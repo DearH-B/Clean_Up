@@ -1,0 +1,25 @@
+name: clean_up
+description: Cleaning routine Flutter app sprint 1.
+publish_to: "none"
+version: 0.1.0+1
+
+environment:
+  sdk: ">=3.4.0 <4.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  url_launcher: ^6.3.2
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^4.0.0
+
+flutter:
+  uses-material-design: true
+  assets:
+    - 캐릭터/귀여운 분홍새.png
+    - 캐릭터/청소요정_시작.png
+    - 캐릭터/청소요정_진행.png
+    - 캐릭터/청소요정_완료.png

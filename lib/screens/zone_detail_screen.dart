@@ -1,0 +1,322 @@
+import 'package:flutter/material.dart';
+
+import '../data/mock_zone_items.dart';
+import '../models/cleaning_zone.dart';
+import '../models/zone_item.dart';
+import '../widgets/zone_item_tile.dart';
+import 'zone_item_detail_screen.dart';
+
+class ZoneDetailScreen extends StatefulWidget {
+  const ZoneDetailScreen({
+    required this.zone,
+    super.key,
+  });
+
+  final CleaningZone zone;
+
+  @override
+  State<ZoneDetailScreen> createState() => _ZoneDetailScreenState();
+}
+
+class _ZoneDetailScreenState extends State<ZoneDetailScreen> {
+  late final List<ZoneItem> _items;
+
+  @override
+  void initState() {
+    super.initState();
+    _items =
+        mockZoneItems.where((item) => item.zoneId == widget.zone.id).toList();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text(widget.zone.name)),
+      body: _items.isEmpty
+          ? _EmptyZone(
+              zoneName: widget.zone.name,
+              onAdd: _showAddItemSheet,
+            )
+          : ListView(
+              padding: const EdgeInsets.fromLTRB(16, 12, 16, 96),
+              children: [
+                Text(
+                  '${widget.zone.name}의 가전과 가구',
+                  style: Theme.of(context).textTheme.titleLarge,
+                ),
+                const SizedBox(height: 6),
+                Text(
+                  '항목을 선택하면 준비물과 단계별 청소법을 볼 수 있어요.',
+                  style: Theme.of(context).textTheme.bodyMedium,
+                ),
+                const SizedBox(height: 20),
+                for (final item in _items) ...[
+                  ZoneItemTile(
+                    item: item,
+                    onTap: () => _openItem(item),
+                  ),
+                  const SizedBox(height: 10),
+                ],
+              ],
+            ),
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: _showAddItemSheet,
+        icon: const Icon(Icons.add),
+        label: const Text('항목 추가'),
+      ),
+    );
+  }
+
+  void _openItem(ZoneItem item) {
+    Navigator.of(context).push(
+      MaterialPageRoute<void>(
+        builder: (context) => ZoneItemDetailScreen(
+          item: item,
+          onItemUpdated: (updatedItem) {
+            final index = _items.indexWhere(
+              (candidate) => candidate.id == updatedItem.id,
+            );
+            if (index == -1 || !mounted) {
+              return;
+            }
+            setState(() {
+              _items[index] = updatedItem;
+            });
+          },
+        ),
+      ),
+    );
+  }
+
+  Future<void> _showAddItemSheet() async {
+    final item = await showModalBottomSheet<ZoneItem>(
+      context: context,
+      isScrollControlled: true,
+      showDragHandle: true,
+      builder: (context) => _AddZoneItemSheet(zoneId: widget.zone.id),
+    );
+
+    if (item == null || !mounted) {
+      return;
+    }
+
+    setState(() {
+      _items.add(item);
+    });
+  }
+}
+
+class _EmptyZone extends StatelessWidget {
+  const _EmptyZone({
+    required this.zoneName,
+    required this.onAdd,
+  });
+
+  final String zoneName;
+  final VoidCallback onAdd;
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.all(32),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(
+              Icons.inventory_2_outlined,
+              size: 52,
+              color: Theme.of(context).colorScheme.primary,
+            ),
+            const SizedBox(height: 16),
+            Text(
+              '$zoneName에 등록된 항목이 없어요',
+              textAlign: TextAlign.center,
+              style: Theme.of(context).textTheme.titleMedium,
+            ),
+            const SizedBox(height: 8),
+            const Text('자주 청소하는 가전이나 가구를 추가해 보세요.'),
+            const SizedBox(height: 20),
+            FilledButton.icon(
+              onPressed: onAdd,
+              icon: const Icon(Icons.add),
+              label: const Text('첫 항목 추가'),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _AddZoneItemSheet extends StatefulWidget {
+  const _AddZoneItemSheet({required this.zoneId});
+
+  final String zoneId;
+
+  @override
+  State<_AddZoneItemSheet> createState() => _AddZoneItemSheetState();
+}
+
+class _AddZoneItemSheetState extends State<_AddZoneItemSheet> {
+  final _nameController = TextEditingController();
+  final _manufacturerController = TextEditingController();
+  final _modelController = TextEditingController();
+  ZoneItemType _selectedType = ZoneItemType.appliance;
+  bool _addProductInfo = false;
+
+  @override
+  void dispose() {
+    _nameController.dispose();
+    _manufacturerController.dispose();
+    _modelController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.fromLTRB(
+        20,
+        0,
+        20,
+        20 + MediaQuery.viewInsetsOf(context).bottom,
+      ),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Text(
+            '가전 또는 가구 추가',
+            style: Theme.of(context).textTheme.titleLarge,
+          ),
+          const SizedBox(height: 16),
+          SegmentedButton<bool>(
+            segments: const [
+              ButtonSegment(
+                value: false,
+                icon: Icon(Icons.category_outlined),
+                label: Text('일반 항목'),
+              ),
+              ButtonSegment(
+                value: true,
+                icon: Icon(Icons.qr_code_2),
+                label: Text('제품 등록'),
+              ),
+            ],
+            selected: {_addProductInfo},
+            onSelectionChanged: (selection) {
+              setState(() {
+                _addProductInfo = selection.first;
+              });
+            },
+          ),
+          const SizedBox(height: 8),
+          Text(
+            _addProductInfo
+                ? '브랜드나 모델명을 알고 있다면 함께 등록해요.'
+                : '제품 정보를 몰라도 냉장고처럼 종류만 등록할 수 있어요.',
+            style: Theme.of(context).textTheme.bodySmall,
+          ),
+          const SizedBox(height: 16),
+          TextField(
+            controller: _nameController,
+            autofocus: true,
+            decoration: const InputDecoration(
+              labelText: '항목 이름',
+              hintText: '예: 냉장고',
+              border: OutlineInputBorder(),
+            ),
+          ),
+          const SizedBox(height: 16),
+          DropdownMenu<ZoneItemType>(
+            width: double.infinity,
+            initialSelection: _selectedType,
+            label: const Text('종류'),
+            dropdownMenuEntries: [
+              for (final type in ZoneItemType.values)
+                DropdownMenuEntry(value: type, label: type.label),
+            ],
+            onSelected: (type) {
+              if (type != null) {
+                setState(() {
+                  _selectedType = type;
+                });
+              }
+            },
+          ),
+          if (_addProductInfo) ...[
+            const SizedBox(height: 16),
+            TextField(
+              controller: _manufacturerController,
+              decoration: const InputDecoration(
+                labelText: '브랜드 또는 제조사',
+                hintText: '예: 삼성전자',
+              ),
+            ),
+            const SizedBox(height: 12),
+            TextField(
+              controller: _modelController,
+              textInputAction: TextInputAction.done,
+              decoration: const InputDecoration(
+                labelText: '모델명',
+                hintText: '제품 라벨에 적힌 모델명',
+              ),
+              onSubmitted: (_) => _submit(),
+            ),
+          ],
+          const SizedBox(height: 20),
+          FilledButton(
+            onPressed: _submit,
+            child: const Text('추가'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _submit() {
+    final name = _nameController.text.trim();
+    if (name.isEmpty) {
+      return;
+    }
+    final manufacturer = _manufacturerController.text.trim();
+    final modelName = _modelController.text.trim();
+
+    Navigator.of(context).pop(
+      ZoneItem(
+        id: 'custom-${DateTime.now().microsecondsSinceEpoch}',
+        zoneId: widget.zoneId,
+        name: name,
+        type: _selectedType,
+        summary: '$name 청소를 시작하기 전에 제품 재질과 설명서를 확인하세요.',
+        frequency: '필요할 때',
+        supplies: const ['부드러운 천', '중성세제'],
+        cautions: const [
+          '가전은 전원을 분리하고, 제품별 사용설명서를 우선 확인하세요.',
+          '세제를 눈에 띄지 않는 곳에 먼저 시험하세요.',
+        ],
+        steps: [
+          '$name 주변의 물건과 먼지를 먼저 정리해요.',
+          '제품 재질에 맞는 도구와 중성세제로 오염을 닦아요.',
+          '깨끗한 천으로 세제와 물기를 제거해요.',
+          '충분히 건조한 뒤 원래 위치에 정리해요.',
+        ],
+        manufacturer:
+            _addProductInfo && manufacturer.isNotEmpty ? manufacturer : null,
+        modelName: _addProductInfo && modelName.isNotEmpty ? modelName : null,
+        guideStatus: _addProductInfo
+            ? '등록된 제품 정보를 바탕으로 공식 안내를 확인할 수 있어요.'
+            : '브랜드와 모델명이 없어 일반적인 관리 방법을 안내해요.',
+        guideBasis: _addProductInfo
+            ? '동일 모델 자료가 없으면 같은 브랜드 또는 유사 제품군을 참고해 안내해요.'
+            : '제품군에 공통으로 적용되는 일반 관리법이에요.',
+        recommendedSupplies: const [
+          '표면 손상을 줄이는 부드러운 극세사 천',
+          '재질에 맞는 중성세제',
+          '좁은 부분을 위한 부드러운 틈새 솔',
+        ],
+      ),
+    );
+  }
+}
