@@ -215,24 +215,12 @@ class _AddZoneSheet extends StatefulWidget {
 class _AddZoneSheetState extends State<_AddZoneSheet> {
   final _nameController = TextEditingController();
   final _descriptionController = TextEditingController();
-  final _nameFocusNode = FocusNode();
   final _descriptionFocusNode = FocusNode();
-
-  @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (mounted) {
-        _nameFocusNode.requestFocus();
-      }
-    });
-  }
 
   @override
   void dispose() {
     _nameController.dispose();
     _descriptionController.dispose();
-    _nameFocusNode.dispose();
     _descriptionFocusNode.dispose();
     super.dispose();
   }
@@ -255,10 +243,22 @@ class _AddZoneSheetState extends State<_AddZoneSheet> {
             const SizedBox(height: 8),
             const Text('방1, 방2, 베란다처럼 우리 집 구조에 맞춰 만들어요.'),
             const SizedBox(height: 16),
+            Wrap(
+              spacing: 8,
+              runSpacing: 8,
+              children: [
+                for (final preset in const ['주방', '거실', '욕실', '침실', '방1', '방2'])
+                  ActionChip(
+                    label: Text(preset),
+                    onPressed: () => _pickPreset(preset),
+                  ),
+              ],
+            ),
+            const SizedBox(height: 16),
             TextField(
               controller: _nameController,
-              focusNode: _nameFocusNode,
               textInputAction: TextInputAction.next,
+              keyboardType: TextInputType.text,
               decoration: const InputDecoration(
                 labelText: '구역 이름',
                 hintText: '예: 방1',
@@ -303,5 +303,18 @@ class _AddZoneSheetState extends State<_AddZoneSheet> {
         completedTaskCount: 0,
       ),
     );
+  }
+
+  void _pickPreset(String name) {
+    setState(() {
+      _nameController.text = name;
+      _descriptionController.text = switch (name) {
+        '주방' => '싱크대, 조리대, 냉장고 앞 공간',
+        '거실' => '소파, 테이블, 바닥, 창가',
+        '욕실' => '세면대, 변기, 샤워부스',
+        '침실' => '침구, 옷장 주변, 협탁',
+        _ => '새로 추가한 청소 구역',
+      };
+    });
   }
 }
