@@ -2,8 +2,6 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 
-import '../data/mock_cleaning_data.dart';
-import '../data/mock_zone_items.dart';
 import '../models/cleaning_record.dart';
 import '../models/cleaning_task.dart';
 import '../repositories/cleaning_data_repository.dart';
@@ -32,7 +30,7 @@ class _TodayScreenState extends State<TodayScreen> {
   @override
   void initState() {
     super.initState();
-    _tasks = todayTasks.toList();
+    _tasks = [];
     unawaited(_loadInitialTasks());
   }
 
@@ -298,10 +296,10 @@ class _TodayScreenState extends State<TodayScreen> {
   Future<void> _loadInitialTasks() async {
     final savedTasks = await widget.taskRepository.loadTodayTasks();
     final savedItems = await widget.dataRepository.loadZoneItems();
-    var tasks = savedTasks ?? todayTasks.toList();
+    var tasks = savedTasks ?? <CleaningTask>[];
     var changed = false;
 
-    final items = savedItems ?? mockZoneItems;
+    final items = savedItems ?? const [];
     if (items.isNotEmpty) {
       final now = DateTime.now();
       for (final item in items.where((item) => item.isDue(now))) {

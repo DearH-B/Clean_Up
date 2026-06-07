@@ -9,6 +9,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'package:clean_up/app.dart';
+import 'package:clean_up/data/mock_cleaning_data.dart';
+import 'package:clean_up/data/mock_zone_items.dart';
 import 'package:clean_up/models/cleaning_record.dart';
 import 'package:clean_up/models/cleaning_task.dart';
 import 'package:clean_up/models/cleaning_zone.dart';
@@ -27,12 +29,14 @@ void main() {
   });
 
   testWidgets('메인 화면에 청소 탭이 표시된다', (WidgetTester tester) async {
+    seedSampleData(taskRepository, dataRepository);
     await tester.pumpWidget(
       CleanUpApp(
         taskRepository: taskRepository,
         dataRepository: dataRepository,
       ),
     );
+    await tester.pumpAndSettle();
 
     expect(find.text('오늘'), findsNWidgets(2));
     expect(find.text('구역'), findsOneWidget);
@@ -41,7 +45,7 @@ void main() {
     expect(find.text('자랑'), findsOneWidget);
 
     await tester.tap(find.text('구역'));
-    await tester.pump();
+    await tester.pumpAndSettle();
 
     expect(find.text('주방'), findsOneWidget);
     expect(find.text('거실'), findsOneWidget);
@@ -87,15 +91,17 @@ void main() {
   });
 
   testWidgets('일반 항목에 나중에 제품 정보를 등록할 수 있다', (tester) async {
+    seedSampleData(taskRepository, dataRepository);
     await tester.pumpWidget(
       CleanUpApp(
         taskRepository: taskRepository,
         dataRepository: dataRepository,
       ),
     );
+    await tester.pumpAndSettle();
 
     await tester.tap(find.text('구역'));
-    await tester.pump();
+    await tester.pumpAndSettle();
     await tester.tap(find.text('주방'));
     await tester.pumpAndSettle();
     await tester.tap(find.text('냉장고'));
@@ -122,12 +128,14 @@ void main() {
   });
 
   testWidgets('오늘 할 일을 추가하고 완료할 수 있다', (tester) async {
+    seedSampleData(taskRepository, dataRepository);
     await tester.pumpWidget(
       CleanUpApp(
         taskRepository: taskRepository,
         dataRepository: dataRepository,
       ),
     );
+    await tester.pumpAndSettle();
 
     await tester.tap(find.text('할 일 추가'));
     await tester.pumpAndSettle();
@@ -164,25 +172,28 @@ void main() {
         dataRepository: dataRepository,
       ),
     );
+    await tester.pumpAndSettle();
 
     await tester.tap(find.text('자랑'));
     await tester.pump();
 
     expect(find.text('청소 자랑'), findsOneWidget);
     expect(find.text('내 청소 자랑하기'), findsOneWidget);
-    expect(find.text('반짝주방'), findsOneWidget);
+    expect(find.text('아직 올라온 자랑이 없어요'), findsOneWidget);
   });
 
   testWidgets('청소 완료 시 기록 탭에 자동으로 남는다', (tester) async {
+    seedSampleData(taskRepository, dataRepository);
     await tester.pumpWidget(
       CleanUpApp(
         taskRepository: taskRepository,
         dataRepository: dataRepository,
       ),
     );
+    await tester.pumpAndSettle();
 
     await tester.tap(find.text('구역'));
-    await tester.pump();
+    await tester.pumpAndSettle();
     await tester.tap(find.text('주방'));
     await tester.pumpAndSettle();
     await tester.tap(find.text('에코업 음식물처리기'));
@@ -207,6 +218,7 @@ void main() {
         dataRepository: dataRepository,
       ),
     );
+    await tester.pumpAndSettle();
 
     await tester.tap(find.text('자랑'));
     await tester.pump();
@@ -223,16 +235,20 @@ void main() {
   });
 
   testWidgets('주기 청소를 다음 일정으로 미룰 수 있다', (tester) async {
+    seedSampleData(taskRepository, dataRepository);
     await tester.pumpWidget(
       CleanUpApp(
         taskRepository: taskRepository,
         dataRepository: dataRepository,
       ),
     );
+    await tester.pumpAndSettle();
 
     await tester.drag(find.byType(ListView), const Offset(0, -220));
-    await tester.pump();
+    await tester.pumpAndSettle();
     final postponeButton = find.byTooltip('미루기').first;
+    await tester.ensureVisible(postponeButton);
+    await tester.pumpAndSettle();
     await tester.tap(postponeButton);
     await tester.pumpAndSettle();
     await tester.tap(find.text('내일로 미룸'));
@@ -249,12 +265,14 @@ void main() {
   });
 
   testWidgets('오늘 할 일을 삭제하고 되돌릴 수 있다', (tester) async {
+    seedSampleData(taskRepository, dataRepository);
     await tester.pumpWidget(
       CleanUpApp(
         taskRepository: taskRepository,
         dataRepository: dataRepository,
       ),
     );
+    await tester.pumpAndSettle();
 
     await tester.drag(find.byType(ListView), const Offset(0, -220));
     await tester.pump();
@@ -274,12 +292,14 @@ void main() {
   });
 
   testWidgets('추가한 오늘 할 일이 앱을 다시 열어도 유지된다', (tester) async {
+    seedSampleData(taskRepository, dataRepository);
     await tester.pumpWidget(
       CleanUpApp(
         taskRepository: taskRepository,
         dataRepository: dataRepository,
       ),
     );
+    await tester.pumpAndSettle();
 
     await tester.tap(find.text('할 일 추가'));
     await tester.pumpAndSettle();
@@ -319,9 +339,10 @@ void main() {
         dataRepository: dataRepository,
       ),
     );
+    await tester.pumpAndSettle();
 
     await tester.tap(find.text('구역'));
-    await tester.pump();
+    await tester.pumpAndSettle();
     await tester.tap(find.byTooltip('구역 추가'));
     await tester.pumpAndSettle();
     await tester.enterText(
@@ -332,7 +353,7 @@ void main() {
       find.widgetWithText(TextField, '구역 설명'),
       '책상, 침대, 옷장',
     );
-    await tester.tap(find.text('구역 추가'));
+    await tester.tap(find.widgetWithText(FilledButton, '구역 추가').last);
     await tester.pumpAndSettle();
 
     await tester.scrollUntilVisible(
@@ -342,6 +363,16 @@ void main() {
     );
     expect(find.text('방1'), findsOneWidget);
   });
+}
+
+void seedSampleData(
+  MemoryCleaningTaskRepository taskRepository,
+  MemoryCleaningDataRepository dataRepository,
+) {
+  taskRepository.saveTodayTasks(todayTasks);
+  dataRepository.saveZones(cleaningZones);
+  dataRepository.saveZoneItems(mockZoneItems);
+  dataRepository.saveRecords(cleaningRecords);
 }
 
 class MemoryCleaningDataRepository extends CleaningDataRepository {

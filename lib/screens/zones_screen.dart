@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 
-import '../data/mock_cleaning_data.dart';
-import '../data/mock_zone_items.dart';
 import '../models/cleaning_zone.dart';
 import '../models/zone_item.dart';
 import '../repositories/cleaning_data_repository.dart';
@@ -28,8 +26,8 @@ class _ZonesScreenState extends State<ZonesScreen> {
   @override
   void initState() {
     super.initState();
-    _zones = cleaningZones.toList();
-    _items = mockZoneItems.toList();
+    _zones = [];
+    _items = [];
     _loadSavedData();
   }
 
@@ -66,42 +64,48 @@ class _ZonesScreenState extends State<ZonesScreen> {
             ),
           ),
         ),
-        SliverPadding(
-          padding: const EdgeInsets.fromLTRB(20, 0, 20, 28),
-          sliver: SliverGrid(
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2,
-              mainAxisExtent: 190,
-              crossAxisSpacing: 12,
-              mainAxisSpacing: 12,
-            ),
-            delegate: SliverChildBuilderDelegate(
-              (context, index) {
-                final zone = _zoneWithProgress(_zones[index]);
+        if (_zones.isEmpty)
+          SliverFillRemaining(
+            hasScrollBody: false,
+            child: _EmptyZones(onAdd: _showAddZoneSheet),
+          )
+        else
+          SliverPadding(
+            padding: const EdgeInsets.fromLTRB(20, 0, 20, 28),
+            sliver: SliverGrid(
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2,
+                mainAxisExtent: 190,
+                crossAxisSpacing: 12,
+                mainAxisSpacing: 12,
+              ),
+              delegate: SliverChildBuilderDelegate(
+                (context, index) {
+                  final zone = _zoneWithProgress(_zones[index]);
 
-                return ZoneCard(
-                  zone: zone,
-                  index: index,
-                  onTap: () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute<void>(
-                        builder: (context) => ZoneDetailScreen(
-                          zone: zone,
-                          items: _items
-                              .where((item) => item.zoneId == zone.id)
-                              .toList(),
-                          onItemsChanged: _updateZoneItems,
-                          dataRepository: widget.dataRepository,
+                  return ZoneCard(
+                    zone: zone,
+                    index: index,
+                    onTap: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute<void>(
+                          builder: (context) => ZoneDetailScreen(
+                            zone: zone,
+                            items: _items
+                                .where((item) => item.zoneId == zone.id)
+                                .toList(),
+                            onItemsChanged: _updateZoneItems,
+                            dataRepository: widget.dataRepository,
+                          ),
                         ),
-                      ),
-                    );
-                  },
-                );
-              },
-              childCount: _zones.length,
+                      );
+                    },
+                  );
+                },
+                childCount: _zones.length,
+              ),
             ),
           ),
-        ),
       ],
     );
   }
@@ -158,6 +162,45 @@ class _ZonesScreenState extends State<ZonesScreen> {
       taskCount: zoneItems.length,
       completedTaskCount:
           zoneItems.where((item) => item.lastCleanedAt != null).length,
+    );
+  }
+}
+
+class _EmptyZones extends StatelessWidget {
+  const _EmptyZones({required this.onAdd});
+
+  final VoidCallback onAdd;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(32, 24, 32, 96),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(
+            Icons.add_home_work_outlined,
+            size: 54,
+            color: Theme.of(context).colorScheme.primary,
+          ),
+          const SizedBox(height: 16),
+          Text(
+            '아직 등록한 구역이 없어요',
+            style: Theme.of(context).textTheme.titleMedium,
+          ),
+          const SizedBox(height: 8),
+          const Text(
+            '주방, 방1, 욕실처럼 내가 관리할 공간을 먼저 만들어 보세요.',
+            textAlign: TextAlign.center,
+          ),
+          const SizedBox(height: 20),
+          FilledButton.icon(
+            onPressed: onAdd,
+            icon: const Icon(Icons.add),
+            label: const Text('구역 추가'),
+          ),
+        ],
+      ),
     );
   }
 }

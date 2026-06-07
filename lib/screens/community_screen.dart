@@ -22,7 +22,7 @@ class _CommunityScreenState extends State<CommunityScreen> {
   @override
   void initState() {
     super.initState();
-    _posts = _defaultPosts;
+    _posts = [];
     _loadPosts();
   }
 
@@ -57,10 +57,13 @@ class _CommunityScreenState extends State<CommunityScreen> {
           label: const Text('내 청소 자랑하기'),
         ),
         const SizedBox(height: 20),
-        for (final post in _posts) ...[
-          _CommunityPostCard(post: post),
-          const SizedBox(height: 12),
-        ],
+        if (_posts.isEmpty)
+          const _EmptyCommunity()
+        else
+          for (final post in _posts) ...[
+            _CommunityPostCard(post: post),
+            const SizedBox(height: 12),
+          ],
       ],
     );
   }
@@ -95,35 +98,37 @@ class _CommunityScreenState extends State<CommunityScreen> {
   }
 }
 
-const _defaultPosts = [
-  CommunityPost(
-    id: 'sample-1',
-    name: '반짝주방',
-    place: '주방',
-    message: '미뤄뒀던 냉장고 선반을 전부 닦았어요. 문 열 때마다 기분이 좋아요!',
-    likes: 24,
-    colorValue: 0xFFFFE9EC,
-    iconCodePoint: 0xe33d,
-  ),
-  CommunityPost(
-    id: 'sample-2',
-    name: '정리한스푼',
-    place: '거실',
-    message: '소파 밑까지 청소기 완료. 청소 요정에게 칭찬받을 준비됐어요.',
-    likes: 17,
-    colorValue: 0xFFFFF4E3,
-    iconCodePoint: 0xf1f0,
-  ),
-  CommunityPost(
-    id: 'sample-3',
-    name: '오늘도한칸',
-    place: '욕실',
-    message: '세면대 하나만 닦으려고 했는데 거울까지 끝냈어요!',
-    likes: 31,
-    colorValue: 0xFFF4E9FF,
-    iconCodePoint: 0xe06b,
-  ),
-];
+class _EmptyCommunity extends StatelessWidget {
+  const _EmptyCommunity();
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      child: Padding(
+        padding: const EdgeInsets.all(20),
+        child: Column(
+          children: [
+            Icon(
+              Icons.forum_outlined,
+              size: 44,
+              color: Theme.of(context).colorScheme.primary,
+            ),
+            const SizedBox(height: 12),
+            Text(
+              '아직 올라온 자랑이 없어요',
+              style: Theme.of(context).textTheme.titleMedium,
+            ),
+            const SizedBox(height: 6),
+            const Text(
+              '처음으로 오늘의 청소를 자랑해 보세요.',
+              textAlign: TextAlign.center,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
 
 class _AddPostSheet extends StatefulWidget {
   const _AddPostSheet();

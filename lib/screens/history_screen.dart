@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import '../data/mock_cleaning_data.dart';
 import '../models/cleaning_record.dart';
 import '../repositories/cleaning_data_repository.dart';
 import '../widgets/fairy_image.dart';
@@ -24,7 +23,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
   @override
   void initState() {
     super.initState();
-    _records = cleaningRecords.toList();
+    _records = [];
     _loadRecords();
   }
 
