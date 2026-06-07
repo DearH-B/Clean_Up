@@ -1,6 +1,8 @@
+// ignore_for_file: prefer_const_constructors
+
 import '../models/zone_item.dart';
 
-const mockZoneItems = <ZoneItem>[
+final mockZoneItems = <ZoneItem>[
   ZoneItem(
     id: 'kitchen-food-waste-processor',
     zoneId: 'zone-1',
@@ -14,6 +16,9 @@ const mockZoneItems = <ZoneItem>[
     guideVideoTitle: '분쇄기 세척방법',
     guideVideoChannel: '★에코업 음식물처리기★',
     guideBasis: '제조사 공식 유사 분쇄기 세척 영상을 참고한 안내예요.',
+    guideSourceType: GuideSourceType.officialVideo,
+    recurrenceDays: 7,
+    nextDueAt: DateTime(2026, 6, 1),
     recommendedSupplies: [
       '손이 닿는 외부용 부드러운 틈새 솔',
       '흡수력이 좋은 극세사 천',
@@ -55,6 +60,8 @@ const mockZoneItems = <ZoneItem>[
     supplies: ['중성세제', '부드러운 천', '마른 수건'],
     cautions: ['유리 선반은 실온에 둔 뒤 닦아 급격한 온도 변화를 피하세요.'],
     guideBasis: '브랜드와 모델에 공통으로 적용되는 냉장고 일반 관리법이에요.',
+    guideSourceType: GuideSourceType.general,
+    recurrenceDays: 30,
     recommendedSupplies: [
       '흠집이 적은 부드러운 극세사 천',
       '향이 강하지 않은 주방용 중성세제',
@@ -85,6 +92,8 @@ const mockZoneItems = <ZoneItem>[
     supplies: ['전자레인지용 물그릇', '부드러운 천', '중성세제'],
     cautions: ['가열한 물그릇은 뜨거우므로 장갑을 사용하세요.'],
     guideBasis: '전자레인지 제품군의 일반적인 스팀 청소법이에요.',
+    guideSourceType: GuideSourceType.general,
+    recurrenceDays: 7,
     recommendedSupplies: [
       '전자레인지 사용 가능 내열 용기',
       '기름때용 부드러운 극세사 천',
@@ -114,6 +123,8 @@ const mockZoneItems = <ZoneItem>[
     supplies: ['주방용 중성세제', '수세미', '배수구 솔'],
     cautions: ['세제끼리 혼합하지 말고 표면 재질에 맞는 제품을 사용하세요.'],
     guideBasis: '스테인리스 싱크대의 일반 관리법이에요.',
+    guideSourceType: GuideSourceType.general,
+    recurrenceDays: 1,
     recommendedSupplies: [
       '비연마 주방 수세미',
       '배수구 전용 작은 솔',

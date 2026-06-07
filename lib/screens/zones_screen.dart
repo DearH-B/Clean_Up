@@ -1,25 +1,36 @@
 import 'package:flutter/material.dart';
 
 import '../data/mock_cleaning_data.dart';
+import '../data/mock_zone_items.dart';
 import '../models/cleaning_zone.dart';
+import '../models/zone_item.dart';
+import '../repositories/cleaning_data_repository.dart';
 import '../widgets/fairy_image.dart';
 import '../widgets/zone_card.dart';
 import 'zone_detail_screen.dart';
 
 class ZonesScreen extends StatefulWidget {
-  const ZonesScreen({super.key});
+  const ZonesScreen({
+    required this.dataRepository,
+    super.key,
+  });
+
+  final CleaningDataRepository dataRepository;
 
   @override
   State<ZonesScreen> createState() => _ZonesScreenState();
 }
 
 class _ZonesScreenState extends State<ZonesScreen> {
-  late final List<CleaningZone> _zones;
+  late List<CleaningZone> _zones;
+  late List<ZoneItem> _items;
 
   @override
   void initState() {
     super.initState();
     _zones = cleaningZones.toList();
+    _items = mockZoneItems.toList();
+    _loadSavedData();
   }
 
   @override
@@ -66,7 +77,7 @@ class _ZonesScreenState extends State<ZonesScreen> {
             ),
             delegate: SliverChildBuilderDelegate(
               (context, index) {
-                final zone = _zones[index];
+                final zone = _zoneWithProgress(_zones[index]);
 
                 return ZoneCard(
                   zone: zone,
@@ -74,7 +85,14 @@ class _ZonesScreenState extends State<ZonesScreen> {
                   onTap: () {
                     Navigator.of(context).push(
                       MaterialPageRoute<void>(
-                        builder: (context) => ZoneDetailScreen(zone: zone),
+                        builder: (context) => ZoneDetailScreen(
+                          zone: zone,
+                          items: _items
+                              .where((item) => item.zoneId == zone.id)
+                              .toList(),
+                          onItemsChanged: _updateZoneItems,
+                          dataRepository: widget.dataRepository,
+                        ),
                       ),
                     );
                   },
@@ -103,6 +121,44 @@ class _ZonesScreenState extends State<ZonesScreen> {
     setState(() {
       _zones.add(zone);
     });
+    await widget.dataRepository.saveZones(_zones);
+  }
+
+  Future<void> _loadSavedData() async {
+    final savedZones = await widget.dataRepository.loadZones();
+    final savedItems = await widget.dataRepository.loadZoneItems();
+    if (!mounted) {
+      return;
+    }
+
+    setState(() {
+      if (savedZones != null) {
+        _zones = savedZones;
+      }
+      if (savedItems != null) {
+        _items = savedItems;
+      }
+    });
+  }
+
+  void _updateZoneItems(String zoneId, List<ZoneItem> updatedItems) {
+    setState(() {
+      _items = [
+        for (final item in _items)
+          if (item.zoneId != zoneId) item,
+        ...updatedItems,
+      ];
+    });
+    widget.dataRepository.saveZoneItems(_items);
+  }
+
+  CleaningZone _zoneWithProgress(CleaningZone zone) {
+    final zoneItems = _items.where((item) => item.zoneId == zone.id).toList();
+    return zone.copyWith(
+      taskCount: zoneItems.length,
+      completedTaskCount:
+          zoneItems.where((item) => item.lastCleanedAt != null).length,
+    );
   }
 }
 

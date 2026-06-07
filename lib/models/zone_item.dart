@@ -9,6 +9,17 @@ enum ZoneItemType {
   final String label;
 }
 
+enum GuideSourceType {
+  official('공식 자료'),
+  officialVideo('공식 영상 참고'),
+  similarProduct('유사 제품 참고'),
+  general('일반 관리법');
+
+  const GuideSourceType(this.label);
+
+  final String label;
+}
+
 class CleaningProduct {
   const CleaningProduct({
     required this.brand,
@@ -23,6 +34,26 @@ class CleaningProduct {
   final String reason;
   final String url;
   final bool isSponsored;
+
+  factory CleaningProduct.fromJson(Map<String, Object?> json) {
+    return CleaningProduct(
+      brand: json['brand'] as String,
+      name: json['name'] as String,
+      reason: json['reason'] as String,
+      url: json['url'] as String,
+      isSponsored: json['isSponsored'] as bool? ?? false,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    return {
+      'brand': brand,
+      'name': name,
+      'reason': reason,
+      'url': url,
+      'isSponsored': isSponsored,
+    };
+  }
 }
 
 class ZoneItem {
@@ -36,6 +67,7 @@ class ZoneItem {
     required this.supplies,
     required this.cautions,
     required this.steps,
+    this.estimatedMinutes = 10,
     this.manufacturer,
     this.modelName,
     this.productMethod,
@@ -44,6 +76,10 @@ class ZoneItem {
     this.guideVideoTitle,
     this.guideVideoChannel,
     this.guideBasis,
+    this.guideSourceType = GuideSourceType.general,
+    this.recurrenceDays = 7,
+    this.lastCleanedAt,
+    this.nextDueAt,
     this.recommendedSupplies = const [],
     this.recommendedProducts = const [],
   });
@@ -57,6 +93,7 @@ class ZoneItem {
   final List<String> supplies;
   final List<String> cautions;
   final List<String> steps;
+  final int estimatedMinutes;
   final String? manufacturer;
   final String? modelName;
   final String? productMethod;
@@ -65,6 +102,10 @@ class ZoneItem {
   final String? guideVideoTitle;
   final String? guideVideoChannel;
   final String? guideBasis;
+  final GuideSourceType guideSourceType;
+  final int recurrenceDays;
+  final DateTime? lastCleanedAt;
+  final DateTime? nextDueAt;
   final List<String> recommendedSupplies;
   final List<CleaningProduct> recommendedProducts;
 
@@ -72,10 +113,96 @@ class ZoneItem {
       (manufacturer?.trim().isNotEmpty ?? false) ||
       (modelName?.trim().isNotEmpty ?? false);
 
+  bool isDue(DateTime now) {
+    final dueAt = nextDueAt;
+    if (dueAt == null) {
+      return false;
+    }
+
+    return !dueAt.isAfter(now);
+  }
+
+  factory ZoneItem.fromJson(Map<String, Object?> json) {
+    return ZoneItem(
+      id: json['id'] as String,
+      zoneId: json['zoneId'] as String,
+      name: json['name'] as String,
+      type: ZoneItemType.values.byName(json['type'] as String),
+      summary: json['summary'] as String,
+      frequency: json['frequency'] as String,
+      supplies: (json['supplies'] as List<dynamic>).cast<String>(),
+      cautions: (json['cautions'] as List<dynamic>).cast<String>(),
+      steps: (json['steps'] as List<dynamic>).cast<String>(),
+      estimatedMinutes: json['estimatedMinutes'] as int? ?? 10,
+      manufacturer: json['manufacturer'] as String?,
+      modelName: json['modelName'] as String?,
+      productMethod: json['productMethod'] as String?,
+      guideStatus: json['guideStatus'] as String?,
+      guideVideoUrl: json['guideVideoUrl'] as String?,
+      guideVideoTitle: json['guideVideoTitle'] as String?,
+      guideVideoChannel: json['guideVideoChannel'] as String?,
+      guideBasis: json['guideBasis'] as String?,
+      guideSourceType: GuideSourceType.values.byName(
+        json['guideSourceType'] as String? ?? GuideSourceType.general.name,
+      ),
+      recurrenceDays: json['recurrenceDays'] as int? ?? 7,
+      lastCleanedAt: json['lastCleanedAt'] == null
+          ? null
+          : DateTime.parse(json['lastCleanedAt'] as String),
+      nextDueAt: json['nextDueAt'] == null
+          ? null
+          : DateTime.parse(json['nextDueAt'] as String),
+      recommendedSupplies:
+          (json['recommendedSupplies'] as List<dynamic>? ?? const [])
+              .cast<String>(),
+      recommendedProducts:
+          (json['recommendedProducts'] as List<dynamic>? ?? const [])
+              .map(
+                (item) => CleaningProduct.fromJson(
+                  Map<String, Object?>.from(item as Map),
+                ),
+              )
+              .toList(),
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    return {
+      'id': id,
+      'zoneId': zoneId,
+      'name': name,
+      'type': type.name,
+      'summary': summary,
+      'frequency': frequency,
+      'supplies': supplies,
+      'cautions': cautions,
+      'steps': steps,
+      'estimatedMinutes': estimatedMinutes,
+      'manufacturer': manufacturer,
+      'modelName': modelName,
+      'productMethod': productMethod,
+      'guideStatus': guideStatus,
+      'guideVideoUrl': guideVideoUrl,
+      'guideVideoTitle': guideVideoTitle,
+      'guideVideoChannel': guideVideoChannel,
+      'guideBasis': guideBasis,
+      'guideSourceType': guideSourceType.name,
+      'recurrenceDays': recurrenceDays,
+      'lastCleanedAt': lastCleanedAt?.toIso8601String(),
+      'nextDueAt': nextDueAt?.toIso8601String(),
+      'recommendedSupplies': recommendedSupplies,
+      'recommendedProducts': [
+        for (final product in recommendedProducts) product.toJson(),
+      ],
+    };
+  }
+
   ZoneItem copyWith({
     String? manufacturer,
     String? modelName,
     String? guideStatus,
+    DateTime? lastCleanedAt,
+    DateTime? nextDueAt,
   }) {
     return ZoneItem(
       id: id,
@@ -87,6 +214,7 @@ class ZoneItem {
       supplies: supplies,
       cautions: cautions,
       steps: steps,
+      estimatedMinutes: estimatedMinutes,
       manufacturer: manufacturer ?? this.manufacturer,
       modelName: modelName ?? this.modelName,
       productMethod: productMethod,
@@ -95,6 +223,10 @@ class ZoneItem {
       guideVideoTitle: guideVideoTitle,
       guideVideoChannel: guideVideoChannel,
       guideBasis: guideBasis,
+      guideSourceType: guideSourceType,
+      recurrenceDays: recurrenceDays,
+      lastCleanedAt: lastCleanedAt ?? this.lastCleanedAt,
+      nextDueAt: nextDueAt ?? this.nextDueAt,
       recommendedSupplies: recommendedSupplies,
       recommendedProducts: recommendedProducts,
     );

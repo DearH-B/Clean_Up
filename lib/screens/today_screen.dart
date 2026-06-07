@@ -3,7 +3,10 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 
 import '../data/mock_cleaning_data.dart';
+import '../data/mock_zone_items.dart';
+import '../models/cleaning_record.dart';
 import '../models/cleaning_task.dart';
+import '../repositories/cleaning_data_repository.dart';
 import '../repositories/cleaning_task_repository.dart';
 import '../theme/app_theme.dart';
 import '../widgets/fairy_image.dart';
@@ -12,10 +15,12 @@ import '../widgets/task_tile.dart';
 class TodayScreen extends StatefulWidget {
   const TodayScreen({
     required this.taskRepository,
+    required this.dataRepository,
     super.key,
   });
 
   final CleaningTaskRepository taskRepository;
+  final CleaningDataRepository dataRepository;
 
   @override
   State<TodayScreen> createState() => _TodayScreenState();
@@ -28,7 +33,7 @@ class _TodayScreenState extends State<TodayScreen> {
   void initState() {
     super.initState();
     _tasks = todayTasks.toList();
-    unawaited(_loadSavedTasks());
+    unawaited(_loadInitialTasks());
   }
 
   @override
@@ -176,6 +181,7 @@ class _TodayScreenState extends State<TodayScreen> {
     unawaited(_saveTasks());
 
     if (!task.isDone) {
+      unawaited(_completeLinkedZoneItem(task));
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(
@@ -289,19 +295,99 @@ class _TodayScreenState extends State<TodayScreen> {
       );
   }
 
-  Future<void> _loadSavedTasks() async {
+  Future<void> _loadInitialTasks() async {
     final savedTasks = await widget.taskRepository.loadTodayTasks();
-    if (!mounted || savedTasks == null) {
+    final savedItems = await widget.dataRepository.loadZoneItems();
+    var tasks = savedTasks ?? todayTasks.toList();
+    var changed = false;
+
+    final items = savedItems ?? mockZoneItems;
+    if (items.isNotEmpty) {
+      final now = DateTime.now();
+      for (final item in items.where((item) => item.isDue(now))) {
+        final taskId = _scheduledTaskId(item.id);
+        if (tasks.any((task) => task.id == taskId)) {
+          continue;
+        }
+
+        tasks = [
+          ...tasks,
+          CleaningTask(
+            id: taskId,
+            title: '${item.name} 정기 청소',
+            zoneName: item.name,
+            estimatedMinutes: item.estimatedMinutes,
+            isDone: false,
+            isRecurring: true,
+          ),
+        ];
+        changed = true;
+      }
+    }
+
+    if (!mounted) {
       return;
     }
 
     setState(() {
-      _tasks = savedTasks;
+      _tasks = tasks;
     });
+    if (changed) {
+      unawaited(_saveTasks());
+    }
   }
 
   Future<void> _saveTasks() {
     return widget.taskRepository.saveTodayTasks(_tasks);
+  }
+
+  Future<void> _completeLinkedZoneItem(CleaningTask task) async {
+    final itemId = _zoneItemIdFromTask(task);
+    if (itemId == null) {
+      return;
+    }
+
+    final items = await widget.dataRepository.loadZoneItems();
+    if (items == null) {
+      return;
+    }
+
+    final index = items.indexWhere((item) => item.id == itemId);
+    if (index == -1) {
+      return;
+    }
+
+    final now = DateTime.now();
+    final item = items[index];
+    final updatedItem = item.copyWith(
+      lastCleanedAt: now,
+      nextDueAt: now.add(Duration(days: item.recurrenceDays)),
+    );
+    items[index] = updatedItem;
+    await widget.dataRepository.saveZoneItems(items);
+
+    final records = await widget.dataRepository.loadRecords();
+    await widget.dataRepository.saveRecords([
+      CleaningRecord(
+        id: 'record-${now.microsecondsSinceEpoch}',
+        title: '${item.name} 청소 완료',
+        zoneName: item.name,
+        completedAt: now,
+        minutes: item.estimatedMinutes,
+      ),
+      ...(records ?? const <CleaningRecord>[]),
+    ]);
+  }
+
+  String _scheduledTaskId(String itemId) => 'scheduled-zone-item-$itemId';
+
+  String? _zoneItemIdFromTask(CleaningTask task) {
+    const prefix = 'scheduled-zone-item-';
+    if (!task.id.startsWith(prefix)) {
+      return null;
+    }
+
+    return task.id.substring(prefix.length);
   }
 
   _FairyState _fairyState(int completedCount, int activeTaskCount) {

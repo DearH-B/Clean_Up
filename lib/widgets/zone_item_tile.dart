@@ -25,18 +25,35 @@ class ZoneItemTile extends StatelessWidget {
           child: Icon(_iconFor(item.type)),
         ),
         title: Text(item.name),
-        subtitle: Text(
-          item.hasProductInfo
-              ? [
-                  item.manufacturer,
-                  item.modelName,
-                ]
-                  .whereType<String>()
-                  .where((text) => text.isNotEmpty)
-                  .join(' · ')
-              : '${item.type.label} · 제품 정보 없음',
-          maxLines: 1,
-          overflow: TextOverflow.ellipsis,
+        subtitle: Padding(
+          padding: const EdgeInsets.only(top: 3),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                item.hasProductInfo
+                    ? [
+                        item.manufacturer,
+                        item.modelName,
+                      ]
+                        .whereType<String>()
+                        .where((text) => text.isNotEmpty)
+                        .join(' · ')
+                    : '${item.type.label} · 제품 정보 없음',
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+              ),
+              const SizedBox(height: 5),
+              Wrap(
+                spacing: 6,
+                runSpacing: 4,
+                children: [
+                  _MiniBadge(label: item.guideSourceType.label),
+                  _MiniBadge(label: '다음 ${_formatDue(item.nextDueAt)}'),
+                ],
+              ),
+            ],
+          ),
         ),
         trailing: const Icon(Icons.chevron_right),
       ),
@@ -50,5 +67,35 @@ class ZoneItemTile extends StatelessWidget {
       ZoneItemType.fixture => Icons.countertops_outlined,
       ZoneItemType.other => Icons.inventory_2_outlined,
     };
+  }
+
+  String _formatDue(DateTime? dateTime) {
+    if (dateTime == null) {
+      return '미정';
+    }
+    final month = dateTime.month.toString().padLeft(2, '0');
+    final day = dateTime.day.toString().padLeft(2, '0');
+    return '$month.$day';
+  }
+}
+
+class _MiniBadge extends StatelessWidget {
+  const _MiniBadge({required this.label});
+
+  final String label;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+      decoration: BoxDecoration(
+        color: const Color(0xFFFFF3F5),
+        borderRadius: BorderRadius.circular(4),
+      ),
+      child: Text(
+        label,
+        style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w700),
+      ),
+    );
   }
 }

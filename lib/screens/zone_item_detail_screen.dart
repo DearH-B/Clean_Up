@@ -1,16 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../models/cleaning_record.dart';
 import '../models/zone_item.dart';
+import '../repositories/cleaning_data_repository.dart';
 
 class ZoneItemDetailScreen extends StatefulWidget {
   const ZoneItemDetailScreen({
     required this.item,
+    required this.dataRepository,
     this.onItemUpdated,
     super.key,
   });
 
   final ZoneItem item;
+  final CleaningDataRepository dataRepository;
   final ValueChanged<ZoneItem>? onItemUpdated;
 
   @override
@@ -51,6 +55,8 @@ class _ZoneItemDetailScreenState extends State<ZoneItemDetailScreen> {
                     ),
                     const SizedBox(height: 4),
                     Text('${_item.type.label} · ${_item.frequency}'),
+                    const SizedBox(height: 8),
+                    _GuideSourceBadge(sourceType: _item.guideSourceType),
                   ],
                 ),
               ),
@@ -58,6 +64,11 @@ class _ZoneItemDetailScreenState extends State<ZoneItemDetailScreen> {
           ),
           const SizedBox(height: 20),
           Text(_item.summary),
+          const SizedBox(height: 16),
+          _ScheduleCard(
+            item: _item,
+            onComplete: _completeCleaning,
+          ),
           const SizedBox(height: 16),
           if (!_item.hasProductInfo)
             OutlinedButton.icon(
@@ -117,7 +128,7 @@ class _ZoneItemDetailScreenState extends State<ZoneItemDetailScreen> {
                   _RecommendationTile(text: recommendation),
                 const SizedBox(height: 4),
                 Text(
-                  '특정 브랜드 광고가 아닌 제품 선택 기준을 안내해요.',
+                  '광고 또는 제휴가 있는 제품은 반드시 별도 표시하고, 추천 이유를 함께 안내해요.',
                   style: Theme.of(context).textTheme.bodySmall,
                 ),
               ],
@@ -215,6 +226,117 @@ class _ZoneItemDetailScreenState extends State<ZoneItemDetailScreen> {
         const SnackBar(content: Text('제품 페이지를 열 수 없어요.')),
       );
     }
+  }
+
+  Future<void> _completeCleaning() async {
+    final now = DateTime.now();
+    final updatedItem = _item.copyWith(
+      lastCleanedAt: now,
+      nextDueAt: now.add(Duration(days: _item.recurrenceDays)),
+    );
+    final savedRecords = await widget.dataRepository.loadRecords();
+    final records = [
+      CleaningRecord(
+        id: 'record-${now.microsecondsSinceEpoch}',
+        title: '${_item.name} 청소 완료',
+        zoneName: _item.name,
+        completedAt: now,
+        minutes: _item.estimatedMinutes,
+      ),
+      ...(savedRecords ?? const <CleaningRecord>[]),
+    ];
+
+    await widget.dataRepository.saveRecords(records);
+    if (!mounted) {
+      return;
+    }
+
+    setState(() {
+      _item = updatedItem;
+    });
+    widget.onItemUpdated?.call(updatedItem);
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('청소 기록에 저장했어요. 다음 일정도 갱신됐어요.')),
+    );
+  }
+}
+
+class _ScheduleCard extends StatelessWidget {
+  const _ScheduleCard({
+    required this.item,
+    required this.onComplete,
+  });
+
+  final ZoneItem item;
+  final VoidCallback onComplete;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(14),
+      decoration: BoxDecoration(
+        color: Theme.of(context).colorScheme.primaryContainer,
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: Row(
+        children: [
+          const Icon(Icons.event_available_outlined),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  item.nextDueAt == null
+                      ? '아직 예정일이 없어요'
+                      : '다음 예정일 ${_formatDate(item.nextDueAt!)}',
+                  style: const TextStyle(fontWeight: FontWeight.w800),
+                ),
+                Text('${item.frequency} · 예상 ${item.estimatedMinutes}분'),
+              ],
+            ),
+          ),
+          FilledButton(
+            onPressed: onComplete,
+            child: const Text('완료'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  String _formatDate(DateTime dateTime) {
+    final month = dateTime.month.toString().padLeft(2, '0');
+    final day = dateTime.day.toString().padLeft(2, '0');
+    return '$month.$day';
+  }
+}
+
+class _GuideSourceBadge extends StatelessWidget {
+  const _GuideSourceBadge({required this.sourceType});
+
+  final GuideSourceType sourceType;
+
+  @override
+  Widget build(BuildContext context) {
+    final color = switch (sourceType) {
+      GuideSourceType.official => const Color(0xFFE8F4EC),
+      GuideSourceType.officialVideo => const Color(0xFFFFE7E7),
+      GuideSourceType.similarProduct => const Color(0xFFFFF2D8),
+      GuideSourceType.general => const Color(0xFFF3EEF0),
+    };
+
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+      decoration: BoxDecoration(
+        color: color,
+        borderRadius: BorderRadius.circular(4),
+      ),
+      child: Text(
+        sourceType.label,
+        style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w800),
+      ),
+    );
   }
 }
 

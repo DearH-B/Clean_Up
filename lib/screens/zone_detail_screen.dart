@@ -1,31 +1,36 @@
 import 'package:flutter/material.dart';
 
-import '../data/mock_zone_items.dart';
 import '../models/cleaning_zone.dart';
 import '../models/zone_item.dart';
+import '../repositories/cleaning_data_repository.dart';
 import '../widgets/zone_item_tile.dart';
 import 'zone_item_detail_screen.dart';
 
 class ZoneDetailScreen extends StatefulWidget {
   const ZoneDetailScreen({
     required this.zone,
+    required this.items,
+    required this.onItemsChanged,
+    required this.dataRepository,
     super.key,
   });
 
   final CleaningZone zone;
+  final List<ZoneItem> items;
+  final void Function(String zoneId, List<ZoneItem> items) onItemsChanged;
+  final CleaningDataRepository dataRepository;
 
   @override
   State<ZoneDetailScreen> createState() => _ZoneDetailScreenState();
 }
 
 class _ZoneDetailScreenState extends State<ZoneDetailScreen> {
-  late final List<ZoneItem> _items;
+  late List<ZoneItem> _items;
 
   @override
   void initState() {
     super.initState();
-    _items =
-        mockZoneItems.where((item) => item.zoneId == widget.zone.id).toList();
+    _items = widget.items.toList();
   }
 
   @override
@@ -72,6 +77,7 @@ class _ZoneDetailScreenState extends State<ZoneDetailScreen> {
       MaterialPageRoute<void>(
         builder: (context) => ZoneItemDetailScreen(
           item: item,
+          dataRepository: widget.dataRepository,
           onItemUpdated: (updatedItem) {
             final index = _items.indexWhere(
               (candidate) => candidate.id == updatedItem.id,
@@ -82,6 +88,7 @@ class _ZoneDetailScreenState extends State<ZoneDetailScreen> {
             setState(() {
               _items[index] = updatedItem;
             });
+            widget.onItemsChanged(widget.zone.id, _items);
           },
         ),
       ),
@@ -103,6 +110,7 @@ class _ZoneDetailScreenState extends State<ZoneDetailScreen> {
     setState(() {
       _items.add(item);
     });
+    widget.onItemsChanged(widget.zone.id, _items);
   }
 }
 
@@ -162,7 +170,9 @@ class _AddZoneItemSheetState extends State<_AddZoneItemSheet> {
   final _nameController = TextEditingController();
   final _manufacturerController = TextEditingController();
   final _modelController = TextEditingController();
+  final _minutesController = TextEditingController(text: '10');
   ZoneItemType _selectedType = ZoneItemType.appliance;
+  int _recurrenceDays = 7;
   bool _addProductInfo = false;
 
   @override
@@ -170,6 +180,7 @@ class _AddZoneItemSheetState extends State<_AddZoneItemSheet> {
     _nameController.dispose();
     _manufacturerController.dispose();
     _modelController.dispose();
+    _minutesController.dispose();
     super.dispose();
   }
 
@@ -245,6 +256,35 @@ class _AddZoneItemSheetState extends State<_AddZoneItemSheet> {
               }
             },
           ),
+          const SizedBox(height: 16),
+          DropdownMenu<int>(
+            width: double.infinity,
+            initialSelection: _recurrenceDays,
+            label: const Text('청소 주기'),
+            dropdownMenuEntries: const [
+              DropdownMenuEntry(value: 1, label: '매일'),
+              DropdownMenuEntry(value: 7, label: '매주'),
+              DropdownMenuEntry(value: 14, label: '2주마다'),
+              DropdownMenuEntry(value: 30, label: '한 달마다'),
+              DropdownMenuEntry(value: 90, label: '3개월마다'),
+            ],
+            onSelected: (days) {
+              if (days != null) {
+                setState(() {
+                  _recurrenceDays = days;
+                });
+              }
+            },
+          ),
+          const SizedBox(height: 16),
+          TextField(
+            controller: _minutesController,
+            keyboardType: TextInputType.number,
+            decoration: const InputDecoration(
+              labelText: '예상 시간(분)',
+              hintText: '예: 10',
+            ),
+          ),
           if (_addProductInfo) ...[
             const SizedBox(height: 16),
             TextField(
@@ -282,6 +322,8 @@ class _AddZoneItemSheetState extends State<_AddZoneItemSheet> {
     }
     final manufacturer = _manufacturerController.text.trim();
     final modelName = _modelController.text.trim();
+    final minutes = int.tryParse(_minutesController.text.trim()) ?? 10;
+    final now = DateTime.now();
 
     Navigator.of(context).pop(
       ZoneItem(
@@ -290,7 +332,10 @@ class _AddZoneItemSheetState extends State<_AddZoneItemSheet> {
         name: name,
         type: _selectedType,
         summary: '$name 청소를 시작하기 전에 제품 재질과 설명서를 확인하세요.',
-        frequency: '필요할 때',
+        frequency: _frequencyLabel(_recurrenceDays),
+        estimatedMinutes: minutes,
+        recurrenceDays: _recurrenceDays,
+        nextDueAt: now,
         supplies: const ['부드러운 천', '중성세제'],
         cautions: const [
           '가전은 전원을 분리하고, 제품별 사용설명서를 우선 확인하세요.',
@@ -311,6 +356,9 @@ class _AddZoneItemSheetState extends State<_AddZoneItemSheet> {
         guideBasis: _addProductInfo
             ? '동일 모델 자료가 없으면 같은 브랜드 또는 유사 제품군을 참고해 안내해요.'
             : '제품군에 공통으로 적용되는 일반 관리법이에요.',
+        guideSourceType: _addProductInfo
+            ? GuideSourceType.similarProduct
+            : GuideSourceType.general,
         recommendedSupplies: const [
           '표면 손상을 줄이는 부드러운 극세사 천',
           '재질에 맞는 중성세제',
@@ -318,5 +366,16 @@ class _AddZoneItemSheetState extends State<_AddZoneItemSheet> {
         ],
       ),
     );
+  }
+
+  String _frequencyLabel(int days) {
+    return switch (days) {
+      1 => '매일',
+      7 => '매주',
+      14 => '2주마다',
+      30 => '한 달마다',
+      90 => '3개월마다',
+      _ => '$days일마다',
+    };
   }
 }

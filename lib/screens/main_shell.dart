@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'history_screen.dart';
 import 'community_screen.dart';
+import '../repositories/cleaning_data_repository.dart';
 import '../repositories/cleaning_task_repository.dart';
 import 'today_screen.dart';
 import 'zones_screen.dart';
@@ -9,10 +10,12 @@ import 'zones_screen.dart';
 class MainShell extends StatefulWidget {
   const MainShell({
     required this.taskRepository,
+    required this.dataRepository,
     super.key,
   });
 
   final CleaningTaskRepository taskRepository;
+  final CleaningDataRepository dataRepository;
 
   @override
   State<MainShell> createState() => _MainShellState();
@@ -24,10 +27,13 @@ class _MainShellState extends State<MainShell> {
   @override
   Widget build(BuildContext context) {
     final screens = <Widget>[
-      TodayScreen(taskRepository: widget.taskRepository),
-      const ZonesScreen(),
-      const HistoryScreen(),
-      const CommunityScreen(),
+      TodayScreen(
+        taskRepository: widget.taskRepository,
+        dataRepository: widget.dataRepository,
+      ),
+      ZonesScreen(dataRepository: widget.dataRepository),
+      HistoryScreen(dataRepository: widget.dataRepository),
+      CommunityScreen(dataRepository: widget.dataRepository),
     ];
 
     return Scaffold(
