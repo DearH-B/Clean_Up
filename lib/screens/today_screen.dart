@@ -1,25 +1,34 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 
 import '../data/mock_cleaning_data.dart';
 import '../models/cleaning_task.dart';
+import '../repositories/cleaning_task_repository.dart';
 import '../theme/app_theme.dart';
 import '../widgets/fairy_image.dart';
 import '../widgets/task_tile.dart';
 
 class TodayScreen extends StatefulWidget {
-  const TodayScreen({super.key});
+  const TodayScreen({
+    required this.taskRepository,
+    super.key,
+  });
+
+  final CleaningTaskRepository taskRepository;
 
   @override
   State<TodayScreen> createState() => _TodayScreenState();
 }
 
 class _TodayScreenState extends State<TodayScreen> {
-  late final List<CleaningTask> _tasks;
+  late List<CleaningTask> _tasks;
 
   @override
   void initState() {
     super.initState();
     _tasks = todayTasks.toList();
+    unawaited(_loadSavedTasks());
   }
 
   @override
@@ -164,6 +173,7 @@ class _TodayScreenState extends State<TodayScreen> {
     setState(() {
       _tasks[index] = task.copyWith(isDone: !task.isDone);
     });
+    unawaited(_saveTasks());
 
     if (!task.isDone) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -191,6 +201,7 @@ class _TodayScreenState extends State<TodayScreen> {
     setState(() {
       _tasks.add(task);
     });
+    unawaited(_saveTasks());
   }
 
   Future<void> _showPostponeSheet(CleaningTask task) async {
@@ -231,6 +242,7 @@ class _TodayScreenState extends State<TodayScreen> {
     setState(() {
       _tasks[index] = task.copyWith(postponedLabel: label);
     });
+    unawaited(_saveTasks());
   }
 
   void _restoreTask(CleaningTask task) {
@@ -238,6 +250,7 @@ class _TodayScreenState extends State<TodayScreen> {
     setState(() {
       _tasks[index] = task.copyWith(clearPostponed: true);
     });
+    unawaited(_saveTasks());
   }
 
   void _deleteTask(CleaningTask task) {
@@ -250,6 +263,7 @@ class _TodayScreenState extends State<TodayScreen> {
     setState(() {
       _tasks.removeAt(removedIndex);
     });
+    unawaited(_saveTasks());
 
     ScaffoldMessenger.of(context)
       ..hideCurrentSnackBar()
@@ -268,10 +282,26 @@ class _TodayScreenState extends State<TodayScreen> {
                 final restoreIndex = removedIndex.clamp(0, _tasks.length);
                 _tasks.insert(restoreIndex, task);
               });
+              unawaited(_saveTasks());
             },
           ),
         ),
       );
+  }
+
+  Future<void> _loadSavedTasks() async {
+    final savedTasks = await widget.taskRepository.loadTodayTasks();
+    if (!mounted || savedTasks == null) {
+      return;
+    }
+
+    setState(() {
+      _tasks = savedTasks;
+    });
+  }
+
+  Future<void> _saveTasks() {
+    return widget.taskRepository.saveTodayTasks(_tasks);
   }
 
   _FairyState _fairyState(int completedCount, int activeTaskCount) {

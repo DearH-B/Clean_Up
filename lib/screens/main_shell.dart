@@ -2,11 +2,17 @@ import 'package:flutter/material.dart';
 
 import 'history_screen.dart';
 import 'community_screen.dart';
+import '../repositories/cleaning_task_repository.dart';
 import 'today_screen.dart';
 import 'zones_screen.dart';
 
 class MainShell extends StatefulWidget {
-  const MainShell({super.key});
+  const MainShell({
+    required this.taskRepository,
+    super.key,
+  });
+
+  final CleaningTaskRepository taskRepository;
 
   @override
   State<MainShell> createState() => _MainShellState();
@@ -15,18 +21,18 @@ class MainShell extends StatefulWidget {
 class _MainShellState extends State<MainShell> {
   int _selectedIndex = 0;
 
-  static const _screens = <Widget>[
-    TodayScreen(),
-    ZonesScreen(),
-    HistoryScreen(),
-    CommunityScreen(),
-  ];
-
   @override
   Widget build(BuildContext context) {
+    final screens = <Widget>[
+      TodayScreen(taskRepository: widget.taskRepository),
+      const ZonesScreen(),
+      const HistoryScreen(),
+      const CommunityScreen(),
+    ];
+
     return Scaffold(
       body: SafeArea(
-        child: _screens[_selectedIndex],
+        child: screens[_selectedIndex],
       ),
       bottomNavigationBar: NavigationBar(
         selectedIndex: _selectedIndex,

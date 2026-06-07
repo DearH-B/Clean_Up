@@ -19,6 +19,30 @@ class CleaningTask {
 
   bool get isPostponed => postponedLabel != null;
 
+  factory CleaningTask.fromJson(Map<String, Object?> json) {
+    return CleaningTask(
+      id: json['id'] as String,
+      title: json['title'] as String,
+      zoneName: json['zoneName'] as String,
+      estimatedMinutes: json['estimatedMinutes'] as int,
+      isDone: json['isDone'] as bool,
+      isRecurring: json['isRecurring'] as bool? ?? false,
+      postponedLabel: json['postponedLabel'] as String?,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    return {
+      'id': id,
+      'title': title,
+      'zoneName': zoneName,
+      'estimatedMinutes': estimatedMinutes,
+      'isDone': isDone,
+      'isRecurring': isRecurring,
+      'postponedLabel': postponedLabel,
+    };
+  }
+
   CleaningTask copyWith({
     bool? isDone,
     String? postponedLabel,
