@@ -215,55 +215,74 @@ class _AddZoneSheet extends StatefulWidget {
 class _AddZoneSheetState extends State<_AddZoneSheet> {
   final _nameController = TextEditingController();
   final _descriptionController = TextEditingController();
+  final _nameFocusNode = FocusNode();
+  final _descriptionFocusNode = FocusNode();
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) {
+        _nameFocusNode.requestFocus();
+      }
+    });
+  }
 
   @override
   void dispose() {
     _nameController.dispose();
     _descriptionController.dispose();
+    _nameFocusNode.dispose();
+    _descriptionFocusNode.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.fromLTRB(
-        20,
-        0,
-        20,
-        20 + MediaQuery.viewInsetsOf(context).bottom,
-      ),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Text('새 구역 추가', style: Theme.of(context).textTheme.titleLarge),
-          const SizedBox(height: 8),
-          const Text('방1, 방2, 베란다처럼 우리 집 구조에 맞춰 만들어요.'),
-          const SizedBox(height: 16),
-          TextField(
-            controller: _nameController,
-            autofocus: true,
-            decoration: const InputDecoration(
-              labelText: '구역 이름',
-              hintText: '예: 방1',
+    return SafeArea(
+      child: SingleChildScrollView(
+        padding: EdgeInsets.fromLTRB(
+          20,
+          0,
+          20,
+          20 + MediaQuery.viewInsetsOf(context).bottom,
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Text('새 구역 추가', style: Theme.of(context).textTheme.titleLarge),
+            const SizedBox(height: 8),
+            const Text('방1, 방2, 베란다처럼 우리 집 구조에 맞춰 만들어요.'),
+            const SizedBox(height: 16),
+            TextField(
+              controller: _nameController,
+              focusNode: _nameFocusNode,
+              textInputAction: TextInputAction.next,
+              decoration: const InputDecoration(
+                labelText: '구역 이름',
+                hintText: '예: 방1',
+              ),
+              onSubmitted: (_) => _descriptionFocusNode.requestFocus(),
             ),
-          ),
-          const SizedBox(height: 12),
-          TextField(
-            controller: _descriptionController,
-            textInputAction: TextInputAction.done,
-            decoration: const InputDecoration(
-              labelText: '구역 설명',
-              hintText: '예: 책상, 침대, 옷장',
+            const SizedBox(height: 12),
+            TextField(
+              controller: _descriptionController,
+              focusNode: _descriptionFocusNode,
+              textInputAction: TextInputAction.done,
+              decoration: const InputDecoration(
+                labelText: '구역 설명',
+                hintText: '예: 책상, 침대, 옷장',
+              ),
+              onSubmitted: (_) => _submit(),
             ),
-            onSubmitted: (_) => _submit(),
-          ),
-          const SizedBox(height: 20),
-          FilledButton(
-            onPressed: _submit,
-            child: const Text('구역 추가'),
-          ),
-        ],
+            const SizedBox(height: 20),
+            FilledButton(
+              onPressed: _submit,
+              child: const Text('구역 추가'),
+            ),
+          ],
+        ),
       ),
     );
   }
