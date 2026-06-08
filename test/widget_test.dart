@@ -171,6 +171,31 @@ void main() {
     expect(find.text('RF85'), findsOneWidget);
   });
 
+  testWidgets('제품 등록 모드에서 항목 프리셋을 눌러도 제품 등록이 유지된다', (tester) async {
+    seedSampleData(taskRepository, dataRepository);
+    await tester.pumpWidget(
+      CleanUpApp(
+        taskRepository: taskRepository,
+        dataRepository: dataRepository,
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.text('구역'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('주방'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('항목 추가'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('제품 등록'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.widgetWithText(ActionChip, '냉장고'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('대표 브랜드'), findsOneWidget);
+    expect(find.widgetWithText(TextField, '브랜드 또는 제조사'), findsOneWidget);
+  });
+
   testWidgets('오늘 할 일을 추가하고 완료할 수 있다', (tester) async {
     seedSampleData(taskRepository, dataRepository);
     await tester.pumpWidget(

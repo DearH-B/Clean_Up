@@ -469,7 +469,6 @@ class _AddZoneItemSheetState extends State<_AddZoneItemSheet> {
       _selectedType = preset.type;
       _recurrenceDays = preset.recurrenceDays;
       _minutesController.text = '${preset.estimatedMinutes}';
-      _addProductInfo = false;
       _manufacturerController.clear();
       _modelController.clear();
     });
