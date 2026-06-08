@@ -103,7 +103,7 @@ class _TodayScreenState extends State<TodayScreen> {
   Widget _buildFairyPanel(BuildContext context) {
     final state = _fairyState();
     return Container(
-      height: 190,
+      height: 220,
       clipBehavior: Clip.antiAlias,
       decoration: BoxDecoration(
         color: AppColors.pinkSoft,
@@ -112,9 +112,9 @@ class _TodayScreenState extends State<TodayScreen> {
       child: Stack(
         children: [
           Positioned(
-            right: -2,
-            bottom: -18,
-            child: FairyImage(size: 168, assetPath: state.assetPath),
+            right: -22,
+            bottom: -24,
+            child: FairyImage(size: 148, assetPath: state.assetPath),
           ),
           Positioned.fill(
             child: Padding(
@@ -124,15 +124,24 @@ class _TodayScreenState extends State<TodayScreen> {
                 children: [
                   const _FairyLabel(),
                   const SizedBox(height: 12),
-                  SizedBox(
-                    width: 210,
+                  ConstrainedBox(
+                    constraints: const BoxConstraints(maxWidth: 210),
                     child: Text(
                       state.title,
+                      maxLines: 3,
+                      overflow: TextOverflow.visible,
                       style: Theme.of(context).textTheme.titleLarge,
                     ),
                   ),
                   const SizedBox(height: 5),
-                  SizedBox(width: 210, child: Text(state.message)),
+                  ConstrainedBox(
+                    constraints: const BoxConstraints(maxWidth: 205),
+                    child: Text(
+                      state.message,
+                      maxLines: 3,
+                      overflow: TextOverflow.visible,
+                    ),
+                  ),
                   if (_sessionTasks.isNotEmpty) ...[
                     const Spacer(),
                     SizedBox(
