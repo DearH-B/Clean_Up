@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 
 import '../models/cleaning_task.dart';
@@ -22,30 +20,12 @@ class CleaningSessionScreen extends StatefulWidget {
 }
 
 class _CleaningSessionScreenState extends State<CleaningSessionScreen> {
-  Timer? _timer;
-  late int _remainingSeconds;
-  bool _isRunning = false;
-
-  int get _totalSeconds => widget.task.estimatedMinutes * 60;
-
   List<String> get _steps {
     final itemSteps = widget.item?.steps ?? const [];
     if (itemSteps.isNotEmpty) {
       return itemSteps;
     }
     return _defaultSteps(widget.task);
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    _remainingSeconds = _totalSeconds;
-  }
-
-  @override
-  void dispose() {
-    _timer?.cancel();
-    super.dispose();
   }
 
   @override
@@ -73,9 +53,7 @@ class _CleaningSessionScreenState extends State<CleaningSessionScreen> {
                       style: Theme.of(context).textTheme.headlineSmall,
                     ),
                     const SizedBox(height: 5),
-                    Text(
-                      '${widget.task.zoneName} · 약 ${widget.task.estimatedMinutes}분',
-                    ),
+                    Text(widget.task.zoneName),
                     if (item?.hasProductInfo ?? false) ...[
                       const SizedBox(height: 6),
                       Text(
@@ -91,14 +69,6 @@ class _CleaningSessionScreenState extends State<CleaningSessionScreen> {
                 ),
               ),
             ],
-          ),
-          const SizedBox(height: 22),
-          _TimerPanel(
-            remainingSeconds: _remainingSeconds,
-            totalSeconds: _totalSeconds,
-            isRunning: _isRunning,
-            onToggle: _toggleTimer,
-            onReset: _resetTimer,
           ),
           if (item?.supplies.isNotEmpty ?? false) ...[
             const SizedBox(height: 24),
@@ -151,7 +121,7 @@ class _CleaningSessionScreenState extends State<CleaningSessionScreen> {
             _StepRow(number: index + 1, text: _steps[index]),
           const SizedBox(height: 12),
           FilledButton.icon(
-            onPressed: () => Navigator.of(context).pop(true),
+            onPressed: _showCompletion,
             icon: const Icon(Icons.check_rounded),
             label: const Text('청소 완료'),
           ),
@@ -165,106 +135,47 @@ class _CleaningSessionScreenState extends State<CleaningSessionScreen> {
     );
   }
 
-  void _toggleTimer() {
-    if (_isRunning) {
-      _timer?.cancel();
-      setState(() {
-        _isRunning = false;
-      });
-      return;
-    }
-
-    if (_remainingSeconds == 0) {
-      _remainingSeconds = _totalSeconds;
-    }
-    setState(() {
-      _isRunning = true;
-    });
-    _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
-      if (_remainingSeconds <= 1) {
-        timer.cancel();
-        setState(() {
-          _remainingSeconds = 0;
-          _isRunning = false;
-        });
-        return;
-      }
-      setState(() {
-        _remainingSeconds--;
-      });
-    });
-  }
-
-  void _resetTimer() {
-    _timer?.cancel();
-    setState(() {
-      _remainingSeconds = _totalSeconds;
-      _isRunning = false;
-    });
-  }
-}
-
-class _TimerPanel extends StatelessWidget {
-  const _TimerPanel({
-    required this.remainingSeconds,
-    required this.totalSeconds,
-    required this.isRunning,
-    required this.onToggle,
-    required this.onReset,
-  });
-
-  final int remainingSeconds;
-  final int totalSeconds;
-  final bool isRunning;
-  final VoidCallback onToggle;
-  final VoidCallback onReset;
-
-  @override
-  Widget build(BuildContext context) {
-    final minutes = (remainingSeconds ~/ 60).toString().padLeft(2, '0');
-    final seconds = (remainingSeconds % 60).toString().padLeft(2, '0');
-    final progress =
-        totalSeconds == 0 ? 0.0 : 1 - (remainingSeconds / totalSeconds);
-
-    return Container(
-      padding: const EdgeInsets.all(18),
-      decoration: BoxDecoration(
-        color: AppColors.pinkSoft,
-        borderRadius: BorderRadius.circular(8),
-      ),
-      child: Column(
-        children: [
-          Text(
-            '$minutes:$seconds',
-            style: const TextStyle(
-              fontSize: 38,
-              fontWeight: FontWeight.w800,
-            ),
-          ),
-          const SizedBox(height: 10),
-          LinearProgressIndicator(
-            value: progress,
-            minHeight: 8,
-            borderRadius: BorderRadius.circular(8),
-          ),
-          const SizedBox(height: 14),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
+  Future<void> _showCompletion() async {
+    await showModalBottomSheet<void>(
+      context: context,
+      isDismissible: false,
+      enableDrag: false,
+      builder: (sheetContext) => SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(24, 24, 24, 20),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
             children: [
-              FilledButton.icon(
-                onPressed: onToggle,
-                icon: Icon(isRunning ? Icons.pause : Icons.play_arrow),
-                label: Text(isRunning ? '잠시 멈춤' : '타이머 시작'),
+              const FairyImage(
+                size: 126,
+                assetPath: '캐릭터/청소요정_완료.png',
               ),
-              const SizedBox(width: 8),
-              IconButton(
-                tooltip: '타이머 초기화',
-                onPressed: onReset,
-                icon: const Icon(Icons.restart_alt),
+              const SizedBox(height: 16),
+              Text(
+                '한 곳을 반짝이게 만들었어요!',
+                textAlign: TextAlign.center,
+                style: Theme.of(context).textTheme.titleLarge,
+              ),
+              const SizedBox(height: 8),
+              Text(
+                '${widget.task.title}을 해낸 오늘의 나, 정말 멋져요.',
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 20),
+              SizedBox(
+                width: double.infinity,
+                child: FilledButton.icon(
+                  onPressed: () {
+                    Navigator.of(sheetContext).pop();
+                    Navigator.of(context).pop(true);
+                  },
+                  icon: const Icon(Icons.auto_awesome),
+                  label: const Text('뿌듯하게 마치기'),
+                ),
               ),
             ],
           ),
-        ],
+        ),
       ),
     );
   }
@@ -311,7 +222,7 @@ List<String> _defaultSteps(CleaningTask task) {
     return const [
       '가까운 창문을 열고 공기가 통할 길을 만들어요.',
       '주변에 넘어질 물건이 없는지 가볍게 정리해요.',
-      '타이머가 끝나면 창문 상태를 다시 확인해요.',
+      '충분히 환기됐다고 느껴지면 창문 상태를 다시 확인해요.',
     ];
   }
   if (title.contains('싱크대') || title.contains('세면대')) {

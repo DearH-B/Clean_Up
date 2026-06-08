@@ -31,7 +31,6 @@ class _TodayScreenState extends State<TodayScreen> {
   List<CleaningTask> _sessionTasks = [];
   Map<String, ZoneItem> _zoneItemsById = {};
   List<String> _zoneNames = [];
-  _EnergyLevel _energyLevel = _EnergyLevel.normal;
   String? _selectedZone;
   bool _isLoading = true;
 
@@ -69,35 +68,6 @@ class _TodayScreenState extends State<TodayScreen> {
         const SizedBox(height: 18),
         _buildFairyPanel(context),
         const SizedBox(height: 24),
-        Text('오늘 체력은 어때요?', style: Theme.of(context).textTheme.titleLarge),
-        const SizedBox(height: 10),
-        SegmentedButton<_EnergyLevel>(
-          segments: const [
-            ButtonSegment(
-              value: _EnergyLevel.light,
-              icon: Icon(Icons.spa_outlined),
-              label: Text('가볍게'),
-            ),
-            ButtonSegment(
-              value: _EnergyLevel.normal,
-              icon: Icon(Icons.favorite_outline),
-              label: Text('보통'),
-            ),
-            ButtonSegment(
-              value: _EnergyLevel.strong,
-              icon: Icon(Icons.bolt_outlined),
-              label: Text('충분해요'),
-            ),
-          ],
-          selected: {_energyLevel},
-          onSelectionChanged: (selection) {
-            setState(() {
-              _energyLevel = selection.first;
-              _refreshZoneItems();
-            });
-          },
-        ),
-        const SizedBox(height: 22),
         Text('신경 쓰이는 구역', style: Theme.of(context).textTheme.titleLarge),
         const SizedBox(height: 5),
         Text(
@@ -184,11 +154,6 @@ class _TodayScreenState extends State<TodayScreen> {
   }
 
   Widget _buildSession(BuildContext context) {
-    final totalMinutes = _sessionTasks.fold<int>(
-      0,
-      (sum, task) => sum + task.estimatedMinutes,
-    );
-
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
@@ -206,7 +171,7 @@ class _TodayScreenState extends State<TodayScreen> {
         Text(
           _isSessionComplete
               ? '계획보다 중요한 건 실제로 해낸 한 번이에요.'
-              : '${_sessionTasks.length}개 · 모두 하면 약 $totalMinutes분 · 하나만 골라도 충분해요',
+              : '${_sessionTasks.length}개가 있어요 · 마음 가는 하나만 골라도 충분해요',
           style: Theme.of(context).textTheme.bodySmall,
         ),
         const SizedBox(height: 12),
@@ -314,12 +279,6 @@ class _TodayScreenState extends State<TodayScreen> {
     if (item?.hasProductInfo ?? false) {
       score += 15;
     }
-    if (_energyLevel == _EnergyLevel.light && task.estimatedMinutes <= 5) {
-      score += 20;
-    }
-    if (_energyLevel == _EnergyLevel.strong && task.estimatedMinutes >= 10) {
-      score += 10;
-    }
     return score;
   }
 
@@ -339,19 +298,7 @@ class _TodayScreenState extends State<TodayScreen> {
     if (task.isRecurring) {
       return '평소 관리 주기를 참고했어요';
     }
-    return _energyLevel == _EnergyLevel.light
-        ? '체력 부담이 적은 짧은 청소예요'
-        : _energyLevel == _EnergyLevel.strong
-            ? '오늘 체력으로 꼼꼼히 해보기 좋아요'
-            : '부담 없이 시작하기 좋은 청소예요';
-  }
-
-  void _refreshZoneItems() {
-    final zone = _selectedZone;
-    if (zone == null) {
-      return;
-    }
-    _sessionTasks = _tasksForZone(zone);
+    return '원할 때 편하게 시작할 수 있어요';
   }
 
   Future<void> _startCleaning(CleaningTask task) async {
@@ -514,7 +461,7 @@ class _TodayScreenState extends State<TodayScreen> {
     return const _FairyState(
       assetPath: '캐릭터/귀여운 분홍새.png',
       title: '어디부터 반짝여볼까요?',
-      message: '오늘 체력과 신경 쓰이는 구역만 골라주세요.',
+      message: '신경 쓰이는 구역에서 마음 가는 하나만 골라주세요.',
     );
   }
 
@@ -642,7 +589,7 @@ class _CleaningSuggestionTile extends StatelessWidget {
                       ),
                       const SizedBox(height: 3),
                       Text(
-                        '${task.zoneName} · 약 ${task.estimatedMinutes}분',
+                        task.zoneName,
                         style: Theme.of(context).textTheme.bodySmall,
                       ),
                     ],
@@ -854,8 +801,6 @@ class _TaskPreset {
   final String zoneName;
   final int minutes;
 }
-
-enum _EnergyLevel { light, normal, strong }
 
 const _taskPresets = [
   _TaskPreset('분리수거 버리기', '현관', 7),

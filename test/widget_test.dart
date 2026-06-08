@@ -413,7 +413,7 @@ void main() {
     expect(find.text('싱크대 주변 물기 제거'), findsOneWidget);
   });
 
-  testWidgets('체력과 구역을 반영한 청소 이유가 표시된다', (tester) async {
+  testWidgets('구역을 선택하면 청소 이유가 표시된다', (tester) async {
     seedSampleData(taskRepository, dataRepository);
     await tester.pumpWidget(
       CleanUpApp(
@@ -423,8 +423,7 @@ void main() {
     );
     await tester.pumpAndSettle();
 
-    await tester.tap(find.text('가볍게'));
-    await tester.pumpAndSettle();
+    expect(find.text('오늘 체력은 어때요?'), findsNothing);
     await tester.tap(find.widgetWithText(ChoiceChip, '욕실'));
     await tester.pumpAndSettle();
 
@@ -433,7 +432,7 @@ void main() {
     expect(find.textContaining('참고했어요'), findsWidgets);
   });
 
-  testWidgets('추천 청소를 시작해 순서와 타이머를 보고 완료할 수 있다', (tester) async {
+  testWidgets('청소 순서를 보고 뿌듯하게 완료할 수 있다', (tester) async {
     seedSampleData(taskRepository, dataRepository);
     await tester.pumpWidget(
       CleanUpApp(
@@ -459,7 +458,7 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.text('청소 시작'), findsOneWidget);
-    expect(find.text('타이머 시작'), findsOneWidget);
+    expect(find.text('타이머 시작'), findsNothing);
     await tester.scrollUntilVisible(
       find.text('이 순서로 해봐요'),
       250,
@@ -473,6 +472,11 @@ void main() {
       scrollable: find.byType(Scrollable).last,
     );
     await tester.tap(find.text('청소 완료'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('한 곳을 반짝이게 만들었어요!'), findsOneWidget);
+    expect(find.text('뿌듯하게 마치기'), findsOneWidget);
+    await tester.tap(find.text('뿌듯하게 마치기'));
     await tester.pumpAndSettle();
 
     expect(find.textContaining('첫 번째 반짝임 완료'), findsOneWidget);
