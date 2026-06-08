@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -5,17 +7,20 @@ import '../data/product_catalog.dart';
 import '../models/cleaning_record.dart';
 import '../models/zone_item.dart';
 import '../repositories/cleaning_data_repository.dart';
+import '../repositories/product_catalog_repository.dart';
 
 class ZoneItemDetailScreen extends StatefulWidget {
   const ZoneItemDetailScreen({
     required this.item,
     required this.dataRepository,
+    required this.catalogRepository,
     this.onItemUpdated,
     super.key,
   });
 
   final ZoneItem item;
   final CleaningDataRepository dataRepository;
+  final ProductCatalogRepository catalogRepository;
   final ValueChanged<ZoneItem>? onItemUpdated;
 
   @override
@@ -210,7 +215,10 @@ class _ZoneItemDetailScreenState extends State<ZoneItemDetailScreen> {
       context: context,
       isScrollControlled: true,
       showDragHandle: true,
-      builder: (context) => _ProductInfoSheet(item: _item),
+      builder: (context) => _ProductInfoSheet(
+        item: _item,
+        catalogRepository: widget.catalogRepository,
+      ),
     );
 
     if (updatedItem == null || !mounted) {
@@ -645,9 +653,13 @@ class _RecommendationTile extends StatelessWidget {
 }
 
 class _ProductInfoSheet extends StatefulWidget {
-  const _ProductInfoSheet({required this.item});
+  const _ProductInfoSheet({
+    required this.item,
+    required this.catalogRepository,
+  });
 
   final ZoneItem item;
+  final ProductCatalogRepository catalogRepository;
 
   @override
   State<_ProductInfoSheet> createState() => _ProductInfoSheetState();
@@ -660,6 +672,9 @@ class _ProductInfoSheetState extends State<_ProductInfoSheet> {
   late bool _customBrand;
   String _searchQuery = '';
   ProductCatalogEntry? _selectedCatalogEntry;
+  List<ProductCatalogEntry> _searchResults = [];
+  Timer? _searchDebounce;
+  bool _isSearching = false;
 
   @override
   void initState() {
@@ -676,6 +691,7 @@ class _ProductInfoSheetState extends State<_ProductInfoSheet> {
 
   @override
   void dispose() {
+    _searchDebounce?.cancel();
     _searchController.dispose();
     _manufacturerController.dispose();
     _modelController.dispose();
@@ -716,13 +732,15 @@ class _ProductInfoSheetState extends State<_ProductInfoSheet> {
                   _searchQuery = value;
                   _selectedCatalogEntry = null;
                 });
+                _searchCatalog(value);
               },
             ),
             if (_searchQuery.trim().isNotEmpty) ...[
               const SizedBox(height: 10),
               _ProductCatalogResults(
                 query: _searchQuery,
-                categoryName: widget.item.name,
+                results: _searchResults,
+                isSearching: _isSearching,
                 selectedEntry: _selectedCatalogEntry,
                 onSelected: _selectCatalogEntry,
               ),
@@ -850,31 +868,59 @@ class _ProductInfoSheetState extends State<_ProductInfoSheet> {
       _customBrand = false;
     });
   }
+
+  void _searchCatalog(String query) {
+    _searchDebounce?.cancel();
+    if (query.trim().isEmpty) {
+      setState(() {
+        _searchResults = [];
+        _isSearching = false;
+      });
+      return;
+    }
+    setState(() {
+      _isSearching = true;
+    });
+    _searchDebounce = Timer(const Duration(milliseconds: 300), () async {
+      final results = await widget.catalogRepository.search(
+        query,
+        category: widget.item.name,
+        limit: 4,
+      );
+      if (!mounted || query != _searchQuery) {
+        return;
+      }
+      setState(() {
+        _searchResults = results;
+        _isSearching = false;
+      });
+    });
+  }
 }
 
 class _ProductCatalogResults extends StatelessWidget {
   const _ProductCatalogResults({
     required this.query,
-    required this.categoryName,
+    required this.results,
+    required this.isSearching,
     required this.selectedEntry,
     required this.onSelected,
   });
 
   final String query;
-  final String categoryName;
+  final List<ProductCatalogEntry> results;
+  final bool isSearching;
   final ProductCatalogEntry? selectedEntry;
   final ValueChanged<ProductCatalogEntry> onSelected;
 
   @override
   Widget build(BuildContext context) {
-    final results = searchProductCatalog(query)
-        .where(
-          (entry) =>
-              categoryName.contains(entry.categoryName) ||
-              entry.categoryName.contains(categoryName),
-        )
-        .take(4)
-        .toList();
+    if (isSearching) {
+      return const Padding(
+        padding: EdgeInsets.all(12),
+        child: Center(child: CircularProgressIndicator()),
+      );
+    }
     if (results.isEmpty) {
       return Container(
         padding: const EdgeInsets.all(12),

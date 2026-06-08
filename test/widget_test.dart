@@ -12,6 +12,7 @@ import 'package:clean_up/models/community_post.dart';
 import 'package:clean_up/models/zone_item.dart';
 import 'package:clean_up/repositories/cleaning_data_repository.dart';
 import 'package:clean_up/repositories/cleaning_task_repository.dart';
+import 'package:clean_up/repositories/product_catalog_repository.dart';
 
 void main() {
   late MemoryCleaningTaskRepository taskRepository;
@@ -181,6 +182,7 @@ Future<void> pumpApp(
     CleanUpApp(
       taskRepository: taskRepository,
       dataRepository: dataRepository,
+      catalogRepository: const LocalProductCatalogRepository(),
     ),
   );
   await tester.pumpAndSettle();

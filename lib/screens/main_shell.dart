@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../repositories/cleaning_data_repository.dart';
 import '../repositories/cleaning_task_repository.dart';
+import '../repositories/product_catalog_repository.dart';
 import 'community_screen.dart';
 import 'history_screen.dart';
 import 'home_screen.dart';
@@ -11,11 +12,13 @@ class MainShell extends StatefulWidget {
   const MainShell({
     required this.taskRepository,
     required this.dataRepository,
+    required this.catalogRepository,
     super.key,
   });
 
   final CleaningTaskRepository taskRepository;
   final CleaningDataRepository dataRepository;
+  final ProductCatalogRepository catalogRepository;
 
   @override
   State<MainShell> createState() => _MainShellState();
@@ -33,13 +36,17 @@ class _MainShellState extends State<MainShell> {
     super.initState();
     _homeScreen = HomeScreen(
       dataRepository: widget.dataRepository,
+      catalogRepository: widget.catalogRepository,
       onOpenProducts: () {
         setState(() {
           _selectedIndex = 1;
         });
       },
     );
-    _productsScreen = ZonesScreen(dataRepository: widget.dataRepository);
+    _productsScreen = ZonesScreen(
+      dataRepository: widget.dataRepository,
+      catalogRepository: widget.catalogRepository,
+    );
     _communityScreen = CommunityScreen(dataRepository: widget.dataRepository);
   }
 

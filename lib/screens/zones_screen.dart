@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../models/cleaning_zone.dart';
 import '../models/zone_item.dart';
 import '../repositories/cleaning_data_repository.dart';
+import '../repositories/product_catalog_repository.dart';
 import '../widgets/fairy_image.dart';
 import '../widgets/zone_card.dart';
 import 'zone_detail_screen.dart';
@@ -10,10 +11,12 @@ import 'zone_detail_screen.dart';
 class ZonesScreen extends StatefulWidget {
   const ZonesScreen({
     required this.dataRepository,
+    required this.catalogRepository,
     super.key,
   });
 
   final CleaningDataRepository dataRepository;
+  final ProductCatalogRepository catalogRepository;
 
   @override
   State<ZonesScreen> createState() => _ZonesScreenState();
@@ -192,6 +195,7 @@ class _ZonesScreenState extends State<ZonesScreen> {
           onItemsChanged: _updateZoneItems,
           onDeleteZone: _deleteZone,
           dataRepository: widget.dataRepository,
+          catalogRepository: widget.catalogRepository,
           startWithAddItem: startWithAddItem,
         ),
       ),

@@ -63,6 +63,50 @@ class ProductCatalogEntry {
   final String? guideVideoChannel;
   final List<String> keywords;
 
+  factory ProductCatalogEntry.fromJson(Map<String, Object?> json) {
+    return ProductCatalogEntry(
+      id: json['id'] as String,
+      name: json['name'] as String,
+      type: ZoneItemType.values.byName(json['type'] as String),
+      categoryName: json['categoryName'] as String,
+      brand: json['brand'] as String,
+      manufacturer: json['manufacturer'] as String,
+      modelName: json['modelName'] as String,
+      summary: json['summary'] as String,
+      frequency: json['frequency'] as String,
+      recurrenceDays: json['recurrenceDays'] as int,
+      estimatedMinutes: json['estimatedMinutes'] as int,
+      productMethod: json['productMethod'] as String,
+      guideStatus: json['guideStatus'] as String,
+      guideBasis: json['guideBasis'] as String,
+      guideSourceType: GuideSourceType.values.byName(
+        json['guideSourceType'] as String,
+      ),
+      matchLevelLabel: json['matchLevelLabel'] as String,
+      sourceTitle: json['sourceTitle'] as String,
+      sourceUrl: json['sourceUrl'] as String,
+      sourceCheckedAt: DateTime.parse(json['sourceCheckedAt'] as String),
+      productSpecs: (json['productSpecs'] as List<dynamic>).cast<String>(),
+      supplies: (json['supplies'] as List<dynamic>).cast<String>(),
+      recommendedSupplies:
+          (json['recommendedSupplies'] as List<dynamic>).cast<String>(),
+      recommendedProducts:
+          (json['recommendedProducts'] as List<dynamic>? ?? const [])
+              .map(
+                (item) => CleaningProduct.fromJson(
+                  Map<String, Object?>.from(item as Map),
+                ),
+              )
+              .toList(),
+      cautions: (json['cautions'] as List<dynamic>).cast<String>(),
+      steps: (json['steps'] as List<dynamic>).cast<String>(),
+      guideVideoUrl: json['guideVideoUrl'] as String?,
+      guideVideoTitle: json['guideVideoTitle'] as String?,
+      guideVideoChannel: json['guideVideoChannel'] as String?,
+      keywords: (json['keywords'] as List<dynamic>? ?? const []).cast<String>(),
+    );
+  }
+
   ZoneItem toZoneItem({
     required String id,
     required String zoneId,

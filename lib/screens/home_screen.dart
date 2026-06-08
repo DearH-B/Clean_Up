@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import '../models/cleaning_record.dart';
 import '../models/zone_item.dart';
 import '../repositories/cleaning_data_repository.dart';
+import '../repositories/product_catalog_repository.dart';
 import '../theme/app_theme.dart';
 import '../widgets/fairy_image.dart';
 import 'zone_item_detail_screen.dart';
@@ -12,11 +13,13 @@ import 'zone_item_detail_screen.dart';
 class HomeScreen extends StatefulWidget {
   const HomeScreen({
     required this.dataRepository,
+    required this.catalogRepository,
     required this.onOpenProducts,
     super.key,
   });
 
   final CleaningDataRepository dataRepository;
+  final ProductCatalogRepository catalogRepository;
   final VoidCallback onOpenProducts;
 
   @override
@@ -124,6 +127,7 @@ class _HomeScreenState extends State<HomeScreen> {
         builder: (context) => ZoneItemDetailScreen(
           item: item,
           dataRepository: widget.dataRepository,
+          catalogRepository: widget.catalogRepository,
           onItemUpdated: _updateItem,
         ),
       ),

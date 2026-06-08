@@ -1,9 +1,12 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 
 import '../data/product_catalog.dart';
 import '../models/cleaning_zone.dart';
 import '../models/zone_item.dart';
 import '../repositories/cleaning_data_repository.dart';
+import '../repositories/product_catalog_repository.dart';
 import '../widgets/zone_item_tile.dart';
 import 'zone_item_detail_screen.dart';
 
@@ -14,6 +17,7 @@ class ZoneDetailScreen extends StatefulWidget {
     required this.onItemsChanged,
     required this.onDeleteZone,
     required this.dataRepository,
+    required this.catalogRepository,
     this.startWithAddItem = false,
     super.key,
   });
@@ -23,6 +27,7 @@ class ZoneDetailScreen extends StatefulWidget {
   final void Function(String zoneId, List<ZoneItem> items) onItemsChanged;
   final ValueChanged<String> onDeleteZone;
   final CleaningDataRepository dataRepository;
+  final ProductCatalogRepository catalogRepository;
   final bool startWithAddItem;
 
   @override
@@ -99,6 +104,7 @@ class _ZoneDetailScreenState extends State<ZoneDetailScreen> {
         builder: (context) => ZoneItemDetailScreen(
           item: item,
           dataRepository: widget.dataRepository,
+          catalogRepository: widget.catalogRepository,
           onItemUpdated: (updatedItem) {
             final index = _items.indexWhere(
               (candidate) => candidate.id == updatedItem.id,
@@ -121,7 +127,10 @@ class _ZoneDetailScreenState extends State<ZoneDetailScreen> {
       context: context,
       isScrollControlled: true,
       showDragHandle: true,
-      builder: (context) => _AddZoneItemSheet(zoneId: widget.zone.id),
+      builder: (context) => _AddZoneItemSheet(
+        zoneId: widget.zone.id,
+        catalogRepository: widget.catalogRepository,
+      ),
     );
 
     if (item == null || !mounted) {
@@ -206,9 +215,13 @@ class _EmptyZone extends StatelessWidget {
 }
 
 class _AddZoneItemSheet extends StatefulWidget {
-  const _AddZoneItemSheet({required this.zoneId});
+  const _AddZoneItemSheet({
+    required this.zoneId,
+    required this.catalogRepository,
+  });
 
   final String zoneId;
+  final ProductCatalogRepository catalogRepository;
 
   @override
   State<_AddZoneItemSheet> createState() => _AddZoneItemSheetState();
@@ -226,9 +239,13 @@ class _AddZoneItemSheetState extends State<_AddZoneItemSheet> {
   bool _customBrand = false;
   String _searchQuery = '';
   ProductCatalogEntry? _selectedCatalogEntry;
+  List<ProductCatalogEntry> _searchResults = [];
+  Timer? _searchDebounce;
+  bool _isSearching = false;
 
   @override
   void dispose() {
+    _searchDebounce?.cancel();
     _searchController.dispose();
     _nameController.dispose();
     _manufacturerController.dispose();
@@ -299,11 +316,14 @@ class _AddZoneItemSheetState extends State<_AddZoneItemSheet> {
                     _searchQuery = value;
                     _selectedCatalogEntry = null;
                   });
+                  _searchCatalog(value);
                 },
               ),
               const SizedBox(height: 10),
               _CatalogSearchResults(
                 query: _searchQuery,
+                results: _searchResults,
+                isSearching: _isSearching,
                 selectedEntry: _selectedCatalogEntry,
                 onSelected: _selectCatalogEntry,
               ),
@@ -576,16 +596,45 @@ class _AddZoneItemSheetState extends State<_AddZoneItemSheet> {
       _customBrand = false;
     });
   }
+
+  void _searchCatalog(String query) {
+    _searchDebounce?.cancel();
+    if (query.trim().isEmpty) {
+      setState(() {
+        _searchResults = [];
+        _isSearching = false;
+      });
+      return;
+    }
+
+    setState(() {
+      _isSearching = true;
+    });
+    _searchDebounce = Timer(const Duration(milliseconds: 300), () async {
+      final results = await widget.catalogRepository.search(query, limit: 5);
+      if (!mounted || query != _searchQuery) {
+        return;
+      }
+      setState(() {
+        _searchResults = results;
+        _isSearching = false;
+      });
+    });
+  }
 }
 
 class _CatalogSearchResults extends StatelessWidget {
   const _CatalogSearchResults({
     required this.query,
+    required this.results,
+    required this.isSearching,
     required this.selectedEntry,
     required this.onSelected,
   });
 
   final String query;
+  final List<ProductCatalogEntry> results;
+  final bool isSearching;
   final ProductCatalogEntry? selectedEntry;
   final ValueChanged<ProductCatalogEntry> onSelected;
 
@@ -595,7 +644,12 @@ class _CatalogSearchResults extends StatelessWidget {
       return const SizedBox.shrink();
     }
 
-    final results = searchProductCatalog(query).take(5).toList();
+    if (isSearching) {
+      return const Padding(
+        padding: EdgeInsets.all(12),
+        child: Center(child: CircularProgressIndicator()),
+      );
+    }
     if (results.isEmpty) {
       return Container(
         padding: const EdgeInsets.all(12),
