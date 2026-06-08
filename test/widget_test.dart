@@ -395,6 +395,11 @@ void main() {
     );
     await tester.pumpAndSettle();
 
+    await tester.scrollUntilVisible(
+      find.text('장소에서 직접 고르기'),
+      250,
+      scrollable: find.byType(Scrollable).first,
+    );
     await tester.tap(find.text('장소에서 직접 고르기'));
     await tester.pumpAndSettle();
     await tester.scrollUntilVisible(
@@ -403,6 +408,105 @@ void main() {
       scrollable: find.byType(Scrollable).last,
     );
     expect(find.text('싱크대 주변 물기 제거'), findsOneWidget);
+  });
+
+  testWidgets('체력과 장소를 반영한 추천 이유가 표시된다', (tester) async {
+    seedSampleData(taskRepository, dataRepository);
+    await tester.pumpWidget(
+      CleanUpApp(
+        taskRepository: taskRepository,
+        dataRepository: dataRepository,
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.text('15분'));
+    await tester.pumpAndSettle();
+    await tester.scrollUntilVisible(
+      find.widgetWithText(ChoiceChip, '욕실'),
+      -250,
+      scrollable: find.byType(Scrollable).first,
+    );
+    await tester.tap(find.widgetWithText(ChoiceChip, '욕실'));
+    await tester.pumpAndSettle();
+
+    expect(find.textContaining('추천 코스'), findsOneWidget);
+    expect(find.textContaining('참고했어요'), findsWidgets);
+  });
+
+  testWidgets('추천 청소를 시작해 순서와 타이머를 보고 완료할 수 있다', (tester) async {
+    seedSampleData(taskRepository, dataRepository);
+    await tester.pumpWidget(
+      CleanUpApp(
+        taskRepository: taskRepository,
+        dataRepository: dataRepository,
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.text('15분'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.widgetWithText(FilledButton, '시작').first);
+    await tester.pumpAndSettle();
+
+    expect(find.text('청소 시작'), findsOneWidget);
+    expect(find.text('타이머 시작'), findsOneWidget);
+    await tester.scrollUntilVisible(
+      find.text('이 순서로 해봐요'),
+      250,
+      scrollable: find.byType(Scrollable).last,
+    );
+    expect(find.text('이 순서로 해봐요'), findsOneWidget);
+
+    await tester.scrollUntilVisible(
+      find.text('청소 완료'),
+      250,
+      scrollable: find.byType(Scrollable).last,
+    );
+    await tester.tap(find.text('청소 완료'));
+    await tester.pumpAndSettle();
+
+    expect(find.textContaining('첫 번째 반짝임 완료'), findsOneWidget);
+    final records = await dataRepository.loadRecords();
+    expect(records?.first.title, contains('완료'));
+  });
+
+  testWidgets('다음 예정일이 남은 정기 청소는 다시 추천하지 않는다', (tester) async {
+    final now = DateTime.now();
+    final sink = mockZoneItems.firstWhere(
+      (item) => item.id == 'kitchen-sink',
+    );
+    await dataRepository.saveZones(cleaningZones);
+    await dataRepository.saveZoneItems([
+      ...mockZoneItems.where((item) => item.id != sink.id),
+      sink.copyWith(
+        lastCleanedAt: now,
+        nextDueAt: now.add(const Duration(days: 1)),
+      ),
+    ]);
+    await taskRepository.saveTodayTasks([
+      const CleaningTask(
+        id: 'scheduled-zone-item-kitchen-sink',
+        title: '싱크대 정기 청소',
+        zoneName: '주방',
+        estimatedMinutes: 8,
+        isDone: false,
+        isRecurring: true,
+      ),
+    ]);
+
+    await tester.pumpWidget(
+      CleanUpApp(
+        taskRepository: taskRepository,
+        dataRepository: dataRepository,
+      ),
+    );
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('15분'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('싱크대 정기 청소'), findsNothing);
+    expect(find.textContaining('마지막 청소 후 0일'), findsNothing);
   });
 
   testWidgets('방1 같은 새 구역을 추가할 수 있다', (tester) async {

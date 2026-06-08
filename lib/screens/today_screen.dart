@@ -9,6 +9,7 @@ import '../repositories/cleaning_data_repository.dart';
 import '../repositories/cleaning_task_repository.dart';
 import '../theme/app_theme.dart';
 import '../widgets/fairy_image.dart';
+import 'cleaning_session_screen.dart';
 
 class TodayScreen extends StatefulWidget {
   const TodayScreen({
@@ -30,6 +31,8 @@ class _TodayScreenState extends State<TodayScreen> {
   List<CleaningTask> _sessionTasks = [];
   Map<String, ZoneItem> _zoneItemsById = {};
   int? _selectedMinutes;
+  _EnergyLevel _energyLevel = _EnergyLevel.normal;
+  String _selectedZone = '아무 곳이나';
   int _recommendationOffset = 0;
   bool _isLoading = true;
 
@@ -91,6 +94,58 @@ class _TodayScreenState extends State<TodayScreen> {
               if (option != _timeOptions.last) const SizedBox(width: 8),
             ],
           ],
+        ),
+        const SizedBox(height: 20),
+        Text('오늘 체력은 어때요?', style: Theme.of(context).textTheme.titleMedium),
+        const SizedBox(height: 10),
+        SegmentedButton<_EnergyLevel>(
+          segments: const [
+            ButtonSegment(
+              value: _EnergyLevel.light,
+              icon: Icon(Icons.spa_outlined),
+              label: Text('가볍게'),
+            ),
+            ButtonSegment(
+              value: _EnergyLevel.normal,
+              icon: Icon(Icons.favorite_outline),
+              label: Text('보통'),
+            ),
+            ButtonSegment(
+              value: _EnergyLevel.strong,
+              icon: Icon(Icons.bolt_outlined),
+              label: Text('충분해요'),
+            ),
+          ],
+          selected: {_energyLevel},
+          onSelectionChanged: (selection) {
+            setState(() {
+              _energyLevel = selection.first;
+              _refreshRecommendations();
+            });
+          },
+        ),
+        const SizedBox(height: 18),
+        Text('신경 쓰이는 곳', style: Theme.of(context).textTheme.titleMedium),
+        const SizedBox(height: 10),
+        SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          child: Row(
+            children: [
+              for (final zone in _zoneChoices) ...[
+                ChoiceChip(
+                  label: Text(zone),
+                  selected: _selectedZone == zone,
+                  onSelected: (_) {
+                    setState(() {
+                      _selectedZone = zone;
+                      _refreshRecommendations();
+                    });
+                  },
+                ),
+                const SizedBox(width: 8),
+              ],
+            ],
+          ),
         ),
         const SizedBox(height: 12),
         OutlinedButton.icon(
@@ -200,7 +255,10 @@ class _TodayScreenState extends State<TodayScreen> {
         for (final task in _sessionTasks) ...[
           _CleaningSuggestionTile(
             task: task,
+            reason: _recommendationReason(task),
             onToggle: () => _toggleTask(task),
+            onStart: () => _startCleaning(task),
+            onReplace: () => _replaceTask(task),
           ),
           const SizedBox(height: 10),
         ],
@@ -227,6 +285,7 @@ class _TodayScreenState extends State<TodayScreen> {
     final zones = await widget.dataRepository.loadZones() ?? [];
     final zoneNames = {for (final zone in zones) zone.id: zone.name};
     final now = DateTime.now();
+    final itemsById = {for (final item in items) item.id: item};
 
     final itemTasks = <CleaningTask>[
       for (final item in items)
@@ -246,9 +305,14 @@ class _TodayScreenState extends State<TodayScreen> {
     }
 
     setState(() {
-      _zoneItemsById = {for (final item in items) item.id: item};
+      _zoneItemsById = itemsById;
       _candidates = _deduplicateTasks([
-        ...savedTasks.where((task) => !task.isDone && !task.isPostponed),
+        ...savedTasks.where(
+          (task) =>
+              !task.isDone &&
+              !task.isPostponed &&
+              _isStillAvailable(task, itemsById, now),
+        ),
         ...itemTasks,
         ..._fallbackTasks,
       ]);
@@ -267,9 +331,22 @@ class _TodayScreenState extends State<TodayScreen> {
 
   List<CleaningTask> _recommendTasks(int minutes, int offset) {
     final available = _candidates
-        .where((task) => !task.isDone && task.estimatedMinutes <= minutes)
+        .where(
+          (task) =>
+              !task.isDone &&
+              task.estimatedMinutes <= _maximumTaskMinutes(minutes) &&
+              (_selectedZone == '아무 곳이나' ||
+                  task.zoneName == _selectedZone ||
+                  task.zoneName == '집 전체'),
+        )
         .toList()
       ..sort((a, b) {
+        final scoreComparison = _recommendationScore(
+          b,
+        ).compareTo(_recommendationScore(a));
+        if (scoreComparison != 0) {
+          return scoreComparison;
+        }
         if (a.isRecurring != b.isRecurring) {
           return a.isRecurring ? -1 : 1;
         }
@@ -299,6 +376,66 @@ class _TodayScreenState extends State<TodayScreen> {
         : selected;
   }
 
+  int _maximumTaskMinutes(int selectedMinutes) {
+    return switch (_energyLevel) {
+      _EnergyLevel.light => (selectedMinutes * 0.6).ceil(),
+      _EnergyLevel.normal => selectedMinutes,
+      _EnergyLevel.strong => selectedMinutes,
+    };
+  }
+
+  int _recommendationScore(CleaningTask task) {
+    var score = 0;
+    if (task.isRecurring) {
+      score += 30;
+    }
+    if (_selectedZone != '아무 곳이나' && task.zoneName == _selectedZone) {
+      score += 25;
+    }
+    final itemId = _zoneItemIdFromTask(task);
+    final item = itemId == null ? null : _zoneItemsById[itemId];
+    if (item?.hasProductInfo ?? false) {
+      score += 15;
+    }
+    if (_energyLevel == _EnergyLevel.light && task.estimatedMinutes <= 5) {
+      score += 20;
+    }
+    if (_energyLevel == _EnergyLevel.strong && task.estimatedMinutes >= 10) {
+      score += 10;
+    }
+    return score;
+  }
+
+  String _recommendationReason(CleaningTask task) {
+    final itemId = _zoneItemIdFromTask(task);
+    final item = itemId == null ? null : _zoneItemsById[itemId];
+    if (item?.lastCleanedAt != null) {
+      final days = DateTime.now().difference(item!.lastCleanedAt!).inDays;
+      return '마지막 청소 후 $days일이 지났어요';
+    }
+    if (item?.hasProductInfo ?? false) {
+      return '등록한 ${item!.manufacturer ?? '제품'} 관리 시기를 참고했어요';
+    }
+    if (task.isRecurring) {
+      return '평소 관리 주기를 참고했어요';
+    }
+    if (_selectedZone != '아무 곳이나' && task.zoneName == _selectedZone) {
+      return '지금 신경 쓰이는 장소와 잘 맞아요';
+    }
+    return _energyLevel == _EnergyLevel.light
+        ? '체력 부담이 적은 짧은 청소예요'
+        : '선택한 시간 안에 끝내기 좋아요';
+  }
+
+  void _refreshRecommendations() {
+    final minutes = _selectedMinutes;
+    if (minutes == null) {
+      return;
+    }
+    _recommendationOffset = 0;
+    _sessionTasks = _recommendTasks(minutes, 0);
+  }
+
   void _showAnotherRecommendation() {
     final minutes = _selectedMinutes;
     if (minutes == null) {
@@ -308,6 +445,59 @@ class _TodayScreenState extends State<TodayScreen> {
       _recommendationOffset++;
       _sessionTasks = _recommendTasks(minutes, _recommendationOffset);
     });
+  }
+
+  void _replaceTask(CleaningTask task) {
+    final minutes = _selectedMinutes ??
+        _sessionTasks.fold<int>(
+          0,
+          (sum, candidate) => sum + candidate.estimatedMinutes,
+        );
+    final currentIds = _sessionTasks.map((candidate) => candidate.id).toSet();
+    final replacements = _candidates
+        .where(
+          (candidate) =>
+              !candidate.isDone &&
+              !currentIds.contains(candidate.id) &&
+              candidate.estimatedMinutes <=
+                  (task.estimatedMinutes + 5).clamp(1, minutes) &&
+              (_selectedZone == '아무 곳이나' ||
+                  candidate.zoneName == _selectedZone ||
+                  candidate.zoneName == '집 전체'),
+        )
+        .toList()
+      ..sort(
+        (a, b) => _recommendationScore(b).compareTo(_recommendationScore(a)),
+      );
+
+    if (replacements.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('지금 조건에 맞는 다른 청소가 없어요.')),
+      );
+      return;
+    }
+
+    final index =
+        _sessionTasks.indexWhere((candidate) => candidate.id == task.id);
+    setState(() {
+      _sessionTasks[index] = replacements.first.copyWith(isDone: false);
+    });
+  }
+
+  Future<void> _startCleaning(CleaningTask task) async {
+    final itemId = _zoneItemIdFromTask(task);
+    final completed = await Navigator.of(context).push<bool>(
+      MaterialPageRoute(
+        builder: (context) => CleaningSessionScreen(
+          task: task,
+          item: itemId == null ? null : _zoneItemsById[itemId],
+        ),
+      ),
+    );
+
+    if (completed == true && mounted && !task.isDone) {
+      await _toggleTask(task);
+    }
   }
 
   Future<void> _showPlacePicker() async {
@@ -488,6 +678,19 @@ class _TodayScreenState extends State<TodayScreen> {
     return task.id.startsWith(prefix) ? task.id.substring(prefix.length) : null;
   }
 
+  bool _isStillAvailable(
+    CleaningTask task,
+    Map<String, ZoneItem> itemsById,
+    DateTime now,
+  ) {
+    final itemId = _zoneItemIdFromTask(task);
+    if (itemId == null) {
+      return true;
+    }
+    final item = itemsById[itemId];
+    return item != null && item.isDue(now);
+  }
+
   _FairyState _fairyState() {
     if (_isSessionComplete) {
       return const _FairyState(
@@ -607,64 +810,110 @@ class _ReadyMessage extends StatelessWidget {
 class _CleaningSuggestionTile extends StatelessWidget {
   const _CleaningSuggestionTile({
     required this.task,
+    required this.reason,
     required this.onToggle,
+    required this.onStart,
+    required this.onReplace,
   });
 
   final CleaningTask task;
+  final String reason;
   final VoidCallback onToggle;
+  final VoidCallback onStart;
+  final VoidCallback onReplace;
 
   @override
   Widget build(BuildContext context) {
     return Card(
-      child: InkWell(
-        onTap: onToggle,
-        borderRadius: BorderRadius.circular(8),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
-          child: Row(
-            children: [
-              Container(
-                width: 44,
-                height: 44,
-                decoration: BoxDecoration(
-                  color: task.isDone
-                      ? AppColors.pinkSoft
-                      : Theme.of(context).colorScheme.surfaceContainerLow,
-                  shape: BoxShape.circle,
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(14, 12, 10, 10),
+        child: Column(
+          children: [
+            Row(
+              children: [
+                Container(
+                  width: 44,
+                  height: 44,
+                  decoration: BoxDecoration(
+                    color: task.isDone
+                        ? AppColors.pinkSoft
+                        : Theme.of(context).colorScheme.surfaceContainerLow,
+                    shape: BoxShape.circle,
+                  ),
+                  child: Icon(
+                    task.isDone
+                        ? Icons.check_rounded
+                        : Icons.cleaning_services_outlined,
+                    color: task.isDone
+                        ? AppColors.rose
+                        : Theme.of(context).colorScheme.outline,
+                  ),
                 ),
-                child: Icon(
-                  task.isDone
-                      ? Icons.check_rounded
-                      : Icons.cleaning_services_outlined,
-                  color: task.isDone
-                      ? AppColors.rose
-                      : Theme.of(context).colorScheme.outline,
-                ),
-              ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      task.title,
-                      style: TextStyle(
-                        fontWeight: FontWeight.w700,
-                        decoration:
-                            task.isDone ? TextDecoration.lineThrough : null,
+                const SizedBox(width: 12),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        task.title,
+                        style: TextStyle(
+                          fontWeight: FontWeight.w700,
+                          decoration:
+                              task.isDone ? TextDecoration.lineThrough : null,
+                        ),
                       ),
-                    ),
-                    const SizedBox(height: 3),
-                    Text(
-                      '${task.zoneName} · 약 ${task.estimatedMinutes}분',
+                      const SizedBox(height: 3),
+                      Text(
+                        '${task.zoneName} · 약 ${task.estimatedMinutes}분',
+                        style: Theme.of(context).textTheme.bodySmall,
+                      ),
+                    ],
+                  ),
+                ),
+                Checkbox(value: task.isDone, onChanged: (_) => onToggle()),
+              ],
+            ),
+            const SizedBox(height: 10),
+            Container(
+              width: double.infinity,
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+              decoration: BoxDecoration(
+                color: Theme.of(context).colorScheme.surfaceContainerLow,
+                borderRadius: BorderRadius.circular(6),
+              ),
+              child: Row(
+                children: [
+                  const Icon(Icons.auto_awesome, size: 16),
+                  const SizedBox(width: 7),
+                  Expanded(
+                    child: Text(
+                      reason,
                       style: Theme.of(context).textTheme.bodySmall,
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
-              Checkbox(value: task.isDone, onChanged: (_) => onToggle()),
+            ),
+            if (!task.isDone) ...[
+              const SizedBox(height: 8),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  TextButton.icon(
+                    onPressed: onReplace,
+                    icon: const Icon(Icons.swap_horiz, size: 18),
+                    label: const Text('교체'),
+                  ),
+                  const SizedBox(width: 4),
+                  FilledButton.icon(
+                    onPressed: onStart,
+                    icon: const Icon(Icons.play_arrow, size: 19),
+                    label: const Text('시작'),
+                  ),
+                ],
+              ),
             ],
-          ),
+          ],
         ),
       ),
     );
@@ -841,11 +1090,15 @@ class _TaskPreset {
   final int minutes;
 }
 
+enum _EnergyLevel { light, normal, strong }
+
 const _timeOptions = [
   _TimeOption(5, '아주 가볍게'),
   _TimeOption(15, '한 곳 산뜻하게'),
   _TimeOption(30, '제대로 한 번'),
 ];
+
+const _zoneChoices = ['아무 곳이나', '주방', '거실', '욕실', '침실', '현관'];
 
 const _taskPresets = [
   _TaskPreset('분리수거 버리기', '현관', 7),
