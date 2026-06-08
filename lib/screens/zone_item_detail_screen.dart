@@ -4,6 +4,7 @@ import 'package:url_launcher/url_launcher.dart';
 import '../models/cleaning_record.dart';
 import '../models/zone_item.dart';
 import '../repositories/cleaning_data_repository.dart';
+import '../widgets/searchable_choice_section.dart';
 
 class ZoneItemDetailScreen extends StatefulWidget {
   const ZoneItemDetailScreen({
@@ -590,48 +591,71 @@ class _ProductInfoSheetState extends State<_ProductInfoSheet> {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.fromLTRB(
-        20,
-        0,
-        20,
-        20 + MediaQuery.viewInsetsOf(context).bottom,
-      ),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Text(
-            '${widget.item.name} 제품 정보',
-            style: Theme.of(context).textTheme.titleLarge,
-          ),
-          const SizedBox(height: 8),
-          const Text('제품 라벨이나 설명서에서 확인할 수 있어요.'),
-          const SizedBox(height: 16),
-          TextField(
-            controller: _manufacturerController,
-            autofocus: true,
-            decoration: const InputDecoration(
-              labelText: '브랜드 또는 제조사',
-              hintText: '예: 삼성전자',
+    return SafeArea(
+      child: SingleChildScrollView(
+        padding: EdgeInsets.fromLTRB(
+          20,
+          0,
+          20,
+          20 + MediaQuery.viewInsetsOf(context).bottom,
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Text(
+              '${widget.item.name} 제품 정보',
+              style: Theme.of(context).textTheme.titleLarge,
             ),
-          ),
-          const SizedBox(height: 12),
-          TextField(
-            controller: _modelController,
-            textInputAction: TextInputAction.done,
-            decoration: const InputDecoration(
-              labelText: '모델명',
-              hintText: '예: RF85C...',
+            const SizedBox(height: 8),
+            const Text('제품 라벨이나 설명서에서 확인할 수 있어요.'),
+            const SizedBox(height: 16),
+            SearchableChoiceSection(
+              title: '대표 브랜드',
+              searchLabel: '브랜드 찾기',
+              options: _brandOptions,
+              onSelected: (brand) {
+                setState(() {
+                  _manufacturerController.text = brand;
+                });
+              },
             ),
-            onSubmitted: (_) => _submit(),
-          ),
-          const SizedBox(height: 20),
-          FilledButton(
-            onPressed: _submit,
-            child: const Text('제품 정보 저장'),
-          ),
-        ],
+            const SizedBox(height: 16),
+            TextField(
+              controller: _manufacturerController,
+              decoration: const InputDecoration(
+                labelText: '브랜드 또는 제조사',
+                hintText: '예: 삼성전자',
+              ),
+            ),
+            const SizedBox(height: 12),
+            SearchableChoiceSection(
+              title: '대표 모델명',
+              searchLabel: '모델명 찾기',
+              options: _modelOptionsFor(widget.item.name),
+              onSelected: (modelName) {
+                setState(() {
+                  _modelController.text = modelName;
+                });
+              },
+            ),
+            const SizedBox(height: 16),
+            TextField(
+              controller: _modelController,
+              textInputAction: TextInputAction.done,
+              decoration: const InputDecoration(
+                labelText: '모델명',
+                hintText: '예: RF85C...',
+              ),
+              onSubmitted: (_) => _submit(),
+            ),
+            const SizedBox(height: 20),
+            FilledButton(
+              onPressed: _submit,
+              child: const Text('제품 정보 저장'),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -651,6 +675,34 @@ class _ProductInfoSheetState extends State<_ProductInfoSheet> {
       ),
     );
   }
+}
+
+const _brandOptions = [
+  '삼성전자',
+  'LG전자',
+  '위니아',
+  '쿠쿠',
+  '쿠첸',
+  '다이슨',
+  '샤오미',
+  '에코업',
+  '제이앤에이치컴퍼니',
+];
+
+List<String> _modelOptionsFor(String itemName) {
+  if (itemName.contains('음식물')) {
+    return const ['DCS-HM4AG-W', 'DCS-HM4AG', 'ECO-UP'];
+  }
+  if (itemName.contains('냉장고')) {
+    return const ['RF85', 'RF90', 'M874', 'T873'];
+  }
+  if (itemName.contains('공기청정')) {
+    return const ['AX', 'AS', '퓨리케어', 'Mi Air'];
+  }
+  if (itemName.contains('전자레인지')) {
+    return const ['MS23', 'MW23', 'MZ23'];
+  }
+  return const ['모델명 모름', '라벨 확인 필요'];
 }
 
 class _ProductInfo extends StatelessWidget {

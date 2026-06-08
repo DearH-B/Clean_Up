@@ -119,12 +119,56 @@ void main() {
       find.widgetWithText(TextField, '모델명'),
       'RF85TEST',
     );
+    await tester.scrollUntilVisible(
+      find.text('제품 정보 저장'),
+      250,
+      scrollable: find.byType(Scrollable).last,
+    );
     await tester.tap(find.text('제품 정보 저장'));
     await tester.pumpAndSettle();
 
     expect(find.text('삼성전자'), findsOneWidget);
     expect(find.text('RF85TEST'), findsOneWidget);
     expect(find.text('제품 정보 수정'), findsOneWidget);
+  });
+
+  testWidgets('브랜드와 모델명을 선택지로 등록할 수 있다', (tester) async {
+    seedSampleData(taskRepository, dataRepository);
+    await tester.pumpWidget(
+      CleanUpApp(
+        taskRepository: taskRepository,
+        dataRepository: dataRepository,
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.text('구역'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('주방'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('냉장고'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('브랜드·모델 등록'));
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.text('LG전자'));
+    await tester.pumpAndSettle();
+    await tester.scrollUntilVisible(
+      find.text('RF85'),
+      250,
+      scrollable: find.byType(Scrollable).last,
+    );
+    await tester.tap(find.text('RF85'));
+    await tester.scrollUntilVisible(
+      find.text('제품 정보 저장'),
+      250,
+      scrollable: find.byType(Scrollable).last,
+    );
+    await tester.tap(find.text('제품 정보 저장'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('LG전자'), findsOneWidget);
+    expect(find.text('RF85'), findsOneWidget);
   });
 
   testWidgets('오늘 할 일을 추가하고 완료할 수 있다', (tester) async {

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../models/cleaning_zone.dart';
 import '../models/zone_item.dart';
 import '../repositories/cleaning_data_repository.dart';
+import '../widgets/searchable_choice_section.dart';
 import '../widgets/zone_item_tile.dart';
 import 'zone_item_detail_screen.dart';
 
@@ -347,6 +348,17 @@ class _AddZoneItemSheetState extends State<_AddZoneItemSheet> {
             ),
             if (_addProductInfo) ...[
               const SizedBox(height: 16),
+              SearchableChoiceSection(
+                title: '대표 브랜드',
+                searchLabel: '브랜드 찾기',
+                options: _brandOptions,
+                onSelected: (brand) {
+                  setState(() {
+                    _manufacturerController.text = brand;
+                  });
+                },
+              ),
+              const SizedBox(height: 16),
               TextField(
                 controller: _manufacturerController,
                 decoration: const InputDecoration(
@@ -355,6 +367,17 @@ class _AddZoneItemSheetState extends State<_AddZoneItemSheet> {
                 ),
               ),
               const SizedBox(height: 12),
+              SearchableChoiceSection(
+                title: '대표 모델명',
+                searchLabel: '모델명 찾기',
+                options: _modelOptionsFor(_nameController.text),
+                onSelected: (modelName) {
+                  setState(() {
+                    _modelController.text = modelName;
+                  });
+                },
+              ),
+              const SizedBox(height: 16),
               TextField(
                 controller: _modelController,
                 textInputAction: TextInputAction.done,
@@ -517,3 +540,31 @@ const _itemPresets = [
     estimatedMinutes: 15,
   ),
 ];
+
+const _brandOptions = [
+  '삼성전자',
+  'LG전자',
+  '위니아',
+  '쿠쿠',
+  '쿠첸',
+  '다이슨',
+  '샤오미',
+  '에코업',
+  '제이앤에이치컴퍼니',
+];
+
+List<String> _modelOptionsFor(String itemName) {
+  if (itemName.contains('음식물')) {
+    return const ['DCS-HM4AG-W', 'DCS-HM4AG', 'ECO-UP'];
+  }
+  if (itemName.contains('냉장고')) {
+    return const ['RF85', 'RF90', 'M874', 'T873'];
+  }
+  if (itemName.contains('공기청정')) {
+    return const ['AX', 'AS', '퓨리케어', 'Mi Air'];
+  }
+  if (itemName.contains('전자레인지')) {
+    return const ['MS23', 'MW23', 'MZ23'];
+  }
+  return const ['모델명 모름', '라벨 확인 필요'];
+}
