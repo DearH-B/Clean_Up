@@ -4,6 +4,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:clean_up/app.dart';
 import 'package:clean_up/data/mock_cleaning_data.dart';
 import 'package:clean_up/data/mock_zone_items.dart';
+import 'package:clean_up/data/product_catalog.dart';
 import 'package:clean_up/models/cleaning_record.dart';
 import 'package:clean_up/models/cleaning_task.dart';
 import 'package:clean_up/models/cleaning_zone.dart';
@@ -19,6 +20,26 @@ void main() {
   setUp(() {
     taskRepository = MemoryCleaningTaskRepository();
     dataRepository = MemoryCleaningDataRepository();
+  });
+
+  test('제품 카탈로그는 모델명과 별칭으로 검색할 수 있다', () {
+    expect(
+      searchProductCatalog('DCS-HM4AG-W').single.modelName,
+      'DCS-HM4AG-W',
+    );
+    expect(searchProductCatalog('음처기').single.brand, '에코업');
+  });
+
+  test('제품 출처 정보는 JSON 저장 후에도 유지된다', () {
+    final item = productCatalog.first.toZoneItem(
+      id: 'saved-product',
+      zoneId: 'zone-1',
+    );
+    final restored = ZoneItem.fromJson(item.toJson());
+
+    expect(restored.matchLevelLabel, '모델명 일치');
+    expect(restored.sourceTitle, contains('다나와'));
+    expect(restored.productSpecs, contains('처리용량: 1kg'));
   });
 
   testWidgets('제품 관리형 홈 화면이 표시된다', (tester) async {
@@ -68,6 +89,46 @@ void main() {
     expect(find.text('에코업 음식물처리기'), findsOneWidget);
     expect(find.text('냉장고'), findsOneWidget);
     expect(find.text('항목 추가'), findsOneWidget);
+  });
+
+  testWidgets('모델명을 검색해 출처가 있는 제품을 등록할 수 있다', (tester) async {
+    seedSampleData(taskRepository, dataRepository);
+    await pumpApp(tester, taskRepository, dataRepository);
+
+    await tester.tap(find.text('내 제품'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('주방'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('항목 추가'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('제품 등록'));
+    await tester.pumpAndSettle();
+
+    await tester.enterText(
+      find.widgetWithText(TextField, '제품 검색'),
+      'DCS-HM4AG-W',
+    );
+    await tester.pumpAndSettle();
+    await tester.tap(
+      find.widgetWithText(ListTile, '에코업 음식물처리기').last,
+    );
+    await tester.pumpAndSettle();
+    await tester.scrollUntilVisible(
+      find.widgetWithText(FilledButton, '추가'),
+      300,
+      scrollable: find.byType(Scrollable).last,
+    );
+    await tester.tap(find.widgetWithText(FilledButton, '추가'));
+    await tester.pumpAndSettle();
+
+    final items = await dataRepository.loadZoneItems();
+    final registered = items!.lastWhere(
+      (item) => item.id.startsWith('custom-'),
+    );
+    expect(registered.modelName, 'DCS-HM4AG-W');
+    expect(registered.matchLevelLabel, '모델명 일치');
+    expect(registered.sourceUrl, isNotEmpty);
+    expect(registered.productSpecs, contains('소음: 약 40dB'));
   });
 
   testWidgets('처음 사용하는 상태에서는 제품 추가 안내가 나온다', (tester) async {

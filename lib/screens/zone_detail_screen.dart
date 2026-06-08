@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../data/product_catalog.dart';
 import '../models/cleaning_zone.dart';
 import '../models/zone_item.dart';
 import '../repositories/cleaning_data_repository.dart';
@@ -214,6 +215,7 @@ class _AddZoneItemSheet extends StatefulWidget {
 }
 
 class _AddZoneItemSheetState extends State<_AddZoneItemSheet> {
+  final _searchController = TextEditingController();
   final _nameController = TextEditingController();
   final _manufacturerController = TextEditingController();
   final _modelController = TextEditingController();
@@ -222,9 +224,12 @@ class _AddZoneItemSheetState extends State<_AddZoneItemSheet> {
   int _recurrenceDays = 7;
   bool _addProductInfo = false;
   bool _customBrand = false;
+  String _searchQuery = '';
+  ProductCatalogEntry? _selectedCatalogEntry;
 
   @override
   void dispose() {
+    _searchController.dispose();
     _nameController.dispose();
     _manufacturerController.dispose();
     _modelController.dispose();
@@ -278,6 +283,36 @@ class _AddZoneItemSheetState extends State<_AddZoneItemSheet> {
                   : '제품 정보를 몰라도 냉장고처럼 종류만 등록할 수 있어요.',
               style: Theme.of(context).textTheme.bodySmall,
             ),
+            if (_addProductInfo) ...[
+              const SizedBox(height: 16),
+              TextField(
+                controller: _searchController,
+                textInputAction: TextInputAction.search,
+                decoration: const InputDecoration(
+                  labelText: '제품 검색',
+                  hintText: '제품명, 브랜드 또는 모델명',
+                  prefixIcon: Icon(Icons.search),
+                  border: OutlineInputBorder(),
+                ),
+                onChanged: (value) {
+                  setState(() {
+                    _searchQuery = value;
+                    _selectedCatalogEntry = null;
+                  });
+                },
+              ),
+              const SizedBox(height: 10),
+              _CatalogSearchResults(
+                query: _searchQuery,
+                selectedEntry: _selectedCatalogEntry,
+                onSelected: _selectCatalogEntry,
+              ),
+              const SizedBox(height: 8),
+              Text(
+                '찾는 제품이 없다면 아래에서 종류, 브랜드, 모델명을 직접 입력할 수 있어요.',
+                style: Theme.of(context).textTheme.bodySmall,
+              ),
+            ],
             const SizedBox(height: 14),
             Wrap(
               spacing: 8,
@@ -351,7 +386,7 @@ class _AddZoneItemSheetState extends State<_AddZoneItemSheet> {
               _ChoiceSection(
                 title: '브랜드',
                 helperText: '브랜드를 고르면 아래 모델 후보가 바뀌어요.',
-                options: _brandOptionsFor(_nameController.text),
+                options: catalogBrandOptionsFor(_nameController.text),
                 selectedValue:
                     _customBrand ? null : _manufacturerController.text.trim(),
                 onSelected: _selectBrand,
@@ -387,10 +422,8 @@ class _AddZoneItemSheetState extends State<_AddZoneItemSheet> {
                 helperText: _manufacturerController.text.trim().isEmpty
                     ? '브랜드를 먼저 선택하면 대표 모델을 보여드려요.'
                     : '${_manufacturerController.text.trim()} ${_nameController.text.trim()} 대표 모델이에요.',
-                options: _modelOptionsFor(
-                  _nameController.text,
-                  _manufacturerController.text.trim(),
-                ),
+                options: catalogModelOptionsFor(
+                    _nameController.text, _manufacturerController.text.trim()),
                 selectedValue: _modelController.text.trim(),
                 onSelected: (modelName) {
                   setState(() {
@@ -429,6 +462,22 @@ class _AddZoneItemSheetState extends State<_AddZoneItemSheet> {
     final modelName = _modelController.text.trim();
     final minutes = int.tryParse(_minutesController.text.trim()) ?? 10;
     final now = DateTime.now();
+    final catalogEntry = _selectedCatalogEntry ??
+        findCatalogEntry(
+          categoryName: name,
+          brand: manufacturer,
+          modelName: modelName,
+        );
+
+    if (_addProductInfo && catalogEntry != null) {
+      Navigator.of(context).pop(
+        catalogEntry.toZoneItem(
+          id: 'custom-${DateTime.now().microsecondsSinceEpoch}',
+          zoneId: widget.zoneId,
+        ),
+      );
+      return;
+    }
 
     Navigator.of(context).pop(
       ZoneItem(
@@ -464,6 +513,13 @@ class _AddZoneItemSheetState extends State<_AddZoneItemSheet> {
         guideSourceType: _addProductInfo
             ? GuideSourceType.similarProduct
             : GuideSourceType.general,
+        matchLevelLabel: _addProductInfo ? '사용자 입력 정보' : '제품군 기준',
+        sourceTitle: _addProductInfo ? '사용자 등록 정보' : '앱 기본 관리법',
+        sourceCheckedAt: now,
+        productSpecs: [
+          if (manufacturer.isNotEmpty) '브랜드/제조사: $manufacturer',
+          if (modelName.isNotEmpty) '모델명: $modelName',
+        ],
         recommendedSupplies: const [
           '표면 손상을 줄이는 부드러운 극세사 천',
           '재질에 맞는 중성세제',
@@ -493,6 +549,7 @@ class _AddZoneItemSheetState extends State<_AddZoneItemSheet> {
       _manufacturerController.clear();
       _modelController.clear();
       _customBrand = false;
+      _selectedCatalogEntry = null;
     });
   }
 
@@ -501,7 +558,86 @@ class _AddZoneItemSheetState extends State<_AddZoneItemSheet> {
       _customBrand = false;
       _manufacturerController.text = brand;
       _modelController.clear();
+      _selectedCatalogEntry = null;
     });
+  }
+
+  void _selectCatalogEntry(ProductCatalogEntry entry) {
+    setState(() {
+      _selectedCatalogEntry = entry;
+      _searchController.text = '${entry.brand} ${entry.modelName}'.trim();
+      _searchQuery = _searchController.text;
+      _nameController.text = entry.categoryName;
+      _selectedType = entry.type;
+      _recurrenceDays = entry.recurrenceDays;
+      _minutesController.text = '${entry.estimatedMinutes}';
+      _manufacturerController.text = entry.brand;
+      _modelController.text = entry.modelName;
+      _customBrand = false;
+    });
+  }
+}
+
+class _CatalogSearchResults extends StatelessWidget {
+  const _CatalogSearchResults({
+    required this.query,
+    required this.selectedEntry,
+    required this.onSelected,
+  });
+
+  final String query;
+  final ProductCatalogEntry? selectedEntry;
+  final ValueChanged<ProductCatalogEntry> onSelected;
+
+  @override
+  Widget build(BuildContext context) {
+    if (query.trim().isEmpty) {
+      return const SizedBox.shrink();
+    }
+
+    final results = searchProductCatalog(query).take(5).toList();
+    if (results.isEmpty) {
+      return Container(
+        padding: const EdgeInsets.all(12),
+        decoration: BoxDecoration(
+          color: Theme.of(context).colorScheme.surfaceContainerLow,
+          borderRadius: BorderRadius.circular(8),
+        ),
+        child: const Row(
+          children: [
+            Icon(Icons.info_outline, size: 20),
+            SizedBox(width: 8),
+            Expanded(child: Text('카탈로그에서 찾지 못했어요. 직접 입력해 등록할 수 있어요.')),
+          ],
+        ),
+      );
+    }
+
+    return Column(
+      children: [
+        for (final entry in results)
+          Card(
+            margin: const EdgeInsets.only(bottom: 8),
+            child: ListTile(
+              onTap: () => onSelected(entry),
+              leading: Icon(
+                selectedEntry?.id == entry.id
+                    ? Icons.check_circle
+                    : Icons.inventory_2_outlined,
+              ),
+              title: Text(entry.name),
+              subtitle: Text(
+                [
+                  entry.brand,
+                  entry.modelName,
+                  entry.matchLevelLabel,
+                ].where((text) => text.isNotEmpty).join(' · '),
+              ),
+              trailing: const Icon(Icons.chevron_right),
+            ),
+          ),
+      ],
+    );
   }
 }
 
@@ -616,62 +752,3 @@ const _itemPresets = [
     estimatedMinutes: 15,
   ),
 ];
-
-const _brandOptions = [
-  '삼성전자',
-  'LG전자',
-  '위니아',
-  '쿠쿠',
-  '쿠첸',
-  '다이슨',
-  '샤오미',
-  '에코업',
-  '제이앤에이치컴퍼니',
-];
-
-List<String> _brandOptionsFor(String itemName) {
-  if (itemName.contains('음식물')) {
-    return const ['에코업', '제이앤에이치컴퍼니', '쿠쿠', '스마트카라'];
-  }
-  if (itemName.contains('냉장고')) {
-    return const ['삼성전자', 'LG전자', '위니아'];
-  }
-  if (itemName.contains('전자레인지')) {
-    return const ['삼성전자', 'LG전자', '쿠쿠'];
-  }
-  if (itemName.contains('공기청정')) {
-    return const ['삼성전자', 'LG전자', '다이슨', '샤오미'];
-  }
-  return _brandOptions;
-}
-
-List<String> _modelOptionsFor(String itemName, String brand) {
-  if (itemName.contains('음식물')) {
-    if (brand == '에코업' || brand == '제이앤에이치컴퍼니') {
-      return const ['DCS-HM4AG-W', 'DCS-HM4AG', 'ECO-UP'];
-    }
-    if (brand == '쿠쿠') return const ['CFD-BG202MOG', 'CFD-BG202M'];
-    if (brand == '스마트카라') return const ['PCS-400', 'PCS-500D'];
-  }
-  if (itemName.contains('냉장고')) {
-    if (brand == '삼성전자') {
-      return const ['RF85C90F1AP', 'RF85C9141AP', 'RF60C9013AP'];
-    }
-    if (brand == 'LG전자') {
-      return const ['M874GBB031', 'T873MEE312', 'S834MTE10'];
-    }
-    if (brand == '위니아') return const ['WRB480DMS', 'WRT50DS', 'ERB48DWG'];
-  }
-  if (itemName.contains('공기청정')) {
-    if (brand == '삼성전자') return const ['AX060B510RSD', 'AX033B310GBD'];
-    if (brand == 'LG전자') return const ['AS193DWFA', 'AS120VELA'];
-    if (brand == '다이슨') return const ['PH04', 'TP07', 'HP07'];
-    if (brand == '샤오미') return const ['Mi Air 3H', 'Smart Air 4'];
-  }
-  if (itemName.contains('전자레인지')) {
-    if (brand == '삼성전자') return const ['MS23K3513AW', 'MS23T5018AK'];
-    if (brand == 'LG전자') return const ['MW23BD', 'MW25B'];
-    if (brand == '쿠쿠') return const ['CMW-A201DW', 'CMW-A201DB'];
-  }
-  return const [];
-}

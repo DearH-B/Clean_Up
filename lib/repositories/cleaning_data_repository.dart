@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../data/product_catalog.dart';
 import '../models/cleaning_record.dart';
 import '../models/cleaning_zone.dart';
 import '../models/community_post.dart';
@@ -24,7 +25,25 @@ class CleaningDataRepository {
   }
 
   Future<List<ZoneItem>?> loadZoneItems() async {
-    return _loadList(_zoneItemsKey, ZoneItem.fromJson);
+    final items = await _loadList(_zoneItemsKey, ZoneItem.fromJson);
+    if (items == null) {
+      return null;
+    }
+
+    var changed = false;
+    final enrichedItems = [
+      for (final item in items)
+        if (item.sourceTitle == null &&
+            item.manufacturer?.isNotEmpty == true &&
+            item.modelName?.isNotEmpty == true)
+          _enrichCatalogItem(item, () => changed = true)
+        else
+          item,
+    ];
+    if (changed) {
+      await saveZoneItems(enrichedItems);
+    }
+    return enrichedItems;
   }
 
   Future<void> saveZoneItems(List<ZoneItem> items) async {
@@ -70,5 +89,18 @@ class CleaningDataRepository {
   Future<void> _saveList(String key, List<Map<String, Object?>> items) async {
     final preferences = await SharedPreferences.getInstance();
     await preferences.setString(key, jsonEncode(items));
+  }
+
+  ZoneItem _enrichCatalogItem(ZoneItem item, void Function() markChanged) {
+    final entry = findCatalogEntry(
+      categoryName: item.name,
+      brand: item.manufacturer!,
+      modelName: item.modelName!,
+    );
+    if (entry == null) {
+      return item;
+    }
+    markChanged();
+    return entry.mergeInto(item);
   }
 }

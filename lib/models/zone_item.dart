@@ -76,6 +76,11 @@ class ZoneItem {
     this.guideVideoTitle,
     this.guideVideoChannel,
     this.guideBasis,
+    this.sourceTitle,
+    this.sourceUrl,
+    this.sourceCheckedAt,
+    this.matchLevelLabel,
+    this.productSpecs = const [],
     this.guideSourceType = GuideSourceType.general,
     this.recurrenceDays = 7,
     this.lastCleanedAt,
@@ -102,6 +107,11 @@ class ZoneItem {
   final String? guideVideoTitle;
   final String? guideVideoChannel;
   final String? guideBasis;
+  final String? sourceTitle;
+  final String? sourceUrl;
+  final DateTime? sourceCheckedAt;
+  final String? matchLevelLabel;
+  final List<String> productSpecs;
   final GuideSourceType guideSourceType;
   final int recurrenceDays;
   final DateTime? lastCleanedAt;
@@ -142,6 +152,14 @@ class ZoneItem {
       guideVideoTitle: json['guideVideoTitle'] as String?,
       guideVideoChannel: json['guideVideoChannel'] as String?,
       guideBasis: json['guideBasis'] as String?,
+      sourceTitle: json['sourceTitle'] as String?,
+      sourceUrl: json['sourceUrl'] as String?,
+      sourceCheckedAt: json['sourceCheckedAt'] == null
+          ? null
+          : DateTime.parse(json['sourceCheckedAt'] as String),
+      matchLevelLabel: json['matchLevelLabel'] as String?,
+      productSpecs:
+          (json['productSpecs'] as List<dynamic>? ?? const []).cast<String>(),
       guideSourceType: GuideSourceType.values.byName(
         json['guideSourceType'] as String? ?? GuideSourceType.general.name,
       ),
@@ -186,6 +204,11 @@ class ZoneItem {
       'guideVideoTitle': guideVideoTitle,
       'guideVideoChannel': guideVideoChannel,
       'guideBasis': guideBasis,
+      'sourceTitle': sourceTitle,
+      'sourceUrl': sourceUrl,
+      'sourceCheckedAt': sourceCheckedAt?.toIso8601String(),
+      'matchLevelLabel': matchLevelLabel,
+      'productSpecs': productSpecs,
       'guideSourceType': guideSourceType.name,
       'recurrenceDays': recurrenceDays,
       'lastCleanedAt': lastCleanedAt?.toIso8601String(),
@@ -201,6 +224,11 @@ class ZoneItem {
     String? manufacturer,
     String? modelName,
     String? guideStatus,
+    String? sourceTitle,
+    String? sourceUrl,
+    DateTime? sourceCheckedAt,
+    String? matchLevelLabel,
+    List<String>? productSpecs,
     DateTime? lastCleanedAt,
     DateTime? nextDueAt,
   }) {
@@ -223,6 +251,11 @@ class ZoneItem {
       guideVideoTitle: guideVideoTitle,
       guideVideoChannel: guideVideoChannel,
       guideBasis: guideBasis,
+      sourceTitle: sourceTitle ?? this.sourceTitle,
+      sourceUrl: sourceUrl ?? this.sourceUrl,
+      sourceCheckedAt: sourceCheckedAt ?? this.sourceCheckedAt,
+      matchLevelLabel: matchLevelLabel ?? this.matchLevelLabel,
+      productSpecs: productSpecs ?? this.productSpecs,
       guideSourceType: guideSourceType,
       recurrenceDays: recurrenceDays,
       lastCleanedAt: lastCleanedAt ?? this.lastCleanedAt,
