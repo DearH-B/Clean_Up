@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
-import 'history_screen.dart';
-import 'community_screen.dart';
 import '../repositories/cleaning_data_repository.dart';
 import '../repositories/cleaning_task_repository.dart';
-import 'today_screen.dart';
+import 'community_screen.dart';
+import 'history_screen.dart';
+import 'home_screen.dart';
 import 'zones_screen.dart';
 
 class MainShell extends StatefulWidget {
@@ -24,26 +24,30 @@ class MainShell extends StatefulWidget {
 class _MainShellState extends State<MainShell> {
   int _selectedIndex = 0;
   int _historyVersion = 0;
-  late final Widget _todayScreen;
-  late final Widget _zonesScreen;
+  late final Widget _homeScreen;
+  late final Widget _productsScreen;
   late final Widget _communityScreen;
 
   @override
   void initState() {
     super.initState();
-    _todayScreen = TodayScreen(
-      taskRepository: widget.taskRepository,
+    _homeScreen = HomeScreen(
       dataRepository: widget.dataRepository,
+      onOpenProducts: () {
+        setState(() {
+          _selectedIndex = 1;
+        });
+      },
     );
-    _zonesScreen = ZonesScreen(dataRepository: widget.dataRepository);
+    _productsScreen = ZonesScreen(dataRepository: widget.dataRepository);
     _communityScreen = CommunityScreen(dataRepository: widget.dataRepository);
   }
 
   @override
   Widget build(BuildContext context) {
     final screens = [
-      _todayScreen,
-      _zonesScreen,
+      _homeScreen,
+      _productsScreen,
       HistoryScreen(
         key: ValueKey(_historyVersion),
         dataRepository: widget.dataRepository,
@@ -72,12 +76,12 @@ class _MainShellState extends State<MainShell> {
           NavigationDestination(
             icon: Icon(Icons.auto_awesome_outlined),
             selectedIcon: Icon(Icons.auto_awesome),
-            label: '지금 청소',
+            label: '홈',
           ),
           NavigationDestination(
-            icon: Icon(Icons.home_work_outlined),
-            selectedIcon: Icon(Icons.home_work),
-            label: '구역',
+            icon: Icon(Icons.inventory_2_outlined),
+            selectedIcon: Icon(Icons.inventory_2),
+            label: '내 제품',
           ),
           NavigationDestination(
             icon: Icon(Icons.history_outlined),

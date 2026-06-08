@@ -20,14 +20,13 @@ class ZonesScreen extends StatefulWidget {
 }
 
 class _ZonesScreenState extends State<ZonesScreen> {
-  late List<CleaningZone> _zones;
-  late List<ZoneItem> _items;
+  List<CleaningZone> _zones = [];
+  List<ZoneItem> _items = [];
+  bool _isLoading = true;
 
   @override
   void initState() {
     super.initState();
-    _zones = [];
-    _items = [];
     _loadSavedData();
   }
 
@@ -45,17 +44,17 @@ class _ZonesScreenState extends State<ZonesScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        '구역',
+                        '내 제품',
                         style: Theme.of(context).textTheme.headlineSmall,
                       ),
                       const SizedBox(height: 4),
-                      const Text('청소할 공간을 골라볼까요?'),
+                      const Text('공간별로 제품을 넣어두고 청소법을 바로 확인해요.'),
                     ],
                   ),
                 ),
                 IconButton.filledTonal(
                   onPressed: _showAddZoneSheet,
-                  tooltip: '구역 추가',
+                  tooltip: '공간 추가',
                   icon: const Icon(Icons.add_home_work_outlined),
                 ),
                 const SizedBox(width: 8),
@@ -64,7 +63,11 @@ class _ZonesScreenState extends State<ZonesScreen> {
             ),
           ),
         ),
-        if (_zones.isEmpty)
+        if (_isLoading)
+          const SliverFillRemaining(
+            child: Center(child: CircularProgressIndicator()),
+          )
+        else if (_zones.isEmpty)
           SliverFillRemaining(
             hasScrollBody: false,
             child: _InitialZoneSetup(onCreate: _createPresetZones),
@@ -97,6 +100,20 @@ class _ZonesScreenState extends State<ZonesScreen> {
     );
   }
 
+  Future<void> _loadSavedData() async {
+    final savedZones = await widget.dataRepository.loadZones();
+    final savedItems = await widget.dataRepository.loadZoneItems();
+    if (!mounted) {
+      return;
+    }
+
+    setState(() {
+      _zones = savedZones ?? [];
+      _items = savedItems ?? [];
+      _isLoading = false;
+    });
+  }
+
   Future<void> _showAddZoneSheet() async {
     final zone = await showModalBottomSheet<CleaningZone>(
       context: context,
@@ -118,23 +135,6 @@ class _ZonesScreenState extends State<ZonesScreen> {
     }
   }
 
-  Future<void> _loadSavedData() async {
-    final savedZones = await widget.dataRepository.loadZones();
-    final savedItems = await widget.dataRepository.loadZoneItems();
-    if (!mounted) {
-      return;
-    }
-
-    setState(() {
-      if (savedZones != null) {
-        _zones = savedZones;
-      }
-      if (savedItems != null) {
-        _items = savedItems;
-      }
-    });
-  }
-
   void _updateZoneItems(String zoneId, List<ZoneItem> updatedItems) {
     setState(() {
       _items = [
@@ -150,8 +150,7 @@ class _ZonesScreenState extends State<ZonesScreen> {
     final zoneItems = _items.where((item) => item.zoneId == zone.id).toList();
     return zone.copyWith(
       taskCount: zoneItems.length,
-      completedTaskCount:
-          zoneItems.where((item) => item.lastCleanedAt != null).length,
+      completedTaskCount: zoneItems.where((item) => item.hasProductInfo).length,
     );
   }
 
@@ -200,7 +199,13 @@ class _ZonesScreenState extends State<ZonesScreen> {
   }
 
   Future<void> _deleteZone(String zoneId) async {
-    final deletedZone = _zones.where((zone) => zone.id == zoneId).firstOrNull;
+    CleaningZone? deletedZone;
+    for (final zone in _zones) {
+      if (zone.id == zoneId) {
+        deletedZone = zone;
+        break;
+      }
+    }
     if (deletedZone == null) {
       return;
     }
@@ -224,7 +229,7 @@ class _ZonesScreenState extends State<ZonesScreen> {
     }
 
     ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('${deletedZone.name} 구역을 삭제했어요.')),
+      SnackBar(content: Text('${deletedZone.name} 공간을 삭제했어요.')),
     );
   }
 }
@@ -255,20 +260,20 @@ class _InitialZoneSetupState extends State<_InitialZoneSetup> {
         children: [
           Center(
             child: Icon(
-              Icons.add_home_work_outlined,
+              Icons.inventory_2_outlined,
               size: 54,
               color: Theme.of(context).colorScheme.primary,
             ),
           ),
           const SizedBox(height: 16),
           Text(
-            '먼저 집 구조를 골라볼까요?',
+            '제품을 담을 공간을 먼저 만들까요?',
             textAlign: TextAlign.center,
             style: Theme.of(context).textTheme.titleMedium,
           ),
           const SizedBox(height: 8),
           const Text(
-            '자주 청소하는 공간을 선택하면 바로 시작할 수 있어요.',
+            '주방, 거실, 욕실처럼 제품이 놓인 공간을 고르면 다음에 제품을 추가할 수 있어요.',
             textAlign: TextAlign.center,
           ),
           const SizedBox(height: 18),
@@ -299,7 +304,7 @@ class _InitialZoneSetupState extends State<_InitialZoneSetup> {
                 ? null
                 : () => widget.onCreate(_selectedPresets.toList()),
             icon: const Icon(Icons.check_rounded),
-            label: const Text('선택한 구역 만들기'),
+            label: const Text('선택한 공간 만들기'),
           ),
         ],
       ),
@@ -318,13 +323,13 @@ class _ZonePreset {
 }
 
 const _zonePresets = [
-  _ZonePreset(name: '주방', description: '싱크대, 조리대, 냉장고 앞 공간'),
-  _ZonePreset(name: '거실', description: '소파, 테이블, 바닥, 창가'),
-  _ZonePreset(name: '욕실', description: '세면대, 변기, 샤워부스'),
-  _ZonePreset(name: '침실', description: '침구, 옷장 주변, 협탁'),
-  _ZonePreset(name: '방1', description: '책상, 침대, 옷장'),
-  _ZonePreset(name: '방2', description: '새로 추가한 청소 구역'),
-  _ZonePreset(name: '베란다', description: '창틀, 바닥, 세탁 공간'),
+  _ZonePreset(name: '주방', description: '냉장고, 음식물처리기, 싱크대'),
+  _ZonePreset(name: '거실', description: '공기청정기, 소파, 테이블'),
+  _ZonePreset(name: '욕실', description: '세면대, 샤워부스, 환풍기'),
+  _ZonePreset(name: '침실', description: '침대, 매트리스, 옷장'),
+  _ZonePreset(name: '방1', description: '책상, 의자, 수납장'),
+  _ZonePreset(name: '방2', description: '필요한 제품을 직접 추가'),
+  _ZonePreset(name: '베란다', description: '창틀, 세탁기, 바닥'),
   _ZonePreset(name: '현관', description: '신발장, 바닥, 문 주변'),
 ];
 
@@ -362,9 +367,9 @@ class _AddZoneSheetState extends State<_AddZoneSheet> {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Text('새 구역 추가', style: Theme.of(context).textTheme.titleLarge),
+            Text('공간 추가', style: Theme.of(context).textTheme.titleLarge),
             const SizedBox(height: 8),
-            const Text('방1, 방2, 베란다처럼 우리 집 구조에 맞춰 만들어요.'),
+            const Text('제품을 어디에 두었는지 찾기 쉽게 공간을 만들어두세요.'),
             const SizedBox(height: 16),
             Wrap(
               spacing: 8,
@@ -383,7 +388,7 @@ class _AddZoneSheetState extends State<_AddZoneSheet> {
               textInputAction: TextInputAction.next,
               keyboardType: TextInputType.text,
               decoration: const InputDecoration(
-                labelText: '구역 이름',
+                labelText: '공간 이름',
                 hintText: '예: 방1',
               ),
               onSubmitted: (_) => _descriptionFocusNode.requestFocus(),
@@ -394,15 +399,15 @@ class _AddZoneSheetState extends State<_AddZoneSheet> {
               focusNode: _descriptionFocusNode,
               textInputAction: TextInputAction.done,
               decoration: const InputDecoration(
-                labelText: '구역 설명',
-                hintText: '예: 책상, 침대, 옷장',
+                labelText: '공간 설명',
+                hintText: '예: 책상, 의자, 수납장',
               ),
               onSubmitted: (_) => _submit(),
             ),
             const SizedBox(height: 20),
             FilledButton(
               onPressed: _submit,
-              child: const Text('구역 추가'),
+              child: const Text('공간 추가'),
             ),
           ],
         ),
@@ -421,7 +426,7 @@ class _AddZoneSheetState extends State<_AddZoneSheet> {
       CleaningZone(
         id: 'custom-zone-${DateTime.now().microsecondsSinceEpoch}',
         name: name,
-        description: description.isEmpty ? '새로 추가한 청소 구역' : description,
+        description: description.isEmpty ? '새로 추가한 제품 공간' : description,
         taskCount: 0,
         completedTaskCount: 0,
       ),
@@ -432,11 +437,11 @@ class _AddZoneSheetState extends State<_AddZoneSheet> {
     setState(() {
       _nameController.text = name;
       _descriptionController.text = switch (name) {
-        '주방' => '싱크대, 조리대, 냉장고 앞 공간',
-        '거실' => '소파, 테이블, 바닥, 창가',
-        '욕실' => '세면대, 변기, 샤워부스',
-        '침실' => '침구, 옷장 주변, 협탁',
-        _ => '새로 추가한 청소 구역',
+        '주방' => '냉장고, 음식물처리기, 싱크대',
+        '거실' => '공기청정기, 소파, 테이블',
+        '욕실' => '세면대, 샤워부스, 환풍기',
+        '침실' => '침대, 매트리스, 옷장',
+        _ => '새로 추가한 제품 공간',
       };
     });
   }
