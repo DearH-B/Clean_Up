@@ -4,11 +4,11 @@ import 'package:flutter/material.dart';
 
 import '../models/cleaning_record.dart';
 import '../models/cleaning_task.dart';
+import '../models/zone_item.dart';
 import '../repositories/cleaning_data_repository.dart';
 import '../repositories/cleaning_task_repository.dart';
 import '../theme/app_theme.dart';
 import '../widgets/fairy_image.dart';
-import '../widgets/task_tile.dart';
 
 class TodayScreen extends StatefulWidget {
   const TodayScreen({
@@ -25,169 +25,346 @@ class TodayScreen extends StatefulWidget {
 }
 
 class _TodayScreenState extends State<TodayScreen> {
-  late List<CleaningTask> _tasks;
+  final _scrollController = ScrollController();
+  List<CleaningTask> _candidates = [];
+  List<CleaningTask> _sessionTasks = [];
+  Map<String, ZoneItem> _zoneItemsById = {};
+  int? _selectedMinutes;
+  int _recommendationOffset = 0;
+  bool _isLoading = true;
+
+  int get _completedCount => _sessionTasks.where((task) => task.isDone).length;
+
+  bool get _isSessionComplete =>
+      _sessionTasks.isNotEmpty && _completedCount == _sessionTasks.length;
 
   @override
   void initState() {
     super.initState();
-    _tasks = [];
-    unawaited(_loadInitialTasks());
+    unawaited(_loadCandidates());
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    final activeTasks = _tasks.where((task) => !task.isPostponed).toList();
-    final postponedTasks = _tasks.where((task) => task.isPostponed).toList();
-    final completedCount = activeTasks.where((task) => task.isDone).length;
-    final remainingMinutes = activeTasks
-        .where((task) => !task.isDone)
-        .fold<int>(0, (sum, task) => sum + task.estimatedMinutes);
-    final fairyState = _fairyState(completedCount, activeTasks.length);
-
     return ListView(
+      controller: _scrollController,
       padding: const EdgeInsets.fromLTRB(20, 20, 20, 28),
       children: [
-        Text('오늘', style: Theme.of(context).textTheme.headlineSmall),
+        Text('지금 청소', style: Theme.of(context).textTheme.headlineSmall),
         const SizedBox(height: 4),
         Text(
-          '오늘 필요한 청소만 가볍게 담아보세요.',
-          style:
-              TextStyle(color: Theme.of(context).colorScheme.onSurfaceVariant),
+          '시간이 생겼을 때, 부담 없는 만큼만 시작해요.',
+          style: TextStyle(
+            color: Theme.of(context).colorScheme.onSurfaceVariant,
+          ),
         ),
         const SizedBox(height: 18),
-        Container(
-          height: 196,
-          clipBehavior: Clip.antiAlias,
-          decoration: BoxDecoration(
-            color: AppColors.pinkSoft,
-            borderRadius: BorderRadius.circular(8),
-          ),
-          child: Stack(
-            children: [
-              Positioned(
-                right: -4,
-                bottom: -20,
-                child: FairyImage(
-                  size: 174,
-                  assetPath: fairyState.assetPath,
-                ),
-              ),
-              Positioned.fill(
-                child: Padding(
-                  padding: const EdgeInsets.all(20),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const _FairyLabel(),
-                      const SizedBox(height: 12),
-                      SizedBox(
-                        width: 220,
-                        child: Text(
-                          fairyState.title,
-                          style: Theme.of(context).textTheme.titleLarge,
-                        ),
-                      ),
-                      const SizedBox(height: 4),
-                      SizedBox(
-                        width: 225,
-                        child: Text(fairyState.message),
-                      ),
-                      const Spacer(),
-                      SizedBox(
-                        width: 190,
-                        child: LinearProgressIndicator(
-                          value: activeTasks.isEmpty
-                              ? 0
-                              : completedCount / activeTasks.length,
-                          minHeight: 8,
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
+        _buildFairyPanel(context),
         const SizedBox(height: 24),
+        Text(
+          '지금 몇 분 정도 괜찮으세요?',
+          style: Theme.of(context).textTheme.titleLarge,
+        ),
+        const SizedBox(height: 6),
+        Text(
+          '밀린 청소 대신, 이 시간 안에 끝낼 수 있는 것만 골라드려요.',
+          style: Theme.of(context).textTheme.bodySmall,
+        ),
+        const SizedBox(height: 14),
         Row(
           children: [
-            Expanded(
-              child: Text(
-                '오늘 할 일',
-                style: Theme.of(context).textTheme.titleLarge,
+            for (final option in _timeOptions) ...[
+              Expanded(
+                child: _TimeOptionButton(
+                  minutes: option.minutes,
+                  label: option.label,
+                  isSelected: _selectedMinutes == option.minutes,
+                  onPressed: () => _selectDuration(option.minutes),
+                ),
               ),
-            ),
-            TextButton.icon(
-              onPressed: _showAddTaskSheet,
-              icon: const Icon(Icons.add, size: 19),
-              label: const Text('할 일 추가'),
-            ),
+              if (option != _timeOptions.last) const SizedBox(width: 8),
+            ],
           ],
         ),
-        Padding(
-          padding: const EdgeInsets.only(bottom: 12),
-          child: Text(
-            activeTasks.isEmpty
-                ? '아직 할 일이 없어요.'
-                : '$completedCount/${activeTasks.length} 완료 · 남은 시간 약 $remainingMinutes분',
-            style: Theme.of(context).textTheme.bodySmall,
-          ),
+        const SizedBox(height: 12),
+        OutlinedButton.icon(
+          onPressed: _isLoading ? null : _showPlacePicker,
+          icon: const Icon(Icons.home_work_outlined),
+          label: const Text('장소에서 직접 고르기'),
         ),
-        for (final task in activeTasks) ...[
-          TaskTile(
-            task: task,
-            onToggle: () => _toggleTask(task),
-            onDelete: () => _deleteTask(task),
-            onPostpone: () => _showPostponeSheet(task),
-          ),
-          const SizedBox(height: 10),
-        ],
-        if (postponedTasks.isNotEmpty) ...[
-          const SizedBox(height: 12),
-          Text('미룬 할 일', style: Theme.of(context).textTheme.titleMedium),
-          const SizedBox(height: 4),
-          Text(
-            '오늘 진행률에는 포함되지 않아요.',
-            style: Theme.of(context).textTheme.bodySmall,
-          ),
-          const SizedBox(height: 10),
-          for (final task in postponedTasks) ...[
-            TaskTile(
-              task: task,
-              onToggle: () {},
-              onDelete: () => _deleteTask(task),
-              onRestore: () => _restoreTask(task),
-            ),
-            const SizedBox(height: 10),
-          ],
-        ],
+        const SizedBox(height: 26),
+        if (_isLoading)
+          const Center(child: CircularProgressIndicator())
+        else if (_selectedMinutes == null && _sessionTasks.isEmpty)
+          const _ReadyMessage()
+        else
+          _buildSession(context),
       ],
     );
   }
 
-  void _toggleTask(CleaningTask task) {
-    final index = _tasks.indexWhere((candidate) => candidate.id == task.id);
-    if (index == -1) {
+  Widget _buildFairyPanel(BuildContext context) {
+    final state = _fairyState();
+    return Container(
+      height: 190,
+      clipBehavior: Clip.antiAlias,
+      decoration: BoxDecoration(
+        color: AppColors.pinkSoft,
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: Stack(
+        children: [
+          Positioned(
+            right: -2,
+            bottom: -18,
+            child: FairyImage(size: 168, assetPath: state.assetPath),
+          ),
+          Positioned.fill(
+            child: Padding(
+              padding: const EdgeInsets.all(20),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const _FairyLabel(),
+                  const SizedBox(height: 12),
+                  SizedBox(
+                    width: 210,
+                    child: Text(
+                      state.title,
+                      style: Theme.of(context).textTheme.titleLarge,
+                    ),
+                  ),
+                  const SizedBox(height: 5),
+                  SizedBox(width: 210, child: Text(state.message)),
+                  if (_sessionTasks.isNotEmpty) ...[
+                    const Spacer(),
+                    SizedBox(
+                      width: 180,
+                      child: LinearProgressIndicator(
+                        value: _completedCount / _sessionTasks.length,
+                        minHeight: 8,
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                    ),
+                  ],
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildSession(BuildContext context) {
+    final totalMinutes = _sessionTasks.fold<int>(
+      0,
+      (sum, task) => sum + task.estimatedMinutes,
+    );
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Row(
+          children: [
+            Expanded(
+              child: Text(
+                _isSessionComplete
+                    ? '오늘 청소 끝!'
+                    : '${_selectedMinutes ?? totalMinutes}분 추천 코스',
+                style: Theme.of(context).textTheme.titleLarge,
+              ),
+            ),
+            if (!_isSessionComplete && _selectedMinutes != null)
+              TextButton.icon(
+                onPressed: _showAnotherRecommendation,
+                icon: const Icon(Icons.refresh, size: 19),
+                label: const Text('다른 추천'),
+              ),
+          ],
+        ),
+        const SizedBox(height: 4),
+        Text(
+          _isSessionComplete
+              ? '계획보다 중요한 건 실제로 해낸 한 번이에요.'
+              : '${_sessionTasks.length}개 · 약 $totalMinutes분 · 원할 때 멈춰도 괜찮아요',
+          style: Theme.of(context).textTheme.bodySmall,
+        ),
+        const SizedBox(height: 12),
+        for (final task in _sessionTasks) ...[
+          _CleaningSuggestionTile(
+            task: task,
+            onToggle: () => _toggleTask(task),
+          ),
+          const SizedBox(height: 10),
+        ],
+        const SizedBox(height: 4),
+        if (_isSessionComplete)
+          FilledButton.icon(
+            onPressed: _finishSession,
+            icon: const Icon(Icons.check_circle_outline),
+            label: const Text('기분 좋게 마치기'),
+          )
+        else
+          TextButton.icon(
+            onPressed: _showAddTaskSheet,
+            icon: const Icon(Icons.add),
+            label: const Text('하고 싶은 청소 직접 추가'),
+          ),
+      ],
+    );
+  }
+
+  Future<void> _loadCandidates() async {
+    final savedTasks = await widget.taskRepository.loadTodayTasks() ?? [];
+    final items = await widget.dataRepository.loadZoneItems() ?? [];
+    final zones = await widget.dataRepository.loadZones() ?? [];
+    final zoneNames = {for (final zone in zones) zone.id: zone.name};
+    final now = DateTime.now();
+
+    final itemTasks = <CleaningTask>[
+      for (final item in items)
+        if (item.isDue(now))
+          CleaningTask(
+            id: _scheduledTaskId(item.id),
+            title: '${item.name} 청소',
+            zoneName: zoneNames[item.zoneId] ?? item.name,
+            estimatedMinutes: item.estimatedMinutes,
+            isDone: false,
+            isRecurring: true,
+          ),
+    ];
+
+    if (!mounted) {
       return;
     }
 
     setState(() {
-      _tasks[index] = task.copyWith(isDone: !task.isDone);
+      _zoneItemsById = {for (final item in items) item.id: item};
+      _candidates = _deduplicateTasks([
+        ...savedTasks.where((task) => !task.isDone && !task.isPostponed),
+        ...itemTasks,
+        ..._fallbackTasks,
+      ]);
+      _isLoading = false;
     });
-    unawaited(_saveTasks());
+  }
 
-    if (!task.isDone) {
-      unawaited(_completeLinkedZoneItem(task));
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(
-              _completionSnack(_tasks.where((item) => item.isDone).length)),
-          duration: const Duration(seconds: 2),
-        ),
-      );
+  void _selectDuration(int minutes) {
+    setState(() {
+      _selectedMinutes = minutes;
+      _recommendationOffset = 0;
+      _sessionTasks = _recommendTasks(minutes, 0);
+    });
+    _scrollToSession();
+  }
+
+  List<CleaningTask> _recommendTasks(int minutes, int offset) {
+    final available = _candidates
+        .where((task) => !task.isDone && task.estimatedMinutes <= minutes)
+        .toList()
+      ..sort((a, b) {
+        if (a.isRecurring != b.isRecurring) {
+          return a.isRecurring ? -1 : 1;
+        }
+        return a.estimatedMinutes.compareTo(b.estimatedMinutes);
+      });
+
+    if (available.isEmpty) {
+      return [];
     }
+
+    final rotated = [
+      ...available.skip(offset % available.length),
+      ...available.take(offset % available.length),
+    ];
+    final selected = <CleaningTask>[];
+    var remaining = minutes;
+
+    for (final task in rotated) {
+      if (task.estimatedMinutes <= remaining && selected.length < 3) {
+        selected.add(task.copyWith(isDone: false));
+        remaining -= task.estimatedMinutes;
+      }
+    }
+
+    return selected.isEmpty
+        ? [rotated.first.copyWith(isDone: false)]
+        : selected;
+  }
+
+  void _showAnotherRecommendation() {
+    final minutes = _selectedMinutes;
+    if (minutes == null) {
+      return;
+    }
+    setState(() {
+      _recommendationOffset++;
+      _sessionTasks = _recommendTasks(minutes, _recommendationOffset);
+    });
+  }
+
+  Future<void> _showPlacePicker() async {
+    final task = await showModalBottomSheet<CleaningTask>(
+      context: context,
+      showDragHandle: true,
+      builder: (context) {
+        final grouped = <String, List<CleaningTask>>{};
+        for (final candidate in _candidates.where((task) => !task.isDone)) {
+          grouped.putIfAbsent(candidate.zoneName, () => []).add(candidate);
+        }
+
+        return SafeArea(
+          child: ListView(
+            shrinkWrap: true,
+            padding: const EdgeInsets.fromLTRB(20, 0, 20, 20),
+            children: [
+              Text(
+                '어디를 가볍게 치워볼까요?',
+                style: Theme.of(context).textTheme.titleLarge,
+              ),
+              const SizedBox(height: 6),
+              const Text('하나만 골라도 충분해요.'),
+              const SizedBox(height: 14),
+              for (final entry in grouped.entries) ...[
+                Padding(
+                  padding: const EdgeInsets.only(top: 8, bottom: 4),
+                  child: Text(
+                    entry.key,
+                    style: Theme.of(context).textTheme.titleMedium,
+                  ),
+                ),
+                for (final item in entry.value)
+                  ListTile(
+                    contentPadding: EdgeInsets.zero,
+                    leading: const Icon(Icons.cleaning_services_outlined),
+                    title: Text(item.title),
+                    subtitle: Text('약 ${item.estimatedMinutes}분'),
+                    trailing: const Icon(Icons.chevron_right),
+                    onTap: () => Navigator.of(context).pop(item),
+                  ),
+              ],
+            ],
+          ),
+        );
+      },
+    );
+
+    if (task == null || !mounted) {
+      return;
+    }
+
+    setState(() {
+      _selectedMinutes = null;
+      _sessionTasks = [task.copyWith(isDone: false)];
+    });
+    _scrollToSession();
   }
 
   Future<void> _showAddTaskSheet() async {
@@ -203,224 +380,294 @@ class _TodayScreenState extends State<TodayScreen> {
     }
 
     setState(() {
-      _tasks.add(task);
+      _candidates = _deduplicateTasks([..._candidates, task]);
+      _sessionTasks = [..._sessionTasks, task];
     });
-    unawaited(_saveTasks());
+    unawaited(_saveUserCandidates());
   }
 
-  Future<void> _showPostponeSheet(CleaningTask task) async {
-    final label = await showModalBottomSheet<String>(
-      context: context,
-      showDragHandle: true,
-      builder: (context) => SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.fromLTRB(20, 0, 20, 20),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Text(
-                '${task.title} 미루기',
-                style: Theme.of(context).textTheme.titleLarge,
-              ),
-              const SizedBox(height: 8),
-              const Text('언제로 옮길까요? 오늘 진행률에서는 제외돼요.'),
-              const SizedBox(height: 14),
-              for (final option in ['내일로 미룸', '3일 뒤로 미룸', '다음 주로 미룸'])
-                ListTile(
-                  leading: const Icon(Icons.event_outlined),
-                  title: Text(option),
-                  onTap: () => Navigator.of(context).pop(option),
-                ),
-            ],
-          ),
-        ),
-      ),
-    );
-
-    if (label == null || !mounted) {
-      return;
-    }
-
-    final index = _tasks.indexWhere((candidate) => candidate.id == task.id);
-    setState(() {
-      _tasks[index] = task.copyWith(postponedLabel: label);
-    });
-    unawaited(_saveTasks());
-  }
-
-  void _restoreTask(CleaningTask task) {
-    final index = _tasks.indexWhere((candidate) => candidate.id == task.id);
-    setState(() {
-      _tasks[index] = task.copyWith(clearPostponed: true);
-    });
-    unawaited(_saveTasks());
-  }
-
-  void _deleteTask(CleaningTask task) {
-    final removedIndex =
-        _tasks.indexWhere((candidate) => candidate.id == task.id);
-    if (removedIndex == -1) {
-      return;
-    }
-
-    setState(() {
-      _tasks.removeAt(removedIndex);
-    });
-    unawaited(_saveTasks());
-
-    ScaffoldMessenger.of(context)
-      ..hideCurrentSnackBar()
-      ..showSnackBar(
-        SnackBar(
-          content: Text("'${task.title}'을 오늘 할 일에서 지웠어요."),
-          action: SnackBarAction(
-            label: '되돌리기',
-            onPressed: () {
-              if (!mounted ||
-                  _tasks.any((candidate) => candidate.id == task.id)) {
-                return;
-              }
-
-              setState(() {
-                final restoreIndex = removedIndex.clamp(0, _tasks.length);
-                _tasks.insert(restoreIndex, task);
-              });
-              unawaited(_saveTasks());
-            },
-          ),
-        ),
-      );
-  }
-
-  Future<void> _loadInitialTasks() async {
-    final savedTasks = await widget.taskRepository.loadTodayTasks();
-    final savedItems = await widget.dataRepository.loadZoneItems();
-    var tasks = savedTasks ?? <CleaningTask>[];
-    var changed = false;
-
-    final items = savedItems ?? const [];
-    if (items.isNotEmpty) {
-      final now = DateTime.now();
-      for (final item in items.where((item) => item.isDue(now))) {
-        final taskId = _scheduledTaskId(item.id);
-        if (tasks.any((task) => task.id == taskId)) {
-          continue;
-        }
-
-        tasks = [
-          ...tasks,
-          CleaningTask(
-            id: taskId,
-            title: '${item.name} 정기 청소',
-            zoneName: item.name,
-            estimatedMinutes: item.estimatedMinutes,
-            isDone: false,
-            isRecurring: true,
-          ),
-        ];
-        changed = true;
-      }
-    }
-
-    if (!mounted) {
-      return;
-    }
-
-    setState(() {
-      _tasks = tasks;
-    });
-    if (changed) {
-      unawaited(_saveTasks());
-    }
-  }
-
-  Future<void> _saveTasks() {
-    return widget.taskRepository.saveTodayTasks(_tasks);
-  }
-
-  Future<void> _completeLinkedZoneItem(CleaningTask task) async {
-    final itemId = _zoneItemIdFromTask(task);
-    if (itemId == null) {
-      return;
-    }
-
-    final items = await widget.dataRepository.loadZoneItems();
-    if (items == null) {
-      return;
-    }
-
-    final index = items.indexWhere((item) => item.id == itemId);
+  Future<void> _toggleTask(CleaningTask task) async {
+    final index =
+        _sessionTasks.indexWhere((candidate) => candidate.id == task.id);
     if (index == -1) {
       return;
     }
 
-    final now = DateTime.now();
-    final item = items[index];
-    final updatedItem = item.copyWith(
-      lastCleanedAt: now,
-      nextDueAt: now.add(Duration(days: item.recurrenceDays)),
-    );
-    items[index] = updatedItem;
-    await widget.dataRepository.saveZoneItems(items);
+    final willComplete = !task.isDone;
+    setState(() {
+      _sessionTasks[index] = task.copyWith(isDone: willComplete);
+      final candidateIndex =
+          _candidates.indexWhere((candidate) => candidate.id == task.id);
+      if (candidateIndex != -1) {
+        _candidates[candidateIndex] =
+            _candidates[candidateIndex].copyWith(isDone: willComplete);
+      }
+    });
 
-    final records = await widget.dataRepository.loadRecords();
+    unawaited(_saveUserCandidates());
+    if (willComplete) {
+      await _recordCompletion(task);
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(_completionSnack(_completedCount))),
+        );
+      }
+    }
+  }
+
+  Future<void> _recordCompletion(CleaningTask task) async {
+    final now = DateTime.now();
+    final itemId = _zoneItemIdFromTask(task);
+    final item = itemId == null ? null : _zoneItemsById[itemId];
+
+    if (item != null) {
+      final items = await widget.dataRepository.loadZoneItems() ?? [];
+      final index = items.indexWhere((candidate) => candidate.id == item.id);
+      if (index != -1) {
+        items[index] = item.copyWith(
+          lastCleanedAt: now,
+          nextDueAt: now.add(Duration(days: item.recurrenceDays)),
+        );
+        await widget.dataRepository.saveZoneItems(items);
+      }
+    }
+
+    final records = await widget.dataRepository.loadRecords() ?? [];
     await widget.dataRepository.saveRecords([
       CleaningRecord(
         id: 'record-${now.microsecondsSinceEpoch}',
-        title: '${item.name} 청소 완료',
-        zoneName: item.name,
+        title: '${task.title} 완료',
+        zoneName: task.zoneName,
         completedAt: now,
-        minutes: item.estimatedMinutes,
+        minutes: task.estimatedMinutes,
       ),
-      ...(records ?? const <CleaningRecord>[]),
+      ...records,
     ]);
+  }
+
+  void _finishSession() {
+    setState(() {
+      _selectedMinutes = null;
+      _sessionTasks = [];
+      _recommendationOffset = 0;
+    });
+  }
+
+  void _scrollToSession() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted || !_scrollController.hasClients) {
+        return;
+      }
+      _scrollController.animateTo(
+        _scrollController.position.maxScrollExtent,
+        duration: const Duration(milliseconds: 350),
+        curve: Curves.easeOutCubic,
+      );
+    });
+  }
+
+  Future<void> _saveUserCandidates() {
+    final persistable = _candidates
+        .where((task) => !_fallbackTaskIds.contains(task.id))
+        .toList();
+    return widget.taskRepository.saveTodayTasks(persistable);
+  }
+
+  List<CleaningTask> _deduplicateTasks(List<CleaningTask> tasks) {
+    final seen = <String>{};
+    return [
+      for (final task in tasks)
+        if (seen.add(task.id)) task,
+    ];
   }
 
   String _scheduledTaskId(String itemId) => 'scheduled-zone-item-$itemId';
 
   String? _zoneItemIdFromTask(CleaningTask task) {
     const prefix = 'scheduled-zone-item-';
-    if (!task.id.startsWith(prefix)) {
-      return null;
-    }
-
-    return task.id.substring(prefix.length);
+    return task.id.startsWith(prefix) ? task.id.substring(prefix.length) : null;
   }
 
-  _FairyState _fairyState(int completedCount, int activeTaskCount) {
-    if (activeTaskCount > 0 && completedCount == activeTaskCount) {
+  _FairyState _fairyState() {
+    if (_isSessionComplete) {
       return const _FairyState(
         assetPath: '캐릭터/청소요정_완료.png',
-        title: '오늘의 반짝임 완성!',
-        message: '모두 끝냈어요. 정말 멋지게 해냈어요!',
+        title: '이만큼이면 충분해요!',
+        message: '오늘 생긴 여유를 반짝이는 공간으로 바꿨어요.',
       );
     }
-    if (completedCount == 0) {
+    if (_completedCount > 0) {
+      return _FairyState(
+        assetPath: '캐릭터/청소요정_진행.png',
+        title: '$_completedCount개나 끝냈어요!',
+        message: '한 번 시작한 것만으로도 이미 멋진 변화예요.',
+      );
+    }
+    if (_sessionTasks.isNotEmpty) {
       return const _FairyState(
         assetPath: '캐릭터/청소요정_시작.png',
-        title: '가볍게 하나만 시작해요',
-        message: '첫 체크를 기다리고 있을게요.',
+        title: '딱 하나부터 시작해요',
+        message: '전부 하지 않아도 괜찮아요. 마음 가는 것부터!',
       );
     }
-    return _FairyState(
-      assetPath: '캐릭터/청소요정_진행.png',
-      title: '$completedCount개나 끝냈어요!',
-      message: completedCount == 1
-          ? '첫 반짝임 성공! 시작한 것부터 대단해요.'
-          : '집도 마음도 조금씩 가벼워지고 있어요.',
+    return const _FairyState(
+      assetPath: '캐릭터/귀여운 분홍새.png',
+      title: '시간이 조금 생겼나요?',
+      message: '가능한 시간만 알려주면 가볍게 골라드릴게요.',
     );
   }
 
   String _completionSnack(int completedCount) {
     const messages = [
-      '첫 청소 완료! 아주 좋은 시작이에요.',
-      '두 번째 반짝임까지 완료했어요!',
-      '벌써 세 개예요. 오늘 정말 멋져요.',
-      '깨끗해지는 만큼 마음도 가벼워져요.',
+      '첫 번째 반짝임 완료! 시작한 마음이 제일 대단해요.',
+      '두 곳이나 가벼워졌어요. 오늘 정말 잘했어요.',
+      '벌써 세 개나 끝냈어요! 이제 쉬어도 충분해요.',
     ];
-    final index = (completedCount - 1).clamp(0, messages.length - 1);
-    return messages[index];
+    return messages[(completedCount - 1).clamp(0, messages.length - 1)];
+  }
+}
+
+class _TimeOptionButton extends StatelessWidget {
+  const _TimeOptionButton({
+    required this.minutes,
+    required this.label,
+    required this.isSelected,
+    required this.onPressed,
+  });
+
+  final int minutes;
+  final String label;
+  final bool isSelected;
+  final VoidCallback onPressed;
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      height: 74,
+      child: isSelected
+          ? FilledButton(
+              onPressed: onPressed,
+              style: FilledButton.styleFrom(padding: EdgeInsets.zero),
+              child: _content(context),
+            )
+          : OutlinedButton(
+              onPressed: onPressed,
+              style: OutlinedButton.styleFrom(padding: EdgeInsets.zero),
+              child: _content(context),
+            ),
+    );
+  }
+
+  Widget _content(BuildContext context) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Text(
+          '$minutes분',
+          style: const TextStyle(fontSize: 17, fontWeight: FontWeight.w800),
+        ),
+        const SizedBox(height: 2),
+        Text(label, style: const TextStyle(fontSize: 11)),
+      ],
+    );
+  }
+}
+
+class _ReadyMessage extends StatelessWidget {
+  const _ReadyMessage();
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 24),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(color: Theme.of(context).colorScheme.outlineVariant),
+      ),
+      child: const Column(
+        children: [
+          Icon(Icons.timer_outlined, size: 34, color: AppColors.rose),
+          SizedBox(height: 10),
+          Text(
+            '아직 정해진 할 일은 없어요',
+            style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700),
+          ),
+          SizedBox(height: 5),
+          Text(
+            '시간을 고르는 순간, 지금 할 청소만 나타나요.',
+            textAlign: TextAlign.center,
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _CleaningSuggestionTile extends StatelessWidget {
+  const _CleaningSuggestionTile({
+    required this.task,
+    required this.onToggle,
+  });
+
+  final CleaningTask task;
+  final VoidCallback onToggle;
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      child: InkWell(
+        onTap: onToggle,
+        borderRadius: BorderRadius.circular(8),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+          child: Row(
+            children: [
+              Container(
+                width: 44,
+                height: 44,
+                decoration: BoxDecoration(
+                  color: task.isDone
+                      ? AppColors.pinkSoft
+                      : Theme.of(context).colorScheme.surfaceContainerLow,
+                  shape: BoxShape.circle,
+                ),
+                child: Icon(
+                  task.isDone
+                      ? Icons.check_rounded
+                      : Icons.cleaning_services_outlined,
+                  color: task.isDone
+                      ? AppColors.rose
+                      : Theme.of(context).colorScheme.outline,
+                ),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      task.title,
+                      style: TextStyle(
+                        fontWeight: FontWeight.w700,
+                        decoration:
+                            task.isDone ? TextDecoration.lineThrough : null,
+                      ),
+                    ),
+                    const SizedBox(height: 3),
+                    Text(
+                      '${task.zoneName} · 약 ${task.estimatedMinutes}분',
+                      style: Theme.of(context).textTheme.bodySmall,
+                    ),
+                  ],
+                ),
+              ),
+              Checkbox(value: task.isDone, onChanged: (_) => onToggle()),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 }
 
@@ -436,7 +683,7 @@ class _FairyLabel extends StatelessWidget {
         borderRadius: BorderRadius.circular(20),
       ),
       child: const Text(
-        '청소 요정의 응원',
+        '청소 요정의 추천',
         style: TextStyle(
           color: Color(0xFFB55567),
           fontSize: 12,
@@ -480,7 +727,7 @@ class _AddTaskSheetState extends State<_AddTaskSheet> {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
+    return SingleChildScrollView(
       padding: EdgeInsets.fromLTRB(
         20,
         0,
@@ -491,9 +738,9 @@ class _AddTaskSheetState extends State<_AddTaskSheet> {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          Text('오늘 할 일 추가', style: Theme.of(context).textTheme.titleLarge),
+          Text('하고 싶은 청소 추가', style: Theme.of(context).textTheme.titleLarge),
           const SizedBox(height: 8),
-          const Text('오늘 생각난 청소를 바로 적어둘 수 있어요.'),
+          const Text('지금 떠오른 청소를 이번 코스에만 가볍게 더해요.'),
           const SizedBox(height: 16),
           TextField(
             controller: _titleController,
@@ -539,15 +786,13 @@ class _AddTaskSheetState extends State<_AddTaskSheet> {
             controller: _minutesController,
             keyboardType: TextInputType.number,
             textInputAction: TextInputAction.done,
-            decoration: const InputDecoration(
-              labelText: '예상 시간(분)',
-            ),
+            decoration: const InputDecoration(labelText: '예상 시간(분)'),
             onSubmitted: (_) => _submit(),
           ),
           const SizedBox(height: 20),
           FilledButton(
             onPressed: _submit,
-            child: const Text('오늘 할 일에 추가'),
+            child: const Text('이번 청소에 추가'),
           ),
         ],
       ),
@@ -568,7 +813,6 @@ class _AddTaskSheetState extends State<_AddTaskSheet> {
         zoneName: _zoneName,
         estimatedMinutes: minutes,
         isDone: false,
-        isRecurring: false,
       ),
     );
   }
@@ -582,22 +826,93 @@ class _AddTaskSheetState extends State<_AddTaskSheet> {
   }
 }
 
+class _TimeOption {
+  const _TimeOption(this.minutes, this.label);
+
+  final int minutes;
+  final String label;
+}
+
 class _TaskPreset {
-  const _TaskPreset({
-    required this.title,
-    required this.zoneName,
-    required this.minutes,
-  });
+  const _TaskPreset(this.title, this.zoneName, this.minutes);
 
   final String title;
   final String zoneName;
   final int minutes;
 }
 
-const _taskPresets = [
-  _TaskPreset(title: '분리수거 버리기', zoneName: '현관', minutes: 7),
-  _TaskPreset(title: '창문 열고 환기', zoneName: '기타', minutes: 5),
-  _TaskPreset(title: '바닥 청소기 돌리기', zoneName: '거실', minutes: 15),
-  _TaskPreset(title: '싱크대 주변 닦기', zoneName: '주방', minutes: 8),
-  _TaskPreset(title: '욕실 세면대 닦기', zoneName: '욕실', minutes: 8),
+const _timeOptions = [
+  _TimeOption(5, '아주 가볍게'),
+  _TimeOption(15, '한 곳 산뜻하게'),
+  _TimeOption(30, '제대로 한 번'),
 ];
+
+const _taskPresets = [
+  _TaskPreset('분리수거 버리기', '현관', 7),
+  _TaskPreset('창문 열고 환기', '기타', 5),
+  _TaskPreset('바닥 청소기 돌리기', '거실', 15),
+  _TaskPreset('싱크대 주변 닦기', '주방', 8),
+  _TaskPreset('욕실 세면대 닦기', '욕실', 8),
+];
+
+const _fallbackTasks = [
+  CleaningTask(
+    id: 'fallback-ventilate',
+    title: '창문 열고 환기하기',
+    zoneName: '집 전체',
+    estimatedMinutes: 5,
+    isDone: false,
+  ),
+  CleaningTask(
+    id: 'fallback-sink',
+    title: '싱크대 주변 물기 닦기',
+    zoneName: '주방',
+    estimatedMinutes: 5,
+    isDone: false,
+  ),
+  CleaningTask(
+    id: 'fallback-table',
+    title: '테이블 위 물건 제자리 두기',
+    zoneName: '거실',
+    estimatedMinutes: 5,
+    isDone: false,
+  ),
+  CleaningTask(
+    id: 'fallback-vacuum',
+    title: '자주 걷는 곳만 청소기 돌리기',
+    zoneName: '거실',
+    estimatedMinutes: 10,
+    isDone: false,
+  ),
+  CleaningTask(
+    id: 'fallback-washbasin',
+    title: '세면대와 수전 닦기',
+    zoneName: '욕실',
+    estimatedMinutes: 8,
+    isDone: false,
+  ),
+  CleaningTask(
+    id: 'fallback-bed',
+    title: '침구 정리하고 주변 환기하기',
+    zoneName: '침실',
+    estimatedMinutes: 10,
+    isDone: false,
+  ),
+  CleaningTask(
+    id: 'fallback-floor',
+    title: '바닥 청소기 돌리기',
+    zoneName: '집 전체',
+    estimatedMinutes: 15,
+    isDone: false,
+  ),
+];
+
+const _fallbackTaskIds = {
+  'fallback-ventilate',
+  'fallback-sink',
+  'fallback-table',
+  'fallback-vacuum',
+  'fallback-washbasin',
+  'fallback-bed',
+  'fallback-floor',
+};

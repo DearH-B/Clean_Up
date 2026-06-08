@@ -51,7 +51,7 @@ class _MainShellState extends State<MainShell> {
           NavigationDestination(
             icon: Icon(Icons.auto_awesome_outlined),
             selectedIcon: Icon(Icons.auto_awesome),
-            label: '오늘',
+            label: '지금 청소',
           ),
           NavigationDestination(
             icon: Icon(Icons.home_work_outlined),

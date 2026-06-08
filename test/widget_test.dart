@@ -38,10 +38,10 @@ void main() {
     );
     await tester.pumpAndSettle();
 
-    expect(find.text('오늘'), findsNWidgets(2));
+    expect(find.text('지금 청소'), findsNWidgets(2));
     expect(find.text('구역'), findsOneWidget);
     expect(find.text('기록'), findsOneWidget);
-    expect(find.text('청소 요정의 응원'), findsOneWidget);
+    expect(find.text('청소 요정의 추천'), findsOneWidget);
     expect(find.text('자랑'), findsOneWidget);
 
     await tester.tap(find.text('구역'));
@@ -196,7 +196,7 @@ void main() {
     expect(find.widgetWithText(TextField, '브랜드 또는 제조사'), findsOneWidget);
   });
 
-  testWidgets('오늘 할 일을 추가하고 완료할 수 있다', (tester) async {
+  testWidgets('가능한 시간을 고르고 추천 청소를 완료할 수 있다', (tester) async {
     seedSampleData(taskRepository, dataRepository);
     await tester.pumpWidget(
       CleanUpApp(
@@ -206,32 +206,28 @@ void main() {
     );
     await tester.pumpAndSettle();
 
-    await tester.tap(find.text('할 일 추가'));
-    await tester.pumpAndSettle();
-    await tester.enterText(
-      find.widgetWithText(TextField, '할 일'),
-      '분리수거 버리기',
-    );
-    await tester.enterText(
-      find.widgetWithText(TextField, '예상 시간(분)'),
-      '7',
-    );
-    await tester.ensureVisible(find.text('오늘 할 일에 추가'));
-    await tester.tap(find.text('오늘 할 일에 추가'));
-    await tester.pumpAndSettle();
-
     await tester.scrollUntilVisible(
-      find.text('분리수거 버리기'),
+      find.text('아직 정해진 할 일은 없어요'),
       250,
       scrollable: find.byType(Scrollable).first,
     );
-    expect(find.text('분리수거 버리기'), findsOneWidget);
+    expect(find.text('아직 정해진 할 일은 없어요'), findsOneWidget);
+    expect(find.text('싱크대 주변 닦기'), findsNothing);
 
-    await tester.drag(find.byType(ListView), const Offset(0, -180));
-    await tester.pump();
-    await tester.tap(find.byType(Checkbox).last);
-    await tester.pump();
-    expect(find.textContaining('벌써 세 개'), findsOneWidget);
+    await tester.scrollUntilVisible(
+      find.text('15분'),
+      -250,
+      scrollable: find.byType(Scrollable).first,
+    );
+    await tester.tap(find.text('15분'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('15분 추천 코스'), findsOneWidget);
+    expect(find.textContaining('원할 때 멈춰도 괜찮아요'), findsOneWidget);
+
+    await tester.tap(find.byType(Checkbox).first);
+    await tester.pumpAndSettle();
+    expect(find.textContaining('첫 번째 반짝임 완료'), findsOneWidget);
   });
 
   testWidgets('청소 자랑 커뮤니티 탭이 표시된다', (tester) async {
@@ -324,7 +320,7 @@ void main() {
     expect(find.text('욕실'), findsOneWidget);
   });
 
-  testWidgets('주기 청소를 다음 일정으로 미룰 수 있다', (tester) async {
+  testWidgets('첫 화면에는 밀린 청소가 쌓여 보이지 않는다', (tester) async {
     seedSampleData(taskRepository, dataRepository);
     await tester.pumpWidget(
       CleanUpApp(
@@ -332,56 +328,19 @@ void main() {
         dataRepository: dataRepository,
       ),
     );
-    await tester.pumpAndSettle();
-
-    await tester.drag(find.byType(ListView), const Offset(0, -220));
-    await tester.pumpAndSettle();
-    final postponeButton = find.byTooltip('미루기').first;
-    await tester.ensureVisible(postponeButton);
-    await tester.pumpAndSettle();
-    await tester.tap(postponeButton);
-    await tester.pumpAndSettle();
-    await tester.tap(find.text('내일로 미룸'));
     await tester.pumpAndSettle();
 
     await tester.scrollUntilVisible(
-      find.text('미룬 할 일'),
+      find.text('아직 정해진 할 일은 없어요'),
       250,
       scrollable: find.byType(Scrollable).first,
     );
-    expect(find.text('미룬 할 일'), findsOneWidget);
-    expect(find.textContaining('내일로 미룸'), findsOneWidget);
-    expect(find.text('되돌리기'), findsOneWidget);
-  });
-
-  testWidgets('오늘 할 일을 삭제하고 되돌릴 수 있다', (tester) async {
-    seedSampleData(taskRepository, dataRepository);
-    await tester.pumpWidget(
-      CleanUpApp(
-        taskRepository: taskRepository,
-        dataRepository: dataRepository,
-      ),
-    );
-    await tester.pumpAndSettle();
-
-    await tester.drag(find.byType(ListView), const Offset(0, -220));
-    await tester.pump();
-    await tester.tap(find.byTooltip('삭제').first);
-    await tester.pump(const Duration(milliseconds: 300));
-
+    expect(find.text('아직 정해진 할 일은 없어요'), findsOneWidget);
     expect(find.text('싱크대 주변 닦기'), findsNothing);
-    expect(find.textContaining('오늘 할 일에서 지웠어요'), findsOneWidget);
-
-    final undoAction = tester.widget<SnackBarAction>(
-      find.byType(SnackBarAction),
-    );
-    undoAction.onPressed();
-    await tester.pump(const Duration(milliseconds: 300));
-
-    expect(find.text('싱크대 주변 닦기'), findsOneWidget);
+    expect(find.text('거실 바닥 청소기 돌리기'), findsNothing);
   });
 
-  testWidgets('추가한 오늘 할 일이 앱을 다시 열어도 유지된다', (tester) async {
+  testWidgets('다른 추천으로 청소 코스를 바꿀 수 있다', (tester) async {
     seedSampleData(taskRepository, dataRepository);
     await tester.pumpWidget(
       CleanUpApp(
@@ -391,7 +350,29 @@ void main() {
     );
     await tester.pumpAndSettle();
 
-    await tester.tap(find.text('할 일 추가'));
+    await tester.tap(find.text('15분'));
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.text('다른 추천'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('15분 추천 코스'), findsOneWidget);
+    expect(find.text('다른 추천'), findsOneWidget);
+  });
+
+  testWidgets('직접 추가한 청소가 앱을 다시 열어도 추천 후보로 유지된다', (tester) async {
+    seedSampleData(taskRepository, dataRepository);
+    await tester.pumpWidget(
+      CleanUpApp(
+        taskRepository: taskRepository,
+        dataRepository: dataRepository,
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.text('15분'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('하고 싶은 청소 직접 추가'));
     await tester.pumpAndSettle();
     await tester.enterText(
       find.widgetWithText(TextField, '할 일'),
@@ -401,8 +382,8 @@ void main() {
       find.widgetWithText(TextField, '예상 시간(분)'),
       '3',
     );
-    await tester.ensureVisible(find.text('오늘 할 일에 추가'));
-    await tester.tap(find.text('오늘 할 일에 추가'));
+    await tester.ensureVisible(find.text('이번 청소에 추가'));
+    await tester.tap(find.text('이번 청소에 추가'));
     await tester.pumpAndSettle();
 
     await tester.pumpWidget(const SizedBox.shrink());
@@ -414,10 +395,12 @@ void main() {
     );
     await tester.pumpAndSettle();
 
+    await tester.tap(find.text('장소에서 직접 고르기'));
+    await tester.pumpAndSettle();
     await tester.scrollUntilVisible(
       find.text('싱크대 주변 물기 제거'),
       250,
-      scrollable: find.byType(Scrollable).first,
+      scrollable: find.byType(Scrollable).last,
     );
     expect(find.text('싱크대 주변 물기 제거'), findsOneWidget);
   });
