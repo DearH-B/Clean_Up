@@ -30,10 +30,9 @@ class _TodayScreenState extends State<TodayScreen> {
   List<CleaningTask> _candidates = [];
   List<CleaningTask> _sessionTasks = [];
   Map<String, ZoneItem> _zoneItemsById = {};
-  int? _selectedMinutes;
+  List<String> _zoneNames = [];
   _EnergyLevel _energyLevel = _EnergyLevel.normal;
-  String _selectedZone = '아무 곳이나';
-  int _recommendationOffset = 0;
+  String? _selectedZone;
   bool _isLoading = true;
 
   int get _completedCount => _sessionTasks.where((task) => task.isDone).length;
@@ -62,7 +61,7 @@ class _TodayScreenState extends State<TodayScreen> {
         Text('지금 청소', style: Theme.of(context).textTheme.headlineSmall),
         const SizedBox(height: 4),
         Text(
-          '시간이 생겼을 때, 부담 없는 만큼만 시작해요.',
+          '오늘 신경 쓰이는 곳에서 하나만 골라 시작해요.',
           style: TextStyle(
             color: Theme.of(context).colorScheme.onSurfaceVariant,
           ),
@@ -70,33 +69,7 @@ class _TodayScreenState extends State<TodayScreen> {
         const SizedBox(height: 18),
         _buildFairyPanel(context),
         const SizedBox(height: 24),
-        Text(
-          '지금 몇 분 정도 괜찮으세요?',
-          style: Theme.of(context).textTheme.titleLarge,
-        ),
-        const SizedBox(height: 6),
-        Text(
-          '밀린 청소 대신, 이 시간 안에 끝낼 수 있는 것만 골라드려요.',
-          style: Theme.of(context).textTheme.bodySmall,
-        ),
-        const SizedBox(height: 14),
-        Row(
-          children: [
-            for (final option in _timeOptions) ...[
-              Expanded(
-                child: _TimeOptionButton(
-                  minutes: option.minutes,
-                  label: option.label,
-                  isSelected: _selectedMinutes == option.minutes,
-                  onPressed: () => _selectDuration(option.minutes),
-                ),
-              ),
-              if (option != _timeOptions.last) const SizedBox(width: 8),
-            ],
-          ],
-        ),
-        const SizedBox(height: 20),
-        Text('오늘 체력은 어때요?', style: Theme.of(context).textTheme.titleMedium),
+        Text('오늘 체력은 어때요?', style: Theme.of(context).textTheme.titleLarge),
         const SizedBox(height: 10),
         SegmentedButton<_EnergyLevel>(
           segments: const [
@@ -120,43 +93,36 @@ class _TodayScreenState extends State<TodayScreen> {
           onSelectionChanged: (selection) {
             setState(() {
               _energyLevel = selection.first;
-              _refreshRecommendations();
+              _refreshZoneItems();
             });
           },
         ),
-        const SizedBox(height: 18),
-        Text('신경 쓰이는 곳', style: Theme.of(context).textTheme.titleMedium),
-        const SizedBox(height: 10),
-        SingleChildScrollView(
-          scrollDirection: Axis.horizontal,
-          child: Row(
-            children: [
-              for (final zone in _zoneChoices) ...[
-                ChoiceChip(
-                  label: Text(zone),
-                  selected: _selectedZone == zone,
-                  onSelected: (_) {
-                    setState(() {
-                      _selectedZone = zone;
-                      _refreshRecommendations();
-                    });
-                  },
-                ),
-                const SizedBox(width: 8),
-              ],
-            ],
-          ),
+        const SizedBox(height: 22),
+        Text('신경 쓰이는 구역', style: Theme.of(context).textTheme.titleLarge),
+        const SizedBox(height: 5),
+        Text(
+          '내가 등록한 구역을 고르면 안에 있는 청소 항목을 보여드려요.',
+          style: Theme.of(context).textTheme.bodySmall,
         ),
-        const SizedBox(height: 12),
-        OutlinedButton.icon(
-          onPressed: _isLoading ? null : _showPlacePicker,
-          icon: const Icon(Icons.home_work_outlined),
-          label: const Text('장소에서 직접 고르기'),
+        const SizedBox(height: 10),
+        Wrap(
+          spacing: 8,
+          runSpacing: 8,
+          children: [
+            for (final zone in _zoneNames)
+              ChoiceChip(
+                label: Text(zone),
+                selected: _selectedZone == zone,
+                onSelected: (_) => _selectZone(zone),
+              ),
+          ],
         ),
         const SizedBox(height: 26),
         if (_isLoading)
           const Center(child: CircularProgressIndicator())
-        else if (_selectedMinutes == null && _sessionTasks.isEmpty)
+        else if (_zoneNames.isEmpty)
+          const _EmptyZoneMessage()
+        else if (_selectedZone == null)
           const _ReadyMessage()
         else
           _buildSession(context),
@@ -230,25 +196,17 @@ class _TodayScreenState extends State<TodayScreen> {
           children: [
             Expanded(
               child: Text(
-                _isSessionComplete
-                    ? '오늘 청소 끝!'
-                    : '${_selectedMinutes ?? totalMinutes}분 추천 코스',
+                _isSessionComplete ? '오늘 청소 끝!' : '$_selectedZone 청소 목록',
                 style: Theme.of(context).textTheme.titleLarge,
               ),
             ),
-            if (!_isSessionComplete && _selectedMinutes != null)
-              TextButton.icon(
-                onPressed: _showAnotherRecommendation,
-                icon: const Icon(Icons.refresh, size: 19),
-                label: const Text('다른 추천'),
-              ),
           ],
         ),
         const SizedBox(height: 4),
         Text(
           _isSessionComplete
               ? '계획보다 중요한 건 실제로 해낸 한 번이에요.'
-              : '${_sessionTasks.length}개 · 약 $totalMinutes분 · 원할 때 멈춰도 괜찮아요',
+              : '${_sessionTasks.length}개 · 모두 하면 약 $totalMinutes분 · 하나만 골라도 충분해요',
           style: Theme.of(context).textTheme.bodySmall,
         ),
         const SizedBox(height: 12),
@@ -258,7 +216,6 @@ class _TodayScreenState extends State<TodayScreen> {
             reason: _recommendationReason(task),
             onToggle: () => _toggleTask(task),
             onStart: () => _startCleaning(task),
-            onReplace: () => _replaceTask(task),
           ),
           const SizedBox(height: 10),
         ],
@@ -284,20 +241,18 @@ class _TodayScreenState extends State<TodayScreen> {
     final items = await widget.dataRepository.loadZoneItems() ?? [];
     final zones = await widget.dataRepository.loadZones() ?? [];
     final zoneNames = {for (final zone in zones) zone.id: zone.name};
-    final now = DateTime.now();
     final itemsById = {for (final item in items) item.id: item};
 
     final itemTasks = <CleaningTask>[
       for (final item in items)
-        if (item.isDue(now))
-          CleaningTask(
-            id: _scheduledTaskId(item.id),
-            title: '${item.name} 청소',
-            zoneName: zoneNames[item.zoneId] ?? item.name,
-            estimatedMinutes: item.estimatedMinutes,
-            isDone: false,
-            isRecurring: true,
-          ),
+        CleaningTask(
+          id: _scheduledTaskId(item.id),
+          title: '${item.name} 청소',
+          zoneName: zoneNames[item.zoneId] ?? item.name,
+          estimatedMinutes: item.estimatedMinutes,
+          isDone: false,
+          isRecurring: true,
+        ),
     ];
 
     if (!mounted) {
@@ -306,38 +261,32 @@ class _TodayScreenState extends State<TodayScreen> {
 
     setState(() {
       _zoneItemsById = itemsById;
+      _zoneNames = [for (final zone in zones) zone.name];
       _candidates = _deduplicateTasks([
         ...savedTasks.where(
           (task) =>
               !task.isDone &&
               !task.isPostponed &&
-              _isStillAvailable(task, itemsById, now),
+              _zoneItemIdFromTask(task) == null,
         ),
         ...itemTasks,
-        ..._fallbackTasks,
       ]);
       _isLoading = false;
     });
   }
 
-  void _selectDuration(int minutes) {
+  void _selectZone(String zone) {
     setState(() {
-      _selectedMinutes = minutes;
-      _recommendationOffset = 0;
-      _sessionTasks = _recommendTasks(minutes, 0);
+      _selectedZone = zone;
+      _sessionTasks = _tasksForZone(zone);
     });
     _scrollToSession();
   }
 
-  List<CleaningTask> _recommendTasks(int minutes, int offset) {
+  List<CleaningTask> _tasksForZone(String zone) {
     final available = _candidates
         .where(
-          (task) =>
-              !task.isDone &&
-              task.estimatedMinutes <= _maximumTaskMinutes(minutes) &&
-              (_selectedZone == '아무 곳이나' ||
-                  task.zoneName == _selectedZone ||
-                  task.zoneName == '집 전체'),
+          (task) => !task.isDone && task.zoneName == zone,
         )
         .toList()
       ..sort((a, b) {
@@ -352,45 +301,13 @@ class _TodayScreenState extends State<TodayScreen> {
         }
         return a.estimatedMinutes.compareTo(b.estimatedMinutes);
       });
-
-    if (available.isEmpty) {
-      return [];
-    }
-
-    final rotated = [
-      ...available.skip(offset % available.length),
-      ...available.take(offset % available.length),
-    ];
-    final selected = <CleaningTask>[];
-    var remaining = minutes;
-
-    for (final task in rotated) {
-      if (task.estimatedMinutes <= remaining && selected.length < 3) {
-        selected.add(task.copyWith(isDone: false));
-        remaining -= task.estimatedMinutes;
-      }
-    }
-
-    return selected.isEmpty
-        ? [rotated.first.copyWith(isDone: false)]
-        : selected;
-  }
-
-  int _maximumTaskMinutes(int selectedMinutes) {
-    return switch (_energyLevel) {
-      _EnergyLevel.light => (selectedMinutes * 0.6).ceil(),
-      _EnergyLevel.normal => selectedMinutes,
-      _EnergyLevel.strong => selectedMinutes,
-    };
+    return [for (final task in available) task.copyWith(isDone: false)];
   }
 
   int _recommendationScore(CleaningTask task) {
     var score = 0;
     if (task.isRecurring) {
       score += 30;
-    }
-    if (_selectedZone != '아무 곳이나' && task.zoneName == _selectedZone) {
-      score += 25;
     }
     final itemId = _zoneItemIdFromTask(task);
     final item = itemId == null ? null : _zoneItemsById[itemId];
@@ -411,6 +328,9 @@ class _TodayScreenState extends State<TodayScreen> {
     final item = itemId == null ? null : _zoneItemsById[itemId];
     if (item?.lastCleanedAt != null) {
       final days = DateTime.now().difference(item!.lastCleanedAt!).inDays;
+      if (days == 0) {
+        return '최근에 청소했어요. 필요하면 가볍게 관리해요';
+      }
       return '마지막 청소 후 $days일이 지났어요';
     }
     if (item?.hasProductInfo ?? false) {
@@ -419,69 +339,19 @@ class _TodayScreenState extends State<TodayScreen> {
     if (task.isRecurring) {
       return '평소 관리 주기를 참고했어요';
     }
-    if (_selectedZone != '아무 곳이나' && task.zoneName == _selectedZone) {
-      return '지금 신경 쓰이는 장소와 잘 맞아요';
-    }
     return _energyLevel == _EnergyLevel.light
         ? '체력 부담이 적은 짧은 청소예요'
-        : '선택한 시간 안에 끝내기 좋아요';
+        : _energyLevel == _EnergyLevel.strong
+            ? '오늘 체력으로 꼼꼼히 해보기 좋아요'
+            : '부담 없이 시작하기 좋은 청소예요';
   }
 
-  void _refreshRecommendations() {
-    final minutes = _selectedMinutes;
-    if (minutes == null) {
+  void _refreshZoneItems() {
+    final zone = _selectedZone;
+    if (zone == null) {
       return;
     }
-    _recommendationOffset = 0;
-    _sessionTasks = _recommendTasks(minutes, 0);
-  }
-
-  void _showAnotherRecommendation() {
-    final minutes = _selectedMinutes;
-    if (minutes == null) {
-      return;
-    }
-    setState(() {
-      _recommendationOffset++;
-      _sessionTasks = _recommendTasks(minutes, _recommendationOffset);
-    });
-  }
-
-  void _replaceTask(CleaningTask task) {
-    final minutes = _selectedMinutes ??
-        _sessionTasks.fold<int>(
-          0,
-          (sum, candidate) => sum + candidate.estimatedMinutes,
-        );
-    final currentIds = _sessionTasks.map((candidate) => candidate.id).toSet();
-    final replacements = _candidates
-        .where(
-          (candidate) =>
-              !candidate.isDone &&
-              !currentIds.contains(candidate.id) &&
-              candidate.estimatedMinutes <=
-                  (task.estimatedMinutes + 5).clamp(1, minutes) &&
-              (_selectedZone == '아무 곳이나' ||
-                  candidate.zoneName == _selectedZone ||
-                  candidate.zoneName == '집 전체'),
-        )
-        .toList()
-      ..sort(
-        (a, b) => _recommendationScore(b).compareTo(_recommendationScore(a)),
-      );
-
-    if (replacements.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('지금 조건에 맞는 다른 청소가 없어요.')),
-      );
-      return;
-    }
-
-    final index =
-        _sessionTasks.indexWhere((candidate) => candidate.id == task.id);
-    setState(() {
-      _sessionTasks[index] = replacements.first.copyWith(isDone: false);
-    });
+    _sessionTasks = _tasksForZone(zone);
   }
 
   Future<void> _startCleaning(CleaningTask task) async {
@@ -498,63 +368,6 @@ class _TodayScreenState extends State<TodayScreen> {
     if (completed == true && mounted && !task.isDone) {
       await _toggleTask(task);
     }
-  }
-
-  Future<void> _showPlacePicker() async {
-    final task = await showModalBottomSheet<CleaningTask>(
-      context: context,
-      showDragHandle: true,
-      builder: (context) {
-        final grouped = <String, List<CleaningTask>>{};
-        for (final candidate in _candidates.where((task) => !task.isDone)) {
-          grouped.putIfAbsent(candidate.zoneName, () => []).add(candidate);
-        }
-
-        return SafeArea(
-          child: ListView(
-            shrinkWrap: true,
-            padding: const EdgeInsets.fromLTRB(20, 0, 20, 20),
-            children: [
-              Text(
-                '어디를 가볍게 치워볼까요?',
-                style: Theme.of(context).textTheme.titleLarge,
-              ),
-              const SizedBox(height: 6),
-              const Text('하나만 골라도 충분해요.'),
-              const SizedBox(height: 14),
-              for (final entry in grouped.entries) ...[
-                Padding(
-                  padding: const EdgeInsets.only(top: 8, bottom: 4),
-                  child: Text(
-                    entry.key,
-                    style: Theme.of(context).textTheme.titleMedium,
-                  ),
-                ),
-                for (final item in entry.value)
-                  ListTile(
-                    contentPadding: EdgeInsets.zero,
-                    leading: const Icon(Icons.cleaning_services_outlined),
-                    title: Text(item.title),
-                    subtitle: Text('약 ${item.estimatedMinutes}분'),
-                    trailing: const Icon(Icons.chevron_right),
-                    onTap: () => Navigator.of(context).pop(item),
-                  ),
-              ],
-            ],
-          ),
-        );
-      },
-    );
-
-    if (task == null || !mounted) {
-      return;
-    }
-
-    setState(() {
-      _selectedMinutes = null;
-      _sessionTasks = [task.copyWith(isDone: false)];
-    });
-    _scrollToSession();
   }
 
   Future<void> _showAddTaskSheet() async {
@@ -637,9 +450,8 @@ class _TodayScreenState extends State<TodayScreen> {
 
   void _finishSession() {
     setState(() {
-      _selectedMinutes = null;
+      _selectedZone = null;
       _sessionTasks = [];
-      _recommendationOffset = 0;
     });
   }
 
@@ -657,9 +469,8 @@ class _TodayScreenState extends State<TodayScreen> {
   }
 
   Future<void> _saveUserCandidates() {
-    final persistable = _candidates
-        .where((task) => !_fallbackTaskIds.contains(task.id))
-        .toList();
+    final persistable =
+        _candidates.where((task) => _zoneItemIdFromTask(task) == null).toList();
     return widget.taskRepository.saveTodayTasks(persistable);
   }
 
@@ -676,19 +487,6 @@ class _TodayScreenState extends State<TodayScreen> {
   String? _zoneItemIdFromTask(CleaningTask task) {
     const prefix = 'scheduled-zone-item-';
     return task.id.startsWith(prefix) ? task.id.substring(prefix.length) : null;
-  }
-
-  bool _isStillAvailable(
-    CleaningTask task,
-    Map<String, ZoneItem> itemsById,
-    DateTime now,
-  ) {
-    final itemId = _zoneItemIdFromTask(task);
-    if (itemId == null) {
-      return true;
-    }
-    final item = itemsById[itemId];
-    return item != null && item.isDue(now);
   }
 
   _FairyState _fairyState() {
@@ -715,8 +513,8 @@ class _TodayScreenState extends State<TodayScreen> {
     }
     return const _FairyState(
       assetPath: '캐릭터/귀여운 분홍새.png',
-      title: '시간이 조금 생겼나요?',
-      message: '가능한 시간만 알려주면 가볍게 골라드릴게요.',
+      title: '어디부터 반짝여볼까요?',
+      message: '오늘 체력과 신경 쓰이는 구역만 골라주세요.',
     );
   }
 
@@ -727,52 +525,6 @@ class _TodayScreenState extends State<TodayScreen> {
       '벌써 세 개나 끝냈어요! 이제 쉬어도 충분해요.',
     ];
     return messages[(completedCount - 1).clamp(0, messages.length - 1)];
-  }
-}
-
-class _TimeOptionButton extends StatelessWidget {
-  const _TimeOptionButton({
-    required this.minutes,
-    required this.label,
-    required this.isSelected,
-    required this.onPressed,
-  });
-
-  final int minutes;
-  final String label;
-  final bool isSelected;
-  final VoidCallback onPressed;
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      height: 74,
-      child: isSelected
-          ? FilledButton(
-              onPressed: onPressed,
-              style: FilledButton.styleFrom(padding: EdgeInsets.zero),
-              child: _content(context),
-            )
-          : OutlinedButton(
-              onPressed: onPressed,
-              style: OutlinedButton.styleFrom(padding: EdgeInsets.zero),
-              child: _content(context),
-            ),
-    );
-  }
-
-  Widget _content(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Text(
-          '$minutes분',
-          style: const TextStyle(fontSize: 17, fontWeight: FontWeight.w800),
-        ),
-        const SizedBox(height: 2),
-        Text(label, style: const TextStyle(fontSize: 11)),
-      ],
-    );
   }
 }
 
@@ -790,17 +542,45 @@ class _ReadyMessage extends StatelessWidget {
       ),
       child: const Column(
         children: [
-          Icon(Icons.timer_outlined, size: 34, color: AppColors.rose),
+          Icon(Icons.home_work_outlined, size: 34, color: AppColors.rose),
           SizedBox(height: 10),
           Text(
-            '아직 정해진 할 일은 없어요',
+            '청소할 구역을 골라주세요',
             style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700),
           ),
           SizedBox(height: 5),
           Text(
-            '시간을 고르는 순간, 지금 할 청소만 나타나요.',
+            '구역을 선택하면 등록한 가전과 가구가 나타나요.',
             textAlign: TextAlign.center,
           ),
+        ],
+      ),
+    );
+  }
+}
+
+class _EmptyZoneMessage extends StatelessWidget {
+  const _EmptyZoneMessage();
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 24),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(color: Theme.of(context).colorScheme.outlineVariant),
+      ),
+      child: const Column(
+        children: [
+          Icon(Icons.add_home_work_outlined, size: 34, color: AppColors.rose),
+          SizedBox(height: 10),
+          Text(
+            '먼저 내 구역을 등록해 주세요',
+            style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700),
+          ),
+          SizedBox(height: 5),
+          Text('구역 탭에서 주방, 거실, 욕실 등을 만들 수 있어요.'),
         ],
       ),
     );
@@ -813,14 +593,12 @@ class _CleaningSuggestionTile extends StatelessWidget {
     required this.reason,
     required this.onToggle,
     required this.onStart,
-    required this.onReplace,
   });
 
   final CleaningTask task;
   final String reason;
   final VoidCallback onToggle;
   final VoidCallback onStart;
-  final VoidCallback onReplace;
 
   @override
   Widget build(BuildContext context) {
@@ -899,12 +677,6 @@ class _CleaningSuggestionTile extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  TextButton.icon(
-                    onPressed: onReplace,
-                    icon: const Icon(Icons.swap_horiz, size: 18),
-                    label: const Text('교체'),
-                  ),
-                  const SizedBox(width: 4),
                   FilledButton.icon(
                     onPressed: onStart,
                     icon: const Icon(Icons.play_arrow, size: 19),
@@ -1075,13 +847,6 @@ class _AddTaskSheetState extends State<_AddTaskSheet> {
   }
 }
 
-class _TimeOption {
-  const _TimeOption(this.minutes, this.label);
-
-  final int minutes;
-  final String label;
-}
-
 class _TaskPreset {
   const _TaskPreset(this.title, this.zoneName, this.minutes);
 
@@ -1092,14 +857,6 @@ class _TaskPreset {
 
 enum _EnergyLevel { light, normal, strong }
 
-const _timeOptions = [
-  _TimeOption(5, '아주 가볍게'),
-  _TimeOption(15, '한 곳 산뜻하게'),
-  _TimeOption(30, '제대로 한 번'),
-];
-
-const _zoneChoices = ['아무 곳이나', '주방', '거실', '욕실', '침실', '현관'];
-
 const _taskPresets = [
   _TaskPreset('분리수거 버리기', '현관', 7),
   _TaskPreset('창문 열고 환기', '기타', 5),
@@ -1107,65 +864,3 @@ const _taskPresets = [
   _TaskPreset('싱크대 주변 닦기', '주방', 8),
   _TaskPreset('욕실 세면대 닦기', '욕실', 8),
 ];
-
-const _fallbackTasks = [
-  CleaningTask(
-    id: 'fallback-ventilate',
-    title: '창문 열고 환기하기',
-    zoneName: '집 전체',
-    estimatedMinutes: 5,
-    isDone: false,
-  ),
-  CleaningTask(
-    id: 'fallback-sink',
-    title: '싱크대 주변 물기 닦기',
-    zoneName: '주방',
-    estimatedMinutes: 5,
-    isDone: false,
-  ),
-  CleaningTask(
-    id: 'fallback-table',
-    title: '테이블 위 물건 제자리 두기',
-    zoneName: '거실',
-    estimatedMinutes: 5,
-    isDone: false,
-  ),
-  CleaningTask(
-    id: 'fallback-vacuum',
-    title: '자주 걷는 곳만 청소기 돌리기',
-    zoneName: '거실',
-    estimatedMinutes: 10,
-    isDone: false,
-  ),
-  CleaningTask(
-    id: 'fallback-washbasin',
-    title: '세면대와 수전 닦기',
-    zoneName: '욕실',
-    estimatedMinutes: 8,
-    isDone: false,
-  ),
-  CleaningTask(
-    id: 'fallback-bed',
-    title: '침구 정리하고 주변 환기하기',
-    zoneName: '침실',
-    estimatedMinutes: 10,
-    isDone: false,
-  ),
-  CleaningTask(
-    id: 'fallback-floor',
-    title: '바닥 청소기 돌리기',
-    zoneName: '집 전체',
-    estimatedMinutes: 15,
-    isDone: false,
-  ),
-];
-
-const _fallbackTaskIds = {
-  'fallback-ventilate',
-  'fallback-sink',
-  'fallback-table',
-  'fallback-vacuum',
-  'fallback-washbasin',
-  'fallback-bed',
-  'fallback-floor',
-};
