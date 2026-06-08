@@ -23,28 +23,49 @@ class MainShell extends StatefulWidget {
 
 class _MainShellState extends State<MainShell> {
   int _selectedIndex = 0;
+  int _historyVersion = 0;
+  late final Widget _todayScreen;
+  late final Widget _zonesScreen;
+  late final Widget _communityScreen;
+
+  @override
+  void initState() {
+    super.initState();
+    _todayScreen = TodayScreen(
+      taskRepository: widget.taskRepository,
+      dataRepository: widget.dataRepository,
+    );
+    _zonesScreen = ZonesScreen(dataRepository: widget.dataRepository);
+    _communityScreen = CommunityScreen(dataRepository: widget.dataRepository);
+  }
 
   @override
   Widget build(BuildContext context) {
-    final screens = <Widget>[
-      TodayScreen(
-        taskRepository: widget.taskRepository,
+    final screens = [
+      _todayScreen,
+      _zonesScreen,
+      HistoryScreen(
+        key: ValueKey(_historyVersion),
         dataRepository: widget.dataRepository,
       ),
-      ZonesScreen(dataRepository: widget.dataRepository),
-      HistoryScreen(dataRepository: widget.dataRepository),
-      CommunityScreen(dataRepository: widget.dataRepository),
+      _communityScreen,
     ];
 
     return Scaffold(
       body: SafeArea(
-        child: screens[_selectedIndex],
+        child: IndexedStack(
+          index: _selectedIndex,
+          children: screens,
+        ),
       ),
       bottomNavigationBar: NavigationBar(
         selectedIndex: _selectedIndex,
         onDestinationSelected: (index) {
           setState(() {
             _selectedIndex = index;
+            if (index == 2) {
+              _historyVersion++;
+            }
           });
         },
         destinations: const [

@@ -26,10 +26,16 @@ final mockZoneItems = <ZoneItem>[
     ],
     recommendedProducts: [
       CleaningProduct(
-        brand: '스카치-브라이트',
-        name: '제로스크래치 스폰지 수세미',
-        reason: '제품 내부가 아닌 투입구 외부와 싱크대 주변을 부드럽게 닦을 때 참고할 수 있어요.',
-        url: 'https://www.scotch-brite.co.kr/3M/ko_KR/p/d/v000466295/',
+        brand: '스카치브라이트',
+        name: '베이직 제로 스크래치 스펀지 수세미',
+        reason: '투입구 외부와 싱크대 주변처럼 흠집이 걱정되는 곳을 부드럽게 닦을 때 참고해요.',
+        url: 'https://www.coupang.com/np/categories/127929',
+      ),
+      CleaningProduct(
+        brand: '탐사',
+        name: '니트릴장갑 100매입',
+        reason: '음식물처리기 주변을 만질 때 손 냄새와 오염 부담을 줄이는 일회용 장갑이에요.',
+        url: 'https://www.coupang.com/np/categories/399685',
       ),
     ],
     summary: '내가 사용하는 제품으로 등록된 에코업 하이브리드 음식물처리기예요.',
@@ -69,10 +75,16 @@ final mockZoneItems = <ZoneItem>[
     ],
     recommendedProducts: [
       CleaningProduct(
-        brand: '스카치-브라이트',
+        brand: '코멧',
+        name: '부직포 행주 20개입',
+        reason: '냉장고 선반과 내부 물기를 닦고 바로 교체하기 쉬운 일상용 행주예요.',
+        url: 'https://www.coupang.com/np/categories/105949',
+      ),
+      CleaningProduct(
+        brand: '스카치브라이트',
         name: '제로스크래치 셀룰로오스 수세미',
-        reason: '부드러운 세척과 빠른 수분 흡수가 필요한 분리 선반 관리에 참고할 수 있어요.',
-        url: 'https://www.scotch-brite.co.kr/3M/ko_KR/p/d/v000492148/',
+        reason: '분리 선반을 닦을 때 표면 흠집 부담을 줄이는 부드러운 수세미예요.',
+        url: 'https://www.coupang.com/np/categories/399680',
       ),
     ],
     steps: [
@@ -100,10 +112,17 @@ final mockZoneItems = <ZoneItem>[
     ],
     recommendedProducts: [
       CleaningProduct(
-        brand: '스카치-브라이트',
-        name: '제로스크래치 스폰지 수세미',
-        reason: '코팅·플라스틱 제품을 부드럽게 닦는 용도로 소개된 제품이에요.',
-        url: 'https://www.scotch-brite.co.kr/3M/ko_KR/p/d/v000466295/',
+        brand: '스카치브라이트',
+        name: '베이직 제로 스크래치 스펀지 수세미',
+        reason: '전자레인지 내부 코팅과 문 주변을 부드럽게 닦는 용도로 참고하기 좋아요.',
+        url: 'https://www.coupang.com/np/categories/127929',
+      ),
+      CleaningProduct(
+        brand: '글라스락',
+        name: '전자레인지 사용 가능 내열 유리용기',
+        reason: '물 한 컵을 데워 내부 오염을 불리는 스팀 청소에 쓰기 좋아요.',
+        url:
+            'https://www.coupang.com/np/search?q=%EA%B8%80%EB%9D%BC%EC%8A%A4%EB%9D%BD%20%EB%82%B4%EC%97%B4%20%EC%9C%A0%EB%A6%AC%EC%9A%A9%EA%B8%B0',
       ),
     ],
     steps: [
@@ -132,10 +151,16 @@ final mockZoneItems = <ZoneItem>[
     ],
     recommendedProducts: [
       CleaningProduct(
-        brand: '스카치-브라이트',
-        name: '제로스크래치 패드 수세미 225',
-        reason: '스크래치 부담을 줄이며 부드럽게 세척하는 용도로 소개된 제품이에요.',
-        url: 'https://www.scotch-brite.co.kr/3M/ko_KR/p/d/v000453335/',
+        brand: '생활공작소',
+        name: '배수구 클리너 1.85L',
+        reason: '싱크대 배수구 냄새와 찌꺼기 관리를 할 때 참고할 수 있는 배수구 세정제예요.',
+        url: 'https://www.coupang.com/vp/products/7599800377',
+      ),
+      CleaningProduct(
+        brand: '스카치브라이트',
+        name: '제로 스크래치 다목적 수세미',
+        reason: '스테인리스 싱크볼과 수전 주변을 부드럽게 닦을 때 참고하기 좋아요.',
+        url: 'https://www.coupang.com/np/categories/416678',
       ),
     ],
     steps: [

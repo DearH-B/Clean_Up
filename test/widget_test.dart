@@ -80,7 +80,7 @@ void main() {
       scrollable: find.byType(Scrollable).last,
     );
     expect(find.text('추천 제품'), findsOneWidget);
-    expect(find.text('제로스크래치 스폰지 수세미'), findsOneWidget);
+    expect(find.text('베이직 제로 스크래치 스펀지 수세미'), findsOneWidget);
     await tester.scrollUntilVisible(
       find.text('청소 순서'),
       300,
@@ -111,12 +111,14 @@ void main() {
 
     await tester.tap(find.text('브랜드·모델 등록'));
     await tester.pumpAndSettle();
+    await tester.tap(find.text('목록에 없어요'));
+    await tester.pumpAndSettle();
     await tester.enterText(
-      find.widgetWithText(TextField, '브랜드 또는 제조사'),
+      find.widgetWithText(TextField, '브랜드 직접 입력'),
       '삼성전자',
     );
     await tester.enterText(
-      find.widgetWithText(TextField, '모델명'),
+      find.widgetWithText(TextField, '모델명 직접 입력 또는 선택'),
       'RF85TEST',
     );
     await tester.scrollUntilVisible(
@@ -154,11 +156,12 @@ void main() {
     await tester.tap(find.text('LG전자'));
     await tester.pumpAndSettle();
     await tester.scrollUntilVisible(
-      find.text('RF85'),
+      find.text('M874GBB031'),
       250,
       scrollable: find.byType(Scrollable).last,
     );
-    await tester.tap(find.text('RF85'));
+    expect(find.text('RF85C90F1AP'), findsNothing);
+    await tester.tap(find.text('M874GBB031'));
     await tester.scrollUntilVisible(
       find.text('제품 정보 저장'),
       250,
@@ -168,7 +171,7 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.text('LG전자'), findsOneWidget);
-    expect(find.text('RF85'), findsOneWidget);
+    expect(find.text('M874GBB031'), findsOneWidget);
   });
 
   testWidgets('제품 등록 모드에서 항목 프리셋을 눌러도 제품 등록이 유지된다', (tester) async {
@@ -192,8 +195,9 @@ void main() {
     await tester.tap(find.widgetWithText(ActionChip, '냉장고'));
     await tester.pumpAndSettle();
 
-    expect(find.text('대표 브랜드'), findsOneWidget);
-    expect(find.widgetWithText(TextField, '브랜드 또는 제조사'), findsOneWidget);
+    expect(find.text('브랜드'), findsOneWidget);
+    expect(find.text('브랜드를 고르면 아래 모델 후보가 바뀌어요.'), findsOneWidget);
+    expect(find.widgetWithText(TextField, '모델명 직접 입력 또는 선택'), findsOneWidget);
   });
 
   testWidgets('구역을 고르고 등록된 청소를 완료할 수 있다', (tester) async {
@@ -236,6 +240,63 @@ void main() {
     await tester.tap(foodWasteCheckbox);
     await tester.pumpAndSettle();
     expect(find.textContaining('첫 번째 반짝임 완료'), findsOneWidget);
+  });
+
+  testWidgets('탭을 이동해도 지금 청소의 체크 상태가 유지된다', (tester) async {
+    seedSampleData(taskRepository, dataRepository);
+    await tester.pumpWidget(
+      CleanUpApp(
+        taskRepository: taskRepository,
+        dataRepository: dataRepository,
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.widgetWithText(ChoiceChip, '주방'));
+    await tester.pumpAndSettle();
+    final sinkCard = find.ancestor(
+      of: find.text('싱크대 청소'),
+      matching: find.byType(Card),
+    );
+    final sinkCheckbox = find.descendant(
+      of: sinkCard,
+      matching: find.byType(Checkbox),
+    );
+    await tester.ensureVisible(sinkCheckbox);
+    await tester.tap(sinkCheckbox);
+    await tester.pumpAndSettle();
+
+    expect(tester.widget<Checkbox>(sinkCheckbox).value, isTrue);
+
+    await tester.tap(find.text('구역'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('주방'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('싱크대'));
+    await tester.pumpAndSettle();
+    await tester.scrollUntilVisible(
+      find.text('청소 순서'),
+      300,
+      scrollable: find.byType(Scrollable).last,
+    );
+    expect(find.text('청소 순서'), findsOneWidget);
+
+    await tester.pageBack();
+    await tester.pumpAndSettle();
+    await tester.pageBack();
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('지금 청소'));
+    await tester.pumpAndSettle();
+
+    final restoredSinkCard = find.ancestor(
+      of: find.text('싱크대 청소'),
+      matching: find.byType(Card),
+    );
+    final restoredSinkCheckbox = find.descendant(
+      of: restoredSinkCard,
+      matching: find.byType(Checkbox),
+    );
+    expect(tester.widget<Checkbox>(restoredSinkCheckbox).value, isTrue);
   });
 
   testWidgets('청소 자랑 커뮤니티 탭이 표시된다', (tester) async {
