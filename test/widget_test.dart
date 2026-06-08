@@ -384,6 +384,31 @@ void main() {
     );
     expect(find.text('방1'), findsOneWidget);
   });
+
+  testWidgets('구역을 삭제할 수 있다', (tester) async {
+    seedSampleData(taskRepository, dataRepository);
+    await tester.pumpWidget(
+      CleanUpApp(
+        taskRepository: taskRepository,
+        dataRepository: dataRepository,
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.text('구역'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('주방'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.byTooltip('구역 삭제'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('주방 삭제'), findsOneWidget);
+    await tester.tap(find.widgetWithText(FilledButton, '삭제'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('주방'), findsNothing);
+    expect(find.textContaining('구역을 삭제했어요'), findsOneWidget);
+  });
 }
 
 void seedSampleData(

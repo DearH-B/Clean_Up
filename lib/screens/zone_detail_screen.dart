@@ -11,6 +11,7 @@ class ZoneDetailScreen extends StatefulWidget {
     required this.zone,
     required this.items,
     required this.onItemsChanged,
+    required this.onDeleteZone,
     required this.dataRepository,
     this.startWithAddItem = false,
     super.key,
@@ -19,6 +20,7 @@ class ZoneDetailScreen extends StatefulWidget {
   final CleaningZone zone;
   final List<ZoneItem> items;
   final void Function(String zoneId, List<ZoneItem> items) onItemsChanged;
+  final ValueChanged<String> onDeleteZone;
   final CleaningDataRepository dataRepository;
   final bool startWithAddItem;
 
@@ -45,7 +47,16 @@ class _ZoneDetailScreenState extends State<ZoneDetailScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text(widget.zone.name)),
+      appBar: AppBar(
+        title: Text(widget.zone.name),
+        actions: [
+          IconButton(
+            tooltip: '구역 삭제',
+            onPressed: _confirmDeleteZone,
+            icon: const Icon(Icons.delete_outline),
+          ),
+        ],
+      ),
       body: _items.isEmpty
           ? _EmptyZone(
               zoneName: widget.zone.name,
@@ -120,6 +131,33 @@ class _ZoneDetailScreenState extends State<ZoneDetailScreen> {
       _items.add(item);
     });
     widget.onItemsChanged(widget.zone.id, _items);
+  }
+
+  Future<void> _confirmDeleteZone() async {
+    final shouldDelete = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text('${widget.zone.name} 삭제'),
+        content: const Text('이 구역과 안에 등록한 항목을 모두 삭제할까요?'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(false),
+            child: const Text('취소'),
+          ),
+          FilledButton(
+            onPressed: () => Navigator.of(context).pop(true),
+            child: const Text('삭제'),
+          ),
+        ],
+      ),
+    );
+
+    if (shouldDelete != true || !mounted) {
+      return;
+    }
+
+    widget.onDeleteZone(widget.zone.id);
+    Navigator.of(context).pop();
   }
 }
 

@@ -191,10 +191,40 @@ class _ZonesScreenState extends State<ZonesScreen> {
           zone: zone,
           items: _items.where((item) => item.zoneId == zone.id).toList(),
           onItemsChanged: _updateZoneItems,
+          onDeleteZone: _deleteZone,
           dataRepository: widget.dataRepository,
           startWithAddItem: startWithAddItem,
         ),
       ),
+    );
+  }
+
+  Future<void> _deleteZone(String zoneId) async {
+    final deletedZone = _zones.where((zone) => zone.id == zoneId).firstOrNull;
+    if (deletedZone == null) {
+      return;
+    }
+
+    setState(() {
+      _zones = [
+        for (final zone in _zones)
+          if (zone.id != zoneId) zone,
+      ];
+      _items = [
+        for (final item in _items)
+          if (item.zoneId != zoneId) item,
+      ];
+    });
+
+    await widget.dataRepository.saveZones(_zones);
+    await widget.dataRepository.saveZoneItems(_items);
+
+    if (!mounted) {
+      return;
+    }
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text('${deletedZone.name} 구역을 삭제했어요.')),
     );
   }
 }
