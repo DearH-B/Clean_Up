@@ -234,6 +234,27 @@ void main() {
     expect(find.text('싱크대 주변을 반짝하게 닦았어요!'), findsOneWidget);
   });
 
+  testWidgets('초기 세팅에서 선택한 구역을 바로 만들 수 있다', (tester) async {
+    await tester.pumpWidget(
+      CleanUpApp(
+        taskRepository: taskRepository,
+        dataRepository: dataRepository,
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.text('구역'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('먼저 집 구조를 골라볼까요?'), findsOneWidget);
+    await tester.tap(find.text('선택한 구역 만들기'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('주방'), findsOneWidget);
+    expect(find.text('거실'), findsOneWidget);
+    expect(find.text('욕실'), findsOneWidget);
+  });
+
   testWidgets('주기 청소를 다음 일정으로 미룰 수 있다', (tester) async {
     seedSampleData(taskRepository, dataRepository);
     await tester.pumpWidget(

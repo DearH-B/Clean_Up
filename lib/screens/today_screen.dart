@@ -497,11 +497,23 @@ class _AddTaskSheetState extends State<_AddTaskSheet> {
           const SizedBox(height: 16),
           TextField(
             controller: _titleController,
-            autofocus: true,
+            textInputAction: TextInputAction.next,
             decoration: const InputDecoration(
               labelText: '할 일',
               hintText: '예: 분리수거 버리기',
             ),
+          ),
+          const SizedBox(height: 12),
+          Wrap(
+            spacing: 8,
+            runSpacing: 8,
+            children: [
+              for (final preset in _taskPresets)
+                ActionChip(
+                  label: Text(preset.title),
+                  onPressed: () => _pickTaskPreset(preset),
+                ),
+            ],
           ),
           const SizedBox(height: 12),
           DropdownMenu<String>(
@@ -560,4 +572,32 @@ class _AddTaskSheetState extends State<_AddTaskSheet> {
       ),
     );
   }
+
+  void _pickTaskPreset(_TaskPreset preset) {
+    setState(() {
+      _titleController.text = preset.title;
+      _zoneName = preset.zoneName;
+      _minutesController.text = '${preset.minutes}';
+    });
+  }
 }
+
+class _TaskPreset {
+  const _TaskPreset({
+    required this.title,
+    required this.zoneName,
+    required this.minutes,
+  });
+
+  final String title;
+  final String zoneName;
+  final int minutes;
+}
+
+const _taskPresets = [
+  _TaskPreset(title: '분리수거 버리기', zoneName: '현관', minutes: 7),
+  _TaskPreset(title: '창문 열고 환기', zoneName: '기타', minutes: 5),
+  _TaskPreset(title: '바닥 청소기 돌리기', zoneName: '거실', minutes: 15),
+  _TaskPreset(title: '싱크대 주변 닦기', zoneName: '주방', minutes: 8),
+  _TaskPreset(title: '욕실 세면대 닦기', zoneName: '욕실', minutes: 8),
+];

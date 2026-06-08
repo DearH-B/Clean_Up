@@ -79,10 +79,13 @@ class _HistoryScreenState extends State<HistoryScreen> {
         const SizedBox(height: 24),
         Text('최근 기록', style: Theme.of(context).textTheme.titleLarge),
         const SizedBox(height: 12),
-        for (final record in _records) ...[
-          RecordTile(record: record),
-          const SizedBox(height: 10),
-        ],
+        if (_records.isEmpty)
+          const _EmptyHistory()
+        else
+          for (final record in _records) ...[
+            RecordTile(record: record),
+            const SizedBox(height: 10),
+          ],
       ],
     );
   }
@@ -96,5 +99,37 @@ class _HistoryScreenState extends State<HistoryScreen> {
     setState(() {
       _records = savedRecords;
     });
+  }
+}
+
+class _EmptyHistory extends StatelessWidget {
+  const _EmptyHistory();
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      child: Padding(
+        padding: const EdgeInsets.all(18),
+        child: Column(
+          children: [
+            Icon(
+              Icons.history_toggle_off_outlined,
+              size: 40,
+              color: Theme.of(context).colorScheme.primary,
+            ),
+            const SizedBox(height: 10),
+            Text(
+              '아직 청소 기록이 없어요',
+              style: Theme.of(context).textTheme.titleMedium,
+            ),
+            const SizedBox(height: 6),
+            const Text(
+              '구역 항목에서 청소를 완료하면 자동으로 기록돼요.',
+              textAlign: TextAlign.center,
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }

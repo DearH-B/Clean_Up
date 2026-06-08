@@ -67,7 +67,7 @@ class _ZonesScreenState extends State<ZonesScreen> {
         if (_zones.isEmpty)
           SliverFillRemaining(
             hasScrollBody: false,
-            child: _EmptyZones(onAdd: _showAddZoneSheet),
+            child: _InitialZoneSetup(onCreate: _createPresetZones),
           )
         else
           SliverPadding(
@@ -86,20 +86,7 @@ class _ZonesScreenState extends State<ZonesScreen> {
                   return ZoneCard(
                     zone: zone,
                     index: index,
-                    onTap: () {
-                      Navigator.of(context).push(
-                        MaterialPageRoute<void>(
-                          builder: (context) => ZoneDetailScreen(
-                            zone: zone,
-                            items: _items
-                                .where((item) => item.zoneId == zone.id)
-                                .toList(),
-                            onItemsChanged: _updateZoneItems,
-                            dataRepository: widget.dataRepository,
-                          ),
-                        ),
-                      );
-                    },
+                    onTap: () => _openZone(zone),
                   );
                 },
                 childCount: _zones.length,
@@ -126,6 +113,9 @@ class _ZonesScreenState extends State<ZonesScreen> {
       _zones.add(zone);
     });
     await widget.dataRepository.saveZones(_zones);
+    if (mounted) {
+      _openZone(zone, startWithAddItem: true);
+    }
   }
 
   Future<void> _loadSavedData() async {
@@ -164,46 +154,149 @@ class _ZonesScreenState extends State<ZonesScreen> {
           zoneItems.where((item) => item.lastCleanedAt != null).length,
     );
   }
+
+  Future<void> _createPresetZones(List<_ZonePreset> presets) async {
+    if (presets.isEmpty) {
+      return;
+    }
+
+    final createdZones = [
+      for (final preset in presets)
+        CleaningZone(
+          id: 'custom-zone-${preset.name}-${DateTime.now().microsecondsSinceEpoch}',
+          name: preset.name,
+          description: preset.description,
+          taskCount: 0,
+          completedTaskCount: 0,
+        ),
+    ];
+
+    setState(() {
+      _zones.addAll(createdZones);
+    });
+    await widget.dataRepository.saveZones(_zones);
+
+    if (mounted && createdZones.length == 1) {
+      _openZone(createdZones.first, startWithAddItem: true);
+    }
+  }
+
+  void _openZone(
+    CleaningZone zone, {
+    bool startWithAddItem = false,
+  }) {
+    Navigator.of(context).push(
+      MaterialPageRoute<void>(
+        builder: (context) => ZoneDetailScreen(
+          zone: zone,
+          items: _items.where((item) => item.zoneId == zone.id).toList(),
+          onItemsChanged: _updateZoneItems,
+          dataRepository: widget.dataRepository,
+          startWithAddItem: startWithAddItem,
+        ),
+      ),
+    );
+  }
 }
 
-class _EmptyZones extends StatelessWidget {
-  const _EmptyZones({required this.onAdd});
+class _InitialZoneSetup extends StatefulWidget {
+  const _InitialZoneSetup({required this.onCreate});
 
-  final VoidCallback onAdd;
+  final ValueChanged<List<_ZonePreset>> onCreate;
+
+  @override
+  State<_InitialZoneSetup> createState() => _InitialZoneSetupState();
+}
+
+class _InitialZoneSetupState extends State<_InitialZoneSetup> {
+  final Set<_ZonePreset> _selectedPresets = {
+    _zonePresets[0],
+    _zonePresets[1],
+    _zonePresets[2],
+  };
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(32, 24, 32, 96),
+      padding: const EdgeInsets.fromLTRB(24, 12, 24, 96),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          Icon(
-            Icons.add_home_work_outlined,
-            size: 54,
-            color: Theme.of(context).colorScheme.primary,
+          Center(
+            child: Icon(
+              Icons.add_home_work_outlined,
+              size: 54,
+              color: Theme.of(context).colorScheme.primary,
+            ),
           ),
           const SizedBox(height: 16),
           Text(
-            '아직 등록한 구역이 없어요',
+            '먼저 집 구조를 골라볼까요?',
+            textAlign: TextAlign.center,
             style: Theme.of(context).textTheme.titleMedium,
           ),
           const SizedBox(height: 8),
           const Text(
-            '주방, 방1, 욕실처럼 내가 관리할 공간을 먼저 만들어 보세요.',
+            '자주 청소하는 공간을 선택하면 바로 시작할 수 있어요.',
             textAlign: TextAlign.center,
           ),
-          const SizedBox(height: 20),
+          const SizedBox(height: 18),
+          Wrap(
+            spacing: 8,
+            runSpacing: 8,
+            alignment: WrapAlignment.center,
+            children: [
+              for (final preset in _zonePresets)
+                FilterChip(
+                  label: Text(preset.name),
+                  selected: _selectedPresets.contains(preset),
+                  onSelected: (selected) {
+                    setState(() {
+                      if (selected) {
+                        _selectedPresets.add(preset);
+                      } else {
+                        _selectedPresets.remove(preset);
+                      }
+                    });
+                  },
+                ),
+            ],
+          ),
+          const SizedBox(height: 22),
           FilledButton.icon(
-            onPressed: onAdd,
-            icon: const Icon(Icons.add),
-            label: const Text('구역 추가'),
+            onPressed: _selectedPresets.isEmpty
+                ? null
+                : () => widget.onCreate(_selectedPresets.toList()),
+            icon: const Icon(Icons.check_rounded),
+            label: const Text('선택한 구역 만들기'),
           ),
         ],
       ),
     );
   }
 }
+
+class _ZonePreset {
+  const _ZonePreset({
+    required this.name,
+    required this.description,
+  });
+
+  final String name;
+  final String description;
+}
+
+const _zonePresets = [
+  _ZonePreset(name: '주방', description: '싱크대, 조리대, 냉장고 앞 공간'),
+  _ZonePreset(name: '거실', description: '소파, 테이블, 바닥, 창가'),
+  _ZonePreset(name: '욕실', description: '세면대, 변기, 샤워부스'),
+  _ZonePreset(name: '침실', description: '침구, 옷장 주변, 협탁'),
+  _ZonePreset(name: '방1', description: '책상, 침대, 옷장'),
+  _ZonePreset(name: '방2', description: '새로 추가한 청소 구역'),
+  _ZonePreset(name: '베란다', description: '창틀, 바닥, 세탁 공간'),
+  _ZonePreset(name: '현관', description: '신발장, 바닥, 문 주변'),
+];
 
 class _AddZoneSheet extends StatefulWidget {
   const _AddZoneSheet();
