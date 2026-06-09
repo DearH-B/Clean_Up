@@ -4,6 +4,13 @@ Flutter 앱은 iPhone 16에서 직접 테스트할 수 있다. 다만 iOS 앱의
 서명은 macOS와 Xcode가 필요하므로 현재 Windows PC만으로는 iPhone에 설치할
 수 없다.
 
+## 현재 개발 방침
+
+- 당분간 Windows와 Android 에뮬레이터에서 기능을 개발하고 검증한다.
+- 변경 사항은 Git과 GitHub에 꾸준히 저장한다.
+- 앱의 주요 기능이 안정된 뒤 Mac을 준비해 iOS 프로젝트를 생성한다.
+- iPhone 16에서 카메라, 키보드, 화면 배치, 권한과 데이터 저장을 다시 검증한다.
+
 ## 준비물
 
 - macOS가 설치된 Mac
@@ -46,3 +53,26 @@ Flutter 앱은 iPhone 16에서 직접 테스트할 수 있다. 다만 iOS 앱의
 현재 추가된 `mobile_scanner` 코드는 Android와 iOS를 모두 지원한다. 따라서
 Mac에서 iOS 플랫폼과 카메라 권한만 구성하면 같은 QR·바코드 등록 흐름을
 iPhone에서도 사용할 수 있다.
+
+## Mac을 구했을 때 체크리스트
+
+- [ ] Mac에 Xcode 설치
+- [ ] Mac에 Flutter SDK와 Git 설치
+- [ ] GitHub에서 프로젝트 clone
+- [ ] `flutter doctor`로 개발 환경 확인
+- [ ] `flutter create --platforms=ios .` 실행
+- [ ] `flutter pub get` 실행
+- [ ] `NSCameraUsageDescription` 추가
+- [ ] Xcode에서 Apple Account와 Team 설정
+- [ ] iPhone 16 연결 및 개발자 모드 활성화
+- [ ] `flutter run`으로 실기기 실행
+- [ ] QR·바코드 카메라 스캔 확인
+- [ ] 제품 검색과 등록 확인
+- [ ] 앱 재실행 후 저장 데이터 유지 확인
+- [ ] 주요 화면의 글자 잘림과 키보드 입력 확인
+
+## 배포 방식 선택
+
+본인의 iPhone에서 개발 테스트만 하는 동안에는 무료 Apple Account를 사용할 수
+있다. 여러 기기에 편하게 배포하거나 TestFlight와 App Store를 이용할 때 Apple
+Developer Program 가입을 진행한다.
