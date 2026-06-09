@@ -68,6 +68,25 @@ void main() {
     expect(restored.note, '필터는 싱크대 아래 보관');
   });
 
+  test('스캔한 제품 코드는 저장 후에도 유지된다', () {
+    final item = productCatalog.first
+        .toZoneItem(id: 'scanned-product', zoneId: 'zone-1')
+        .copyWith(
+          scannedCode: '8801234567890',
+          scannedCodeFormat: 'ean13',
+          scannedSourceUrl: 'https://example.com/products/8801234567890',
+        );
+
+    final restored = ZoneItem.fromJson(item.toJson());
+
+    expect(restored.scannedCode, '8801234567890');
+    expect(restored.scannedCodeFormat, 'ean13');
+    expect(
+      restored.scannedSourceUrl,
+      'https://example.com/products/8801234567890',
+    );
+  });
+
   test('이전 공간과 관리 기록 JSON을 새 모델로 읽을 수 있다', () async {
     SharedPreferences.setMockInitialValues({
       'zones_v1': jsonEncode([

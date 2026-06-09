@@ -68,6 +68,9 @@ class ZoneItem {
     required this.cautions,
     required this.steps,
     this.catalogProductId,
+    this.scannedCode,
+    this.scannedCodeFormat,
+    this.scannedSourceUrl,
     this.nickname,
     this.purchaseDate,
     this.installedDate,
@@ -97,6 +100,9 @@ class ZoneItem {
   final String id;
   final String zoneId;
   final String? catalogProductId;
+  final String? scannedCode;
+  final String? scannedCodeFormat;
+  final String? scannedSourceUrl;
   final String? nickname;
   final DateTime? purchaseDate;
   final DateTime? installedDate;
@@ -150,6 +156,9 @@ class ZoneItem {
       id: json['id'] as String,
       zoneId: json['zoneId'] as String,
       catalogProductId: json['catalogProductId'] as String?,
+      scannedCode: json['scannedCode'] as String?,
+      scannedCodeFormat: json['scannedCodeFormat'] as String?,
+      scannedSourceUrl: json['scannedSourceUrl'] as String?,
       nickname: json['nickname'] as String?,
       purchaseDate: json['purchaseDate'] == null
           ? null
@@ -211,6 +220,9 @@ class ZoneItem {
       'id': id,
       'zoneId': zoneId,
       'catalogProductId': catalogProductId,
+      'scannedCode': scannedCode,
+      'scannedCodeFormat': scannedCodeFormat,
+      'scannedSourceUrl': scannedSourceUrl,
       'nickname': nickname,
       'purchaseDate': purchaseDate?.toIso8601String(),
       'installedDate': installedDate?.toIso8601String(),
@@ -249,6 +261,9 @@ class ZoneItem {
 
   ZoneItem copyWith({
     String? catalogProductId,
+    String? scannedCode,
+    String? scannedCodeFormat,
+    String? scannedSourceUrl,
     String? nickname,
     DateTime? purchaseDate,
     DateTime? installedDate,
@@ -268,6 +283,9 @@ class ZoneItem {
       id: id,
       zoneId: zoneId,
       catalogProductId: catalogProductId ?? this.catalogProductId,
+      scannedCode: scannedCode ?? this.scannedCode,
+      scannedCodeFormat: scannedCodeFormat ?? this.scannedCodeFormat,
+      scannedSourceUrl: scannedSourceUrl ?? this.scannedSourceUrl,
       nickname: nickname ?? this.nickname,
       purchaseDate: purchaseDate ?? this.purchaseDate,
       installedDate: installedDate ?? this.installedDate,

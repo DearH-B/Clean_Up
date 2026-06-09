@@ -8,6 +8,7 @@ import '../models/product_space.dart';
 import '../models/zone_item.dart';
 import '../repositories/product_catalog_repository.dart';
 import '../repositories/product_data_repository.dart';
+import 'product_code_scanner_screen.dart';
 
 class ProductRegistrationResult {
   const ProductRegistrationResult._({
@@ -71,6 +72,9 @@ class _ProductRegistrationScreenState extends State<ProductRegistrationScreen> {
   DateTime? _purchaseDate;
   DateTime? _installedDate;
   ZoneItem? _draftProduct;
+  String? _scannedCode;
+  String? _scannedCodeFormat;
+  String? _scannedSourceUrl;
   late String _selectedSpaceId;
 
   @override
@@ -151,6 +155,19 @@ class _ProductRegistrationScreenState extends State<ProductRegistrationScreen> {
         const SizedBox(height: 6),
         const Text('제품 라벨의 모델명이나 브랜드를 검색하면 가장 정확해요.'),
         const SizedBox(height: 18),
+        FilledButton.tonalIcon(
+          onPressed: _openCodeScanner,
+          icon: const Icon(Icons.qr_code_scanner),
+          label: const Text('QR·바코드로 제품 찾기'),
+        ),
+        if (_scannedCode != null) ...[
+          const SizedBox(height: 10),
+          _ScannedCodeSummary(
+            code: _scannedCode!,
+            format: _scannedCodeFormat,
+          ),
+        ],
+        const SizedBox(height: 14),
         TextField(
           controller: _searchController,
           autofocus: false,
@@ -551,6 +568,9 @@ class _ProductRegistrationScreenState extends State<ProductRegistrationScreen> {
     final entry = _selectedEntry;
     if (!_manualMode && entry != null) {
       return entry.toZoneItem(id: id, zoneId: _selectedSpaceId).copyWith(
+            scannedCode: _scannedCode,
+            scannedCodeFormat: _scannedCodeFormat,
+            scannedSourceUrl: _scannedSourceUrl,
             nickname: nickname.isEmpty ? null : nickname,
             purchaseDate: _purchaseDate,
             installedDate: _installedDate,
@@ -565,6 +585,9 @@ class _ProductRegistrationScreenState extends State<ProductRegistrationScreen> {
     return ZoneItem(
       id: id,
       zoneId: _selectedSpaceId,
+      scannedCode: _scannedCode,
+      scannedCodeFormat: _scannedCodeFormat,
+      scannedSourceUrl: _scannedSourceUrl,
       name: category,
       nickname: nickname.isEmpty ? null : nickname,
       purchaseDate: _purchaseDate,
@@ -687,6 +710,26 @@ class _ProductRegistrationScreenState extends State<ProductRegistrationScreen> {
     if (mounted) {
       setState(() => _recentSearches = searches.take(5).toList());
     }
+  }
+
+  Future<void> _openCodeScanner() async {
+    final result = await Navigator.of(context).push<ProductCodeScanResult>(
+      MaterialPageRoute(
+        builder: (context) => const ProductCodeScannerScreen(),
+      ),
+    );
+    if (result == null || !mounted) {
+      return;
+    }
+
+    setState(() {
+      _scannedCode = result.rawValue;
+      _scannedCodeFormat = result.format;
+      _scannedSourceUrl = result.sourceUrl;
+      _searchController.text = result.searchQuery;
+    });
+    _searchCatalog(result.searchQuery);
+    _showMessage('코드를 읽었어요. 연결된 제품 정보를 찾고 있어요.');
   }
 
   void _searchCatalog(String value) {
@@ -1062,6 +1105,51 @@ class _SectionLabel extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.only(bottom: 10),
       child: Text(label, style: Theme.of(context).textTheme.titleMedium),
+    );
+  }
+}
+
+class _ScannedCodeSummary extends StatelessWidget {
+  const _ScannedCodeSummary({
+    required this.code,
+    required this.format,
+  });
+
+  final String code;
+  final String? format;
+
+  @override
+  Widget build(BuildContext context) {
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        color: Theme.of(context).colorScheme.surfaceContainerLow,
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(12),
+        child: Row(
+          children: [
+            const Icon(Icons.check_circle_outline),
+            const SizedBox(width: 10),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text(
+                    '코드 인식 완료',
+                    style: TextStyle(fontWeight: FontWeight.w800),
+                  ),
+                  Text(
+                    '${format ?? 'unknown'} · $code',
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
