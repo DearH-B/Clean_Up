@@ -68,8 +68,10 @@ class _ProductRegistrationScreenState extends State<ProductRegistrationScreen> {
   bool _manualMode = false;
   bool _startedFromSearchFailure = false;
   bool _isSearching = false;
+  bool _isLoadingBrands = false;
   String _searchQuery = '';
   List<String> _recentSearches = [];
+  List<String> _brandOptions = [];
   List<ProductCatalogEntry> _searchResults = [];
   ProductCatalogEntry? _selectedEntry;
   ZoneItemType _selectedType = ZoneItemType.appliance;
@@ -277,9 +279,6 @@ class _ProductRegistrationScreenState extends State<ProductRegistrationScreen> {
   }
 
   Widget _buildManualFields() {
-    final brandOptions = catalogBrandOptionsFor(
-      _categoryController.text.trim(),
-    );
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
@@ -290,7 +289,13 @@ class _ProductRegistrationScreenState extends State<ProductRegistrationScreen> {
             labelText: '제품 종류',
             hintText: '예: 냉장고, 음식물처리기',
           ),
-          onChanged: (_) => setState(() => _visualCandidate = null),
+          onChanged: (_) {
+            setState(() {
+              _visualCandidate = null;
+              _brandOptions = [];
+            });
+            _loadBrandOptions();
+          },
         ),
         const SizedBox(height: 14),
         DropdownMenu<ZoneItemType>(
@@ -308,14 +313,19 @@ class _ProductRegistrationScreenState extends State<ProductRegistrationScreen> {
           },
         ),
         const SizedBox(height: 14),
-        if (brandOptions.isNotEmpty) ...[
+        if (_isLoadingBrands)
+          const Padding(
+            padding: EdgeInsets.only(bottom: 14),
+            child: LinearProgressIndicator(),
+          )
+        else if (_brandOptions.isNotEmpty) ...[
           Text('대표 브랜드', style: Theme.of(context).textTheme.titleSmall),
           const SizedBox(height: 8),
           Wrap(
             spacing: 8,
             runSpacing: 8,
             children: [
-              for (final brand in brandOptions)
+              for (final brand in _brandOptions)
                 ChoiceChip(
                   label: Text(brand),
                   selected: _brandController.text.trim() == brand,
@@ -852,7 +862,7 @@ class _ProductRegistrationScreenState extends State<ProductRegistrationScreen> {
         builder: (context) => ModelSelectionScreen(
           categoryName: category,
           brand: brand,
-          models: catalogModelOptionsFor(category, brand),
+          catalogRepository: widget.catalogRepository,
           selectedModel: _modelController.text.trim().isEmpty
               ? null
               : _modelController.text.trim(),
@@ -917,6 +927,29 @@ class _ProductRegistrationScreenState extends State<ProductRegistrationScreen> {
         _categoryController.text = _searchQuery;
       }
       _step = 1;
+    });
+    _loadBrandOptions();
+  }
+
+  Future<void> _loadBrandOptions() async {
+    final category = _categoryController.text.trim();
+    if (category.isEmpty) {
+      if (mounted) {
+        setState(() {
+          _brandOptions = [];
+          _isLoadingBrands = false;
+        });
+      }
+      return;
+    }
+    setState(() => _isLoadingBrands = true);
+    final brands = await widget.catalogRepository.brandsFor(category);
+    if (!mounted || category != _categoryController.text.trim()) {
+      return;
+    }
+    setState(() {
+      _brandOptions = brands;
+      _isLoadingBrands = false;
     });
   }
 

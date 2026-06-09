@@ -3,7 +3,12 @@ from pathlib import Path
 from fastapi import FastAPI, HTTPException, Query
 
 from .catalog import ProductCatalog
-from .schemas import CatalogProduct, ProductSearchResponse
+from .schemas import (
+    CatalogProduct,
+    ModelListResponse,
+    ProductSearchResponse,
+    StringListResponse,
+)
 
 BASE_DIR = Path(__file__).resolve().parents[1]
 catalog = ProductCatalog(BASE_DIR / "data" / "products.json")
@@ -37,3 +42,22 @@ def get_product(product_id: str) -> CatalogProduct:
     if product is None:
         raise HTTPException(status_code=404, detail="Product not found")
     return product
+
+
+@app.get("/v1/brands", response_model=StringListResponse)
+def list_brands(
+    category: str = Query(min_length=1, max_length=80),
+) -> StringListResponse:
+    items = catalog.brands(category)
+    return StringListResponse(items=items, total=len(items))
+
+
+@app.get("/v1/models", response_model=ModelListResponse)
+def list_models(
+    category: str = Query(min_length=1, max_length=80),
+    brand: str = Query(min_length=1, max_length=80),
+    q: str = Query(default="", max_length=120),
+    limit: int = Query(default=50, ge=1, le=100),
+) -> ModelListResponse:
+    items = catalog.models(category=category, brand=brand, query=q)[:limit]
+    return ModelListResponse(items=items, total=len(items))

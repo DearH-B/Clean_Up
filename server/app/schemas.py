@@ -108,3 +108,27 @@ class ProductSearchResponse(BaseModel):
     items: list[CatalogProduct]
     total: int
     query: str
+
+
+class StringListResponse(BaseModel):
+    items: list[str]
+    total: int
+
+
+class CatalogModelOption(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    categoryName: str
+    brand: str
+    modelName: str
+    displayName: str
+    releaseYear: int | None = None
+    imageUrl: str | None = None
+    productUrl: str | None = None
+    sourceCheckedAt: date
+    reviewStatus: ReviewStatus
+
+
+class ModelListResponse(BaseModel):
+    items: list[CatalogModelOption]
+    total: int

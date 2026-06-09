@@ -12,6 +12,8 @@ python -m uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
 - API 문서: `http://127.0.0.1:8000/docs`
 - 상태 확인: `http://127.0.0.1:8000/health`
 - 제품 검색: `http://127.0.0.1:8000/v1/products?q=DCS-HM4AG-W`
+- 브랜드 조회: `http://127.0.0.1:8000/v1/brands?category=TV`
+- 모델 조회: `http://127.0.0.1:8000/v1/models?category=TV&brand=삼성전자`
 
 Android 에뮬레이터에서는 PC의 `localhost`가 `10.0.2.2`로 보입니다.
 
@@ -22,6 +24,11 @@ Android 에뮬레이터에서는 PC의 `localhost`가 `10.0.2.2`로 보입니다
 - `verified`: 모델명과 주요 출처 확인 완료
 
 현재는 `data/products.json`을 Git으로 검수합니다. 제품 수가 늘면 PostgreSQL과 관리자 화면으로 교체할 수 있도록 API 계층을 분리했습니다.
+
+- `data/products.json`: 관리법까지 검수 완료된 제품
+- `data/models.json`: 제품 등록 단계에서 보여줄 브랜드별 모델 후보
+
+모델 후보와 관리법 데이터는 분리합니다. 모델을 찾았더라도 관리법 근거가 충분하지 않으면 앱은 해당 제품군의 일반 관리법을 표시합니다.
 
 ## 출처와 검수 규칙
 

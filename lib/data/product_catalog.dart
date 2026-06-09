@@ -648,6 +648,9 @@ List<String> catalogBrandOptionsFor(String categoryName) {
   if (categoryName.contains('공기청정')) {
     options.addAll(['삼성전자', 'LG전자', '다이슨', '샤오미']);
   }
+  if (_normalize(categoryName) == 'tv' || categoryName.contains('텔레비전')) {
+    options.addAll(['삼성전자', 'LG전자', '소니']);
+  }
   return options.toList()..sort();
 }
 
@@ -670,6 +673,14 @@ List<String> catalogModelOptionsFor(String categoryName, String brand) {
     if (brand == 'LG전자') {
       options.addAll(['M874GBB031', 'T873MEE312', 'S834MTE10']);
     }
+  }
+  if ((_normalize(categoryName) == 'tv' || categoryName.contains('텔레비전')) &&
+      brand == '삼성전자') {
+    options.addAll([
+      'KQ65QNF90AFXKR',
+      'KQ65QNF70AFXKR',
+      'KQ75QNF900FXKR',
+    ]);
   }
   return options.toList()..sort();
 }

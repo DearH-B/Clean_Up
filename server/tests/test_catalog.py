@@ -48,6 +48,25 @@ class ProductCatalogTest(unittest.TestCase):
                 all(source_id in source_ids for group in references for source_id in group)
             )
 
+    def test_lists_brands_by_category(self) -> None:
+        self.assertIn("삼성전자", self.catalog.brands("TV"))
+        self.assertNotIn("삼성전자", self.catalog.brands("냉장고"))
+
+    def test_lists_verified_models_by_brand(self) -> None:
+        results = self.catalog.models(category="TV", brand="삼성전자")
+
+        self.assertEqual(results[0].releaseYear, 2025)
+        self.assertIn("KQ65QNF90AFXKR", {item.modelName for item in results})
+
+    def test_filters_model_search(self) -> None:
+        results = self.catalog.models(
+            category="TV",
+            brand="삼성전자",
+            query="QNF70",
+        )
+
+        self.assertEqual([item.modelName for item in results], ["KQ65QNF70AFXKR"])
+
 
 if __name__ == "__main__":
     unittest.main()

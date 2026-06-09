@@ -44,6 +44,20 @@ void main() {
     );
   });
 
+  test('TV는 로컬 대체 목록에서도 삼성전자 모델을 찾을 수 있다', () async {
+    const repository = LocalProductCatalogRepository();
+
+    expect(await repository.brandsFor('TV'), contains('삼성전자'));
+    final models = await repository.modelsFor(
+      category: 'TV',
+      brand: '삼성전자',
+    );
+    expect(
+      models.map((item) => item.modelName),
+      contains('KQ65QNF90AFXKR'),
+    );
+  });
+
   test('카탈로그 제품 ID와 출처 정보는 저장 후에도 유지된다', () {
     final item = productCatalog.first.toZoneItem(
       id: 'saved-product',

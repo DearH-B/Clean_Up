@@ -1,0 +1,35 @@
+[
+  {
+    "categoryName": "TV",
+    "brand": "삼성전자",
+    "modelName": "KQ65QNF90AFXKR",
+    "displayName": "2025 Neo QLED QNF90 163cm",
+    "releaseYear": 2025,
+    "imageUrl": null,
+    "productUrl": "https://www.samsung.com/sec/tvs/neo-qled-4k-qnf90-d2c/KQ65QNF90AFXKR/",
+    "sourceCheckedAt": "2026-06-09",
+    "reviewStatus": "verified"
+  },
+  {
+    "categoryName": "TV",
+    "brand": "삼성전자",
+    "modelName": "KQ65QNF70AFXKR",
+    "displayName": "2025 Neo QLED QNF70 163cm",
+    "releaseYear": 2025,
+    "imageUrl": null,
+    "productUrl": "https://www.samsung.com/sec/tvs/neo-qled-4k-qnf70-d2c/KQ65QNF70AFXKR/",
+    "sourceCheckedAt": "2026-06-09",
+    "reviewStatus": "verified"
+  },
+  {
+    "categoryName": "TV",
+    "brand": "삼성전자",
+    "modelName": "KQ75QNF900FXKR",
+    "displayName": "2025 Neo QLED 8K QNF900 189cm",
+    "releaseYear": 2025,
+    "imageUrl": null,
+    "productUrl": "https://www.samsung.com/sec/tvs/neo-qled-8k-qnf900-d2c/KQ75QNF900FXKR/",
+    "sourceCheckedAt": "2026-06-09",
+    "reviewStatus": "verified"
+  }
+]
