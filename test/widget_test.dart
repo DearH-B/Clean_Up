@@ -460,6 +460,43 @@ void main() {
     expect(products.single.visualCandidateId, isNull);
   });
 
+  testWidgets('모델 선택 화면을 반복해서 열고 닫아도 오류가 발생하지 않는다', (tester) async {
+    await dataRepository.saveSpaces(productSpaces);
+    await dataRepository.saveUserProducts([]);
+    await pumpApp(tester, dataRepository);
+
+    await tester.tap(find.text('내 제품'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('주방'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('제품 추가'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('냉장고'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('삼성전자'));
+    await tester.pumpAndSettle();
+
+    final modelButton = find.widgetWithText(OutlinedButton, '모델 선택');
+    await tester.ensureVisible(modelButton);
+    await tester.pumpAndSettle();
+    await tester.tap(modelButton);
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('RF85C90F1AP'));
+    await tester.pumpAndSettle();
+
+    expect(tester.takeException(), isNull);
+    final selectedButton = find.widgetWithText(OutlinedButton, 'RF85C90F1AP');
+    await tester.ensureVisible(selectedButton);
+    await tester.pumpAndSettle();
+    await tester.tap(selectedButton);
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('모델명을 모르겠어요'));
+    await tester.pumpAndSettle();
+
+    expect(tester.takeException(), isNull);
+    expect(find.widgetWithText(OutlinedButton, '모델 선택'), findsOneWidget);
+  });
+
   testWidgets('검색 실패 시 제품 정보 요청을 저장할 수 있다', (tester) async {
     seedSampleData(dataRepository);
     await pumpApp(tester, dataRepository);

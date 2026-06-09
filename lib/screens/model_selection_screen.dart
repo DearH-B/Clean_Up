@@ -19,14 +19,7 @@ class ModelSelectionScreen extends StatefulWidget {
 }
 
 class _ModelSelectionScreenState extends State<ModelSelectionScreen> {
-  final _searchController = TextEditingController();
   String _query = '';
-
-  @override
-  void dispose() {
-    _searchController.dispose();
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -52,7 +45,6 @@ class _ModelSelectionScreenState extends State<ModelSelectionScreen> {
           const Text('제품 라벨의 모델명과 같은 항목을 선택하세요. 정확하지 않으면 직접 입력하거나 건너뛸 수 있어요.'),
           const SizedBox(height: 16),
           TextField(
-            controller: _searchController,
             decoration: const InputDecoration(
               labelText: '모델 검색',
               hintText: '모델명의 일부를 입력하세요',
@@ -75,7 +67,7 @@ class _ModelSelectionScreenState extends State<ModelSelectionScreen> {
               Card(
                 margin: const EdgeInsets.only(bottom: 8),
                 child: ListTile(
-                  onTap: () => Navigator.of(context).pop(model),
+                  onTap: () => _finish(model),
                   leading: Icon(
                     widget.selectedModel == model
                         ? Icons.check_circle
@@ -93,7 +85,7 @@ class _ModelSelectionScreenState extends State<ModelSelectionScreen> {
             label: const Text('모델명 직접 입력'),
           ),
           TextButton(
-            onPressed: () => Navigator.of(context).pop(''),
+            onPressed: () => _finish(''),
             child: const Text('모델명을 모르겠어요'),
           ),
         ],
@@ -102,20 +94,21 @@ class _ModelSelectionScreenState extends State<ModelSelectionScreen> {
   }
 
   Future<void> _enterModelManually() async {
-    final controller = TextEditingController(text: _query);
+    var input = _query.trim();
     final model = await showDialog<String>(
       context: context,
       builder: (context) => AlertDialog(
         title: const Text('모델명 직접 입력'),
-        content: TextField(
-          controller: controller,
+        content: TextFormField(
+          initialValue: input,
           autofocus: true,
           textInputAction: TextInputAction.done,
           decoration: const InputDecoration(
             labelText: '모델명',
             hintText: '제품 라벨의 모델명을 그대로 입력하세요',
           ),
-          onSubmitted: (value) {
+          onChanged: (value) => input = value,
+          onFieldSubmitted: (value) {
             final model = value.trim();
             if (model.isNotEmpty) {
               Navigator.of(context).pop(model);
@@ -129,7 +122,7 @@ class _ModelSelectionScreenState extends State<ModelSelectionScreen> {
           ),
           FilledButton(
             onPressed: () {
-              final model = controller.text.trim();
+              final model = input.trim();
               if (model.isNotEmpty) {
                 Navigator.of(context).pop(model);
               }
@@ -139,10 +132,18 @@ class _ModelSelectionScreenState extends State<ModelSelectionScreen> {
         ],
       ),
     );
-    controller.dispose();
     if (model != null && mounted) {
-      Navigator.of(context).pop(model);
+      _finish(model);
     }
+  }
+
+  void _finish(String model) {
+    FocusManager.instance.primaryFocus?.unfocus();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) {
+        Navigator.of(context).pop(model);
+      }
+    });
   }
 }
 
