@@ -22,3 +22,11 @@ Android 에뮬레이터에서는 PC의 `localhost`가 `10.0.2.2`로 보입니다
 - `verified`: 모델명과 주요 출처 확인 완료
 
 현재는 `data/products.json`을 Git으로 검수합니다. 제품 수가 늘면 PostgreSQL과 관리자 화면으로 교체할 수 있도록 API 계층을 분리했습니다.
+
+## 출처와 검수 규칙
+
+- 공개 제품은 하나 이상의 `sources`와 `reviewHistory`가 필요합니다.
+- 숫자가 포함된 스펙은 `specSourceIds`로 근거 출처를 연결합니다.
+- 관리 단계의 근거는 `stepSourceIds`로 연결합니다.
+- 존재하지 않는 출처 ID를 참조하면 서버가 시작되지 않습니다.
+- 마지막 검수 이력의 상태는 제품의 `reviewStatus`와 같아야 합니다.

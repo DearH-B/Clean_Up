@@ -19,6 +19,59 @@
     "sourceTitle": "다나와/에누리 공개 스펙 및 에코업 세척 영상",
     "sourceUrl": "https://prod.danawa.com/info/?pcode=96061655",
     "sourceCheckedAt": "2026-06-08",
+    "sources": [
+      {
+        "id": "eco-up-spec",
+        "title": "DCS-HM4AG-W 공개 제품 스펙",
+        "url": "https://prod.danawa.com/info/?pcode=96061655",
+        "type": "priceComparison",
+        "publisher": "다나와",
+        "checkedAt": "2026-06-08",
+        "supports": ["모델명", "처리방식", "설치형태", "처리용량", "크기와 무게"],
+        "isOfficial": false,
+        "isActive": true
+      },
+      {
+        "id": "eco-up-cleaning-video",
+        "title": "분쇄기 세척방법",
+        "url": "https://www.youtube.com/watch?v=NhcPjcHIJkw",
+        "type": "officialVideo",
+        "publisher": "에코업 음식물처리기",
+        "checkedAt": "2026-06-08",
+        "supports": ["투입구 주변 관리", "세척 시 주의사항", "이상 발생 시 대응"],
+        "isOfficial": true,
+        "isActive": true
+      }
+    ],
+    "specSourceIds": {
+      "처리방식": ["eco-up-spec"],
+      "설치형태": ["eco-up-spec"],
+      "처리용량": ["eco-up-spec"],
+      "소음": ["eco-up-spec"],
+      "크기": ["eco-up-spec"],
+      "무게": ["eco-up-spec"]
+    },
+    "stepSourceIds": {
+      "0": ["eco-up-cleaning-video"],
+      "1": ["eco-up-cleaning-video"],
+      "2": ["eco-up-cleaning-video"],
+      "3": ["eco-up-spec", "eco-up-cleaning-video"]
+    },
+    "reviewHistory": [
+      {
+        "status": "reviewed",
+        "reviewer": "catalog-editor",
+        "reviewedAt": "2026-06-08",
+        "note": "모델명과 공개 스펙을 확인하고 위험한 분해 단계를 제외함."
+      },
+      {
+        "status": "verified",
+        "reviewer": "catalog-editor",
+        "reviewedAt": "2026-06-08",
+        "note": "공식 세척 영상과 제품 스펙 출처를 분리해 교차 확인함."
+      }
+    ],
+    "installationType": "싱크대 내장형",
     "productSpecs": [
       "처리방식: 습식분쇄 + 미생물",
       "설치형태: 싱크대 내장형",
@@ -81,6 +134,34 @@
     "sourceTitle": "앱 기본 관리법",
     "sourceUrl": "",
     "sourceCheckedAt": "2026-06-08",
+    "sources": [
+      {
+        "id": "generic-refrigerator-guide",
+        "title": "앱 냉장고 일반 관리법",
+        "url": null,
+        "type": "generalGuidance",
+        "publisher": "앱 편집팀",
+        "checkedAt": "2026-06-08",
+        "supports": ["선반과 서랍 관리", "고무패킹 관리", "유리 선반 주의사항"],
+        "isOfficial": false,
+        "isActive": true
+      }
+    ],
+    "specSourceIds": {},
+    "stepSourceIds": {
+      "0": ["generic-refrigerator-guide"],
+      "1": ["generic-refrigerator-guide"],
+      "2": ["generic-refrigerator-guide"],
+      "3": ["generic-refrigerator-guide"]
+    },
+    "reviewHistory": [
+      {
+        "status": "reviewed",
+        "reviewer": "catalog-editor",
+        "reviewedAt": "2026-06-08",
+        "note": "제품군 공통 관리법이며 모델별 설명서를 우선하도록 표시함."
+      }
+    ],
     "productSpecs": ["모델 정보 없음"],
     "supplies": ["중성세제", "부드러운 천", "마른 수건"],
     "recommendedSupplies": ["부직포 행주 또는 극세사 천", "향이 강하지 않은 주방용 중성세제"],

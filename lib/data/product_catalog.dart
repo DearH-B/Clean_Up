@@ -1,3 +1,4 @@
+import '../models/catalog_metadata.dart';
 import '../models/zone_item.dart';
 
 class ProductCatalogEntry {
@@ -27,6 +28,18 @@ class ProductCatalogEntry {
     required this.recommendedProducts,
     required this.cautions,
     required this.steps,
+    this.sources = const [],
+    this.specSourceIds = const {},
+    this.stepSourceIds = const {},
+    this.reviewHistory = const [],
+    this.officialManualUrl,
+    this.supportUrl,
+    this.servicePhone,
+    this.releaseYear,
+    this.isDiscontinued,
+    this.imageUrl,
+    this.consumables = const [],
+    this.installationType,
     this.guideVideoUrl,
     this.guideVideoTitle,
     this.guideVideoChannel,
@@ -59,6 +72,18 @@ class ProductCatalogEntry {
   final List<CleaningProduct> recommendedProducts;
   final List<String> cautions;
   final List<String> steps;
+  final List<ProductSource> sources;
+  final Map<String, List<String>> specSourceIds;
+  final Map<String, List<String>> stepSourceIds;
+  final List<CatalogReviewRecord> reviewHistory;
+  final String? officialManualUrl;
+  final String? supportUrl;
+  final String? servicePhone;
+  final int? releaseYear;
+  final bool? isDiscontinued;
+  final String? imageUrl;
+  final List<String> consumables;
+  final String? installationType;
   final String? guideVideoUrl;
   final String? guideVideoTitle;
   final String? guideVideoChannel;
@@ -102,6 +127,31 @@ class ProductCatalogEntry {
               .toList(),
       cautions: (json['cautions'] as List<dynamic>).cast<String>(),
       steps: (json['steps'] as List<dynamic>).cast<String>(),
+      sources: (json['sources'] as List<dynamic>? ?? const [])
+          .map(
+            (source) => ProductSource.fromJson(
+              Map<String, Object?>.from(source as Map),
+            ),
+          )
+          .toList(),
+      specSourceIds: _sourceReferencesFromJson(json['specSourceIds']),
+      stepSourceIds: _sourceReferencesFromJson(json['stepSourceIds']),
+      reviewHistory: (json['reviewHistory'] as List<dynamic>? ?? const [])
+          .map(
+            (record) => CatalogReviewRecord.fromJson(
+              Map<String, Object?>.from(record as Map),
+            ),
+          )
+          .toList(),
+      officialManualUrl: json['officialManualUrl'] as String?,
+      supportUrl: json['supportUrl'] as String?,
+      servicePhone: json['servicePhone'] as String?,
+      releaseYear: json['releaseYear'] as int?,
+      isDiscontinued: json['isDiscontinued'] as bool?,
+      imageUrl: json['imageUrl'] as String?,
+      consumables:
+          (json['consumables'] as List<dynamic>? ?? const []).cast<String>(),
+      installationType: json['installationType'] as String?,
       guideVideoUrl: json['guideVideoUrl'] as String?,
       guideVideoTitle: json['guideVideoTitle'] as String?,
       guideVideoChannel: json['guideVideoChannel'] as String?,
@@ -118,6 +168,7 @@ class ProductCatalogEntry {
       id: id,
       zoneId: zoneId,
       catalogProductId: this.id,
+      productSources: sources,
       name: name,
       type: type,
       summary: summary,
@@ -153,6 +204,7 @@ class ProductCatalogEntry {
       id: catalogItem.id,
       zoneId: catalogItem.zoneId,
       catalogProductId: catalogItem.catalogProductId,
+      productSources: catalogItem.productSources,
       nickname: item.nickname,
       purchaseDate: item.purchaseDate,
       installedDate: item.installedDate,
@@ -204,6 +256,66 @@ class ProductCatalogEntry {
     ].map(_normalize).join(' ');
     return haystack.contains(normalizedQuery);
   }
+
+  List<String> validateForPublication() {
+    final issues = <String>[];
+    if (id.trim().isEmpty ||
+        name.trim().isEmpty ||
+        categoryName.trim().isEmpty ||
+        productMethod.trim().isEmpty ||
+        guideStatus.trim().isEmpty ||
+        sourceCheckedAt.isAfter(DateTime.now())) {
+      issues.add('필수 제품 정보가 비어 있거나 확인일이 올바르지 않습니다.');
+    }
+    if (!const {'reviewed', 'verified'}.contains(reviewStatus)) {
+      issues.add('공개 제품은 reviewed 또는 verified 상태여야 합니다.');
+    }
+    if (sources.isEmpty) {
+      issues.add('하나 이상의 출처가 필요합니다.');
+    }
+    final sourceIds = {for (final source in sources) source.id};
+    for (final references in [
+      ...specSourceIds.values,
+      ...stepSourceIds.values
+    ]) {
+      if (references.any((id) => !sourceIds.contains(id))) {
+        issues.add('존재하지 않는 출처를 참조하고 있습니다.');
+        break;
+      }
+    }
+    if (reviewHistory.isEmpty) {
+      issues.add('검수 이력이 필요합니다.');
+    }
+    for (final spec in productSpecs) {
+      if (!RegExp(r'\d').hasMatch(spec)) {
+        continue;
+      }
+      final label = spec.split(':').first.trim();
+      if (specSourceIds[label]?.isNotEmpty != true) {
+        issues.add('숫자 스펙 "$label"에 연결된 출처가 없습니다.');
+      }
+    }
+    return issues;
+  }
+
+  bool needsSourceReview(
+    DateTime now, {
+    int maxAgeDays = 180,
+  }) {
+    return sources.any(
+      (source) => source.needsReview(now, maxAgeDays: maxAgeDays),
+    );
+  }
+}
+
+Map<String, List<String>> _sourceReferencesFromJson(Object? value) {
+  if (value is! Map) {
+    return const {};
+  }
+  return {
+    for (final entry in value.entries)
+      entry.key.toString(): (entry.value as List<dynamic>).cast<String>(),
+  };
 }
 
 const _checkedAt = '2026-06-08';
@@ -225,6 +337,61 @@ final productCatalog = <ProductCatalogEntry>[
     sourceTitle: '다나와/에누리 공개 스펙 및 에코업 세척 영상',
     sourceUrl: 'https://prod.danawa.com/info/?pcode=96061655',
     sourceCheckedAt: DateTime.parse(_checkedAt),
+    sources: [
+      ProductSource(
+        id: 'eco-up-spec',
+        title: 'DCS-HM4AG-W 공개 제품 스펙',
+        url: 'https://prod.danawa.com/info/?pcode=96061655',
+        type: ProductSourceType.priceComparison,
+        publisher: '다나와',
+        checkedAt: DateTime.parse(_checkedAt),
+        supports: const ['모델명', '처리방식', '설치형태', '처리용량', '크기와 무게'],
+        isOfficial: false,
+        isActive: true,
+      ),
+      ProductSource(
+        id: 'eco-up-cleaning-video',
+        title: '분쇄기 세척방법',
+        url: 'https://www.youtube.com/watch?v=NhcPjcHIJkw',
+        type: ProductSourceType.officialVideo,
+        publisher: '에코업 음식물처리기',
+        checkedAt: DateTime.parse(_checkedAt),
+        supports: const ['투입구 주변 관리', '세척 시 주의사항', '이상 발생 시 대응'],
+        isOfficial: true,
+        isActive: true,
+      ),
+    ],
+    specSourceIds: const {
+      '처리방식': ['eco-up-spec'],
+      '설치형태': ['eco-up-spec'],
+      '처리용량': ['eco-up-spec'],
+      '소음': ['eco-up-spec'],
+      '크기': ['eco-up-spec'],
+      '무게': ['eco-up-spec'],
+    },
+    stepSourceIds: const {
+      '0': ['eco-up-cleaning-video'],
+      '1': ['eco-up-cleaning-video'],
+      '2': ['eco-up-cleaning-video'],
+      '3': ['eco-up-spec', 'eco-up-cleaning-video'],
+      '4': ['eco-up-cleaning-video'],
+      '5': ['eco-up-cleaning-video'],
+    },
+    reviewHistory: [
+      CatalogReviewRecord(
+        status: 'reviewed',
+        reviewer: 'catalog-editor',
+        reviewedAt: DateTime(2026, 6, 8),
+        note: '모델명과 공개 스펙을 확인하고 위험한 분해 단계를 제외함.',
+      ),
+      CatalogReviewRecord(
+        status: 'verified',
+        reviewer: 'catalog-editor',
+        reviewedAt: DateTime(2026, 6, 8),
+        note: '공식 세척 영상과 제품 스펙 출처를 분리해 교차 확인함.',
+      ),
+    ],
+    installationType: '싱크대 내장형',
     guideVideoUrl: 'https://www.youtube.com/watch?v=NhcPjcHIJkw',
     guideVideoTitle: '분쇄기 세척방법',
     guideVideoChannel: '에코업 음식물처리기',
@@ -292,6 +459,32 @@ final productCatalog = <ProductCatalogEntry>[
     sourceTitle: '앱 기본 관리법',
     sourceUrl: '',
     sourceCheckedAt: DateTime.parse(_checkedAt),
+    sources: [
+      ProductSource(
+        id: 'generic-refrigerator-guide',
+        title: '앱 냉장고 일반 관리법',
+        type: ProductSourceType.generalGuidance,
+        publisher: '앱 편집팀',
+        checkedAt: DateTime.parse(_checkedAt),
+        supports: const ['선반과 서랍 관리', '고무패킹 관리', '유리 선반 주의사항'],
+        isOfficial: false,
+        isActive: true,
+      ),
+    ],
+    stepSourceIds: const {
+      '0': ['generic-refrigerator-guide'],
+      '1': ['generic-refrigerator-guide'],
+      '2': ['generic-refrigerator-guide'],
+      '3': ['generic-refrigerator-guide'],
+    },
+    reviewHistory: [
+      CatalogReviewRecord(
+        status: 'reviewed',
+        reviewer: 'catalog-editor',
+        reviewedAt: DateTime(2026, 6, 8),
+        note: '제품군 공통 관리법이며 모델별 설명서를 우선하도록 표시함.',
+      ),
+    ],
     productSpecs: const ['모델 정보 없음'],
     summary: '선반과 문 고무패킹까지 닦아 냄새와 음식물 흔적을 줄여요.',
     frequency: '한 달마다',
@@ -336,6 +529,32 @@ final productCatalog = <ProductCatalogEntry>[
     sourceTitle: '앱 기본 관리법',
     sourceUrl: '',
     sourceCheckedAt: DateTime.parse(_checkedAt),
+    sources: [
+      ProductSource(
+        id: 'generic-air-purifier-guide',
+        title: '앱 공기청정기 일반 관리법',
+        type: ProductSourceType.generalGuidance,
+        publisher: '앱 편집팀',
+        checkedAt: DateTime.parse(_checkedAt),
+        supports: const ['외부 흡입구 관리', '프리필터 관리', '필터 물세척 주의'],
+        isOfficial: false,
+        isActive: true,
+      ),
+    ],
+    stepSourceIds: const {
+      '0': ['generic-air-purifier-guide'],
+      '1': ['generic-air-purifier-guide'],
+      '2': ['generic-air-purifier-guide'],
+      '3': ['generic-air-purifier-guide'],
+    },
+    reviewHistory: [
+      CatalogReviewRecord(
+        status: 'reviewed',
+        reviewer: 'catalog-editor',
+        reviewedAt: DateTime(2026, 6, 8),
+        note: '필터형 제품군의 안전한 외부 관리 범위만 포함함.',
+      ),
+    ],
     productSpecs: const ['모델 정보 없음'],
     summary: '외부 먼지와 프리필터를 관리해 흡입 효율을 유지해요.',
     frequency: '한 달마다',

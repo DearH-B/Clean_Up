@@ -29,6 +29,25 @@ class ProductCatalogTest(unittest.TestCase):
             all(item.reviewStatus.value in {"reviewed", "verified"} for item in results)
         )
 
+    def test_products_have_sources_and_matching_review_history(self) -> None:
+        results = self.catalog.search("")
+        self.assertTrue(all(item.sources for item in results))
+        self.assertTrue(all(item.reviewHistory for item in results))
+        self.assertTrue(
+            all(item.reviewHistory[-1].status == item.reviewStatus for item in results)
+        )
+
+    def test_source_references_point_to_existing_sources(self) -> None:
+        for product in self.catalog.search(""):
+            source_ids = {source.id for source in product.sources}
+            references = [
+                *product.specSourceIds.values(),
+                *product.stepSourceIds.values(),
+            ]
+            self.assertTrue(
+                all(source_id in source_ids for group in references for source_id in group)
+            )
+
 
 if __name__ == "__main__":
     unittest.main()

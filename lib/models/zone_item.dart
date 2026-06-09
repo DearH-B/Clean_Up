@@ -1,3 +1,5 @@
+import 'catalog_metadata.dart';
+
 enum ZoneItemType {
   appliance('가전'),
   furniture('가구'),
@@ -68,6 +70,7 @@ class ZoneItem {
     required this.cautions,
     required this.steps,
     this.catalogProductId,
+    this.productSources = const [],
     this.scannedCode,
     this.scannedCodeFormat,
     this.scannedSourceUrl,
@@ -100,6 +103,7 @@ class ZoneItem {
   final String id;
   final String zoneId;
   final String? catalogProductId;
+  final List<ProductSource> productSources;
   final String? scannedCode;
   final String? scannedCodeFormat;
   final String? scannedSourceUrl;
@@ -156,6 +160,13 @@ class ZoneItem {
       id: json['id'] as String,
       zoneId: json['zoneId'] as String,
       catalogProductId: json['catalogProductId'] as String?,
+      productSources: (json['productSources'] as List<dynamic>? ?? const [])
+          .map(
+            (source) => ProductSource.fromJson(
+              Map<String, Object?>.from(source as Map),
+            ),
+          )
+          .toList(),
       scannedCode: json['scannedCode'] as String?,
       scannedCodeFormat: json['scannedCodeFormat'] as String?,
       scannedSourceUrl: json['scannedSourceUrl'] as String?,
@@ -220,6 +231,9 @@ class ZoneItem {
       'id': id,
       'zoneId': zoneId,
       'catalogProductId': catalogProductId,
+      'productSources': [
+        for (final source in productSources) source.toJson(),
+      ],
       'scannedCode': scannedCode,
       'scannedCodeFormat': scannedCodeFormat,
       'scannedSourceUrl': scannedSourceUrl,
@@ -261,6 +275,7 @@ class ZoneItem {
 
   ZoneItem copyWith({
     String? catalogProductId,
+    List<ProductSource>? productSources,
     String? scannedCode,
     String? scannedCodeFormat,
     String? scannedSourceUrl,
@@ -283,6 +298,7 @@ class ZoneItem {
       id: id,
       zoneId: zoneId,
       catalogProductId: catalogProductId ?? this.catalogProductId,
+      productSources: productSources ?? this.productSources,
       scannedCode: scannedCode ?? this.scannedCode,
       scannedCodeFormat: scannedCodeFormat ?? this.scannedCodeFormat,
       scannedSourceUrl: scannedSourceUrl ?? this.scannedSourceUrl,

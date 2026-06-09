@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../data/product_catalog.dart';
+import '../models/catalog_metadata.dart';
 import '../models/care_record.dart';
 import '../models/zone_item.dart';
 import '../repositories/product_data_repository.dart';
@@ -106,13 +107,11 @@ class _ZoneItemDetailScreenState extends State<ZoneItemDetailScreen> {
             const SizedBox(height: 12),
             _GuideBasis(message: _item.guideBasis!),
           ],
-          if (_item.sourceTitle != null) ...[
+          if (_item.productSources.isNotEmpty || _item.sourceTitle != null) ...[
             const SizedBox(height: 12),
             _ProductEvidenceCard(
               item: _item,
-              onOpenSource: _item.sourceUrl?.isNotEmpty == true
-                  ? () => _openProduct(_item.sourceUrl!)
-                  : null,
+              onOpenSource: _openProduct,
             ),
           ],
           if (_item.productSpecs.isNotEmpty) ...[
@@ -575,14 +574,11 @@ class _ProductEvidenceCard extends StatelessWidget {
   });
 
   final ZoneItem item;
-  final VoidCallback? onOpenSource;
+  final ValueChanged<String> onOpenSource;
 
   @override
   Widget build(BuildContext context) {
-    final checkedAt = item.sourceCheckedAt;
-    final checkedLabel = checkedAt == null
-        ? null
-        : '${checkedAt.year}.${checkedAt.month.toString().padLeft(2, '0')}.${checkedAt.day.toString().padLeft(2, '0')} 확인';
+    final sources = item.productSources;
 
     return Container(
       width: double.infinity,
@@ -603,34 +599,134 @@ class _ProductEvidenceCard extends StatelessWidget {
               const SizedBox(width: 8),
               Expanded(
                 child: Text(
-                  item.matchLevelLabel ?? '정보 출처',
+                  sources.isEmpty ? item.matchLevelLabel ?? '정보 출처' : '정보 출처',
                   style: const TextStyle(fontWeight: FontWeight.w800),
                 ),
               ),
-              if (checkedLabel != null)
+              if (sources.isNotEmpty)
                 Text(
-                  checkedLabel,
+                  '${sources.length}개',
                   style: Theme.of(context).textTheme.bodySmall,
                 ),
             ],
           ),
           const SizedBox(height: 8),
-          Text(item.sourceTitle!),
-          if (onOpenSource != null) ...[
-            const SizedBox(height: 8),
-            Align(
-              alignment: Alignment.centerLeft,
-              child: TextButton.icon(
-                onPressed: onOpenSource,
-                icon: const Icon(Icons.open_in_new, size: 18),
-                label: const Text('확인한 출처 열기'),
+          if (sources.isEmpty)
+            _LegacySource(item: item, onOpenSource: onOpenSource)
+          else
+            for (var index = 0; index < sources.length; index++) ...[
+              if (index > 0) const Divider(height: 22),
+              _SourceDetails(
+                source: sources[index],
+                onOpenSource: onOpenSource,
               ),
-            ),
-          ],
+            ],
         ],
       ),
     );
   }
+}
+
+class _SourceDetails extends StatelessWidget {
+  const _SourceDetails({
+    required this.source,
+    required this.onOpenSource,
+  });
+
+  final ProductSource source;
+  final ValueChanged<String> onOpenSource;
+
+  @override
+  Widget build(BuildContext context) {
+    final checkedAt = source.checkedAt;
+    final url = source.url;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          children: [
+            Expanded(
+              child: Text(
+                source.title,
+                style: const TextStyle(fontWeight: FontWeight.w700),
+              ),
+            ),
+            if (source.isOfficial)
+              const Chip(
+                label: Text('공식'),
+                visualDensity: VisualDensity.compact,
+              ),
+          ],
+        ),
+        const SizedBox(height: 4),
+        Text(
+          '${source.type.label} · ${source.publisher} · ${_sourceDate(checkedAt)} 확인',
+          style: Theme.of(context).textTheme.bodySmall,
+        ),
+        if (source.supports.isNotEmpty) ...[
+          const SizedBox(height: 5),
+          Text('근거: ${source.supports.join(', ')}'),
+        ],
+        if (!source.isActive) ...[
+          const SizedBox(height: 5),
+          Text(
+            '현재 유효성을 다시 확인해야 하는 출처예요.',
+            style: TextStyle(color: Theme.of(context).colorScheme.error),
+          ),
+        ],
+        if (url?.isNotEmpty == true)
+          Align(
+            alignment: Alignment.centerLeft,
+            child: TextButton.icon(
+              onPressed: () => onOpenSource(url!),
+              icon: const Icon(Icons.open_in_new, size: 18),
+              label: const Text('출처 열기'),
+            ),
+          ),
+      ],
+    );
+  }
+}
+
+class _LegacySource extends StatelessWidget {
+  const _LegacySource({
+    required this.item,
+    required this.onOpenSource,
+  });
+
+  final ZoneItem item;
+  final ValueChanged<String> onOpenSource;
+
+  @override
+  Widget build(BuildContext context) {
+    final checkedAt = item.sourceCheckedAt;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(item.sourceTitle!),
+        if (checkedAt != null)
+          Text(
+            '${_sourceDate(checkedAt)} 확인',
+            style: Theme.of(context).textTheme.bodySmall,
+          ),
+        if (item.sourceUrl?.isNotEmpty == true)
+          Align(
+            alignment: Alignment.centerLeft,
+            child: TextButton.icon(
+              onPressed: () => onOpenSource(item.sourceUrl!),
+              icon: const Icon(Icons.open_in_new, size: 18),
+              label: const Text('확인한 출처 열기'),
+            ),
+          ),
+      ],
+    );
+  }
+}
+
+String _sourceDate(DateTime date) {
+  final month = date.month.toString().padLeft(2, '0');
+  final day = date.day.toString().padLeft(2, '0');
+  return '${date.year}.$month.$day';
 }
 
 class _RecommendationTile extends StatelessWidget {

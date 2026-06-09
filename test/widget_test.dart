@@ -45,7 +45,32 @@ void main() {
     expect(restored.catalogProductId, productCatalog.first.id);
     expect(restored.matchLevelLabel, '모델명 일치');
     expect(restored.sourceTitle, contains('다나와'));
+    expect(restored.productSources, hasLength(2));
+    expect(restored.productSources.last.isOfficial, isTrue);
     expect(restored.productSpecs, contains('처리용량: 1kg'));
+  });
+
+  test('공개 카탈로그는 출처와 검수 이력 규칙을 충족한다', () {
+    for (final product in productCatalog) {
+      expect(
+        product.validateForPublication(),
+        isEmpty,
+        reason: product.id,
+      );
+    }
+  });
+
+  test('오래되거나 비활성인 출처는 재검수 대상으로 판단한다', () {
+    final currentProduct = productCatalog.first;
+
+    expect(currentProduct.needsSourceReview(DateTime(2026, 6, 9)), isFalse);
+    expect(
+      currentProduct.needsSourceReview(
+        DateTime(2027, 1, 1),
+        maxAgeDays: 180,
+      ),
+      isTrue,
+    );
   });
 
   test('사용자 제품의 별칭과 구매 정보는 저장 후에도 유지된다', () {

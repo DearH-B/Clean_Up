@@ -12,7 +12,10 @@ class ProductCatalog:
 
     def _load(self) -> list[CatalogProduct]:
         raw_items = json.loads(self._data_path.read_text(encoding="utf-8"))
-        return [CatalogProduct.model_validate(item) for item in raw_items]
+        products = [CatalogProduct.model_validate(item) for item in raw_items]
+        for product in products:
+            _validate_source_references(product)
+        return products
 
     def reload(self) -> None:
         self._products = self._load()
@@ -76,3 +79,33 @@ def _search_text(product: CatalogProduct) -> str:
 
 def _normalize(value: str) -> str:
     return re.sub(r"[\s\-_]+", "", value.lower())
+
+
+def _validate_source_references(product: CatalogProduct) -> None:
+    source_ids = {source.id for source in product.sources}
+    referenced_ids = {
+        source_id
+        for references in [
+            *product.specSourceIds.values(),
+            *product.stepSourceIds.values(),
+        ]
+        for source_id in references
+    }
+    missing_ids = referenced_ids - source_ids
+    if missing_ids:
+        missing = ", ".join(sorted(missing_ids))
+        raise ValueError(f"{product.id} references unknown sources: {missing}")
+
+    if product.reviewHistory[-1].status != product.reviewStatus:
+        raise ValueError(
+            f"{product.id} review history does not match reviewStatus"
+        )
+
+    for spec in product.productSpecs:
+        if not re.search(r"\d", spec):
+            continue
+        label = spec.split(":", maxsplit=1)[0].strip()
+        if not product.specSourceIds.get(label):
+            raise ValueError(
+                f"{product.id} numeric spec has no source: {label}"
+            )
