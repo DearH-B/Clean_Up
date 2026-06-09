@@ -24,7 +24,7 @@ class ZoneItemTile extends StatelessWidget {
         leading: CircleAvatar(
           child: Icon(_iconFor(item.type)),
         ),
-        title: Text(item.name),
+        title: Text(item.displayName),
         subtitle: Padding(
           padding: const EdgeInsets.only(top: 3),
           child: Column(
@@ -43,6 +43,13 @@ class ZoneItemTile extends StatelessWidget {
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
               ),
+              if (item.displayName != item.name) ...[
+                const SizedBox(height: 3),
+                Text(
+                  item.name,
+                  style: Theme.of(context).textTheme.bodySmall,
+                ),
+              ],
               const SizedBox(height: 5),
               Wrap(
                 spacing: 6,

@@ -6,6 +6,7 @@ import '../data/product_catalog.dart';
 import '../models/care_record.dart';
 import '../models/community_post.dart';
 import '../models/product_space.dart';
+import '../models/product_search_request.dart';
 import '../models/zone_item.dart';
 
 class ProductDataRepository {
@@ -16,6 +17,8 @@ class ProductDataRepository {
   static const _userProductsKey = 'zone_items_v1';
   static const _careRecordsKey = 'cleaning_records_v1';
   static const _communityPostsKey = 'community_posts_v1';
+  static const _searchRequestsKey = 'product_search_requests_v1';
+  static const _recentSearchesKey = 'recent_product_searches_v1';
 
   Future<List<ProductSpace>?> loadSpaces() async {
     return _loadList(_spacesKey, ProductSpace.fromJson);
@@ -74,6 +77,29 @@ class ProductDataRepository {
       _communityPostsKey,
       [for (final post in posts) post.toJson()],
     );
+  }
+
+  Future<List<ProductSearchRequest>?> loadProductSearchRequests() async {
+    return _loadList(_searchRequestsKey, ProductSearchRequest.fromJson);
+  }
+
+  Future<void> saveProductSearchRequests(
+    List<ProductSearchRequest> requests,
+  ) async {
+    await _saveList(
+      _searchRequestsKey,
+      [for (final request in requests) request.toJson()],
+    );
+  }
+
+  Future<List<String>> loadRecentProductSearches() async {
+    final preferences = await SharedPreferences.getInstance();
+    return preferences.getStringList(_recentSearchesKey) ?? const [];
+  }
+
+  Future<void> saveRecentProductSearches(List<String> searches) async {
+    final preferences = await SharedPreferences.getInstance();
+    await preferences.setStringList(_recentSearchesKey, searches);
   }
 
   Future<List<T>?> _loadList<T>(

@@ -43,7 +43,7 @@ class _ZoneItemDetailScreenState extends State<ZoneItemDetailScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text(_item.name)),
+      appBar: AppBar(title: Text(_item.displayName)),
       body: ListView(
         padding: const EdgeInsets.all(16),
         children: [
@@ -60,7 +60,7 @@ class _ZoneItemDetailScreenState extends State<ZoneItemDetailScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      _item.name,
+                      _item.displayName,
                       style: Theme.of(context).textTheme.headlineSmall,
                     ),
                     const SizedBox(height: 4),
@@ -1026,9 +1026,22 @@ class _ProductInfo extends StatelessWidget {
           _InfoRow(label: '모델명', value: item.modelName!),
         if (item.productMethod != null)
           _InfoRow(label: '처리 방식', value: item.productMethod!),
+        if (item.purchaseDate != null)
+          _InfoRow(label: '구매일', value: _formatProductDate(item.purchaseDate!)),
+        if (item.installedDate != null)
+          _InfoRow(
+              label: '설치일', value: _formatProductDate(item.installedDate!)),
+        if (item.note?.trim().isNotEmpty == true)
+          _InfoRow(label: '메모', value: item.note!.trim()),
       ],
     );
   }
+}
+
+String _formatProductDate(DateTime date) {
+  final month = date.month.toString().padLeft(2, '0');
+  final day = date.day.toString().padLeft(2, '0');
+  return '${date.year}.$month.$day';
 }
 
 class _InfoRow extends StatelessWidget {

@@ -74,13 +74,14 @@ class RemoteFirstProductCatalogRepository implements ProductCatalogRepository {
         }
         final body = await utf8.decoder.bind(response).join();
         final decoded = jsonDecode(body) as Map<String, dynamic>;
-        return (decoded['items'] as List<dynamic>)
+        final entries = (decoded['items'] as List<dynamic>)
             .map(
               (item) => ProductCatalogEntry.fromJson(
                 Map<String, Object?>.from(item as Map),
               ),
             )
             .toList();
+        return sortProductCatalogResults(entries, query).take(limit).toList();
       } finally {
         client.close(force: true);
       }

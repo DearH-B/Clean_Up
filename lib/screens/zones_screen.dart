@@ -152,6 +152,11 @@ class _ZonesScreenState extends State<ZonesScreen> {
     await widget.dataRepository.saveUserProducts(_items);
   }
 
+  Future<void> _addProduct(ZoneItem product) async {
+    setState(() => _items.add(product));
+    await widget.dataRepository.saveUserProducts(_items);
+  }
+
   ProductSpace _spaceWithProgress(ProductSpace space) {
     final products = _items.where((item) => item.zoneId == space.id).toList();
     return space.copyWith(
@@ -196,7 +201,10 @@ class _ZonesScreenState extends State<ZonesScreen> {
         builder: (context) => ZoneDetailScreen(
           zone: space,
           items: _items.where((item) => item.zoneId == space.id).toList(),
+          allProducts: _items,
+          spaces: _spaces,
           onItemsChanged: _updateZoneItems,
+          onProductAdded: _addProduct,
           onDeleteZone: _deleteZone,
           dataRepository: widget.dataRepository,
           catalogRepository: widget.catalogRepository,

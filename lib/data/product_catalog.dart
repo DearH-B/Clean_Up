@@ -31,6 +31,7 @@ class ProductCatalogEntry {
     this.guideVideoTitle,
     this.guideVideoChannel,
     this.keywords = const [],
+    this.reviewStatus = 'reviewed',
   });
 
   final String id;
@@ -62,6 +63,7 @@ class ProductCatalogEntry {
   final String? guideVideoTitle;
   final String? guideVideoChannel;
   final List<String> keywords;
+  final String reviewStatus;
 
   factory ProductCatalogEntry.fromJson(Map<String, Object?> json) {
     return ProductCatalogEntry(
@@ -104,6 +106,7 @@ class ProductCatalogEntry {
       guideVideoTitle: json['guideVideoTitle'] as String?,
       guideVideoChannel: json['guideVideoChannel'] as String?,
       keywords: (json['keywords'] as List<dynamic>? ?? const []).cast<String>(),
+      reviewStatus: json['reviewStatus'] as String? ?? 'reviewed',
     );
   }
 
@@ -150,6 +153,10 @@ class ProductCatalogEntry {
       id: catalogItem.id,
       zoneId: catalogItem.zoneId,
       catalogProductId: catalogItem.catalogProductId,
+      nickname: item.nickname,
+      purchaseDate: item.purchaseDate,
+      installedDate: item.installedDate,
+      note: item.note,
       name: catalogItem.name,
       type: catalogItem.type,
       summary: catalogItem.summary,
@@ -352,7 +359,46 @@ final productCatalog = <ProductCatalogEntry>[
 ];
 
 List<ProductCatalogEntry> searchProductCatalog(String query) {
-  return productCatalog.where((entry) => entry.matches(query)).toList();
+  final matches =
+      productCatalog.where((entry) => entry.matches(query)).toList();
+  return sortProductCatalogResults(matches, query);
+}
+
+List<ProductCatalogEntry> sortProductCatalogResults(
+  Iterable<ProductCatalogEntry> entries,
+  String query,
+) {
+  final sorted = entries.toList();
+  sorted
+      .sort((a, b) => _searchScore(b, query).compareTo(_searchScore(a, query)));
+  return sorted;
+}
+
+int _searchScore(ProductCatalogEntry entry, String query) {
+  final normalizedQuery = _normalize(query);
+  if (normalizedQuery.isEmpty) {
+    return 0;
+  }
+  final model = _normalize(entry.modelName);
+  final brand = _normalize(entry.brand);
+  final category = _normalize(entry.categoryName);
+  final name = _normalize(entry.name);
+  if (model == normalizedQuery) {
+    return 600;
+  }
+  if (model.contains(normalizedQuery)) {
+    return 500;
+  }
+  if (normalizedQuery.contains(brand) && normalizedQuery.contains(category)) {
+    return 400;
+  }
+  if (name == normalizedQuery || name.contains(normalizedQuery)) {
+    return 300;
+  }
+  if (entry.keywords.any((keyword) => _normalize(keyword) == normalizedQuery)) {
+    return 200;
+  }
+  return 100;
 }
 
 List<String> catalogCategoryOptions() {

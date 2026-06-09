@@ -68,6 +68,10 @@ class ZoneItem {
     required this.cautions,
     required this.steps,
     this.catalogProductId,
+    this.nickname,
+    this.purchaseDate,
+    this.installedDate,
+    this.note,
     this.estimatedMinutes = 10,
     this.manufacturer,
     this.modelName,
@@ -93,6 +97,10 @@ class ZoneItem {
   final String id;
   final String zoneId;
   final String? catalogProductId;
+  final String? nickname;
+  final DateTime? purchaseDate;
+  final DateTime? installedDate;
+  final String? note;
   final String name;
   final ZoneItemType type;
   final String summary;
@@ -125,6 +133,9 @@ class ZoneItem {
       (manufacturer?.trim().isNotEmpty ?? false) ||
       (modelName?.trim().isNotEmpty ?? false);
 
+  String get displayName =>
+      nickname?.trim().isNotEmpty == true ? nickname!.trim() : name;
+
   bool isDue(DateTime now) {
     final dueAt = nextDueAt;
     if (dueAt == null) {
@@ -139,6 +150,14 @@ class ZoneItem {
       id: json['id'] as String,
       zoneId: json['zoneId'] as String,
       catalogProductId: json['catalogProductId'] as String?,
+      nickname: json['nickname'] as String?,
+      purchaseDate: json['purchaseDate'] == null
+          ? null
+          : DateTime.parse(json['purchaseDate'] as String),
+      installedDate: json['installedDate'] == null
+          ? null
+          : DateTime.parse(json['installedDate'] as String),
+      note: json['note'] as String?,
       name: json['name'] as String,
       type: ZoneItemType.values.byName(json['type'] as String),
       summary: json['summary'] as String,
@@ -192,6 +211,10 @@ class ZoneItem {
       'id': id,
       'zoneId': zoneId,
       'catalogProductId': catalogProductId,
+      'nickname': nickname,
+      'purchaseDate': purchaseDate?.toIso8601String(),
+      'installedDate': installedDate?.toIso8601String(),
+      'note': note,
       'name': name,
       'type': type.name,
       'summary': summary,
@@ -226,6 +249,10 @@ class ZoneItem {
 
   ZoneItem copyWith({
     String? catalogProductId,
+    String? nickname,
+    DateTime? purchaseDate,
+    DateTime? installedDate,
+    String? note,
     String? manufacturer,
     String? modelName,
     String? guideStatus,
@@ -241,6 +268,10 @@ class ZoneItem {
       id: id,
       zoneId: zoneId,
       catalogProductId: catalogProductId ?? this.catalogProductId,
+      nickname: nickname ?? this.nickname,
+      purchaseDate: purchaseDate ?? this.purchaseDate,
+      installedDate: installedDate ?? this.installedDate,
+      note: note ?? this.note,
       name: name,
       type: type,
       summary: summary,
