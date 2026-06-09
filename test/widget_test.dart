@@ -8,6 +8,7 @@ import 'package:clean_up/app.dart';
 import 'package:clean_up/data/mock_product_data.dart';
 import 'package:clean_up/data/mock_zone_items.dart';
 import 'package:clean_up/data/product_catalog.dart';
+import 'package:clean_up/data/product_care_templates.dart';
 import 'package:clean_up/models/care_record.dart';
 import 'package:clean_up/models/community_post.dart';
 import 'package:clean_up/models/product_space.dart';
@@ -71,6 +72,20 @@ void main() {
       ),
       isTrue,
     );
+  });
+
+  test('냉장고와 식기세척기는 서로 다른 관리법을 사용한다', () {
+    final refrigerator = findProductCareTemplate('냉장고')!;
+    final dishwasher = findProductCareTemplate('식기세척기')!;
+
+    expect(refrigerator.focusAreas, contains('문 고무패킹'));
+    expect(refrigerator.steps.join(' '), contains('선반'));
+    expect(refrigerator.steps.join(' '), isNot(contains('분사 날개')));
+
+    expect(dishwasher.focusAreas, contains('배수구 주변'));
+    expect(dishwasher.steps.join(' '), contains('필터'));
+    expect(dishwasher.steps.join(' '), contains('분사 날개'));
+    expect(dishwasher.cautions.join(' '), contains('일반 주방세제'));
   });
 
   test('사용자 제품의 별칭과 구매 정보는 저장 후에도 유지된다', () {
@@ -160,6 +175,37 @@ void main() {
 
     expect(products!.single.catalogProductId, 'eco-up-dcs-hm4ag-w');
     expect(products.single.sourceTitle, '이전 버전에서 저장한 출처');
+  });
+
+  test('이전 범용 식기세척기 관리법은 제품군 관리법으로 자동 갱신된다', () async {
+    const legacyDishwasher = ZoneItem(
+      id: 'legacy-dishwasher',
+      zoneId: 'zone-1',
+      name: '식기세척기',
+      nickname: '우리집 식기세척기',
+      type: ZoneItemType.appliance,
+      summary: '식기세척기 제품의 재질과 사용설명서를 확인한 뒤 관리하세요.',
+      frequency: '필요할 때',
+      supplies: ['부드러운 천', '중성세제'],
+      cautions: ['가전은 전원을 분리하세요.'],
+      steps: [
+        '식기세척기 주변의 물건과 먼지를 먼저 정리해요.',
+        '제품 재질에 맞는 도구로 오염을 닦아요.',
+        '깨끗한 천으로 세제와 물기를 제거해요.',
+        '충분히 건조한 뒤 원래 위치에 정리해요.',
+      ],
+    );
+    SharedPreferences.setMockInitialValues({
+      'zone_items_v1': jsonEncode([legacyDishwasher.toJson()]),
+    });
+    const repository = ProductDataRepository();
+
+    final products = await repository.loadUserProducts();
+
+    expect(products!.single.nickname, '우리집 식기세척기');
+    expect(products.single.frequency, contains('필터'));
+    expect(products.single.steps.join(' '), contains('분사 날개'));
+    expect(products.single.steps.join(' '), contains('배수구'));
   });
 
   testWidgets('제품 관리형 앱의 주요 화면을 표시한다', (tester) async {
@@ -283,6 +329,10 @@ void main() {
     expect(registered.name, '식기세척기');
     expect(registered.nickname, '주방 식기세척기');
     expect(registered.catalogProductId, isNull);
+    expect(registered.frequency, contains('필터'));
+    expect(registered.steps.join(' '), contains('배수구'));
+    expect(registered.steps.join(' '), contains('분사 날개'));
+    expect(registered.supplies, contains('제품 허용 세척제'));
   });
 
   testWidgets('제품 등록 추천은 선택한 구역에 맞게 표시된다', (tester) async {

@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../data/product_catalog.dart';
+import '../data/product_care_templates.dart';
 import '../models/care_record.dart';
 import '../models/community_post.dart';
 import '../models/product_space.dart';
@@ -36,13 +37,7 @@ class ProductDataRepository {
 
     var changed = false;
     final enrichedItems = [
-      for (final item in items)
-        if (item.catalogProductId == null &&
-            item.manufacturer?.isNotEmpty == true &&
-            item.modelName?.isNotEmpty == true)
-          _enrichCatalogItem(item, () => changed = true)
-        else
-          item,
+      for (final item in items) _upgradeProduct(item, () => changed = true),
     ];
     if (changed) {
       await saveUserProducts(enrichedItems);
@@ -141,5 +136,50 @@ class ProductDataRepository {
       return item.copyWith(catalogProductId: entry.id);
     }
     return entry.mergeInto(item);
+  }
+
+  ZoneItem _upgradeProduct(ZoneItem item, void Function() markChanged) {
+    if (item.catalogProductId == null &&
+        item.manufacturer?.isNotEmpty == true &&
+        item.modelName?.isNotEmpty == true) {
+      final enriched = _enrichCatalogItem(item, markChanged);
+      if (!identical(enriched, item)) {
+        return enriched;
+      }
+    }
+
+    if (!_usesLegacyGenericGuide(item)) {
+      return item;
+    }
+    final template = findProductCareTemplate(item.name);
+    if (template == null) {
+      return item;
+    }
+    markChanged();
+    return template
+        .createProduct(
+          id: item.id,
+          zoneId: item.zoneId,
+          nickname: item.nickname,
+          purchaseDate: item.purchaseDate,
+          installedDate: item.installedDate,
+          note: item.note,
+          manufacturer: item.manufacturer,
+          modelName: item.modelName,
+          scannedCode: item.scannedCode,
+          scannedCodeFormat: item.scannedCodeFormat,
+          scannedSourceUrl: item.scannedSourceUrl,
+        )
+        .copyWith(
+          lastCleanedAt: item.lastCleanedAt,
+          nextDueAt: item.nextDueAt,
+        );
+  }
+
+  bool _usesLegacyGenericGuide(ZoneItem item) {
+    return item.summary.contains('재질과 사용설명서를 확인한 뒤 관리하세요') ||
+        item.guideStatus?.contains('세부 관리법을 준비하고 있어요') == true ||
+        (item.steps.length == 4 &&
+            item.steps.any((step) => step.contains('주변의 물건과 먼지를 먼저 정리')));
   }
 }

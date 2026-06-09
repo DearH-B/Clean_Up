@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 
 import '../data/product_catalog.dart';
+import '../data/product_care_templates.dart';
 import '../models/product_search_request.dart';
 import '../models/product_space.dart';
 import '../models/zone_item.dart';
@@ -582,6 +583,22 @@ class _ProductRegistrationScreenState extends State<ProductRegistrationScreen> {
     final category = _categoryController.text.trim();
     final brand = _brandController.text.trim();
     final model = _modelController.text.trim();
+    final template = findProductCareTemplate(category);
+    if (template != null) {
+      return template.createProduct(
+        id: id,
+        zoneId: _selectedSpaceId,
+        nickname: nickname.isEmpty ? null : nickname,
+        purchaseDate: _purchaseDate,
+        installedDate: _installedDate,
+        note: note.isEmpty ? null : note,
+        manufacturer: brand.isEmpty ? null : brand,
+        modelName: model.isEmpty ? null : model,
+        scannedCode: _scannedCode,
+        scannedCodeFormat: _scannedCodeFormat,
+        scannedSourceUrl: _scannedSourceUrl,
+      );
+    }
     final now = DateTime.now();
     return ZoneItem(
       id: id,
@@ -595,42 +612,31 @@ class _ProductRegistrationScreenState extends State<ProductRegistrationScreen> {
       installedDate: _installedDate,
       note: note.isEmpty ? null : note,
       type: _selectedType,
-      summary: '$category 제품의 재질과 사용설명서를 확인한 뒤 관리하세요.',
-      frequency: '필요할 때',
-      supplies: const ['부드러운 천', '중성세제'],
+      summary: '$category 제품의 세부 관리법은 아직 준비 중이에요.',
+      frequency: '제품 설명서의 권장 주기 확인',
+      supplies: const [],
       cautions: const [
-        '가전은 전원을 분리하고 제조사 안전 지침을 먼저 확인하세요.',
-        '세제는 눈에 띄지 않는 곳에 먼저 시험하세요.',
+        '정확한 제품 종류와 재질을 확인하기 전에는 세제나 물을 사용하지 마세요.',
+        '가전은 전원을 분리하고 제조사 안전 지침을 우선하세요.',
       ],
       steps: [
-        '$category 주변의 물건과 먼지를 먼저 정리해요.',
-        '제품 재질에 맞는 도구로 오염을 닦아요.',
-        '깨끗한 천으로 세제와 물기를 제거해요.',
-        '충분히 건조한 뒤 원래 위치에 정리해요.',
+        '$category의 브랜드, 모델명과 관리 라벨을 확인해요.',
+        '앱에서 정확한 관리법을 찾을 때까지 제조사 설명서를 우선해요.',
       ],
       manufacturer: brand.isEmpty ? null : brand,
       modelName: model.isEmpty ? null : model,
-      guideStatus: model.isEmpty
-          ? '모델 정보가 없어 제품군의 일반 관리 방법을 안내해요.'
-          : '입력한 모델 정보를 기준으로 관련 관리 자료를 찾고 있어요.',
-      guideBasis: model.isEmpty
-          ? '제품군에 공통으로 적용되는 일반 관리법이에요.'
-          : '정확한 모델 자료가 없으면 같은 브랜드 또는 유사 제품을 참고해요.',
-      guideSourceType: model.isEmpty
-          ? GuideSourceType.general
-          : GuideSourceType.similarProduct,
-      matchLevelLabel: model.isEmpty ? '제품군 기준' : '사용자 입력 모델',
-      sourceTitle: model.isEmpty ? '앱 기본 관리법' : '사용자 등록 정보',
+      guideStatus: '이 제품군의 검수된 세부 관리법을 준비하고 있어요.',
+      guideBasis: '잘못된 공통 청소법을 제공하지 않고 제조사 설명서를 우선하도록 안내해요.',
+      guideSourceType: GuideSourceType.general,
+      matchLevelLabel: model.isEmpty ? '사용자 입력 제품군' : '사용자 입력 모델',
+      sourceTitle: '사용자 등록 정보',
       sourceCheckedAt: now,
       productSpecs: [
         if (brand.isNotEmpty) '브랜드/제조사: $brand',
         if (model.isNotEmpty) '모델명: $model',
       ],
       recurrenceDays: 30,
-      recommendedSupplies: const [
-        '표면 손상을 줄이는 부드러운 극세사 천',
-        '재질에 맞는 중성세제',
-      ],
+      recommendedSupplies: const [],
     );
   }
 
