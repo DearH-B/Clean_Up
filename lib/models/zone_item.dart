@@ -74,6 +74,8 @@ class ZoneItem {
     this.scannedCode,
     this.scannedCodeFormat,
     this.scannedSourceUrl,
+    this.visualCandidateId,
+    this.releasePeriod,
     this.nickname,
     this.purchaseDate,
     this.installedDate,
@@ -107,6 +109,8 @@ class ZoneItem {
   final String? scannedCode;
   final String? scannedCodeFormat;
   final String? scannedSourceUrl;
+  final String? visualCandidateId;
+  final String? releasePeriod;
   final String? nickname;
   final DateTime? purchaseDate;
   final DateTime? installedDate;
@@ -170,6 +174,8 @@ class ZoneItem {
       scannedCode: json['scannedCode'] as String?,
       scannedCodeFormat: json['scannedCodeFormat'] as String?,
       scannedSourceUrl: json['scannedSourceUrl'] as String?,
+      visualCandidateId: json['visualCandidateId'] as String?,
+      releasePeriod: json['releasePeriod'] as String?,
       nickname: json['nickname'] as String?,
       purchaseDate: json['purchaseDate'] == null
           ? null
@@ -237,6 +243,8 @@ class ZoneItem {
       'scannedCode': scannedCode,
       'scannedCodeFormat': scannedCodeFormat,
       'scannedSourceUrl': scannedSourceUrl,
+      'visualCandidateId': visualCandidateId,
+      'releasePeriod': releasePeriod,
       'nickname': nickname,
       'purchaseDate': purchaseDate?.toIso8601String(),
       'installedDate': installedDate?.toIso8601String(),
@@ -279,6 +287,8 @@ class ZoneItem {
     String? scannedCode,
     String? scannedCodeFormat,
     String? scannedSourceUrl,
+    String? visualCandidateId,
+    String? releasePeriod,
     String? nickname,
     DateTime? purchaseDate,
     DateTime? installedDate,
@@ -302,6 +312,8 @@ class ZoneItem {
       scannedCode: scannedCode ?? this.scannedCode,
       scannedCodeFormat: scannedCodeFormat ?? this.scannedCodeFormat,
       scannedSourceUrl: scannedSourceUrl ?? this.scannedSourceUrl,
+      visualCandidateId: visualCandidateId ?? this.visualCandidateId,
+      releasePeriod: releasePeriod ?? this.releasePeriod,
       nickname: nickname ?? this.nickname,
       purchaseDate: purchaseDate ?? this.purchaseDate,
       installedDate: installedDate ?? this.installedDate,

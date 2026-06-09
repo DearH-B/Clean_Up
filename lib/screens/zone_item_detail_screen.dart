@@ -1417,6 +1417,8 @@ class _ProductInfo extends StatelessWidget {
           _InfoRow(label: '모델명', value: item.modelName!),
         if (item.productMethod != null)
           _InfoRow(label: '처리 방식', value: item.productMethod!),
+        if (item.releasePeriod != null)
+          _InfoRow(label: '출시 시기', value: item.releasePeriod!),
         if (item.purchaseDate != null)
           _InfoRow(label: '구매일', value: _formatProductDate(item.purchaseDate!)),
         if (item.installedDate != null)

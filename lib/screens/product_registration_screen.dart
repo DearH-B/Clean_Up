@@ -6,10 +6,12 @@ import '../data/product_catalog.dart';
 import '../data/product_care_templates.dart';
 import '../models/product_search_request.dart';
 import '../models/product_space.dart';
+import '../models/visual_product_candidate.dart';
 import '../models/zone_item.dart';
 import '../repositories/product_catalog_repository.dart';
 import '../repositories/product_data_repository.dart';
 import 'product_code_scanner_screen.dart';
+import 'visual_product_finder_screen.dart';
 
 class ProductRegistrationResult {
   const ProductRegistrationResult._({
@@ -76,6 +78,7 @@ class _ProductRegistrationScreenState extends State<ProductRegistrationScreen> {
   String? _scannedCode;
   String? _scannedCodeFormat;
   String? _scannedSourceUrl;
+  VisualProductCandidate? _visualCandidate;
   late String _selectedSpaceId;
 
   @override
@@ -273,6 +276,9 @@ class _ProductRegistrationScreenState extends State<ProductRegistrationScreen> {
   }
 
   Widget _buildManualFields() {
+    final brandOptions = catalogBrandOptionsFor(
+      _categoryController.text.trim(),
+    );
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
@@ -283,6 +289,7 @@ class _ProductRegistrationScreenState extends State<ProductRegistrationScreen> {
             labelText: '제품 종류',
             hintText: '예: 냉장고, 음식물처리기',
           ),
+          onChanged: (_) => setState(() => _visualCandidate = null),
         ),
         const SizedBox(height: 14),
         DropdownMenu<ZoneItemType>(
@@ -300,6 +307,28 @@ class _ProductRegistrationScreenState extends State<ProductRegistrationScreen> {
           },
         ),
         const SizedBox(height: 14),
+        if (brandOptions.isNotEmpty) ...[
+          Text('대표 브랜드', style: Theme.of(context).textTheme.titleSmall),
+          const SizedBox(height: 8),
+          Wrap(
+            spacing: 8,
+            runSpacing: 8,
+            children: [
+              for (final brand in brandOptions)
+                ChoiceChip(
+                  label: Text(brand),
+                  selected: _brandController.text.trim() == brand,
+                  onSelected: (_) {
+                    setState(() {
+                      _brandController.text = brand;
+                      _visualCandidate = null;
+                    });
+                  },
+                ),
+            ],
+          ),
+          const SizedBox(height: 14),
+        ],
         TextField(
           controller: _brandController,
           textInputAction: TextInputAction.next,
@@ -307,8 +336,23 @@ class _ProductRegistrationScreenState extends State<ProductRegistrationScreen> {
             labelText: '브랜드 또는 제조사 (선택)',
             hintText: '모르면 비워두세요',
           ),
+          onChanged: (_) => setState(() => _visualCandidate = null),
         ),
         const SizedBox(height: 14),
+        if (_canUseVisualFinder) ...[
+          FilledButton.tonalIcon(
+            onPressed: _openVisualProductFinder,
+            icon: const Icon(Icons.image_search_outlined),
+            label: Text(
+              _visualCandidate == null ? '이미지와 연식으로 제품 찾기' : '선택한 제품 형태 바꾸기',
+            ),
+          ),
+          if (_visualCandidate != null) ...[
+            const SizedBox(height: 10),
+            _VisualCandidateSummary(candidate: _visualCandidate!),
+          ],
+          const SizedBox(height: 14),
+        ],
         TextField(
           controller: _modelController,
           textInputAction: TextInputAction.done,
@@ -597,6 +641,10 @@ class _ProductRegistrationScreenState extends State<ProductRegistrationScreen> {
         scannedCode: _scannedCode,
         scannedCodeFormat: _scannedCodeFormat,
         scannedSourceUrl: _scannedSourceUrl,
+        visualCandidateId: _visualCandidate?.id,
+        releasePeriod: _visualCandidate?.releasePeriod,
+        productMethod: _visualCandidate?.formFactor,
+        isVisualMatch: _visualCandidate != null,
       );
     }
     final now = DateTime.now();
@@ -606,6 +654,8 @@ class _ProductRegistrationScreenState extends State<ProductRegistrationScreen> {
       scannedCode: _scannedCode,
       scannedCodeFormat: _scannedCodeFormat,
       scannedSourceUrl: _scannedSourceUrl,
+      visualCandidateId: _visualCandidate?.id,
+      releasePeriod: _visualCandidate?.releasePeriod,
       name: category,
       nickname: nickname.isEmpty ? null : nickname,
       purchaseDate: _purchaseDate,
@@ -625,6 +675,7 @@ class _ProductRegistrationScreenState extends State<ProductRegistrationScreen> {
       ],
       manufacturer: brand.isEmpty ? null : brand,
       modelName: model.isEmpty ? null : model,
+      productMethod: _visualCandidate?.formFactor,
       guideStatus: '이 제품군의 검수된 세부 관리법을 준비하고 있어요.',
       guideBasis: '잘못된 공통 청소법을 제공하지 않고 제조사 설명서를 우선하도록 안내해요.',
       guideSourceType: GuideSourceType.general,
@@ -737,6 +788,29 @@ class _ProductRegistrationScreenState extends State<ProductRegistrationScreen> {
     });
     _searchCatalog(result.searchQuery);
     _showMessage('코드를 읽었어요. 연결된 제품 정보를 찾고 있어요.');
+  }
+
+  Future<void> _openVisualProductFinder() async {
+    final candidate = await Navigator.of(context).push<VisualProductCandidate>(
+      MaterialPageRoute(
+        builder: (context) => VisualProductFinderScreen(
+          categoryName: _categoryController.text.trim(),
+          brand: _brandController.text.trim(),
+        ),
+      ),
+    );
+    if (candidate == null || !mounted) {
+      return;
+    }
+    setState(() {
+      _visualCandidate = candidate;
+      _categoryController.text = candidate.categoryName;
+      if (_brandController.text.trim().isEmpty && candidate.brand != '브랜드 미상') {
+        _brandController.text = candidate.brand;
+      }
+      _modelController.clear();
+      _selectedType = ZoneItemType.appliance;
+    });
   }
 
   void _searchCatalog(String value) {
@@ -886,6 +960,10 @@ class _ProductRegistrationScreenState extends State<ProductRegistrationScreen> {
       (space) => space.id == _selectedSpaceId,
       orElse: () => widget.space,
     );
+  }
+
+  bool get _canUseVisualFinder {
+    return _normalize(_categoryController.text).contains('냉장고');
   }
 
   IconData _iconFor(ZoneItemType type) {
@@ -1156,6 +1234,46 @@ class _ScannedCodeSummary extends StatelessWidget {
             ),
           ],
         ),
+      ),
+    );
+  }
+}
+
+class _VisualCandidateSummary extends StatelessWidget {
+  const _VisualCandidateSummary({required this.candidate});
+
+  final VisualProductCandidate candidate;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(12),
+      decoration: BoxDecoration(
+        color: Theme.of(context).colorScheme.secondaryContainer,
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: Row(
+        children: [
+          Icon(candidate.icon, size: 38),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  candidate.displayName,
+                  style: const TextStyle(fontWeight: FontWeight.w800),
+                ),
+                Text(candidate.formFactor),
+                Text(
+                  candidate.releasePeriod,
+                  style: Theme.of(context).textTheme.bodySmall,
+                ),
+              ],
+            ),
+          ),
+          const Chip(label: Text('유사 제품')),
+        ],
       ),
     );
   }

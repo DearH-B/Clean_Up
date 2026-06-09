@@ -9,6 +9,7 @@ import 'package:clean_up/data/mock_product_data.dart';
 import 'package:clean_up/data/mock_zone_items.dart';
 import 'package:clean_up/data/product_catalog.dart';
 import 'package:clean_up/data/product_care_templates.dart';
+import 'package:clean_up/data/visual_product_candidates.dart';
 import 'package:clean_up/models/care_record.dart';
 import 'package:clean_up/models/product_space.dart';
 import 'package:clean_up/models/product_search_request.dart';
@@ -85,6 +86,18 @@ void main() {
     expect(dishwasher.steps.join(' '), contains('필터'));
     expect(dishwasher.steps.join(' '), contains('분사 날개'));
     expect(dishwasher.cautions.join(' '), contains('일반 주방세제'));
+  });
+
+  test('냉장고 외형 후보는 문 구조와 출시 시기를 제공한다', () {
+    final candidates = visualCandidatesFor(
+      categoryName: '냉장고',
+      brand: '삼성전자',
+    );
+
+    expect(candidates, hasLength(4));
+    expect(candidates.first.formFactor, contains('4도어'));
+    expect(candidates.first.releasePeriod, isNotEmpty);
+    expect(candidates.first.features, contains('위쪽 냉장실'));
   });
 
   test('사용자 제품의 별칭과 구매 정보는 저장 후에도 유지된다', () {
@@ -356,6 +369,46 @@ void main() {
     expect(find.text('소파'), findsOneWidget);
     expect(find.text('냉장고'), findsNothing);
     expect(find.text('음식물처리기'), findsNothing);
+  });
+
+  testWidgets('냉장고는 브랜드 선택 후 외형으로 비슷한 제품을 등록할 수 있다', (tester) async {
+    await dataRepository.saveSpaces(productSpaces);
+    await dataRepository.saveUserProducts([]);
+    await pumpApp(tester, dataRepository);
+
+    await tester.tap(find.text('내 제품'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('주방'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('제품 추가'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('냉장고'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('삼성전자'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('이미지와 연식으로 제품 찾기'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('외형으로 제품 찾기'), findsOneWidget);
+    expect(find.textContaining('4도어 냉장고'), findsOneWidget);
+    await tester.tap(find.text('이 제품과 비슷해요').first);
+    await tester.pumpAndSettle();
+
+    expect(find.text('유사 제품'), findsOneWidget);
+    await tester.tap(find.widgetWithText(FilledButton, '이 정보로 계속'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.widgetWithText(FilledButton, '등록 내용 확인'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('나중에 보기'));
+    await tester.pumpAndSettle();
+
+    final products = await dataRepository.loadUserProducts();
+    final product = products!.single;
+    expect(product.manufacturer, '삼성전자');
+    expect(product.modelName, isNull);
+    expect(product.productMethod, contains('4도어'));
+    expect(product.releasePeriod, contains('2018년 이후'));
+    expect(product.matchLevelLabel, '외형 기반 유사 제품');
   });
 
   testWidgets('검색 실패 시 제품 정보 요청을 저장할 수 있다', (tester) async {

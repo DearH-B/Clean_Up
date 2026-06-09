@@ -38,6 +38,10 @@ class ProductCareTemplate {
     String? scannedCode,
     String? scannedCodeFormat,
     String? scannedSourceUrl,
+    String? visualCandidateId,
+    String? releasePeriod,
+    String? productMethod,
+    bool isVisualMatch = false,
   }) {
     final checkedAt = DateTime(2026, 6, 9);
     final hasModel = modelName?.trim().isNotEmpty == true;
@@ -53,6 +57,8 @@ class ProductCareTemplate {
       scannedCode: scannedCode,
       scannedCodeFormat: scannedCodeFormat,
       scannedSourceUrl: scannedSourceUrl,
+      visualCandidateId: visualCandidateId,
+      releasePeriod: releasePeriod,
       type: type,
       summary: summary,
       frequency: frequency,
@@ -62,14 +68,22 @@ class ProductCareTemplate {
       steps: steps,
       manufacturer: manufacturer,
       modelName: modelName,
-      guideStatus: hasModel
-          ? '입력한 모델의 공식 자료를 찾기 전까지 $categoryName 제품군의 일반 관리법을 안내해요.'
-          : '모델 정보가 없어 $categoryName 제품군의 일반 관리법을 안내해요.',
+      productMethod: productMethod,
+      guideStatus: isVisualMatch
+          ? '외형과 구조가 비슷한 $categoryName 제품군의 일반 관리법을 안내해요.'
+          : hasModel
+              ? '입력한 모델의 공식 자료를 찾기 전까지 $categoryName 제품군의 일반 관리법을 안내해요.'
+              : '모델 정보가 없어 $categoryName 제품군의 일반 관리법을 안내해요.',
       guideBasis: '$categoryName 제품군의 구조와 주요 관리 지점을 기준으로 만든 일반 가이드예요. '
           '분해, 필터 세척과 전용 코스는 제품 설명서를 우선하세요.',
-      guideSourceType:
-          hasModel ? GuideSourceType.similarProduct : GuideSourceType.general,
-      matchLevelLabel: hasModel ? '사용자 입력 모델 · 제품군 가이드' : '제품군 기준',
+      guideSourceType: isVisualMatch || hasModel
+          ? GuideSourceType.similarProduct
+          : GuideSourceType.general,
+      matchLevelLabel: isVisualMatch
+          ? '외형 기반 유사 제품'
+          : hasModel
+              ? '사용자 입력 모델 · 제품군 가이드'
+              : '제품군 기준',
       sourceTitle: '앱 $categoryName 일반 관리법',
       sourceCheckedAt: checkedAt,
       productSources: [
@@ -88,6 +102,10 @@ class ProductCareTemplate {
         if (manufacturer?.trim().isNotEmpty == true)
           '브랜드/제조사: ${manufacturer!.trim()}',
         if (hasModel) '모델명: ${modelName!.trim()}',
+        if (productMethod?.trim().isNotEmpty == true)
+          '제품 형태: ${productMethod!.trim()}',
+        if (releasePeriod?.trim().isNotEmpty == true)
+          '출시 시기: ${releasePeriod!.trim()}',
         '관리 기준: ${focusAreas.join(', ')}',
       ],
       recurrenceDays: recurrenceDays,
