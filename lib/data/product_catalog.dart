@@ -634,7 +634,9 @@ List<String> catalogCategoryOptions() {
 List<String> catalogBrandOptionsFor(String categoryName) {
   final options = {
     for (final entry in productCatalog)
-      if (entry.categoryName == categoryName && entry.brand.isNotEmpty)
+      if (entry.categoryName == categoryName &&
+          entry.brand.isNotEmpty &&
+          entry.brand != '브랜드 미상')
         entry.brand,
   };
   if (categoryName.contains('음식물')) {

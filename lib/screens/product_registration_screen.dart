@@ -11,6 +11,7 @@ import '../models/zone_item.dart';
 import '../repositories/product_catalog_repository.dart';
 import '../repositories/product_data_repository.dart';
 import 'product_code_scanner_screen.dart';
+import 'model_selection_screen.dart';
 import 'visual_product_finder_screen.dart';
 
 class ProductRegistrationResult {
@@ -321,6 +322,7 @@ class _ProductRegistrationScreenState extends State<ProductRegistrationScreen> {
                   onSelected: (_) {
                     setState(() {
                       _brandController.text = brand;
+                      _modelController.clear();
                       _visualCandidate = null;
                     });
                   },
@@ -336,7 +338,10 @@ class _ProductRegistrationScreenState extends State<ProductRegistrationScreen> {
             labelText: '브랜드 또는 제조사 (선택)',
             hintText: '모르면 비워두세요',
           ),
-          onChanged: (_) => setState(() => _visualCandidate = null),
+          onChanged: (_) => setState(() {
+            _modelController.clear();
+            _visualCandidate = null;
+          }),
         ),
         const SizedBox(height: 14),
         if (_canUseVisualFinder) ...[
@@ -353,14 +358,37 @@ class _ProductRegistrationScreenState extends State<ProductRegistrationScreen> {
           ],
           const SizedBox(height: 14),
         ],
-        TextField(
-          controller: _modelController,
-          textInputAction: TextInputAction.done,
-          decoration: const InputDecoration(
-            labelText: '모델명 (선택)',
-            hintText: '제품 라벨에 적힌 모델명',
+        OutlinedButton.icon(
+          onPressed:
+              _brandController.text.trim().isEmpty ? null : _openModelSelection,
+          icon: const Icon(Icons.list_alt_outlined),
+          label: Text(
+            _modelController.text.trim().isEmpty
+                ? '모델 선택'
+                : _modelController.text.trim(),
           ),
         ),
+        if (_brandController.text.trim().isEmpty) ...[
+          const SizedBox(height: 6),
+          Text(
+            '브랜드를 먼저 선택하면 모델 후보를 볼 수 있어요.',
+            style: Theme.of(context).textTheme.bodySmall,
+          ),
+        ] else if (_modelController.text.trim().isNotEmpty) ...[
+          const SizedBox(height: 8),
+          Row(
+            children: [
+              const Icon(Icons.check_circle_outline, size: 18),
+              const SizedBox(width: 6),
+              Expanded(child: Text('선택한 모델: ${_modelController.text.trim()}')),
+              IconButton(
+                tooltip: '모델 선택 해제',
+                onPressed: () => setState(_modelController.clear),
+                icon: const Icon(Icons.close),
+              ),
+            ],
+          ),
+        ],
         const SizedBox(height: 12),
         Text(
           '모델 정보가 없으면 제품군의 일반 관리법을 먼저 보여드려요.',
@@ -810,6 +838,35 @@ class _ProductRegistrationScreenState extends State<ProductRegistrationScreen> {
       }
       _modelController.clear();
       _selectedType = ZoneItemType.appliance;
+    });
+  }
+
+  Future<void> _openModelSelection() async {
+    final category = _categoryController.text.trim();
+    final brand = _brandController.text.trim();
+    if (brand.isEmpty) {
+      return;
+    }
+    final model = await Navigator.of(context).push<String>(
+      MaterialPageRoute(
+        builder: (context) => ModelSelectionScreen(
+          categoryName: category,
+          brand: brand,
+          models: catalogModelOptionsFor(category, brand),
+          selectedModel: _modelController.text.trim().isEmpty
+              ? null
+              : _modelController.text.trim(),
+        ),
+      ),
+    );
+    if (model == null || !mounted) {
+      return;
+    }
+    setState(() {
+      _modelController.text = model;
+      if (model.isNotEmpty) {
+        _visualCandidate = null;
+      }
     });
   }
 

@@ -36,6 +36,14 @@ void main() {
     expect(searchProductCatalog('음처기').single.brand, '에코업');
   });
 
+  test('대표 브랜드 목록에는 브랜드 미상이 표시되지 않는다', () {
+    expect(catalogBrandOptionsFor('냉장고'), isNot(contains('브랜드 미상')));
+    expect(
+      catalogBrandOptionsFor('공기청정기'),
+      isNot(contains('브랜드 미상')),
+    );
+  });
+
   test('카탈로그 제품 ID와 출처 정보는 저장 후에도 유지된다', () {
     final item = productCatalog.first.toZoneItem(
       id: 'saved-product',
@@ -409,6 +417,47 @@ void main() {
     expect(product.productMethod, contains('4도어'));
     expect(product.releasePeriod, contains('2018년 이후'));
     expect(product.matchLevelLabel, '외형 기반 유사 제품');
+  });
+
+  testWidgets('모델명은 별도 선택 화면에서 고를 수 있다', (tester) async {
+    await dataRepository.saveSpaces(productSpaces);
+    await dataRepository.saveUserProducts([]);
+    await pumpApp(tester, dataRepository);
+
+    await tester.tap(find.text('내 제품'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('주방'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('제품 추가'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('냉장고'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('브랜드 미상'), findsNothing);
+    await tester.tap(find.text('삼성전자'));
+    await tester.pumpAndSettle();
+    final modelButton = find.widgetWithText(OutlinedButton, '모델 선택');
+    await tester.ensureVisible(modelButton);
+    await tester.pumpAndSettle();
+    await tester.tap(modelButton);
+    await tester.pumpAndSettle();
+
+    expect(find.text('RF85C90F1AP'), findsOneWidget);
+    await tester.tap(find.text('RF85C90F1AP'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('선택한 모델: RF85C90F1AP'), findsOneWidget);
+    await tester.tap(find.widgetWithText(FilledButton, '이 정보로 계속'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.widgetWithText(FilledButton, '등록 내용 확인'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('나중에 보기'));
+    await tester.pumpAndSettle();
+
+    final products = await dataRepository.loadUserProducts();
+    expect(products!.single.manufacturer, '삼성전자');
+    expect(products.single.modelName, 'RF85C90F1AP');
+    expect(products.single.visualCandidateId, isNull);
   });
 
   testWidgets('검색 실패 시 제품 정보 요청을 저장할 수 있다', (tester) async {
