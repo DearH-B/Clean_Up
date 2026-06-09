@@ -34,109 +34,81 @@ class ZoneItemDetailScreen extends StatefulWidget {
 
 class _ZoneItemDetailScreenState extends State<ZoneItemDetailScreen> {
   late ZoneItem _item;
+  List<CareRecord> _productRecords = [];
 
   @override
   void initState() {
     super.initState();
     _item = widget.item;
+    unawaited(_loadProductRecords());
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text(_item.displayName)),
-      body: ListView(
-        padding: const EdgeInsets.all(16),
-        children: [
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              CircleAvatar(
-                radius: 26,
-                child: Icon(_iconFor(_item.type)),
-              ),
-              const SizedBox(width: 14),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      _item.displayName,
-                      style: Theme.of(context).textTheme.headlineSmall,
-                    ),
-                    const SizedBox(height: 4),
-                    Text('${_item.type.label} · ${_item.frequency}'),
-                    const SizedBox(height: 8),
-                    _GuideSourceBadge(sourceType: _item.guideSourceType),
-                  ],
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 20),
-          Text(_item.summary),
-          const SizedBox(height: 16),
-          _ScheduleCard(
-            item: _item,
-            onComplete: _completeCare,
-          ),
-          const SizedBox(height: 16),
-          if (!_item.hasProductInfo)
-            OutlinedButton.icon(
+    return DefaultTabController(
+      length: 5,
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text(_item.displayName),
+          actions: [
+            IconButton(
+              tooltip: '제품 정보 수정',
               onPressed: _showProductInfoSheet,
-              icon: const Icon(Icons.add),
-              label: const Text('브랜드·모델 등록'),
-            ),
-          if (_item.hasProductInfo) ...[
-            const SizedBox(height: 20),
-            _ProductInfo(item: _item),
-            Align(
-              alignment: Alignment.centerLeft,
-              child: TextButton.icon(
-                onPressed: _showProductInfoSheet,
-                icon: const Icon(Icons.edit_outlined, size: 18),
-                label: const Text('제품 정보 수정'),
-              ),
+              icon: const Icon(Icons.edit_outlined),
             ),
           ],
-          if (_item.guideStatus != null) ...[
-            const SizedBox(height: 12),
-            _GuideStatus(message: _item.guideStatus!),
-          ],
-          if (_item.guideBasis != null) ...[
-            const SizedBox(height: 12),
-            _GuideBasis(message: _item.guideBasis!),
-          ],
-          if (_item.productSources.isNotEmpty || _item.sourceTitle != null) ...[
-            const SizedBox(height: 12),
-            _ProductEvidenceCard(
+        ),
+        body: Column(
+          children: [
+            _ProductHeader(
               item: _item,
-              onOpenSource: _openProduct,
+              onComplete: _completeCare,
             ),
-          ],
-          if (_item.productSpecs.isNotEmpty) ...[
-            const SizedBox(height: 20),
-            _Section(
-              title: '확인된 제품 정보',
-              icon: Icons.fact_check_outlined,
-              children: [
-                for (final spec in _item.productSpecs) _BulletText(text: spec),
+            const TabBar(
+              isScrollable: true,
+              tabAlignment: TabAlignment.start,
+              tabs: [
+                Tab(text: '관리법'),
+                Tab(text: '문제 해결'),
+                Tab(text: '소모품'),
+                Tab(text: '기록'),
+                Tab(text: '제품 정보'),
               ],
             ),
-          ],
-          if (_item.guideVideoUrl != null) ...[
-            const SizedBox(height: 12),
-            _GuideVideoCard(
-              title: _item.guideVideoTitle ?? '세척 영상',
-              channel: _item.guideVideoChannel ?? 'YouTube',
-              onTap: () => _openGuideVideo(_item.guideVideoUrl!),
+            Expanded(
+              child: TabBarView(
+                children: [
+                  _buildCareTab(),
+                  _buildTroubleshootingTab(),
+                  _buildSuppliesTab(),
+                  _buildRecordsTab(),
+                  _buildProductInfoTab(),
+                ],
+              ),
             ),
           ],
-          const SizedBox(height: 24),
-          _Section(
-            title: '준비물',
-            icon: Icons.cleaning_services_outlined,
-            children: [
+        ),
+      ),
+    );
+  }
+
+  Widget _buildCareTab() {
+    return ListView(
+      padding: const EdgeInsets.fromLTRB(16, 18, 16, 32),
+      children: [
+        Text(_item.summary),
+        if (_item.guideStatus != null) ...[
+          const SizedBox(height: 14),
+          _GuideStatus(message: _item.guideStatus!),
+        ],
+        const SizedBox(height: 22),
+        _Section(
+          title: '준비물',
+          icon: Icons.cleaning_services_outlined,
+          children: [
+            if (_item.supplies.isEmpty)
+              const Text('제품 설명서에서 필요한 용품을 먼저 확인하세요.')
+            else
               Wrap(
                 spacing: 8,
                 runSpacing: 8,
@@ -145,72 +117,154 @@ class _ZoneItemDetailScreenState extends State<ZoneItemDetailScreen> {
                     Chip(label: Text(supply)),
                 ],
               ),
-            ],
+          ],
+        ),
+        _Section(
+          title: '관리 순서',
+          icon: Icons.format_list_numbered,
+          children: [
+            for (var index = 0; index < _item.steps.length; index++)
+              _StepTile(number: index + 1, text: _item.steps[index]),
+          ],
+        ),
+        _Section(
+          title: '하면 안 되는 행동',
+          icon: Icons.warning_amber_outlined,
+          children: [
+            for (final caution in _item.cautions) _BulletText(text: caution),
+          ],
+        ),
+        if (_item.guideVideoUrl != null)
+          _GuideVideoCard(
+            title: _item.guideVideoTitle ?? '관리 영상',
+            channel: _item.guideVideoChannel ?? 'YouTube',
+            onTap: () => _openGuideVideo(_item.guideVideoUrl!),
           ),
-          if (_item.recommendedSupplies.isNotEmpty)
-            _Section(
-              title: '청소용품 추천',
-              icon: Icons.shopping_bag_outlined,
-              children: [
-                for (final recommendation in _item.recommendedSupplies)
-                  _RecommendationTile(text: recommendation),
-                const SizedBox(height: 4),
-                Text(
-                  '광고 또는 제휴가 있는 제품은 반드시 별도 표시하고, 추천 이유를 함께 안내해요.',
-                  style: Theme.of(context).textTheme.bodySmall,
-                ),
-              ],
-            ),
-          if (_item.recommendedProducts.isNotEmpty)
-            _Section(
-              title: '추천 제품',
-              icon: Icons.featured_play_list_outlined,
-              children: [
-                for (final product in _item.recommendedProducts)
-                  _ProductRecommendationCard(
-                    product: product,
-                    onTap: () => _openProduct(product.url),
-                  ),
-                Text(
-                  '추천 제품은 사용 전 반드시 제품 표면과 제조사 지침을 확인하세요.',
-                  style: Theme.of(context).textTheme.bodySmall,
-                ),
-              ],
-            ),
-          _Section(
-            title: '먼저 확인하세요',
-            icon: Icons.warning_amber_outlined,
-            children: [
-              for (final caution in _item.cautions) _BulletText(text: caution),
-            ],
-          ),
-          _Section(
-            title: '청소 순서',
-            icon: Icons.format_list_numbered,
-            children: [
-              for (var index = 0; index < _item.steps.length; index++)
-                _StepTile(
-                  number: index + 1,
-                  text: _item.steps[index],
-                ),
-            ],
-          ),
-          Text(
-            '제품의 공식 사용설명서와 안전 지침이 이 안내보다 우선합니다.',
-            style: Theme.of(context).textTheme.bodySmall,
-          ),
-        ],
-      ),
+        const SizedBox(height: 12),
+        Text(
+          '제품의 공식 사용설명서와 안전 지침이 이 안내보다 우선합니다.',
+          style: Theme.of(context).textTheme.bodySmall,
+        ),
+      ],
     );
   }
 
-  IconData _iconFor(ZoneItemType type) {
-    return switch (type) {
-      ZoneItemType.appliance => Icons.kitchen_outlined,
-      ZoneItemType.furniture => Icons.chair_outlined,
-      ZoneItemType.fixture => Icons.countertops_outlined,
-      ZoneItemType.other => Icons.inventory_2_outlined,
-    };
+  Widget _buildTroubleshootingTab() {
+    final advice = _troubleshootingFor(_item.name);
+    return ListView(
+      padding: const EdgeInsets.fromLTRB(16, 18, 16, 32),
+      children: [
+        Text(
+          '증상에 맞는 항목을 확인하세요',
+          style: Theme.of(context).textTheme.titleLarge,
+        ),
+        const SizedBox(height: 6),
+        const Text('분해가 필요하거나 누수·전기 문제가 의심되면 사용을 멈추고 전문가에게 문의하세요.'),
+        const SizedBox(height: 18),
+        for (final item in advice) _TroubleTile(item: item),
+      ],
+    );
+  }
+
+  Widget _buildSuppliesTab() {
+    return ListView(
+      padding: const EdgeInsets.fromLTRB(16, 18, 16, 32),
+      children: [
+        _Section(
+          title: '필요한 용품',
+          icon: Icons.inventory_2_outlined,
+          children: [
+            for (final supply in _item.supplies)
+              _RecommendationTile(text: supply),
+          ],
+        ),
+        if (_item.recommendedSupplies.isNotEmpty)
+          _Section(
+            title: '선택할 때 볼 점',
+            icon: Icons.checklist_outlined,
+            children: [
+              for (final supply in _item.recommendedSupplies)
+                _RecommendationTile(text: supply),
+            ],
+          ),
+        if (_item.recommendedProducts.isNotEmpty)
+          _Section(
+            title: '추천 제품',
+            icon: Icons.shopping_bag_outlined,
+            children: [
+              for (final product in _item.recommendedProducts)
+                _ProductRecommendationCard(
+                  product: product,
+                  onTap: () => _openProduct(product.url),
+                ),
+              Text(
+                '광고 또는 제휴가 있는 제품은 별도 표시합니다.',
+                style: Theme.of(context).textTheme.bodySmall,
+              ),
+            ],
+          ),
+      ],
+    );
+  }
+
+  Widget _buildRecordsTab() {
+    return ListView(
+      padding: const EdgeInsets.fromLTRB(16, 18, 16, 32),
+      children: [
+        Row(
+          children: [
+            Expanded(
+              child: Text(
+                '관리 기록 ${_productRecords.length}개',
+                style: Theme.of(context).textTheme.titleLarge,
+              ),
+            ),
+            FilledButton.icon(
+              onPressed: _completeCare,
+              icon: const Icon(Icons.add_task),
+              label: const Text('기록 추가'),
+            ),
+          ],
+        ),
+        const SizedBox(height: 16),
+        if (_productRecords.isEmpty)
+          const _EmptyProductRecords()
+        else
+          for (final record in _productRecords)
+            _ProductRecordTile(record: record),
+      ],
+    );
+  }
+
+  Widget _buildProductInfoTab() {
+    return ListView(
+      padding: const EdgeInsets.fromLTRB(16, 18, 16, 32),
+      children: [
+        if (_item.hasProductInfo) _ProductInfo(item: _item),
+        if (!_item.hasProductInfo)
+          OutlinedButton.icon(
+            onPressed: _showProductInfoSheet,
+            icon: const Icon(Icons.add),
+            label: const Text('브랜드·모델 등록'),
+          ),
+        if (_item.guideBasis != null) ...[
+          const SizedBox(height: 14),
+          _GuideBasis(message: _item.guideBasis!),
+        ],
+        if (_item.productSpecs.isNotEmpty) ...[
+          const SizedBox(height: 20),
+          _Section(
+            title: '확인된 제품 정보',
+            icon: Icons.fact_check_outlined,
+            children: [
+              for (final spec in _item.productSpecs) _BulletText(text: spec),
+            ],
+          ),
+        ],
+        if (_item.productSources.isNotEmpty || _item.sourceTitle != null)
+          _ProductEvidenceCard(item: _item, onOpenSource: _openProduct),
+      ],
+    );
   }
 
   Future<void> _showProductInfoSheet() async {
@@ -259,6 +313,19 @@ class _ZoneItemDetailScreenState extends State<ZoneItemDetailScreen> {
     }
   }
 
+  Future<void> _loadProductRecords() async {
+    final records = await widget.dataRepository.loadCareRecords() ?? [];
+    if (!mounted) {
+      return;
+    }
+    setState(() {
+      _productRecords = records
+          .where((record) => record.productId == _item.id)
+          .toList()
+        ..sort((a, b) => b.completedAt.compareTo(a.completedAt));
+    });
+  }
+
   Future<void> _completeCare() async {
     final now = DateTime.now();
     final updatedItem = _item.copyWith(
@@ -286,6 +353,7 @@ class _ZoneItemDetailScreenState extends State<ZoneItemDetailScreen> {
 
     setState(() {
       _item = updatedItem;
+      _productRecords = [records.first, ..._productRecords];
     });
     await widget.onItemUpdated?.call(updatedItem);
     if (!mounted) {
@@ -293,6 +361,233 @@ class _ZoneItemDetailScreenState extends State<ZoneItemDetailScreen> {
     }
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(content: Text('관리 기록에 저장했어요. 다음 관리일도 갱신됐어요.')),
+    );
+  }
+}
+
+class _ProductHeader extends StatelessWidget {
+  const _ProductHeader({
+    required this.item,
+    required this.onComplete,
+  });
+
+  final ZoneItem item;
+  final VoidCallback onComplete;
+
+  @override
+  Widget build(BuildContext context) {
+    final identity = [
+      item.manufacturer,
+      item.modelName,
+    ].whereType<String>().where((value) => value.trim().isNotEmpty).join(' · ');
+
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(16, 4, 16, 16),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                width: 48,
+                height: 48,
+                decoration: BoxDecoration(
+                  color: Theme.of(context).colorScheme.secondaryContainer,
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: Icon(_productIcon(item.type)),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      item.displayName,
+                      style: Theme.of(context).textTheme.headlineSmall,
+                    ),
+                    if (identity.isNotEmpty) ...[
+                      const SizedBox(height: 2),
+                      Text(identity),
+                    ],
+                    const SizedBox(height: 7),
+                    _GuideSourceBadge(sourceType: item.guideSourceType),
+                  ],
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 14),
+          _ScheduleCard(item: item, onComplete: onComplete),
+        ],
+      ),
+    );
+  }
+}
+
+IconData _productIcon(ZoneItemType type) {
+  return switch (type) {
+    ZoneItemType.appliance => Icons.kitchen_outlined,
+    ZoneItemType.furniture => Icons.chair_outlined,
+    ZoneItemType.fixture => Icons.countertops_outlined,
+    ZoneItemType.other => Icons.inventory_2_outlined,
+  };
+}
+
+class _TroubleAdvice {
+  const _TroubleAdvice({
+    required this.title,
+    required this.action,
+    this.stopAndAsk = false,
+  });
+
+  final String title;
+  final String action;
+  final bool stopAndAsk;
+}
+
+List<_TroubleAdvice> _troubleshootingFor(String productName) {
+  final name = productName.replaceAll(' ', '');
+  if (name.contains('식기세척기')) {
+    return const [
+      _TroubleAdvice(
+        title: '냄새가 나요',
+        action: '필터와 배수구 주변의 음식물 찌꺼기를 확인하고 문 패킹의 물기를 닦으세요.',
+      ),
+      _TroubleAdvice(
+        title: '세척이 잘 안 돼요',
+        action: '분사 노즐 구멍 막힘, 필터 조립 상태와 전용 세제 사용량을 확인하세요.',
+      ),
+      _TroubleAdvice(
+        title: '물이 빠지지 않아요',
+        action: '사용을 멈추고 필터가 정확히 조립됐는지 확인하세요. 배수 호스나 펌프 분해는 서비스센터에 문의하세요.',
+        stopAndAsk: true,
+      ),
+      _TroubleAdvice(
+        title: '물이 새요',
+        action: '전원과 급수를 차단하고 사용을 중단한 뒤 설치 상태와 서비스센터를 확인하세요.',
+        stopAndAsk: true,
+      ),
+    ];
+  }
+  if (name.contains('냉장고')) {
+    return const [
+      _TroubleAdvice(
+        title: '냄새가 나요',
+        action: '상한 식품을 확인하고 선반, 서랍과 문 고무패킹의 음식물 흔적을 닦으세요.',
+      ),
+      _TroubleAdvice(
+        title: '문이 잘 닫히지 않아요',
+        action: '고무패킹의 이물질과 수납물이 문을 막는지 확인하세요.',
+      ),
+      _TroubleAdvice(
+        title: '성에나 물방울이 많아요',
+        action: '문이 오래 열려 있었는지 확인하고 통풍구를 막은 식품을 정리하세요.',
+      ),
+      _TroubleAdvice(
+        title: '냉각이 약하거나 이상 소음이 나요',
+        action: '전원과 온도 설정을 확인한 뒤 지속되면 내부 부품을 만지지 말고 서비스센터에 문의하세요.',
+        stopAndAsk: true,
+      ),
+    ];
+  }
+  if (name.contains('음식물처리기')) {
+    return const [
+      _TroubleAdvice(
+        title: '냄새가 나요',
+        action: '투입구와 외부 접합부를 닦고 처리 방식에 맞는 미생물 또는 건조통 관리법을 확인하세요.',
+      ),
+      _TroubleAdvice(
+        title: '평소와 다른 소음이 나요',
+        action: '즉시 사용을 멈추고 투입 금지 물질 여부를 확인한 뒤 제조사에 문의하세요.',
+        stopAndAsk: true,
+      ),
+      _TroubleAdvice(
+        title: '누수 흔적이 있어요',
+        action: '전원과 급수를 차단하고 배관이나 본체를 분해하지 말고 설치업체에 문의하세요.',
+        stopAndAsk: true,
+      ),
+    ];
+  }
+  return const [
+    _TroubleAdvice(
+      title: '오염이나 냄새가 생겼어요',
+      action: '제품 표면과 사용자가 분리할 수 있는 부품을 확인하고 설명서의 관리 항목을 먼저 찾으세요.',
+    ),
+    _TroubleAdvice(
+      title: '소음, 누수 또는 작동 문제가 있어요',
+      action: '사용을 멈추고 전원을 분리한 뒤 임의로 분해하지 말고 제조사나 전문가에게 문의하세요.',
+      stopAndAsk: true,
+    ),
+  ];
+}
+
+class _TroubleTile extends StatelessWidget {
+  const _TroubleTile({required this.item});
+
+  final _TroubleAdvice item;
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      margin: const EdgeInsets.only(bottom: 10),
+      child: ExpansionTile(
+        leading: Icon(
+          item.stopAndAsk ? Icons.report_outlined : Icons.build_outlined,
+          color: item.stopAndAsk ? Theme.of(context).colorScheme.error : null,
+        ),
+        title: Text(item.title),
+        childrenPadding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+        expandedCrossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(item.action),
+          if (item.stopAndAsk) ...[
+            const SizedBox(height: 8),
+            Text(
+              '사용 중단 및 전문가 확인 권장',
+              style: TextStyle(
+                color: Theme.of(context).colorScheme.error,
+                fontWeight: FontWeight.w800,
+              ),
+            ),
+          ],
+        ],
+      ),
+    );
+  }
+}
+
+class _EmptyProductRecords extends StatelessWidget {
+  const _EmptyProductRecords();
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        color: Theme.of(context).colorScheme.surfaceContainerLow,
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: const Text('아직 이 제품의 관리 기록이 없습니다.'),
+    );
+  }
+}
+
+class _ProductRecordTile extends StatelessWidget {
+  const _ProductRecordTile({required this.record});
+
+  final CareRecord record;
+
+  @override
+  Widget build(BuildContext context) {
+    return ListTile(
+      contentPadding: EdgeInsets.zero,
+      leading: const Icon(Icons.check_circle_outline),
+      title: Text(record.title),
+      subtitle: Text(
+        '${_sourceDate(record.completedAt)} · ${record.minutes}분',
+      ),
     );
   }
 }

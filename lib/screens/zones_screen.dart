@@ -4,7 +4,6 @@ import '../models/product_space.dart';
 import '../models/zone_item.dart';
 import '../repositories/product_data_repository.dart';
 import '../repositories/product_catalog_repository.dart';
-import '../widgets/fairy_image.dart';
 import '../widgets/space_card.dart';
 import 'zone_detail_screen.dart';
 
@@ -60,8 +59,6 @@ class _ZonesScreenState extends State<ZonesScreen> {
                   tooltip: '공간 추가',
                   icon: const Icon(Icons.add_home_work_outlined),
                 ),
-                const SizedBox(width: 8),
-                const FairyImage(size: 58),
               ],
             ),
           ),

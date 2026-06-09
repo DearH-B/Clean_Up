@@ -18,9 +18,9 @@ class SpaceCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     const colors = [
-      AppColors.peachSoft,
-      AppColors.lavenderSoft,
-      AppColors.pink,
+      AppColors.warmGray,
+      AppColors.steelSoft,
+      AppColors.coralSoft,
       AppColors.graySoft,
     ];
     const icons = [

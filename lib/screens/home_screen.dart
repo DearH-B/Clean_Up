@@ -197,15 +197,19 @@ class _HeroPanel extends StatelessWidget {
       height: 256,
       clipBehavior: Clip.antiAlias,
       decoration: BoxDecoration(
-        color: AppColors.pinkSoft,
+        color: AppColors.steelSoft,
         borderRadius: BorderRadius.circular(8),
+        border: Border.all(color: const Color(0xFFD9E0E2)),
       ),
       child: Stack(
         children: [
           const Positioned(
-            right: -22,
-            bottom: -24,
-            child: FairyImage(size: 150),
+            right: 14,
+            bottom: 14,
+            child: Opacity(
+              opacity: 0.78,
+              child: FairyImage(size: 96),
+            ),
           ),
           Positioned.fill(
             child: Padding(
@@ -216,7 +220,7 @@ class _HeroPanel extends StatelessWidget {
                   const _PillLabel(text: '제품 관리 도우미'),
                   const SizedBox(height: 12),
                   ConstrainedBox(
-                    constraints: const BoxConstraints(maxWidth: 220),
+                    constraints: const BoxConstraints(maxWidth: 260),
                     child: Text(
                       title,
                       maxLines: 2,
@@ -226,7 +230,7 @@ class _HeroPanel extends StatelessWidget {
                   ),
                   const SizedBox(height: 6),
                   ConstrainedBox(
-                    constraints: const BoxConstraints(maxWidth: 216),
+                    constraints: const BoxConstraints(maxWidth: 250),
                     child: Text(
                       message,
                       maxLines: 4,
@@ -327,7 +331,7 @@ class _StatTile extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Icon(icon, size: 19, color: AppColors.rose),
+          Icon(icon, size: 19, color: AppColors.coral),
           const SizedBox(height: 8),
           Text(value, style: Theme.of(context).textTheme.titleLarge),
           const SizedBox(height: 2),
@@ -483,7 +487,7 @@ class _EmptyProducts extends StatelessWidget {
       child: Column(
         children: [
           const Icon(Icons.inventory_2_outlined,
-              size: 36, color: AppColors.rose),
+              size: 36, color: AppColors.coral),
           const SizedBox(height: 10),
           const Text(
             '아직 등록된 제품이 없어요',
@@ -555,7 +559,7 @@ class _DirectionRow extends StatelessWidget {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Icon(icon, size: 19, color: AppColors.rose),
+        Icon(icon, size: 19, color: AppColors.coral),
         const SizedBox(width: 10),
         Expanded(child: Text(text)),
       ],

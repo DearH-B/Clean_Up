@@ -10,7 +10,6 @@ import 'package:clean_up/data/mock_zone_items.dart';
 import 'package:clean_up/data/product_catalog.dart';
 import 'package:clean_up/data/product_care_templates.dart';
 import 'package:clean_up/models/care_record.dart';
-import 'package:clean_up/models/community_post.dart';
 import 'package:clean_up/models/product_space.dart';
 import 'package:clean_up/models/product_search_request.dart';
 import 'package:clean_up/models/zone_item.dart';
@@ -215,7 +214,7 @@ void main() {
     expect(find.text('홈'), findsWidgets);
     expect(find.text('내 제품'), findsOneWidget);
     expect(find.text('기록'), findsOneWidget);
-    expect(find.text('자랑'), findsOneWidget);
+    expect(find.text('자랑'), findsNothing);
     expect(find.text('제품 관리 도우미'), findsOneWidget);
     expect(find.text('등록 제품'), findsOneWidget);
   });
@@ -248,6 +247,12 @@ void main() {
     await tester.pumpAndSettle();
     await tester.tap(find.text('냉장고'));
     await tester.pumpAndSettle();
+
+    expect(find.text('관리법'), findsOneWidget);
+    expect(find.text('문제 해결'), findsOneWidget);
+    expect(find.text('소모품'), findsOneWidget);
+    expect(find.text('제품 정보'), findsOneWidget);
+
     await tester.tap(find.widgetWithText(FilledButton, '완료'));
     await tester.pumpAndSettle();
 
@@ -433,7 +438,6 @@ class MemoryProductDataRepository extends ProductDataRepository {
   List<ProductSpace>? _spaces;
   List<ZoneItem>? _products;
   List<CareRecord>? _records;
-  List<CommunityPost>? _posts;
   List<ProductSearchRequest>? _searchRequests;
   List<String> _recentSearches = [];
 
@@ -459,14 +463,6 @@ class MemoryProductDataRepository extends ProductDataRepository {
   @override
   Future<void> saveCareRecords(List<CareRecord> records) async {
     _records = records.toList();
-  }
-
-  @override
-  Future<List<CommunityPost>?> loadCommunityPosts() async => _posts?.toList();
-
-  @override
-  Future<void> saveCommunityPosts(List<CommunityPost> posts) async {
-    _posts = posts.toList();
   }
 
   @override

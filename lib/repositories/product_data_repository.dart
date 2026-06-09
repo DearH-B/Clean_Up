@@ -5,7 +5,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../data/product_catalog.dart';
 import '../data/product_care_templates.dart';
 import '../models/care_record.dart';
-import '../models/community_post.dart';
 import '../models/product_space.dart';
 import '../models/product_search_request.dart';
 import '../models/zone_item.dart';
@@ -17,7 +16,6 @@ class ProductDataRepository {
   static const _spacesKey = 'zones_v1';
   static const _userProductsKey = 'zone_items_v1';
   static const _careRecordsKey = 'cleaning_records_v1';
-  static const _communityPostsKey = 'community_posts_v1';
   static const _searchRequestsKey = 'product_search_requests_v1';
   static const _recentSearchesKey = 'recent_product_searches_v1';
 
@@ -60,17 +58,6 @@ class ProductDataRepository {
     await _saveList(
       _careRecordsKey,
       [for (final record in records) record.toJson()],
-    );
-  }
-
-  Future<List<CommunityPost>?> loadCommunityPosts() async {
-    return _loadList(_communityPostsKey, CommunityPost.fromJson);
-  }
-
-  Future<void> saveCommunityPosts(List<CommunityPost> posts) async {
-    await _saveList(
-      _communityPostsKey,
-      [for (final post in posts) post.toJson()],
     );
   }
 

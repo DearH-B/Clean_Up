@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 
 import '../models/care_record.dart';
 import '../repositories/product_data_repository.dart';
-import '../widgets/fairy_image.dart';
 import '../widgets/record_tile.dart';
 
 class HistoryScreen extends StatefulWidget {
@@ -49,7 +48,6 @@ class _HistoryScreenState extends State<HistoryScreen> {
                 ],
               ),
             ),
-            const FairyImage(size: 64),
           ],
         ),
         const SizedBox(height: 20),
@@ -61,7 +59,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
           ),
           child: Row(
             children: [
-              const Icon(Icons.auto_awesome, size: 30),
+              const Icon(Icons.history_rounded, size: 30),
               const SizedBox(width: 14),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 
 import '../repositories/product_data_repository.dart';
 import '../repositories/product_catalog_repository.dart';
-import 'community_screen.dart';
 import 'history_screen.dart';
 import 'home_screen.dart';
 import 'zones_screen.dart';
@@ -26,7 +25,6 @@ class _MainShellState extends State<MainShell> {
   int _historyVersion = 0;
   late final Widget _homeScreen;
   late final Widget _productsScreen;
-  late final Widget _communityScreen;
 
   @override
   void initState() {
@@ -44,7 +42,6 @@ class _MainShellState extends State<MainShell> {
       dataRepository: widget.dataRepository,
       catalogRepository: widget.catalogRepository,
     );
-    _communityScreen = CommunityScreen(dataRepository: widget.dataRepository);
   }
 
   @override
@@ -56,7 +53,6 @@ class _MainShellState extends State<MainShell> {
         key: ValueKey(_historyVersion),
         dataRepository: widget.dataRepository,
       ),
-      _communityScreen,
     ];
 
     return Scaffold(
@@ -91,11 +87,6 @@ class _MainShellState extends State<MainShell> {
             icon: Icon(Icons.history_outlined),
             selectedIcon: Icon(Icons.history),
             label: '기록',
-          ),
-          NavigationDestination(
-            icon: Icon(Icons.forum_outlined),
-            selectedIcon: Icon(Icons.forum),
-            label: '자랑',
           ),
         ],
       ),
