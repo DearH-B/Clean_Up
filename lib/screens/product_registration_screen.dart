@@ -148,6 +148,7 @@ class _ProductRegistrationScreenState extends State<ProductRegistrationScreen> {
   }
 
   Widget _buildFindStep() {
+    final recommendedProducts = _recommendedProductsFor(widget.space.name);
     return ListView(
       padding: const EdgeInsets.fromLTRB(20, 12, 20, 32),
       children: [
@@ -226,12 +227,12 @@ class _ProductRegistrationScreenState extends State<ProductRegistrationScreen> {
             ),
             const SizedBox(height: 22),
           ],
-          const _SectionLabel(label: '자주 등록하는 제품'),
+          _SectionLabel(label: '${widget.space.name}에서 자주 등록하는 제품'),
           Wrap(
             spacing: 8,
             runSpacing: 8,
             children: [
-              for (final preset in _popularCategories)
+              for (final preset in recommendedProducts)
                 ActionChip(
                   avatar: Icon(preset.icon, size: 18),
                   label: Text(preset.name),
@@ -1162,13 +1163,115 @@ class _ProductPreset {
   final IconData icon;
 }
 
-const _popularCategories = [
+List<_ProductPreset> _recommendedProductsFor(String spaceName) {
+  final normalized = spaceName.toLowerCase().replaceAll(RegExp(r'\s+'), '');
+
+  if (_containsAny(normalized, const ['주방', '부엌', '키친'])) {
+    return _kitchenProducts;
+  }
+  if (_containsAny(normalized, const ['거실', '응접실', '리빙'])) {
+    return _livingRoomProducts;
+  }
+  if (_containsAny(normalized, const ['욕실', '화장실', '샤워'])) {
+    return _bathroomProducts;
+  }
+  if (_containsAny(
+    normalized,
+    const ['침실', '안방', '아이방', '자녀방', '게스트룸', '방'],
+  )) {
+    return _bedroomProducts;
+  }
+  if (_containsAny(normalized, const ['세탁실', '다용도실'])) {
+    return _laundryRoomProducts;
+  }
+  if (_containsAny(normalized, const ['서재', '공부방', '작업실', '오피스'])) {
+    return _officeProducts;
+  }
+  if (_containsAny(normalized, const ['현관', '입구'])) {
+    return _entranceProducts;
+  }
+  if (_containsAny(normalized, const ['베란다', '발코니'])) {
+    return _balconyProducts;
+  }
+  return _commonProducts;
+}
+
+bool _containsAny(String value, List<String> keywords) {
+  return keywords.any(value.contains);
+}
+
+const _kitchenProducts = [
   _ProductPreset('냉장고', ZoneItemType.appliance, Icons.kitchen_outlined),
   _ProductPreset('음식물처리기', ZoneItemType.appliance, Icons.delete_outline),
-  _ProductPreset('세탁기', ZoneItemType.appliance, Icons.local_laundry_service),
-  _ProductPreset('공기청정기', ZoneItemType.appliance, Icons.air),
   _ProductPreset('전자레인지', ZoneItemType.appliance, Icons.microwave_outlined),
+  _ProductPreset('식기세척기', ZoneItemType.appliance, Icons.local_dining_outlined),
+  _ProductPreset('정수기', ZoneItemType.appliance, Icons.water_drop_outlined),
+  _ProductPreset('싱크대', ZoneItemType.fixture, Icons.countertops_outlined),
+];
+
+const _livingRoomProducts = [
+  _ProductPreset('TV', ZoneItemType.appliance, Icons.tv_outlined),
   _ProductPreset('소파', ZoneItemType.furniture, Icons.weekend_outlined),
+  _ProductPreset(
+      '테이블', ZoneItemType.furniture, Icons.table_restaurant_outlined),
+  _ProductPreset('공기청정기', ZoneItemType.appliance, Icons.air),
+  _ProductPreset('에어컨', ZoneItemType.appliance, Icons.ac_unit_outlined),
+  _ProductPreset('러그', ZoneItemType.furniture, Icons.grid_on_outlined),
+];
+
+const _bathroomProducts = [
+  _ProductPreset('세면대', ZoneItemType.fixture, Icons.wash_outlined),
+  _ProductPreset('변기', ZoneItemType.fixture, Icons.wc_outlined),
+  _ProductPreset('샤워부스', ZoneItemType.fixture, Icons.shower_outlined),
+  _ProductPreset('욕조', ZoneItemType.fixture, Icons.bathtub_outlined),
+  _ProductPreset('환풍기', ZoneItemType.appliance, Icons.air_outlined),
+  _ProductPreset('욕실장', ZoneItemType.furniture, Icons.inventory_2_outlined),
+];
+
+const _bedroomProducts = [
+  _ProductPreset('침대', ZoneItemType.furniture, Icons.bed_outlined),
+  _ProductPreset('매트리스', ZoneItemType.furniture, Icons.bedroom_parent_outlined),
+  _ProductPreset('옷장', ZoneItemType.furniture, Icons.checkroom_outlined),
+  _ProductPreset('화장대', ZoneItemType.furniture, Icons.desk_outlined),
+  _ProductPreset('에어컨', ZoneItemType.appliance, Icons.ac_unit_outlined),
+  _ProductPreset('공기청정기', ZoneItemType.appliance, Icons.air),
+];
+
+const _laundryRoomProducts = [
+  _ProductPreset('세탁기', ZoneItemType.appliance, Icons.local_laundry_service),
+  _ProductPreset('건조기', ZoneItemType.appliance, Icons.dry_cleaning_outlined),
+  _ProductPreset('세탁조', ZoneItemType.fixture, Icons.countertops_outlined),
+  _ProductPreset('빨래건조대', ZoneItemType.fixture, Icons.dry_outlined),
+];
+
+const _officeProducts = [
+  _ProductPreset('책상', ZoneItemType.furniture, Icons.desk_outlined),
+  _ProductPreset('의자', ZoneItemType.furniture, Icons.chair_outlined),
+  _ProductPreset('모니터', ZoneItemType.appliance, Icons.desktop_windows_outlined),
+  _ProductPreset('컴퓨터', ZoneItemType.appliance, Icons.computer_outlined),
+  _ProductPreset('책장', ZoneItemType.furniture, Icons.menu_book_outlined),
+];
+
+const _entranceProducts = [
+  _ProductPreset('신발장', ZoneItemType.furniture, Icons.checkroom_outlined),
+  _ProductPreset('현관문', ZoneItemType.fixture, Icons.door_front_door_outlined),
+  _ProductPreset('중문', ZoneItemType.fixture, Icons.meeting_room_outlined),
+  _ProductPreset('현관 매트', ZoneItemType.furniture, Icons.grid_on_outlined),
+];
+
+const _balconyProducts = [
+  _ProductPreset('창문', ZoneItemType.fixture, Icons.window_outlined),
+  _ProductPreset('방충망', ZoneItemType.fixture, Icons.grid_4x4_outlined),
+  _ProductPreset('실외기', ZoneItemType.appliance, Icons.ac_unit_outlined),
+  _ProductPreset('수납장', ZoneItemType.furniture, Icons.inventory_2_outlined),
+];
+
+const _commonProducts = [
+  _ProductPreset('에어컨', ZoneItemType.appliance, Icons.ac_unit_outlined),
+  _ProductPreset('공기청정기', ZoneItemType.appliance, Icons.air),
+  _ProductPreset('수납장', ZoneItemType.furniture, Icons.inventory_2_outlined),
+  _ProductPreset(
+      '테이블', ZoneItemType.furniture, Icons.table_restaurant_outlined),
 ];
 
 String _normalize(String value) {

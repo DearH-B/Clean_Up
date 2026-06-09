@@ -260,6 +260,24 @@ void main() {
     expect(registered.catalogProductId, isNull);
   });
 
+  testWidgets('제품 등록 추천은 선택한 구역에 맞게 표시된다', (tester) async {
+    seedSampleData(dataRepository);
+    await pumpApp(tester, dataRepository);
+
+    await tester.tap(find.text('내 제품'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('거실'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('제품 추가'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('거실에서 자주 등록하는 제품'), findsOneWidget);
+    expect(find.text('TV'), findsOneWidget);
+    expect(find.text('소파'), findsOneWidget);
+    expect(find.text('냉장고'), findsNothing);
+    expect(find.text('음식물처리기'), findsNothing);
+  });
+
   testWidgets('검색 실패 시 제품 정보 요청을 저장할 수 있다', (tester) async {
     seedSampleData(dataRepository);
     await pumpApp(tester, dataRepository);
