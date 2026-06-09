@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../models/community_post.dart';
-import '../repositories/cleaning_data_repository.dart';
+import '../repositories/product_data_repository.dart';
 import '../widgets/fairy_image.dart';
 
 class CommunityScreen extends StatefulWidget {
@@ -10,7 +10,7 @@ class CommunityScreen extends StatefulWidget {
     super.key,
   });
 
-  final CleaningDataRepository dataRepository;
+  final ProductDataRepository dataRepository;
 
   @override
   State<CommunityScreen> createState() => _CommunityScreenState();
@@ -120,7 +120,7 @@ class _EmptyCommunity extends StatelessWidget {
             ),
             const SizedBox(height: 6),
             const Text(
-              '처음으로 오늘의 청소를 자랑해 보세요.',
+              '처음으로 제품을 돌본 기록을 자랑해 보세요.',
               textAlign: TextAlign.center,
             ),
           ],
@@ -175,7 +175,7 @@ class _AddPostSheetState extends State<_AddPostSheet> {
           DropdownMenu<String>(
             width: double.infinity,
             initialSelection: _place,
-            label: const Text('구역'),
+            label: const Text('공간'),
             dropdownMenuEntries: const [
               DropdownMenuEntry(value: '주방', label: '주방'),
               DropdownMenuEntry(value: '거실', label: '거실'),

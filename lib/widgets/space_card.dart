@@ -1,23 +1,22 @@
 import 'package:flutter/material.dart';
 
-import '../models/cleaning_zone.dart';
+import '../models/product_space.dart';
 import '../theme/app_theme.dart';
 
-class ZoneCard extends StatelessWidget {
-  const ZoneCard({
-    required this.zone,
+class SpaceCard extends StatelessWidget {
+  const SpaceCard({
+    required this.space,
     required this.index,
     required this.onTap,
     super.key,
   });
 
-  final CleaningZone zone;
+  final ProductSpace space;
   final int index;
   final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context) {
-    final percent = (zone.progress * 100).round();
     const colors = [
       AppColors.peachSoft,
       AppColors.lavenderSoft,
@@ -55,7 +54,7 @@ class ZoneCard extends StatelessWidget {
                   const SizedBox(width: 10),
                   Expanded(
                     child: Text(
-                      zone.name,
+                      space.name,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                       style: Theme.of(context).textTheme.titleMedium,
@@ -65,7 +64,7 @@ class ZoneCard extends StatelessWidget {
               ),
               const SizedBox(height: 12),
               Text(
-                zone.description,
+                space.description,
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
                 style: Theme.of(context).textTheme.bodyMedium,
@@ -74,7 +73,7 @@ class ZoneCard extends StatelessWidget {
               Row(
                 children: [
                   Text(
-                    '$percent%',
+                    '${space.identifiedProductCount}/${space.productCount} 제품 확인',
                     style: const TextStyle(fontWeight: FontWeight.w800),
                   ),
                   const Spacer(),
@@ -82,7 +81,7 @@ class ZoneCard extends StatelessWidget {
                 ],
               ),
               const SizedBox(height: 8),
-              LinearProgressIndicator(value: zone.progress),
+              LinearProgressIndicator(value: space.identificationProgress),
             ],
           ),
         ),

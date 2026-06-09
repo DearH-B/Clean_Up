@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../models/cleaning_record.dart';
-import '../repositories/cleaning_data_repository.dart';
+import '../models/care_record.dart';
+import '../repositories/product_data_repository.dart';
 import '../widgets/fairy_image.dart';
 import '../widgets/record_tile.dart';
 
@@ -11,14 +11,14 @@ class HistoryScreen extends StatefulWidget {
     super.key,
   });
 
-  final CleaningDataRepository dataRepository;
+  final ProductDataRepository dataRepository;
 
   @override
   State<HistoryScreen> createState() => _HistoryScreenState();
 }
 
 class _HistoryScreenState extends State<HistoryScreen> {
-  late List<CleaningRecord> _records;
+  late List<CareRecord> _records;
 
   @override
   void initState() {
@@ -45,7 +45,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
                 children: [
                   Text('기록', style: Theme.of(context).textTheme.headlineSmall),
                   const SizedBox(height: 4),
-                  const Text('반짝인 순간들을 모아봤어요.'),
+                  const Text('제품을 돌본 기록을 모아봤어요.'),
                 ],
               ),
             ),
@@ -67,10 +67,10 @@ class _HistoryScreenState extends State<HistoryScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    '이번 주 ${_records.length}번 청소했어요',
+                    '관리 기록 ${_records.length}개',
                     style: Theme.of(context).textTheme.titleMedium,
                   ),
-                  Text('총 $totalMinutes분 동안 집을 돌봤어요'),
+                  Text('총 $totalMinutes분 동안 제품을 관리했어요'),
                 ],
               ),
             ],
@@ -91,7 +91,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
   }
 
   Future<void> _loadRecords() async {
-    final savedRecords = await widget.dataRepository.loadRecords();
+    final savedRecords = await widget.dataRepository.loadCareRecords();
     if (!mounted || savedRecords == null) {
       return;
     }
@@ -119,12 +119,12 @@ class _EmptyHistory extends StatelessWidget {
             ),
             const SizedBox(height: 10),
             Text(
-              '아직 청소 기록이 없어요',
+              '아직 관리 기록이 없어요',
               style: Theme.of(context).textTheme.titleMedium,
             ),
             const SizedBox(height: 6),
             const Text(
-              '구역 항목에서 청소를 완료하면 자동으로 기록돼요.',
+              '제품 상세에서 관리를 완료하면 자동으로 기록돼요.',
               textAlign: TextAlign.center,
             ),
           ],

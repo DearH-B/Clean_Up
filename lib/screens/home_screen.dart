@@ -2,9 +2,9 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 
-import '../models/cleaning_record.dart';
+import '../models/care_record.dart';
 import '../models/zone_item.dart';
-import '../repositories/cleaning_data_repository.dart';
+import '../repositories/product_data_repository.dart';
 import '../repositories/product_catalog_repository.dart';
 import '../theme/app_theme.dart';
 import '../widgets/fairy_image.dart';
@@ -18,7 +18,7 @@ class HomeScreen extends StatefulWidget {
     super.key,
   });
 
-  final CleaningDataRepository dataRepository;
+  final ProductDataRepository dataRepository;
   final ProductCatalogRepository catalogRepository;
   final VoidCallback onOpenProducts;
 
@@ -28,7 +28,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   List<ZoneItem> _items = [];
-  List<CleaningRecord> _records = [];
+  List<CareRecord> _records = [];
   bool _isLoading = true;
 
   @override
@@ -99,7 +99,7 @@ class _HomeScreenState extends State<HomeScreen> {
               const SizedBox(height: 10),
             ],
           const SizedBox(height: 14),
-          const _SectionTitle(title: '제품 관리 앱으로 바뀌는 중'),
+          const _SectionTitle(title: '제품 정보 원칙'),
           const SizedBox(height: 10),
           const _DirectionCard(),
         ],
@@ -108,8 +108,8 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Future<void> _loadData() async {
-    final items = await widget.dataRepository.loadZoneItems();
-    final records = await widget.dataRepository.loadRecords();
+    final items = await widget.dataRepository.loadUserProducts();
+    final records = await widget.dataRepository.loadCareRecords();
     if (!mounted) {
       return;
     }
@@ -136,12 +136,12 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Future<void> _updateItem(ZoneItem updatedItem) async {
-    final savedItems = await widget.dataRepository.loadZoneItems() ?? [];
+    final savedItems = await widget.dataRepository.loadUserProducts() ?? [];
     final updatedItems = [
       for (final item in savedItems)
         if (item.id == updatedItem.id) updatedItem else item,
     ];
-    await widget.dataRepository.saveZoneItems(updatedItems);
+    await widget.dataRepository.saveUserProducts(updatedItems);
     if (!mounted) {
       return;
     }
@@ -250,7 +250,7 @@ class _QuickStats extends StatelessWidget {
   });
 
   final List<ZoneItem> items;
-  final List<CleaningRecord> records;
+  final List<CareRecord> records;
 
   @override
   Widget build(BuildContext context) {
@@ -507,7 +507,7 @@ class _DirectionCard extends StatelessWidget {
         children: [
           _DirectionRow(
             icon: Icons.inventory_2_outlined,
-            text: '제품별 청소법, 주의사항, 준비물을 정리',
+            text: '제품별 관리법, 주의사항, 준비물을 한곳에 정리',
           ),
           SizedBox(height: 10),
           _DirectionRow(
@@ -517,7 +517,7 @@ class _DirectionCard extends StatelessWidget {
           SizedBox(height: 10),
           _DirectionRow(
             icon: Icons.shopping_bag_outlined,
-            text: '상황에 맞는 특정 청소용품 추천 영역 확장',
+            text: '출처와 추천 이유가 분명한 관리용품 안내',
           ),
         ],
       ),

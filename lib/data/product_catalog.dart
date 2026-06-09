@@ -114,6 +114,7 @@ class ProductCatalogEntry {
     return ZoneItem(
       id: id,
       zoneId: zoneId,
+      catalogProductId: this.id,
       name: name,
       type: type,
       summary: summary,
@@ -148,6 +149,7 @@ class ProductCatalogEntry {
     return ZoneItem(
       id: catalogItem.id,
       zoneId: catalogItem.zoneId,
+      catalogProductId: catalogItem.catalogProductId,
       name: catalogItem.name,
       type: catalogItem.type,
       summary: catalogItem.summary,

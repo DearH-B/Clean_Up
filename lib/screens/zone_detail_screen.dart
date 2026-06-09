@@ -3,9 +3,9 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 
 import '../data/product_catalog.dart';
-import '../models/cleaning_zone.dart';
+import '../models/product_space.dart';
 import '../models/zone_item.dart';
-import '../repositories/cleaning_data_repository.dart';
+import '../repositories/product_data_repository.dart';
 import '../repositories/product_catalog_repository.dart';
 import '../widgets/zone_item_tile.dart';
 import 'zone_item_detail_screen.dart';
@@ -22,11 +22,11 @@ class ZoneDetailScreen extends StatefulWidget {
     super.key,
   });
 
-  final CleaningZone zone;
+  final ProductSpace zone;
   final List<ZoneItem> items;
   final void Function(String zoneId, List<ZoneItem> items) onItemsChanged;
   final ValueChanged<String> onDeleteZone;
-  final CleaningDataRepository dataRepository;
+  final ProductDataRepository dataRepository;
   final ProductCatalogRepository catalogRepository;
   final bool startWithAddItem;
 
@@ -57,7 +57,7 @@ class _ZoneDetailScreenState extends State<ZoneDetailScreen> {
         title: Text(widget.zone.name),
         actions: [
           IconButton(
-            tooltip: '구역 삭제',
+            tooltip: '공간 삭제',
             onPressed: _confirmDeleteZone,
             icon: const Icon(Icons.delete_outline),
           ),
@@ -72,12 +72,12 @@ class _ZoneDetailScreenState extends State<ZoneDetailScreen> {
               padding: const EdgeInsets.fromLTRB(16, 12, 16, 96),
               children: [
                 Text(
-                  '${widget.zone.name}의 가전과 가구',
+                  '${widget.zone.name}의 제품',
                   style: Theme.of(context).textTheme.titleLarge,
                 ),
                 const SizedBox(height: 6),
                 Text(
-                  '항목을 선택하면 준비물과 단계별 청소법을 볼 수 있어요.',
+                  '제품을 선택하면 관리 정보와 단계별 방법을 볼 수 있어요.',
                   style: Theme.of(context).textTheme.bodyMedium,
                 ),
                 const SizedBox(height: 20),
@@ -93,7 +93,7 @@ class _ZoneDetailScreenState extends State<ZoneDetailScreen> {
       floatingActionButton: FloatingActionButton.extended(
         onPressed: _showAddItemSheet,
         icon: const Icon(Icons.add),
-        label: const Text('항목 추가'),
+        label: const Text('제품 추가'),
       ),
     );
   }
@@ -148,7 +148,7 @@ class _ZoneDetailScreenState extends State<ZoneDetailScreen> {
       context: context,
       builder: (context) => AlertDialog(
         title: Text('${widget.zone.name} 삭제'),
-        content: const Text('이 구역과 안에 등록한 항목을 모두 삭제할까요?'),
+        content: const Text('이 공간과 안에 등록한 제품을 모두 삭제할까요?'),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(context).pop(false),
@@ -195,17 +195,17 @@ class _EmptyZone extends StatelessWidget {
             ),
             const SizedBox(height: 16),
             Text(
-              '$zoneName에 등록된 항목이 없어요',
+              '$zoneName에 등록된 제품이 없어요',
               textAlign: TextAlign.center,
               style: Theme.of(context).textTheme.titleMedium,
             ),
             const SizedBox(height: 8),
-            const Text('자주 청소하는 가전이나 가구를 추가해 보세요.'),
+            const Text('관리 정보를 확인할 제품을 추가해 보세요.'),
             const SizedBox(height: 20),
             FilledButton.icon(
               onPressed: onAdd,
               icon: const Icon(Icons.add),
-              label: const Text('첫 항목 추가'),
+              label: const Text('첫 제품 추가'),
             ),
           ],
         ),
@@ -269,7 +269,7 @@ class _AddZoneItemSheetState extends State<_AddZoneItemSheet> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Text(
-              '가전 또는 가구 추가',
+              '제품 추가',
               style: Theme.of(context).textTheme.titleLarge,
             ),
             const SizedBox(height: 16),
@@ -278,7 +278,7 @@ class _AddZoneItemSheetState extends State<_AddZoneItemSheet> {
                 ButtonSegment(
                   value: false,
                   icon: Icon(Icons.category_outlined),
-                  label: Text('일반 항목'),
+                  label: Text('종류만 등록'),
                 ),
                 ButtonSegment(
                   value: true,
@@ -350,7 +350,7 @@ class _AddZoneItemSheetState extends State<_AddZoneItemSheet> {
               controller: _nameController,
               textInputAction: TextInputAction.next,
               decoration: const InputDecoration(
-                labelText: '항목 이름',
+                labelText: '제품 이름',
                 hintText: '예: 냉장고',
                 border: OutlineInputBorder(),
               ),
@@ -376,7 +376,7 @@ class _AddZoneItemSheetState extends State<_AddZoneItemSheet> {
             DropdownMenu<int>(
               width: double.infinity,
               initialSelection: _recurrenceDays,
-              label: const Text('청소 주기'),
+              label: const Text('관리 주기'),
               dropdownMenuEntries: const [
                 DropdownMenuEntry(value: 1, label: '매일'),
                 DropdownMenuEntry(value: 7, label: '매주'),

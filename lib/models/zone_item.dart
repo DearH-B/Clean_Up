@@ -67,6 +67,7 @@ class ZoneItem {
     required this.supplies,
     required this.cautions,
     required this.steps,
+    this.catalogProductId,
     this.estimatedMinutes = 10,
     this.manufacturer,
     this.modelName,
@@ -91,6 +92,7 @@ class ZoneItem {
 
   final String id;
   final String zoneId;
+  final String? catalogProductId;
   final String name;
   final ZoneItemType type;
   final String summary;
@@ -136,6 +138,7 @@ class ZoneItem {
     return ZoneItem(
       id: json['id'] as String,
       zoneId: json['zoneId'] as String,
+      catalogProductId: json['catalogProductId'] as String?,
       name: json['name'] as String,
       type: ZoneItemType.values.byName(json['type'] as String),
       summary: json['summary'] as String,
@@ -188,6 +191,7 @@ class ZoneItem {
     return {
       'id': id,
       'zoneId': zoneId,
+      'catalogProductId': catalogProductId,
       'name': name,
       'type': type.name,
       'summary': summary,
@@ -221,6 +225,7 @@ class ZoneItem {
   }
 
   ZoneItem copyWith({
+    String? catalogProductId,
     String? manufacturer,
     String? modelName,
     String? guideStatus,
@@ -235,6 +240,7 @@ class ZoneItem {
     return ZoneItem(
       id: id,
       zoneId: zoneId,
+      catalogProductId: catalogProductId ?? this.catalogProductId,
       name: name,
       type: type,
       summary: summary,

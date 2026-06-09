@@ -4,9 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../data/product_catalog.dart';
-import '../models/cleaning_record.dart';
+import '../models/care_record.dart';
 import '../models/zone_item.dart';
-import '../repositories/cleaning_data_repository.dart';
+import '../repositories/product_data_repository.dart';
 import '../repositories/product_catalog_repository.dart';
 
 class ZoneItemDetailScreen extends StatefulWidget {
@@ -19,7 +19,7 @@ class ZoneItemDetailScreen extends StatefulWidget {
   });
 
   final ZoneItem item;
-  final CleaningDataRepository dataRepository;
+  final ProductDataRepository dataRepository;
   final ProductCatalogRepository catalogRepository;
   final ValueChanged<ZoneItem>? onItemUpdated;
 
@@ -73,7 +73,7 @@ class _ZoneItemDetailScreenState extends State<ZoneItemDetailScreen> {
           const SizedBox(height: 16),
           _ScheduleCard(
             item: _item,
-            onComplete: _completeCleaning,
+            onComplete: _completeCare,
           ),
           const SizedBox(height: 16),
           if (!_item.hasProductInfo)
@@ -256,25 +256,26 @@ class _ZoneItemDetailScreenState extends State<ZoneItemDetailScreen> {
     }
   }
 
-  Future<void> _completeCleaning() async {
+  Future<void> _completeCare() async {
     final now = DateTime.now();
     final updatedItem = _item.copyWith(
       lastCleanedAt: now,
       nextDueAt: now.add(Duration(days: _item.recurrenceDays)),
     );
-    final savedRecords = await widget.dataRepository.loadRecords();
+    final savedRecords = await widget.dataRepository.loadCareRecords();
     final records = [
-      CleaningRecord(
+      CareRecord(
         id: 'record-${now.microsecondsSinceEpoch}',
-        title: '${_item.name} 청소 완료',
-        zoneName: _item.name,
+        title: '${_item.name} 관리 완료',
+        spaceName: _item.name,
         completedAt: now,
         minutes: _item.estimatedMinutes,
+        productId: _item.id,
       ),
-      ...(savedRecords ?? const <CleaningRecord>[]),
+      ...(savedRecords ?? const <CareRecord>[]),
     ];
 
-    await widget.dataRepository.saveRecords(records);
+    await widget.dataRepository.saveCareRecords(records);
     if (!mounted) {
       return;
     }
@@ -284,7 +285,7 @@ class _ZoneItemDetailScreenState extends State<ZoneItemDetailScreen> {
     });
     widget.onItemUpdated?.call(updatedItem);
     ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('청소 기록에 저장했어요. 다음 일정도 갱신됐어요.')),
+      const SnackBar(content: Text('관리 기록에 저장했어요. 다음 관리일도 갱신됐어요.')),
     );
   }
 }
@@ -545,7 +546,7 @@ class _GuideBasis extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const Text(
-                  '이 청소법의 참고 기준',
+                  '이 관리법의 참고 기준',
                   style: TextStyle(fontWeight: FontWeight.w800),
                 ),
                 const SizedBox(height: 3),

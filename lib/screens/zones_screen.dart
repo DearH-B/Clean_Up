@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
-import '../models/cleaning_zone.dart';
+import '../models/product_space.dart';
 import '../models/zone_item.dart';
-import '../repositories/cleaning_data_repository.dart';
+import '../repositories/product_data_repository.dart';
 import '../repositories/product_catalog_repository.dart';
 import '../widgets/fairy_image.dart';
-import '../widgets/zone_card.dart';
+import '../widgets/space_card.dart';
 import 'zone_detail_screen.dart';
 
 class ZonesScreen extends StatefulWidget {
@@ -15,7 +15,7 @@ class ZonesScreen extends StatefulWidget {
     super.key,
   });
 
-  final CleaningDataRepository dataRepository;
+  final ProductDataRepository dataRepository;
   final ProductCatalogRepository catalogRepository;
 
   @override
@@ -23,7 +23,7 @@ class ZonesScreen extends StatefulWidget {
 }
 
 class _ZonesScreenState extends State<ZonesScreen> {
-  List<CleaningZone> _zones = [];
+  List<ProductSpace> _spaces = [];
   List<ZoneItem> _items = [];
   bool _isLoading = true;
 
@@ -70,7 +70,7 @@ class _ZonesScreenState extends State<ZonesScreen> {
           const SliverFillRemaining(
             child: Center(child: CircularProgressIndicator()),
           )
-        else if (_zones.isEmpty)
+        else if (_spaces.isEmpty)
           SliverFillRemaining(
             hasScrollBody: false,
             child: _InitialZoneSetup(onCreate: _createPresetZones),
@@ -87,15 +87,15 @@ class _ZonesScreenState extends State<ZonesScreen> {
               ),
               delegate: SliverChildBuilderDelegate(
                 (context, index) {
-                  final zone = _zoneWithProgress(_zones[index]);
+                  final space = _spaceWithProgress(_spaces[index]);
 
-                  return ZoneCard(
-                    zone: zone,
+                  return SpaceCard(
+                    space: space,
                     index: index,
-                    onTap: () => _openZone(zone),
+                    onTap: () => _openSpace(space),
                   );
                 },
-                childCount: _zones.length,
+                childCount: _spaces.length,
               ),
             ),
           ),
@@ -104,37 +104,37 @@ class _ZonesScreenState extends State<ZonesScreen> {
   }
 
   Future<void> _loadSavedData() async {
-    final savedZones = await widget.dataRepository.loadZones();
-    final savedItems = await widget.dataRepository.loadZoneItems();
+    final savedSpaces = await widget.dataRepository.loadSpaces();
+    final savedItems = await widget.dataRepository.loadUserProducts();
     if (!mounted) {
       return;
     }
 
     setState(() {
-      _zones = savedZones ?? [];
+      _spaces = savedSpaces ?? [];
       _items = savedItems ?? [];
       _isLoading = false;
     });
   }
 
   Future<void> _showAddZoneSheet() async {
-    final zone = await showModalBottomSheet<CleaningZone>(
+    final space = await showModalBottomSheet<ProductSpace>(
       context: context,
       isScrollControlled: true,
       showDragHandle: true,
       builder: (context) => const _AddZoneSheet(),
     );
 
-    if (zone == null || !mounted) {
+    if (space == null || !mounted) {
       return;
     }
 
     setState(() {
-      _zones.add(zone);
+      _spaces.add(space);
     });
-    await widget.dataRepository.saveZones(_zones);
+    await widget.dataRepository.saveSpaces(_spaces);
     if (mounted) {
-      _openZone(zone, startWithAddItem: true);
+      _openSpace(space, startWithAddItem: true);
     }
   }
 
@@ -146,14 +146,15 @@ class _ZonesScreenState extends State<ZonesScreen> {
         ...updatedItems,
       ];
     });
-    widget.dataRepository.saveZoneItems(_items);
+    widget.dataRepository.saveUserProducts(_items);
   }
 
-  CleaningZone _zoneWithProgress(CleaningZone zone) {
-    final zoneItems = _items.where((item) => item.zoneId == zone.id).toList();
-    return zone.copyWith(
-      taskCount: zoneItems.length,
-      completedTaskCount: zoneItems.where((item) => item.hasProductInfo).length,
+  ProductSpace _spaceWithProgress(ProductSpace space) {
+    final products = _items.where((item) => item.zoneId == space.id).toList();
+    return space.copyWith(
+      productCount: products.length,
+      identifiedProductCount:
+          products.where((item) => item.hasProductInfo).length,
     );
   }
 
@@ -162,36 +163,36 @@ class _ZonesScreenState extends State<ZonesScreen> {
       return;
     }
 
-    final createdZones = [
+    final createdSpaces = [
       for (final preset in presets)
-        CleaningZone(
+        ProductSpace(
           id: 'custom-zone-${preset.name}-${DateTime.now().microsecondsSinceEpoch}',
           name: preset.name,
           description: preset.description,
-          taskCount: 0,
-          completedTaskCount: 0,
+          productCount: 0,
+          identifiedProductCount: 0,
         ),
     ];
 
     setState(() {
-      _zones.addAll(createdZones);
+      _spaces.addAll(createdSpaces);
     });
-    await widget.dataRepository.saveZones(_zones);
+    await widget.dataRepository.saveSpaces(_spaces);
 
-    if (mounted && createdZones.length == 1) {
-      _openZone(createdZones.first, startWithAddItem: true);
+    if (mounted && createdSpaces.length == 1) {
+      _openSpace(createdSpaces.first, startWithAddItem: true);
     }
   }
 
-  void _openZone(
-    CleaningZone zone, {
+  void _openSpace(
+    ProductSpace space, {
     bool startWithAddItem = false,
   }) {
     Navigator.of(context).push(
       MaterialPageRoute<void>(
         builder: (context) => ZoneDetailScreen(
-          zone: zone,
-          items: _items.where((item) => item.zoneId == zone.id).toList(),
+          zone: space,
+          items: _items.where((item) => item.zoneId == space.id).toList(),
           onItemsChanged: _updateZoneItems,
           onDeleteZone: _deleteZone,
           dataRepository: widget.dataRepository,
@@ -203,21 +204,21 @@ class _ZonesScreenState extends State<ZonesScreen> {
   }
 
   Future<void> _deleteZone(String zoneId) async {
-    CleaningZone? deletedZone;
-    for (final zone in _zones) {
-      if (zone.id == zoneId) {
-        deletedZone = zone;
+    ProductSpace? deletedSpace;
+    for (final space in _spaces) {
+      if (space.id == zoneId) {
+        deletedSpace = space;
         break;
       }
     }
-    if (deletedZone == null) {
+    if (deletedSpace == null) {
       return;
     }
 
     setState(() {
-      _zones = [
-        for (final zone in _zones)
-          if (zone.id != zoneId) zone,
+      _spaces = [
+        for (final space in _spaces)
+          if (space.id != zoneId) space,
       ];
       _items = [
         for (final item in _items)
@@ -225,15 +226,15 @@ class _ZonesScreenState extends State<ZonesScreen> {
       ];
     });
 
-    await widget.dataRepository.saveZones(_zones);
-    await widget.dataRepository.saveZoneItems(_items);
+    await widget.dataRepository.saveSpaces(_spaces);
+    await widget.dataRepository.saveUserProducts(_items);
 
     if (!mounted) {
       return;
     }
 
     ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('${deletedZone.name} 공간을 삭제했어요.')),
+      SnackBar(content: Text('${deletedSpace.name} 공간을 삭제했어요.')),
     );
   }
 }
@@ -427,12 +428,12 @@ class _AddZoneSheetState extends State<_AddZoneSheet> {
     }
 
     Navigator.of(context).pop(
-      CleaningZone(
+      ProductSpace(
         id: 'custom-zone-${DateTime.now().microsecondsSinceEpoch}',
         name: name,
         description: description.isEmpty ? '새로 추가한 제품 공간' : description,
-        taskCount: 0,
-        completedTaskCount: 0,
+        productCount: 0,
+        identifiedProductCount: 0,
       ),
     );
   }

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../models/cleaning_record.dart';
+import '../models/care_record.dart';
 
 class RecordTile extends StatelessWidget {
   const RecordTile({
@@ -8,7 +8,7 @@ class RecordTile extends StatelessWidget {
     super.key,
   });
 
-  final CleaningRecord record;
+  final CareRecord record;
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +30,7 @@ class RecordTile extends StatelessWidget {
           style: const TextStyle(fontWeight: FontWeight.w700),
         ),
         subtitle: Text(
-          '${record.zoneName} · ${_formatDateTime(record.completedAt)}',
+          '${record.spaceName} · ${_formatDateTime(record.completedAt)}',
         ),
         trailing: const Icon(Icons.chevron_right),
       ),

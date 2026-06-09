@@ -1,25 +1,29 @@
-class CleaningRecord {
-  const CleaningRecord({
+class CareRecord {
+  const CareRecord({
     required this.id,
     required this.title,
-    required this.zoneName,
+    required this.spaceName,
     required this.completedAt,
     required this.minutes,
+    this.productId,
   });
 
   final String id;
   final String title;
-  final String zoneName;
+  final String spaceName;
   final DateTime completedAt;
   final int minutes;
+  final String? productId;
 
-  factory CleaningRecord.fromJson(Map<String, Object?> json) {
-    return CleaningRecord(
+  factory CareRecord.fromJson(Map<String, Object?> json) {
+    return CareRecord(
       id: json['id'] as String,
       title: json['title'] as String,
-      zoneName: json['zoneName'] as String,
+      spaceName:
+          json['spaceName'] as String? ?? json['zoneName'] as String? ?? '',
       completedAt: DateTime.parse(json['completedAt'] as String),
       minutes: json['minutes'] as int,
+      productId: json['productId'] as String?,
     );
   }
 
@@ -27,9 +31,10 @@ class CleaningRecord {
     return {
       'id': id,
       'title': title,
-      'zoneName': zoneName,
+      'spaceName': spaceName,
       'completedAt': completedAt.toIso8601String(),
       'minutes': minutes,
+      'productId': productId,
     };
   }
 }

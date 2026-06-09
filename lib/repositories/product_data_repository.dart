@@ -3,29 +3,30 @@ import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../data/product_catalog.dart';
-import '../models/cleaning_record.dart';
-import '../models/cleaning_zone.dart';
+import '../models/care_record.dart';
 import '../models/community_post.dart';
+import '../models/product_space.dart';
 import '../models/zone_item.dart';
 
-class CleaningDataRepository {
-  const CleaningDataRepository();
+class ProductDataRepository {
+  const ProductDataRepository();
 
-  static const _zonesKey = 'zones_v1';
-  static const _zoneItemsKey = 'zone_items_v1';
-  static const _recordsKey = 'cleaning_records_v1';
+  // Keep existing keys so users retain data created by earlier app versions.
+  static const _spacesKey = 'zones_v1';
+  static const _userProductsKey = 'zone_items_v1';
+  static const _careRecordsKey = 'cleaning_records_v1';
   static const _communityPostsKey = 'community_posts_v1';
 
-  Future<List<CleaningZone>?> loadZones() async {
-    return _loadList(_zonesKey, CleaningZone.fromJson);
+  Future<List<ProductSpace>?> loadSpaces() async {
+    return _loadList(_spacesKey, ProductSpace.fromJson);
   }
 
-  Future<void> saveZones(List<CleaningZone> zones) async {
-    await _saveList(_zonesKey, [for (final zone in zones) zone.toJson()]);
+  Future<void> saveSpaces(List<ProductSpace> spaces) async {
+    await _saveList(_spacesKey, [for (final space in spaces) space.toJson()]);
   }
 
-  Future<List<ZoneItem>?> loadZoneItems() async {
-    final items = await _loadList(_zoneItemsKey, ZoneItem.fromJson);
+  Future<List<ZoneItem>?> loadUserProducts() async {
+    final items = await _loadList(_userProductsKey, ZoneItem.fromJson);
     if (items == null) {
       return null;
     }
@@ -41,23 +42,27 @@ class CleaningDataRepository {
           item,
     ];
     if (changed) {
-      await saveZoneItems(enrichedItems);
+      await saveUserProducts(enrichedItems);
     }
     return enrichedItems;
   }
 
-  Future<void> saveZoneItems(List<ZoneItem> items) async {
-    await _saveList(_zoneItemsKey, [for (final item in items) item.toJson()]);
+  Future<void> saveUserProducts(List<ZoneItem> products) async {
+    await _saveList(
+      _userProductsKey,
+      [for (final product in products) product.toJson()],
+    );
   }
 
-  Future<List<CleaningRecord>?> loadRecords() async {
-    return _loadList(_recordsKey, CleaningRecord.fromJson);
+  Future<List<CareRecord>?> loadCareRecords() async {
+    return _loadList(_careRecordsKey, CareRecord.fromJson);
   }
 
-  Future<void> saveRecords(List<CleaningRecord> records) async {
-    await _saveList(_recordsKey, [
-      for (final record in records) record.toJson(),
-    ]);
+  Future<void> saveCareRecords(List<CareRecord> records) async {
+    await _saveList(
+      _careRecordsKey,
+      [for (final record in records) record.toJson()],
+    );
   }
 
   Future<List<CommunityPost>?> loadCommunityPosts() async {
@@ -66,7 +71,9 @@ class CleaningDataRepository {
 
   Future<void> saveCommunityPosts(List<CommunityPost> posts) async {
     await _saveList(
-        _communityPostsKey, [for (final post in posts) post.toJson()]);
+      _communityPostsKey,
+      [for (final post in posts) post.toJson()],
+    );
   }
 
   Future<List<T>?> _loadList<T>(
@@ -86,7 +93,10 @@ class CleaningDataRepository {
     ];
   }
 
-  Future<void> _saveList(String key, List<Map<String, Object?>> items) async {
+  Future<void> _saveList(
+    String key,
+    List<Map<String, Object?>> items,
+  ) async {
     final preferences = await SharedPreferences.getInstance();
     await preferences.setString(key, jsonEncode(items));
   }

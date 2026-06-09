@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../repositories/cleaning_data_repository.dart';
-import '../repositories/cleaning_task_repository.dart';
+import '../repositories/product_data_repository.dart';
 import '../repositories/product_catalog_repository.dart';
 import 'community_screen.dart';
 import 'history_screen.dart';
@@ -10,14 +9,12 @@ import 'zones_screen.dart';
 
 class MainShell extends StatefulWidget {
   const MainShell({
-    required this.taskRepository,
     required this.dataRepository,
     required this.catalogRepository,
     super.key,
   });
 
-  final CleaningTaskRepository taskRepository;
-  final CleaningDataRepository dataRepository;
+  final ProductDataRepository dataRepository;
   final ProductCatalogRepository catalogRepository;
 
   @override
