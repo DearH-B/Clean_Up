@@ -24,7 +24,8 @@ class ZoneDetailScreen extends StatefulWidget {
 
   final ProductSpace zone;
   final List<ZoneItem> items;
-  final void Function(String zoneId, List<ZoneItem> items) onItemsChanged;
+  final Future<void> Function(String spaceId, List<ZoneItem> items)
+      onItemsChanged;
   final ValueChanged<String> onDeleteZone;
   final ProductDataRepository dataRepository;
   final ProductCatalogRepository catalogRepository;
@@ -103,9 +104,11 @@ class _ZoneDetailScreenState extends State<ZoneDetailScreen> {
       MaterialPageRoute<void>(
         builder: (context) => ZoneItemDetailScreen(
           item: item,
+          spaceId: widget.zone.id,
+          spaceName: widget.zone.name,
           dataRepository: widget.dataRepository,
           catalogRepository: widget.catalogRepository,
-          onItemUpdated: (updatedItem) {
+          onItemUpdated: (updatedItem) async {
             final index = _items.indexWhere(
               (candidate) => candidate.id == updatedItem.id,
             );
@@ -115,7 +118,7 @@ class _ZoneDetailScreenState extends State<ZoneDetailScreen> {
             setState(() {
               _items[index] = updatedItem;
             });
-            widget.onItemsChanged(widget.zone.id, _items);
+            await widget.onItemsChanged(widget.zone.id, _items);
           },
         ),
       ),
@@ -140,7 +143,7 @@ class _ZoneDetailScreenState extends State<ZoneDetailScreen> {
     setState(() {
       _items.add(item);
     });
-    widget.onItemsChanged(widget.zone.id, _items);
+    await widget.onItemsChanged(widget.zone.id, _items);
   }
 
   Future<void> _confirmDeleteZone() async {

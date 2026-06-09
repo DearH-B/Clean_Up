@@ -12,6 +12,8 @@ import '../repositories/product_catalog_repository.dart';
 class ZoneItemDetailScreen extends StatefulWidget {
   const ZoneItemDetailScreen({
     required this.item,
+    required this.spaceId,
+    required this.spaceName,
     required this.dataRepository,
     required this.catalogRepository,
     this.onItemUpdated,
@@ -19,9 +21,11 @@ class ZoneItemDetailScreen extends StatefulWidget {
   });
 
   final ZoneItem item;
+  final String spaceId;
+  final String spaceName;
   final ProductDataRepository dataRepository;
   final ProductCatalogRepository catalogRepository;
-  final ValueChanged<ZoneItem>? onItemUpdated;
+  final Future<void> Function(ZoneItem item)? onItemUpdated;
 
   @override
   State<ZoneItemDetailScreen> createState() => _ZoneItemDetailScreenState();
@@ -228,7 +232,7 @@ class _ZoneItemDetailScreenState extends State<ZoneItemDetailScreen> {
     setState(() {
       _item = updatedItem;
     });
-    widget.onItemUpdated?.call(updatedItem);
+    await widget.onItemUpdated?.call(updatedItem);
   }
 
   Future<void> _openGuideVideo(String url) async {
@@ -267,10 +271,11 @@ class _ZoneItemDetailScreenState extends State<ZoneItemDetailScreen> {
       CareRecord(
         id: 'record-${now.microsecondsSinceEpoch}',
         title: '${_item.name} 관리 완료',
-        spaceName: _item.name,
+        spaceName: widget.spaceName,
         completedAt: now,
         minutes: _item.estimatedMinutes,
         productId: _item.id,
+        spaceId: widget.spaceId,
       ),
       ...(savedRecords ?? const <CareRecord>[]),
     ];
@@ -283,7 +288,10 @@ class _ZoneItemDetailScreenState extends State<ZoneItemDetailScreen> {
     setState(() {
       _item = updatedItem;
     });
-    widget.onItemUpdated?.call(updatedItem);
+    await widget.onItemUpdated?.call(updatedItem);
+    if (!mounted) {
+      return;
+    }
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(content: Text('관리 기록에 저장했어요. 다음 관리일도 갱신됐어요.')),
     );

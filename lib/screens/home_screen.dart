@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 
 import '../models/care_record.dart';
+import '../models/product_space.dart';
 import '../models/zone_item.dart';
 import '../repositories/product_data_repository.dart';
 import '../repositories/product_catalog_repository.dart';
@@ -28,6 +29,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   List<ZoneItem> _items = [];
+  List<ProductSpace> _spaces = [];
   List<CareRecord> _records = [];
   bool _isLoading = true;
 
@@ -109,6 +111,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Future<void> _loadData() async {
     final items = await widget.dataRepository.loadUserProducts();
+    final spaces = await widget.dataRepository.loadSpaces();
     final records = await widget.dataRepository.loadCareRecords();
     if (!mounted) {
       return;
@@ -116,16 +119,20 @@ class _HomeScreenState extends State<HomeScreen> {
 
     setState(() {
       _items = items ?? [];
+      _spaces = spaces ?? [];
       _records = records ?? [];
       _isLoading = false;
     });
   }
 
   Future<void> _openItem(ZoneItem item) async {
+    final space = _spaceFor(item);
     await Navigator.of(context).push(
       MaterialPageRoute<void>(
         builder: (context) => ZoneItemDetailScreen(
           item: item,
+          spaceId: space?.id ?? item.zoneId,
+          spaceName: space?.name ?? '미지정 공간',
           dataRepository: widget.dataRepository,
           catalogRepository: widget.catalogRepository,
           onItemUpdated: _updateItem,
@@ -133,6 +140,15 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
     );
     await _loadData();
+  }
+
+  ProductSpace? _spaceFor(ZoneItem item) {
+    for (final space in _spaces) {
+      if (space.id == item.zoneId) {
+        return space;
+      }
+    }
+    return null;
   }
 
   Future<void> _updateItem(ZoneItem updatedItem) async {

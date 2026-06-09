@@ -34,7 +34,7 @@ class ProductDataRepository {
     var changed = false;
     final enrichedItems = [
       for (final item in items)
-        if (item.sourceTitle == null &&
+        if (item.catalogProductId == null &&
             item.manufacturer?.isNotEmpty == true &&
             item.modelName?.isNotEmpty == true)
           _enrichCatalogItem(item, () => changed = true)
@@ -111,6 +111,9 @@ class ProductDataRepository {
       return item;
     }
     markChanged();
+    if (item.sourceTitle != null) {
+      return item.copyWith(catalogProductId: entry.id);
+    }
     return entry.mergeInto(item);
   }
 }

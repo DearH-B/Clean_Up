@@ -6,6 +6,7 @@ class CareRecord {
     required this.completedAt,
     required this.minutes,
     this.productId,
+    this.spaceId,
   });
 
   final String id;
@@ -14,6 +15,7 @@ class CareRecord {
   final DateTime completedAt;
   final int minutes;
   final String? productId;
+  final String? spaceId;
 
   factory CareRecord.fromJson(Map<String, Object?> json) {
     return CareRecord(
@@ -24,6 +26,7 @@ class CareRecord {
       completedAt: DateTime.parse(json['completedAt'] as String),
       minutes: json['minutes'] as int,
       productId: json['productId'] as String?,
+      spaceId: json['spaceId'] as String?,
     );
   }
 
@@ -35,6 +38,7 @@ class CareRecord {
       'completedAt': completedAt.toIso8601String(),
       'minutes': minutes,
       'productId': productId,
+      'spaceId': spaceId,
     };
   }
 }

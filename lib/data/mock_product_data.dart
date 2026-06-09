@@ -40,6 +40,7 @@ final careRecords = <CareRecord>[
     completedAt: DateTime(2026, 6, 5, 8, 30),
     minutes: 18,
     productId: 'food-waste-processor',
+    spaceId: 'zone-1',
   ),
   CareRecord(
     id: 'record-2',
@@ -48,6 +49,7 @@ final careRecords = <CareRecord>[
     completedAt: DateTime(2026, 6, 4, 21, 10),
     minutes: 15,
     productId: 'fridge',
+    spaceId: 'zone-1',
   ),
   CareRecord(
     id: 'record-3',
@@ -56,5 +58,6 @@ final careRecords = <CareRecord>[
     completedAt: DateTime(2026, 6, 3, 19, 45),
     minutes: 20,
     productId: 'sofa',
+    spaceId: 'zone-2',
   ),
 ];

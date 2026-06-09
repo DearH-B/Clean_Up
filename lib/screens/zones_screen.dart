@@ -138,15 +138,18 @@ class _ZonesScreenState extends State<ZonesScreen> {
     }
   }
 
-  void _updateZoneItems(String zoneId, List<ZoneItem> updatedItems) {
+  Future<void> _updateZoneItems(
+    String spaceId,
+    List<ZoneItem> updatedItems,
+  ) async {
     setState(() {
       _items = [
         for (final item in _items)
-          if (item.zoneId != zoneId) item,
+          if (item.zoneId != spaceId) item,
         ...updatedItems,
       ];
     });
-    widget.dataRepository.saveUserProducts(_items);
+    await widget.dataRepository.saveUserProducts(_items);
   }
 
   ProductSpace _spaceWithProgress(ProductSpace space) {

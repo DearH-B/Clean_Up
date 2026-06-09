@@ -1,5 +1,8 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:clean_up/app.dart';
 import 'package:clean_up/data/mock_product_data.dart';
@@ -40,6 +43,56 @@ void main() {
     expect(restored.productSpecs, contains('처리용량: 1kg'));
   });
 
+  test('이전 공간과 관리 기록 JSON을 새 모델로 읽을 수 있다', () async {
+    SharedPreferences.setMockInitialValues({
+      'zones_v1': jsonEncode([
+        {
+          'id': 'legacy-space',
+          'name': '주방',
+          'description': '이전 버전 공간',
+          'taskCount': 3,
+          'completedTaskCount': 2,
+        },
+      ]),
+      'cleaning_records_v1': jsonEncode([
+        {
+          'id': 'legacy-record',
+          'title': '냉장고 청소 완료',
+          'zoneName': '주방',
+          'completedAt': '2026-06-01T10:00:00.000',
+          'minutes': 10,
+        },
+      ]),
+    });
+    const repository = ProductDataRepository();
+
+    final spaces = await repository.loadSpaces();
+    final records = await repository.loadCareRecords();
+
+    expect(spaces!.single.productCount, 3);
+    expect(spaces.single.identifiedProductCount, 2);
+    expect(records!.single.spaceName, '주방');
+    expect(records.single.productId, isNull);
+    expect(records.single.spaceId, isNull);
+  });
+
+  test('기존 정확 모델은 사용자 정보를 유지하며 카탈로그 ID를 연결한다', () async {
+    final legacyProduct = productCatalog.first
+        .toZoneItem(id: 'legacy-product', zoneId: 'zone-1')
+        .toJson()
+      ..remove('catalogProductId')
+      ..['sourceTitle'] = '이전 버전에서 저장한 출처';
+    SharedPreferences.setMockInitialValues({
+      'zone_items_v1': jsonEncode([legacyProduct]),
+    });
+    const repository = ProductDataRepository();
+
+    final products = await repository.loadUserProducts();
+
+    expect(products!.single.catalogProductId, 'eco-up-dcs-hm4ag-w');
+    expect(products.single.sourceTitle, '이전 버전에서 저장한 출처');
+  });
+
   testWidgets('제품 관리형 앱의 주요 화면을 표시한다', (tester) async {
     seedSampleData(dataRepository);
     await pumpApp(tester, dataRepository);
@@ -68,6 +121,26 @@ void main() {
     expect(find.text('에코업 음식물처리기'), findsOneWidget);
     expect(find.text('냉장고'), findsOneWidget);
     expect(find.text('제품 추가'), findsOneWidget);
+  });
+
+  testWidgets('관리 완료 기록에는 제품명이 아닌 실제 공간이 저장된다', (tester) async {
+    seedSampleData(dataRepository);
+    await pumpApp(tester, dataRepository);
+
+    await tester.tap(find.text('내 제품'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('주방'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('냉장고'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.widgetWithText(FilledButton, '완료'));
+    await tester.pumpAndSettle();
+
+    final records = await dataRepository.loadCareRecords();
+    expect(records!.first.title, '냉장고 관리 완료');
+    expect(records.first.spaceName, '주방');
+    expect(records.first.spaceId, 'zone-1');
+    expect(records.first.productId, 'kitchen-refrigerator');
   });
 
   testWidgets('모델 검색으로 카탈로그 제품을 등록할 수 있다', (tester) async {
