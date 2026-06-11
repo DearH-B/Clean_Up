@@ -9,10 +9,12 @@ import 'package:clean_up/data/mock_product_data.dart';
 import 'package:clean_up/data/mock_zone_items.dart';
 import 'package:clean_up/data/product_catalog.dart';
 import 'package:clean_up/data/product_care_templates.dart';
+import 'package:clean_up/data/product_consumable_defaults.dart';
 import 'package:clean_up/data/visual_product_candidates.dart';
 import 'package:clean_up/models/care_record.dart';
 import 'package:clean_up/models/product_space.dart';
 import 'package:clean_up/models/product_search_request.dart';
+import 'package:clean_up/models/product_consumable.dart';
 import 'package:clean_up/models/zone_item.dart';
 import 'package:clean_up/repositories/product_catalog_repository.dart';
 import 'package:clean_up/repositories/product_data_repository.dart';
@@ -222,6 +224,63 @@ void main() {
     expect(restored.nextCheckAt, DateTime(2026, 9, 11));
   });
 
+  test('제품군 기본 소모품은 호환 수준과 교체 주기를 제공한다', () {
+    final refrigerator = defaultConsumablesFor('냉장고');
+    final airPurifier = defaultConsumablesFor('공기청정기');
+
+    expect(refrigerator, hasLength(2));
+    expect(refrigerator.first.compatibilityLabel, contains('모델'));
+    expect(refrigerator.first.replacementDays, 180);
+    expect(airPurifier.single.name, contains('필터'));
+    expect(airPurifier.single.partNumber, isNull);
+  });
+
+  test('소모품 교체 기록은 제품의 마지막 청소 기록으로 계산하지 않는다', () {
+    final records = [
+      CareRecord(
+        id: 'replacement',
+        title: '냉장고 정수 필터 교체',
+        spaceName: '주방',
+        completedAt: DateTime(2026, 6, 11),
+        minutes: 0,
+        type: CareRecordType.filterReplacement,
+        productId: 'fridge',
+        consumableId: 'water-filter',
+      ),
+      CareRecord(
+        id: 'cleaning',
+        title: '냉장고 청소',
+        spaceName: '주방',
+        completedAt: DateTime(2026, 6, 1),
+        minutes: 0,
+        type: CareRecordType.cleaning,
+        productId: 'fridge',
+      ),
+    ];
+
+    expect(
+      latestScheduledCareRecord(records, 'fridge')!.id,
+      'cleaning',
+    );
+  });
+
+  test('소모품 교체일과 다음 교체일은 저장 후 유지된다', () {
+    final replacedAt = DateTime(2026, 6, 11);
+    final consumable = const ProductConsumable(
+      id: 'filter',
+      name: '집진 필터',
+      type: ConsumableType.filter,
+      replacementDays: 180,
+      compatibilityLabel: '모델별 확인 필요',
+    ).markReplaced(replacedAt);
+
+    final restored = ProductConsumable.fromJson(consumable.toJson());
+
+    expect(restored.lastReplacedAt, replacedAt);
+    expect(
+        restored.nextReplacementAt, replacedAt.add(const Duration(days: 180)));
+  });
+
   test('기존 정확 모델은 사용자 정보를 유지하며 카탈로그 ID를 연결한다', () async {
     final legacyProduct = productCatalog.first
         .toZoneItem(id: 'legacy-product', zoneId: 'zone-1')
@@ -316,7 +375,7 @@ void main() {
     expect(find.text('소모품'), findsOneWidget);
     expect(find.text('제품 정보'), findsOneWidget);
 
-    await tester.tap(find.widgetWithText(FilledButton, '완료'));
+    await tester.tap(find.widgetWithText(FilledButton, '오늘 청소'));
     await tester.pumpAndSettle();
 
     final records = await dataRepository.loadCareRecords();
@@ -341,15 +400,10 @@ void main() {
     await tester.tap(find.widgetWithText(FilledButton, '기록 추가'));
     await tester.pumpAndSettle();
 
+    await tester.tap(find.text('상세 내용 추가'));
+    await tester.pumpAndSettle();
     await tester.tap(find.text('필터 교체'));
     await tester.pumpAndSettle();
-    final suppliesField =
-        find.byKey(const ValueKey('care-record-supplies'));
-    await tester.ensureVisible(suppliesField);
-    await tester.enterText(suppliesField, '교체 필터, 마른 천');
-    final resultField = find.byKey(const ValueKey('care-record-result'));
-    await tester.ensureVisible(resultField);
-    await tester.enterText(resultField, '필터 상태 정상');
     final noteField = find.byKey(const ValueKey('care-record-note'));
     await tester.ensureVisible(noteField);
     await tester.enterText(noteField, '다음에는 안쪽 먼지도 확인');
@@ -364,9 +418,41 @@ void main() {
     final saved = records!.first;
     expect(saved.type, CareRecordType.filterReplacement);
     expect(saved.productId, 'kitchen-refrigerator');
-    expect(saved.usedSupplies, ['교체 필터', '마른 천']);
-    expect(saved.result, '필터 상태 정상');
+    expect(saved.usedSupplies, isEmpty);
+    expect(saved.result, isNull);
     expect(saved.note, '다음에는 안쪽 먼지도 확인');
+  });
+
+  testWidgets('소모품 교체는 별도 교체 기록과 다음 교체일을 저장한다', (tester) async {
+    seedSampleData(dataRepository);
+    await pumpApp(tester, dataRepository);
+
+    await tester.tap(find.text('내 제품'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('주방'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('냉장고'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.widgetWithText(Tab, '소모품'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('정수 필터'), findsOneWidget);
+    await tester.tap(find.text('교체했어요').first);
+    await tester.pumpAndSettle();
+
+    final products = await dataRepository.loadUserProducts();
+    final refrigerator = products!.firstWhere(
+      (item) => item.id == 'kitchen-refrigerator',
+    );
+    final filter = refrigerator.consumables.firstWhere(
+      (item) => item.id == 'refrigerator-water-filter',
+    );
+    expect(filter.lastReplacedAt, isNotNull);
+    expect(filter.nextReplacementAt, isNotNull);
+
+    final records = await dataRepository.loadCareRecords();
+    expect(records!.first.type, CareRecordType.filterReplacement);
+    expect(records.first.consumableId, 'refrigerator-water-filter');
   });
 
   testWidgets('전체 기록에서 유형으로 필터하고 기록을 삭제할 수 있다', (tester) async {

@@ -4,6 +4,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../data/product_catalog.dart';
 import '../data/product_care_templates.dart';
+import '../data/product_consumable_defaults.dart';
 import '../models/care_record.dart';
 import '../models/product_space.dart';
 import '../models/product_search_request.dart';
@@ -126,6 +127,14 @@ class ProductDataRepository {
   }
 
   ZoneItem _upgradeProduct(ZoneItem item, void Function() markChanged) {
+    if (item.consumables.isEmpty) {
+      final defaults = defaultConsumablesFor(item.name);
+      if (defaults.isNotEmpty) {
+        markChanged();
+        item = item.copyWith(consumables: defaults);
+      }
+    }
+
     if (item.catalogProductId == null &&
         item.manufacturer?.isNotEmpty == true &&
         item.modelName?.isNotEmpty == true) {
@@ -160,6 +169,7 @@ class ProductDataRepository {
         .copyWith(
           lastCleanedAt: item.lastCleanedAt,
           nextDueAt: item.nextDueAt,
+          consumables: item.consumables,
         );
   }
 

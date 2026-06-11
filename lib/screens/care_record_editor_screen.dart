@@ -30,6 +30,7 @@ class _CareRecordEditorScreenState extends State<CareRecordEditorScreen> {
   late final TextEditingController _symptomController;
   late final TextEditingController _resultController;
   late final TextEditingController _noteController;
+  bool _showDetails = false;
 
   bool get _isEditing => widget.record != null;
 
@@ -47,6 +48,7 @@ class _CareRecordEditorScreenState extends State<CareRecordEditorScreen> {
     _symptomController = TextEditingController(text: record?.symptom ?? '');
     _resultController = TextEditingController(text: record?.result ?? '');
     _noteController = TextEditingController(text: record?.note ?? '');
+    _showDetails = record != null && _hasDetailedContent(record);
   }
 
   @override
@@ -74,124 +76,116 @@ class _CareRecordEditorScreenState extends State<CareRecordEditorScreen> {
             spaceName: widget.spaceName,
           ),
           const SizedBox(height: 22),
-          Text('기록 유형', style: Theme.of(context).textTheme.titleMedium),
-          const SizedBox(height: 10),
-          Wrap(
-            spacing: 8,
-            runSpacing: 8,
-            children: [
-              for (final type in CareRecordType.values)
-                ChoiceChip(
-                  label: Text(type.label),
-                  selected: _type == type,
-                  onSelected: (_) => setState(() => _type = type),
-                ),
-            ],
-          ),
-          const SizedBox(height: 20),
           _DateTimeField(
-            label: '관리한 날짜와 시간',
+            label: '언제 했나요?',
             value: _completedAt,
             onTap: _pickCompletedAt,
-          ),
-          const SizedBox(height: 14),
-          DropdownMenu<int>(
-            width: double.infinity,
-            initialSelection: _minutes,
-            label: const Text('소요 시간'),
-            dropdownMenuEntries: [
-              for (final minutes in minuteOptions)
-                DropdownMenuEntry(
-                  value: minutes,
-                  label: minutes == 0
-                      ? '기록하지 않음'
-                      : minutes >= 60
-                          ? '$minutes분 이상'
-                          : '$minutes분',
-                ),
-            ],
-            onSelected: (value) {
-              if (value != null) {
-                setState(() => _minutes = value);
-              }
-            },
-          ),
-          const SizedBox(height: 14),
-          TextField(
-            key: const ValueKey('care-record-supplies'),
-            controller: _suppliesController,
-            textInputAction: TextInputAction.next,
-            decoration: const InputDecoration(
-              labelText: '사용한 용품 (선택)',
-              hintText: '예: 중성세제, 극세사 천',
-              prefixIcon: Icon(Icons.cleaning_services_outlined),
-            ),
-          ),
-          const SizedBox(height: 14),
-          if (_type == CareRecordType.issue ||
-              _type == CareRecordType.service) ...[
-            TextField(
-              key: const ValueKey('care-record-symptom'),
-              controller: _symptomController,
-              minLines: 2,
-              maxLines: 4,
-              decoration: const InputDecoration(
-                labelText: '문제 증상',
-                hintText: '언제부터 어떤 문제가 있었나요?',
-                alignLabelWithHint: true,
-              ),
-            ),
-            const SizedBox(height: 14),
-          ],
-          TextField(
-            key: const ValueKey('care-record-result'),
-            controller: _resultController,
-            minLines: 2,
-            maxLines: 4,
-            decoration: const InputDecoration(
-              labelText: '관리 결과 (선택)',
-              hintText: '관리 후 달라진 점을 적어두세요',
-              alignLabelWithHint: true,
-            ),
           ),
           const SizedBox(height: 14),
           TextField(
             key: const ValueKey('care-record-note'),
             controller: _noteController,
-            minLines: 3,
-            maxLines: 6,
+            minLines: 2,
+            maxLines: 4,
             decoration: const InputDecoration(
               labelText: '메모 (선택)',
-              hintText: '다음 관리 때 기억할 내용을 남겨두세요',
+              hintText: '기억할 내용이 있을 때만 적어두세요',
               alignLabelWithHint: true,
             ),
           ),
           const SizedBox(height: 14),
-          _OptionalDateField(
-            value: _nextCheckAt,
-            onTap: _pickNextCheckAt,
-            onClear: _nextCheckAt == null
-                ? null
-                : () => setState(() => _nextCheckAt = null),
-          ),
-          const SizedBox(height: 20),
-          Container(
-            padding: const EdgeInsets.all(14),
-            decoration: BoxDecoration(
-              color: Theme.of(context).colorScheme.surfaceContainerLow,
-              borderRadius: BorderRadius.circular(8),
+          OutlinedButton.icon(
+            onPressed: () => setState(() => _showDetails = !_showDetails),
+            icon: Icon(
+              _showDetails ? Icons.expand_less : Icons.tune_outlined,
             ),
-            child: const Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
+            label: Text(_showDetails ? '상세 내용 접기' : '상세 내용 추가'),
+          ),
+          if (_showDetails) ...[
+            const SizedBox(height: 18),
+            Text('기록 유형', style: Theme.of(context).textTheme.titleMedium),
+            const SizedBox(height: 10),
+            Wrap(
+              spacing: 8,
+              runSpacing: 8,
               children: [
-                Icon(Icons.photo_camera_outlined),
-                SizedBox(width: 10),
-                Expanded(
-                  child: Text('사진 첨부는 기기 파일 보관 정책을 정한 뒤 Phase 4 후속으로 연결합니다.'),
-                ),
+                for (final type in CareRecordType.values)
+                  ChoiceChip(
+                    label: Text(type.label),
+                    selected: _type == type,
+                    onSelected: (_) => setState(() => _type = type),
+                  ),
               ],
             ),
-          ),
+            const SizedBox(height: 14),
+            DropdownMenu<int>(
+              width: double.infinity,
+              initialSelection: _minutes,
+              label: const Text('소요 시간'),
+              dropdownMenuEntries: [
+                for (final minutes in minuteOptions)
+                  DropdownMenuEntry(
+                    value: minutes,
+                    label: minutes == 0
+                        ? '기록하지 않음'
+                        : minutes >= 60
+                            ? '$minutes분 이상'
+                            : '$minutes분',
+                  ),
+              ],
+              onSelected: (value) {
+                if (value != null) {
+                  setState(() => _minutes = value);
+                }
+              },
+            ),
+            const SizedBox(height: 14),
+            TextField(
+              key: const ValueKey('care-record-supplies'),
+              controller: _suppliesController,
+              textInputAction: TextInputAction.next,
+              decoration: const InputDecoration(
+                labelText: '사용한 용품 (선택)',
+                hintText: '예: 중성세제, 극세사 천',
+                prefixIcon: Icon(Icons.cleaning_services_outlined),
+              ),
+            ),
+            const SizedBox(height: 14),
+            if (_type == CareRecordType.issue ||
+                _type == CareRecordType.service) ...[
+              TextField(
+                key: const ValueKey('care-record-symptom'),
+                controller: _symptomController,
+                minLines: 2,
+                maxLines: 4,
+                decoration: const InputDecoration(
+                  labelText: '문제 증상',
+                  hintText: '언제부터 어떤 문제가 있었나요?',
+                  alignLabelWithHint: true,
+                ),
+              ),
+              const SizedBox(height: 14),
+            ],
+            TextField(
+              key: const ValueKey('care-record-result'),
+              controller: _resultController,
+              minLines: 2,
+              maxLines: 4,
+              decoration: const InputDecoration(
+                labelText: '관리 결과 (선택)',
+                hintText: '관리 후 달라진 점을 적어두세요',
+                alignLabelWithHint: true,
+              ),
+            ),
+            const SizedBox(height: 14),
+            _OptionalDateField(
+              value: _nextCheckAt,
+              onTap: _pickNextCheckAt,
+              onClear: _nextCheckAt == null
+                  ? null
+                  : () => setState(() => _nextCheckAt = null),
+            ),
+          ],
         ],
       ),
       bottomNavigationBar: SafeArea(
@@ -281,6 +275,15 @@ class _CareRecordEditorScreenState extends State<CareRecordEditorScreen> {
     );
     Navigator.of(context).pop(record);
   }
+}
+
+bool _hasDetailedContent(CareRecord record) {
+  return record.type != CareRecordType.cleaning ||
+      record.minutes > 0 ||
+      record.usedSupplies.isNotEmpty ||
+      record.symptom?.isNotEmpty == true ||
+      record.result?.isNotEmpty == true ||
+      record.nextCheckAt != null;
 }
 
 class _ProductSummary extends StatelessWidget {

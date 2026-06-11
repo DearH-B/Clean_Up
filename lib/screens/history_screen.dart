@@ -47,10 +47,6 @@ class _HistoryScreenState extends State<HistoryScreen> {
   @override
   Widget build(BuildContext context) {
     final filtered = _filteredRecords;
-    final totalMinutes = filtered.fold<int>(
-      0,
-      (sum, record) => sum + record.minutes,
-    );
     final groups = _groupByMonth(filtered);
 
     return RefreshIndicator(
@@ -64,7 +60,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
           const SizedBox(height: 20),
           _HistorySummary(
             count: filtered.length,
-            totalMinutes: totalMinutes,
+            latestAt: filtered.isEmpty ? null : filtered.first.completedAt,
           ),
           const SizedBox(height: 18),
           TextField(
@@ -376,11 +372,11 @@ class _HistoryScreenState extends State<HistoryScreen> {
 class _HistorySummary extends StatelessWidget {
   const _HistorySummary({
     required this.count,
-    required this.totalMinutes,
+    required this.latestAt,
   });
 
   final int count;
-  final int totalMinutes;
+  final DateTime? latestAt;
 
   @override
   Widget build(BuildContext context) {
@@ -405,9 +401,7 @@ class _HistorySummary extends StatelessWidget {
                 Text(
                   count == 0
                       ? '제품 상세에서 첫 관리 기록을 남겨보세요'
-                      : totalMinutes == 0
-                          ? '시간을 기록하지 않은 관리도 함께 보여요'
-                          : '기록된 관리 시간은 총 $totalMinutes분이에요',
+                      : '최근 기록 ${_formatDate(latestAt!)}',
                 ),
               ],
             ),

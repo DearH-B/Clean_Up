@@ -236,6 +236,7 @@ class ProductCatalogEntry {
       nextDueAt: item.nextDueAt,
       recommendedSupplies: catalogItem.recommendedSupplies,
       recommendedProducts: catalogItem.recommendedProducts,
+      consumables: item.consumables,
     );
   }
 

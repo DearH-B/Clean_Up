@@ -4,12 +4,15 @@ import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../data/product_catalog.dart';
+import '../data/product_consumable_defaults.dart';
 import '../models/catalog_metadata.dart';
 import '../models/care_record.dart';
+import '../models/product_consumable.dart';
 import '../models/zone_item.dart';
 import '../repositories/product_data_repository.dart';
 import '../repositories/product_catalog_repository.dart';
 import 'care_record_editor_screen.dart';
+import 'consumable_editor_screen.dart';
 
 class ZoneItemDetailScreen extends StatefulWidget {
   const ZoneItemDetailScreen({
@@ -40,7 +43,17 @@ class _ZoneItemDetailScreenState extends State<ZoneItemDetailScreen> {
   @override
   void initState() {
     super.initState();
-    _item = widget.item;
+    final defaults = widget.item.consumables.isEmpty
+        ? defaultConsumablesFor(widget.item.name)
+        : const <ProductConsumable>[];
+    _item = defaults.isEmpty
+        ? widget.item
+        : widget.item.copyWith(consumables: defaults);
+    if (defaults.isNotEmpty) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        unawaited(widget.onItemUpdated?.call(_item));
+      });
+    }
     unawaited(_loadProductRecords());
   }
 
@@ -171,8 +184,40 @@ class _ZoneItemDetailScreenState extends State<ZoneItemDetailScreen> {
     return ListView(
       padding: const EdgeInsets.fromLTRB(16, 18, 16, 32),
       children: [
+        Row(
+          children: [
+            Expanded(
+              child: Text(
+                '교체·보충 관리',
+                style: Theme.of(context).textTheme.titleLarge,
+              ),
+            ),
+            IconButton(
+              tooltip: '소모품 추가',
+              onPressed: _openConsumableEditor,
+              icon: const Icon(Icons.add),
+            ),
+          ],
+        ),
+        const SizedBox(height: 6),
+        const Text('정확한 부품 번호와 호환 여부는 제품 설명서를 우선 확인하세요.'),
+        const SizedBox(height: 14),
+        if (_item.consumables.isEmpty)
+          _EmptyConsumables(onAdd: _openConsumableEditor)
+        else
+          for (final consumable in _item.consumables)
+            _ConsumableCard(
+              consumable: consumable,
+              onReplaced: () => _markConsumableReplaced(consumable),
+              onEdit: () => _openConsumableEditor(consumable: consumable),
+              onDelete: () => _confirmDeleteConsumable(consumable),
+              onPurchase: consumable.purchaseUrl == null
+                  ? null
+                  : () => _openProduct(consumable.purchaseUrl!),
+            ),
+        const SizedBox(height: 22),
         _Section(
-          title: '필요한 용품',
+          title: '청소에 필요한 용품',
           icon: Icons.inventory_2_outlined,
           children: [
             for (final supply in _item.supplies)
@@ -369,8 +414,117 @@ class _ZoneItemDetailScreenState extends State<ZoneItemDetailScreen> {
       return;
     }
     ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('관리 기록에 저장했어요. 다음 관리일도 갱신됐어요.')),
+      const SnackBar(content: Text('오늘 청소한 날짜를 기록했어요.')),
     );
+  }
+
+  Future<void> _openConsumableEditor({
+    ProductConsumable? consumable,
+  }) async {
+    final updated = await Navigator.of(context).push<ProductConsumable>(
+      MaterialPageRoute(
+        builder: (context) => ConsumableEditorScreen(
+          consumable: consumable,
+        ),
+      ),
+    );
+    if (updated == null || !mounted) {
+      return;
+    }
+    final exists = _item.consumables.any((item) => item.id == updated.id);
+    final consumables = exists
+        ? [
+            for (final item in _item.consumables)
+              if (item.id == updated.id) updated else item,
+          ]
+        : [..._item.consumables, updated];
+    final updatedItem = _item.copyWith(consumables: consumables);
+    await widget.onItemUpdated?.call(updatedItem);
+    if (!mounted) {
+      return;
+    }
+    setState(() => _item = updatedItem);
+  }
+
+  Future<void> _markConsumableReplaced(
+    ProductConsumable consumable,
+  ) async {
+    final now = DateTime.now();
+    final replaced = consumable.markReplaced(now);
+    final updatedItem = _item.copyWith(
+      consumables: [
+        for (final item in _item.consumables)
+          if (item.id == consumable.id) replaced else item,
+      ],
+    );
+    final savedRecords = await widget.dataRepository.loadCareRecords() ?? [];
+    final record = CareRecord(
+      id: 'record-${now.microsecondsSinceEpoch}',
+      title: '${_item.displayName} ${consumable.name} 교체',
+      spaceName: widget.spaceName,
+      completedAt: now,
+      minutes: 0,
+      type: consumable.type == ConsumableType.filter
+          ? CareRecordType.filterReplacement
+          : CareRecordType.consumableReplacement,
+      productId: _item.id,
+      productName: _item.displayName,
+      consumableId: consumable.id,
+      spaceId: widget.spaceId,
+      usedSupplies: [consumable.name],
+      nextCheckAt: replaced.nextReplacementAt,
+    );
+    final records = [record, ...savedRecords];
+    await widget.dataRepository.saveCareRecords(records);
+    await widget.onItemUpdated?.call(updatedItem);
+    if (!mounted) {
+      return;
+    }
+    setState(() {
+      _item = updatedItem;
+      _productRecords = [record, ..._productRecords];
+    });
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text('${consumable.name} 교체일을 기록했어요.')),
+    );
+  }
+
+  Future<void> _confirmDeleteConsumable(
+    ProductConsumable consumable,
+  ) async {
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('소모품을 삭제할까요?'),
+        content: Text(
+          '${consumable.name} 관리 항목을 삭제해도 이전 교체 기록은 유지됩니다.',
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(false),
+            child: const Text('취소'),
+          ),
+          FilledButton(
+            onPressed: () => Navigator.of(context).pop(true),
+            child: const Text('삭제'),
+          ),
+        ],
+      ),
+    );
+    if (confirmed != true) {
+      return;
+    }
+    final updatedItem = _item.copyWith(
+      consumables: [
+        for (final item in _item.consumables)
+          if (item.id != consumable.id) item,
+      ],
+    );
+    await widget.onItemUpdated?.call(updatedItem);
+    if (!mounted) {
+      return;
+    }
+    setState(() => _item = updatedItem);
   }
 
   Future<void> _openRecordEditor({CareRecord? record}) async {
@@ -741,6 +895,180 @@ IconData _recordTypeIcon(CareRecordType type) {
   };
 }
 
+class _EmptyConsumables extends StatelessWidget {
+  const _EmptyConsumables({required this.onAdd});
+
+  final VoidCallback onAdd;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(18),
+      decoration: BoxDecoration(
+        color: Theme.of(context).colorScheme.surfaceContainerLow,
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: Column(
+        children: [
+          const Icon(Icons.filter_alt_outlined, size: 34),
+          const SizedBox(height: 8),
+          const Text(
+            '등록된 소모품이 없어요',
+            style: TextStyle(fontWeight: FontWeight.w800),
+          ),
+          const SizedBox(height: 5),
+          const Text(
+            '필터나 세척제의 이름과 교체 주기를 직접 추가할 수 있어요.',
+            textAlign: TextAlign.center,
+          ),
+          const SizedBox(height: 12),
+          OutlinedButton.icon(
+            onPressed: onAdd,
+            icon: const Icon(Icons.add),
+            label: const Text('소모품 추가'),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _ConsumableCard extends StatelessWidget {
+  const _ConsumableCard({
+    required this.consumable,
+    required this.onReplaced,
+    required this.onEdit,
+    required this.onDelete,
+    required this.onPurchase,
+  });
+
+  final ProductConsumable consumable;
+  final VoidCallback onReplaced;
+  final VoidCallback onEdit;
+  final VoidCallback onDelete;
+  final VoidCallback? onPurchase;
+
+  @override
+  Widget build(BuildContext context) {
+    final dueLabel = _replacementLabel(consumable);
+    return Card(
+      margin: const EdgeInsets.only(bottom: 10),
+      child: Padding(
+        padding: const EdgeInsets.all(14),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                CircleAvatar(child: Icon(_consumableIcon(consumable.type))),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        consumable.name,
+                        style: Theme.of(context).textTheme.titleMedium,
+                      ),
+                      const SizedBox(height: 3),
+                      Text(
+                        consumable.compatibilityLabel,
+                        style: Theme.of(context).textTheme.bodySmall,
+                      ),
+                    ],
+                  ),
+                ),
+                PopupMenuButton<String>(
+                  tooltip: '소모품 메뉴',
+                  onSelected: (value) {
+                    if (value == 'edit') {
+                      onEdit();
+                    } else if (value == 'delete') {
+                      onDelete();
+                    }
+                  },
+                  itemBuilder: (context) => const [
+                    PopupMenuItem(value: 'edit', child: Text('수정')),
+                    PopupMenuItem(value: 'delete', child: Text('삭제')),
+                  ],
+                ),
+              ],
+            ),
+            const SizedBox(height: 12),
+            Wrap(
+              spacing: 7,
+              runSpacing: 7,
+              children: [
+                Chip(label: Text(consumable.type.label)),
+                Chip(label: Text(_periodLabel(consumable.replacementDays))),
+                if (consumable.partNumber?.isNotEmpty == true)
+                  Chip(label: Text('부품 ${consumable.partNumber}')),
+              ],
+            ),
+            const SizedBox(height: 10),
+            Row(
+              children: [
+                Icon(
+                  consumable.isDue(DateTime.now())
+                      ? Icons.warning_amber_outlined
+                      : Icons.event_outlined,
+                  size: 19,
+                ),
+                const SizedBox(width: 7),
+                Expanded(
+                  child: Text(
+                    dueLabel,
+                    style: const TextStyle(fontWeight: FontWeight.w700),
+                  ),
+                ),
+              ],
+            ),
+            if (consumable.note?.isNotEmpty == true) ...[
+              const SizedBox(height: 8),
+              Text(
+                consumable.note!,
+                style: Theme.of(context).textTheme.bodySmall,
+              ),
+            ],
+            const SizedBox(height: 12),
+            Row(
+              children: [
+                Expanded(
+                  child: FilledButton.tonalIcon(
+                    onPressed: onReplaced,
+                    icon: const Icon(Icons.check),
+                    label: Text(
+                      consumable.type == ConsumableType.refill
+                          ? '보충했어요'
+                          : '교체했어요',
+                    ),
+                  ),
+                ),
+                if (onPurchase != null) ...[
+                  const SizedBox(width: 8),
+                  IconButton.outlined(
+                    onPressed: onPurchase,
+                    tooltip: consumable.isSponsored ? '구매 링크 · 광고' : '구매 링크',
+                    icon: const Icon(Icons.shopping_bag_outlined),
+                  ),
+                ],
+              ],
+            ),
+            if (consumable.isSponsored) ...[
+              const SizedBox(height: 7),
+              const Text(
+                '광고·제휴 링크',
+                style: TextStyle(fontSize: 11, fontWeight: FontWeight.w800),
+              ),
+            ],
+          ],
+        ),
+      ),
+    );
+  }
+}
+
 class _ScheduleCard extends StatelessWidget {
   const _ScheduleCard({
     required this.item,
@@ -767,18 +1095,22 @@ class _ScheduleCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  item.nextDueAt == null
-                      ? '아직 예정일이 없어요'
-                      : '다음 예정일 ${_formatDate(item.nextDueAt!)}',
+                  item.lastCleanedAt == null
+                      ? '아직 청소 기록이 없어요'
+                      : '마지막 청소 ${_formatDate(item.lastCleanedAt!)}',
                   style: const TextStyle(fontWeight: FontWeight.w800),
                 ),
-                Text('${item.frequency} · 예상 ${item.estimatedMinutes}분'),
+                Text(
+                  item.nextDueAt == null
+                      ? '청소한 날만 가볍게 남겨두세요'
+                      : '다음 확인 ${_formatDate(item.nextDueAt!)}',
+                ),
               ],
             ),
           ),
           FilledButton(
             onPressed: onComplete,
-            child: const Text('완료'),
+            child: const Text('오늘 청소'),
           ),
         ],
       ),
@@ -790,6 +1122,41 @@ class _ScheduleCard extends StatelessWidget {
     final day = dateTime.day.toString().padLeft(2, '0');
     return '$month.$day';
   }
+}
+
+IconData _consumableIcon(ConsumableType type) {
+  return switch (type) {
+    ConsumableType.filter => Icons.filter_alt_outlined,
+    ConsumableType.cleaner => Icons.cleaning_services_outlined,
+    ConsumableType.refill => Icons.opacity_outlined,
+    ConsumableType.part => Icons.build_outlined,
+    ConsumableType.other => Icons.inventory_2_outlined,
+  };
+}
+
+String _replacementLabel(ProductConsumable consumable) {
+  final last = consumable.lastReplacedAt;
+  final next = consumable.nextReplacementAt;
+  if (last == null) {
+    return '마지막 교체일을 아직 기록하지 않았어요';
+  }
+  if (next == null) {
+    return '마지막 교체 ${_sourceDate(last)}';
+  }
+  if (consumable.isDue(DateTime.now())) {
+    return '교체 시기 확인 · 마지막 ${_sourceDate(last)}';
+  }
+  return '마지막 ${_sourceDate(last)} · 다음 ${_sourceDate(next)}';
+}
+
+String _periodLabel(int days) {
+  if (days >= 365 && days % 365 == 0) {
+    return '${days ~/ 365}년 주기';
+  }
+  if (days >= 30 && days % 30 == 0) {
+    return '${days ~/ 30}개월 주기';
+  }
+  return '$days일 주기';
 }
 
 class _GuideSourceBadge extends StatelessWidget {

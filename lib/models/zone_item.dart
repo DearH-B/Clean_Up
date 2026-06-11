@@ -1,4 +1,5 @@
 import 'catalog_metadata.dart';
+import 'product_consumable.dart';
 
 enum ZoneItemType {
   appliance('가전'),
@@ -100,6 +101,7 @@ class ZoneItem {
     this.nextDueAt,
     this.recommendedSupplies = const [],
     this.recommendedProducts = const [],
+    this.consumables = const [],
   });
 
   final String id;
@@ -142,6 +144,7 @@ class ZoneItem {
   final DateTime? nextDueAt;
   final List<String> recommendedSupplies;
   final List<CleaningProduct> recommendedProducts;
+  final List<ProductConsumable> consumables;
 
   bool get hasProductInfo =>
       (manufacturer?.trim().isNotEmpty ?? false) ||
@@ -229,6 +232,13 @@ class ZoneItem {
                 ),
               )
               .toList(),
+      consumables: (json['consumables'] as List<dynamic>? ?? const [])
+          .map(
+            (item) => ProductConsumable.fromJson(
+              Map<String, Object?>.from(item as Map),
+            ),
+          )
+          .toList(),
     );
   }
 
@@ -278,6 +288,9 @@ class ZoneItem {
       'recommendedProducts': [
         for (final product in recommendedProducts) product.toJson(),
       ],
+      'consumables': [
+        for (final consumable in consumables) consumable.toJson(),
+      ],
     };
   }
 
@@ -305,6 +318,7 @@ class ZoneItem {
     DateTime? nextDueAt,
     bool clearLastCleanedAt = false,
     bool clearNextDueAt = false,
+    List<ProductConsumable>? consumables,
   }) {
     return ZoneItem(
       id: id,
@@ -348,6 +362,7 @@ class ZoneItem {
       nextDueAt: clearNextDueAt ? null : nextDueAt ?? this.nextDueAt,
       recommendedSupplies: recommendedSupplies,
       recommendedProducts: recommendedProducts,
+      consumables: consumables ?? this.consumables,
     );
   }
 }

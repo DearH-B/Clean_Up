@@ -22,6 +22,7 @@ class CareRecord {
     this.type = CareRecordType.cleaning,
     this.productId,
     this.productName,
+    this.consumableId,
     this.spaceId,
     this.guideTitle,
     this.usedSupplies = const [],
@@ -40,6 +41,7 @@ class CareRecord {
   final CareRecordType type;
   final String? productId;
   final String? productName;
+  final String? consumableId;
   final String? spaceId;
   final String? guideTitle;
   final List<String> usedSupplies;
@@ -49,12 +51,7 @@ class CareRecord {
   final List<String> photoPaths;
   final DateTime? nextCheckAt;
 
-  bool get affectsCareSchedule => {
-        CareRecordType.cleaning,
-        CareRecordType.inspection,
-        CareRecordType.filterReplacement,
-        CareRecordType.consumableReplacement,
-      }.contains(type);
+  bool get affectsCareSchedule => type == CareRecordType.cleaning;
 
   String get displayProductName {
     final name = productName?.trim();
@@ -75,6 +72,7 @@ class CareRecord {
       type: _recordTypeFromJson(json['type']),
       productId: json['productId'] as String?,
       productName: json['productName'] as String?,
+      consumableId: json['consumableId'] as String?,
       spaceId: json['spaceId'] as String?,
       guideTitle: json['guideTitle'] as String?,
       usedSupplies:
@@ -98,6 +96,7 @@ class CareRecord {
     CareRecordType? type,
     String? productId,
     String? productName,
+    String? consumableId,
     String? spaceId,
     String? guideTitle,
     List<String>? usedSupplies,
@@ -117,6 +116,7 @@ class CareRecord {
       type: type ?? this.type,
       productId: productId ?? this.productId,
       productName: productName ?? this.productName,
+      consumableId: consumableId ?? this.consumableId,
       spaceId: spaceId ?? this.spaceId,
       guideTitle: guideTitle ?? this.guideTitle,
       usedSupplies: usedSupplies ?? this.usedSupplies,
@@ -138,6 +138,7 @@ class CareRecord {
       'type': type.name,
       'productId': productId,
       'productName': productName,
+      'consumableId': consumableId,
       'spaceId': spaceId,
       'guideTitle': guideTitle,
       'usedSupplies': usedSupplies,
