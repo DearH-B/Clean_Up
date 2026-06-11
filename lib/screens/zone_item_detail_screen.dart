@@ -9,6 +9,7 @@ import '../models/care_record.dart';
 import '../models/zone_item.dart';
 import '../repositories/product_data_repository.dart';
 import '../repositories/product_catalog_repository.dart';
+import 'care_record_editor_screen.dart';
 
 class ZoneItemDetailScreen extends StatefulWidget {
   const ZoneItemDetailScreen({
@@ -220,7 +221,7 @@ class _ZoneItemDetailScreenState extends State<ZoneItemDetailScreen> {
               ),
             ),
             FilledButton.icon(
-              onPressed: _completeCare,
+              onPressed: _openRecordEditor,
               icon: const Icon(Icons.add_task),
               label: const Text('기록 추가'),
             ),
@@ -231,7 +232,11 @@ class _ZoneItemDetailScreenState extends State<ZoneItemDetailScreen> {
           const _EmptyProductRecords()
         else
           for (final record in _productRecords)
-            _ProductRecordTile(record: record),
+            _ProductRecordTile(
+              record: record,
+              onTap: () => _openRecordEditor(record: record),
+              onDelete: () => _confirmDeleteRecord(record),
+            ),
       ],
     );
   }
@@ -340,8 +345,12 @@ class _ZoneItemDetailScreenState extends State<ZoneItemDetailScreen> {
         spaceName: widget.spaceName,
         completedAt: now,
         minutes: _item.estimatedMinutes,
+        type: CareRecordType.cleaning,
         productId: _item.id,
+        productName: _item.displayName,
         spaceId: widget.spaceId,
+        guideTitle: _item.name,
+        nextCheckAt: updatedItem.nextDueAt,
       ),
       ...(savedRecords ?? const <CareRecord>[]),
     ];
@@ -361,6 +370,108 @@ class _ZoneItemDetailScreenState extends State<ZoneItemDetailScreen> {
     }
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(content: Text('관리 기록에 저장했어요. 다음 관리일도 갱신됐어요.')),
+    );
+  }
+
+  Future<void> _openRecordEditor({CareRecord? record}) async {
+    final updatedRecord = await Navigator.of(context).push<CareRecord>(
+      MaterialPageRoute(
+        builder: (context) => CareRecordEditorScreen(
+          product: _item,
+          spaceId: widget.spaceId,
+          spaceName: widget.spaceName,
+          record: record,
+        ),
+      ),
+    );
+    if (updatedRecord == null || !mounted) {
+      return;
+    }
+
+    final savedRecords = await widget.dataRepository.loadCareRecords() ?? [];
+    final exists = savedRecords.any((item) => item.id == updatedRecord.id);
+    final records = exists
+        ? [
+            for (final item in savedRecords)
+              if (item.id == updatedRecord.id) updatedRecord else item,
+          ]
+        : [updatedRecord, ...savedRecords];
+    records.sort((a, b) => b.completedAt.compareTo(a.completedAt));
+    await widget.dataRepository.saveCareRecords(records);
+
+    final updatedItem = _itemWithLatestRecord(_item, records);
+    await widget.onItemUpdated?.call(updatedItem);
+    if (!mounted) {
+      return;
+    }
+    setState(() {
+      _item = updatedItem;
+      _productRecords =
+          records.where((item) => item.productId == _item.id).toList();
+    });
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text(exists ? '기록을 수정했어요.' : '관리 기록을 저장했어요.')),
+    );
+  }
+
+  Future<void> _confirmDeleteRecord(CareRecord record) async {
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('기록을 삭제할까요?'),
+        content: Text(
+          '${record.type.label} 기록을 삭제하면 다시 복구할 수 없어요.',
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(false),
+            child: const Text('취소'),
+          ),
+          FilledButton(
+            onPressed: () => Navigator.of(context).pop(true),
+            child: const Text('삭제'),
+          ),
+        ],
+      ),
+    );
+    if (confirmed != true) {
+      return;
+    }
+    final records = await widget.dataRepository.loadCareRecords() ?? [];
+    final remaining = [
+      for (final item in records)
+        if (item.id != record.id) item,
+    ];
+    await widget.dataRepository.saveCareRecords(remaining);
+    final updatedItem = _itemWithLatestRecord(_item, remaining);
+    await widget.onItemUpdated?.call(updatedItem);
+    if (!mounted) {
+      return;
+    }
+    setState(() {
+      _item = updatedItem;
+      _productRecords.removeWhere((item) => item.id == record.id);
+    });
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('기록을 삭제했어요.')),
+    );
+  }
+
+  ZoneItem _itemWithLatestRecord(
+    ZoneItem item,
+    List<CareRecord> records,
+  ) {
+    final latest = latestScheduledCareRecord(records, item.id);
+    if (latest == null) {
+      return item.copyWith(
+        clearLastCleanedAt: true,
+        clearNextDueAt: true,
+      );
+    }
+    return item.copyWith(
+      lastCleanedAt: latest.completedAt,
+      nextDueAt: latest.nextCheckAt ??
+          latest.completedAt.add(Duration(days: item.recurrenceDays)),
     );
   }
 }
@@ -575,21 +686,59 @@ class _EmptyProductRecords extends StatelessWidget {
 }
 
 class _ProductRecordTile extends StatelessWidget {
-  const _ProductRecordTile({required this.record});
+  const _ProductRecordTile({
+    required this.record,
+    required this.onTap,
+    required this.onDelete,
+  });
 
   final CareRecord record;
+  final VoidCallback onTap;
+  final VoidCallback onDelete;
 
   @override
   Widget build(BuildContext context) {
     return ListTile(
+      onTap: onTap,
       contentPadding: EdgeInsets.zero,
-      leading: const Icon(Icons.check_circle_outline),
+      leading: Icon(_recordTypeIcon(record.type)),
       title: Text(record.title),
       subtitle: Text(
-        '${_sourceDate(record.completedAt)} · ${record.minutes}분',
+        [
+          _sourceDate(record.completedAt),
+          record.type.label,
+          if (record.minutes > 0) '${record.minutes}분',
+          if (record.note?.isNotEmpty == true) record.note!,
+        ].join(' · '),
+      ),
+      trailing: PopupMenuButton<String>(
+        tooltip: '기록 메뉴',
+        onSelected: (value) {
+          if (value == 'edit') {
+            onTap();
+          } else if (value == 'delete') {
+            onDelete();
+          }
+        },
+        itemBuilder: (context) => const [
+          PopupMenuItem(value: 'edit', child: Text('수정')),
+          PopupMenuItem(value: 'delete', child: Text('삭제')),
+        ],
       ),
     );
   }
+}
+
+IconData _recordTypeIcon(CareRecordType type) {
+  return switch (type) {
+    CareRecordType.cleaning => Icons.cleaning_services_outlined,
+    CareRecordType.inspection => Icons.search_outlined,
+    CareRecordType.filterReplacement => Icons.filter_alt_outlined,
+    CareRecordType.consumableReplacement => Icons.autorenew_outlined,
+    CareRecordType.issue => Icons.report_problem_outlined,
+    CareRecordType.service => Icons.home_repair_service_outlined,
+    CareRecordType.note => Icons.note_alt_outlined,
+  };
 }
 
 class _ScheduleCard extends StatelessWidget {

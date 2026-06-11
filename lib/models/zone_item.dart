@@ -303,6 +303,8 @@ class ZoneItem {
     List<String>? productSpecs,
     DateTime? lastCleanedAt,
     DateTime? nextDueAt,
+    bool clearLastCleanedAt = false,
+    bool clearNextDueAt = false,
   }) {
     return ZoneItem(
       id: id,
@@ -341,8 +343,9 @@ class ZoneItem {
       productSpecs: productSpecs ?? this.productSpecs,
       guideSourceType: guideSourceType,
       recurrenceDays: recurrenceDays,
-      lastCleanedAt: lastCleanedAt ?? this.lastCleanedAt,
-      nextDueAt: nextDueAt ?? this.nextDueAt,
+      lastCleanedAt:
+          clearLastCleanedAt ? null : lastCleanedAt ?? this.lastCleanedAt,
+      nextDueAt: clearNextDueAt ? null : nextDueAt ?? this.nextDueAt,
       recommendedSupplies: recommendedSupplies,
       recommendedProducts: recommendedProducts,
     );

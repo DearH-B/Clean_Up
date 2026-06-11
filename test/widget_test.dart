@@ -192,6 +192,34 @@ void main() {
     expect(records!.single.spaceName, '주방');
     expect(records.single.productId, isNull);
     expect(records.single.spaceId, isNull);
+    expect(records.single.type, CareRecordType.cleaning);
+  });
+
+  test('확장 관리 기록은 유형과 상세 내용을 저장 후 복원한다', () {
+    final record = CareRecord(
+      id: 'record-phase-4',
+      title: '식기세척기 필터 교체',
+      spaceName: '주방',
+      completedAt: DateTime(2026, 6, 11, 9, 20),
+      minutes: 10,
+      type: CareRecordType.filterReplacement,
+      productId: 'kitchen-dishwasher',
+      productName: '식기세척기',
+      spaceId: 'zone-1',
+      guideTitle: '필터 관리',
+      usedSupplies: const ['교체 필터', '마른 천'],
+      result: '냄새가 줄어듦',
+      note: '다음에는 배수구도 함께 확인',
+      nextCheckAt: DateTime(2026, 9, 11),
+    );
+
+    final restored = CareRecord.fromJson(record.toJson());
+
+    expect(restored.type, CareRecordType.filterReplacement);
+    expect(restored.usedSupplies, ['교체 필터', '마른 천']);
+    expect(restored.result, '냄새가 줄어듦');
+    expect(restored.note, '다음에는 배수구도 함께 확인');
+    expect(restored.nextCheckAt, DateTime(2026, 9, 11));
   });
 
   test('기존 정확 모델은 사용자 정보를 유지하며 카탈로그 ID를 연결한다', () async {
@@ -296,6 +324,92 @@ void main() {
     expect(records.first.spaceName, '주방');
     expect(records.first.spaceId, 'zone-1');
     expect(records.first.productId, 'kitchen-refrigerator');
+  });
+
+  testWidgets('제품 상세에서 유형과 메모가 있는 관리 기록을 추가할 수 있다', (tester) async {
+    seedSampleData(dataRepository);
+    await pumpApp(tester, dataRepository);
+
+    await tester.tap(find.text('내 제품'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('주방'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('냉장고'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.widgetWithText(Tab, '기록'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.widgetWithText(FilledButton, '기록 추가'));
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.text('필터 교체'));
+    await tester.pumpAndSettle();
+    final suppliesField =
+        find.byKey(const ValueKey('care-record-supplies'));
+    await tester.ensureVisible(suppliesField);
+    await tester.enterText(suppliesField, '교체 필터, 마른 천');
+    final resultField = find.byKey(const ValueKey('care-record-result'));
+    await tester.ensureVisible(resultField);
+    await tester.enterText(resultField, '필터 상태 정상');
+    final noteField = find.byKey(const ValueKey('care-record-note'));
+    await tester.ensureVisible(noteField);
+    await tester.enterText(noteField, '다음에는 안쪽 먼지도 확인');
+    await tester.testTextInput.receiveAction(TextInputAction.done);
+    await tester.pumpAndSettle();
+    final saveButton = find.widgetWithText(FilledButton, '기록 저장');
+    await tester.ensureVisible(saveButton);
+    await tester.tap(saveButton);
+    await tester.pumpAndSettle();
+
+    final records = await dataRepository.loadCareRecords();
+    final saved = records!.first;
+    expect(saved.type, CareRecordType.filterReplacement);
+    expect(saved.productId, 'kitchen-refrigerator');
+    expect(saved.usedSupplies, ['교체 필터', '마른 천']);
+    expect(saved.result, '필터 상태 정상');
+    expect(saved.note, '다음에는 안쪽 먼지도 확인');
+  });
+
+  testWidgets('전체 기록에서 유형으로 필터하고 기록을 삭제할 수 있다', (tester) async {
+    seedSampleData(dataRepository);
+    await dataRepository.saveCareRecords([
+      CareRecord(
+        id: 'filter-record',
+        title: '냉장고 필터 교체',
+        spaceName: '주방',
+        completedAt: DateTime(2026, 6, 11),
+        minutes: 10,
+        type: CareRecordType.filterReplacement,
+        productId: 'kitchen-refrigerator',
+        productName: '냉장고',
+        spaceId: 'zone-1',
+      ),
+      ...careRecords,
+    ]);
+    await pumpApp(tester, dataRepository);
+
+    await tester.tap(find.text('기록'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.widgetWithText(OutlinedButton, '모든 유형'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('필터 교체').last);
+    await tester.pumpAndSettle();
+
+    expect(find.text('냉장고 필터 교체'), findsOneWidget);
+    expect(find.text('음식물처리기 관리 완료'), findsNothing);
+
+    await tester.tap(find.byTooltip('기록 메뉴'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('삭제'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.widgetWithText(FilledButton, '삭제'));
+    await tester.pumpAndSettle();
+
+    final records = await dataRepository.loadCareRecords();
+    expect(
+        records,
+        isNot(contains(predicate<CareRecord>(
+          (record) => record.id == 'filter-record',
+        ))));
   });
 
   testWidgets('모델 검색으로 카탈로그 제품을 등록할 수 있다', (tester) async {
