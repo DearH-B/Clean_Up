@@ -14,10 +14,12 @@ import 'package:clean_up/data/visual_product_candidates.dart';
 import 'package:clean_up/models/care_record.dart';
 import 'package:clean_up/models/product_space.dart';
 import 'package:clean_up/models/product_search_request.dart';
+import 'package:clean_up/models/product_submission.dart';
 import 'package:clean_up/models/product_consumable.dart';
 import 'package:clean_up/models/zone_item.dart';
 import 'package:clean_up/repositories/product_catalog_repository.dart';
 import 'package:clean_up/repositories/product_data_repository.dart';
+import 'package:clean_up/repositories/product_submission_repository.dart';
 
 void main() {
   late MemoryProductDataRepository dataRepository;
@@ -279,6 +281,45 @@ void main() {
     expect(restored.lastReplacedAt, replacedAt);
     expect(
         restored.nextReplacementAt, replacedAt.add(const Duration(days: 180)));
+  });
+
+  test('제품 정보 제보는 전송 상태와 추적 토큰을 저장한다', () {
+    final now = DateTime(2026, 6, 11, 10, 30);
+    final submission = ProductSubmission(
+      id: 'submission-1',
+      trackingToken: 'tracking-token',
+      type: ProductSubmissionType.incorrectGuide,
+      title: '관리법 확인 요청',
+      details: '설명서와 순서가 달라요.',
+      productId: 'product-1',
+      createdAt: now,
+      updatedAt: now,
+      status: ProductSubmissionStatus.investigating,
+      statusMessage: '공식 설명서를 확인하고 있어요.',
+    );
+
+    final restored = ProductSubmission.fromJson(
+      jsonDecode(jsonEncode(submission.toJson())) as Map<String, Object?>,
+    );
+
+    expect(restored.trackingToken, 'tracking-token');
+    expect(restored.status, ProductSubmissionStatus.investigating);
+    expect(restored.productId, 'product-1');
+  });
+
+  test('손상된 로컬 제품 데이터는 직전 백업으로 복구한다', () async {
+    SharedPreferences.setMockInitialValues({
+      'zone_items_v1': '{broken-json',
+      'zone_items_v1_backup': jsonEncode([mockZoneItems.first.toJson()]),
+    });
+    const repository = ProductDataRepository();
+
+    final recovered = await repository.loadUserProducts();
+    final preferences = await SharedPreferences.getInstance();
+
+    expect(recovered, hasLength(1));
+    expect(recovered!.single.id, mockZoneItems.first.id);
+    expect(preferences.getString('zone_items_v1'), isNot('{broken-json'));
   });
 
   test('기존 정확 모델은 사용자 정보를 유지하며 카탈로그 ID를 연결한다', () async {
@@ -731,6 +772,44 @@ void main() {
 
     final requests = await dataRepository.loadProductSearchRequests();
     expect(requests!.single.query, '없는모델-1234');
+    final submissions = await dataRepository.loadProductSubmissions();
+    expect(submissions!.single.type, ProductSubmissionType.missingProduct);
+    expect(submissions.single.status, ProductSubmissionStatus.pendingUpload);
+  });
+
+  testWidgets('제품 정보 요청은 서버 접수 상태로 동기화된다', (tester) async {
+    final now = DateTime(2026, 6, 11);
+    await dataRepository.saveProductSubmissions([
+      ProductSubmission(
+        id: 'submission-sync',
+        type: ProductSubmissionType.missingProduct,
+        title: '새 제품 정보 요청',
+        details: '모델명을 찾을 수 없어요.',
+        createdAt: now,
+        updatedAt: now,
+        status: ProductSubmissionStatus.pendingUpload,
+      ),
+    ]);
+    const submissionRepository = MemoryProductSubmissionRepository();
+    await pumpApp(
+      tester,
+      dataRepository,
+      submissionRepository: submissionRepository,
+    );
+
+    await tester.scrollUntilVisible(
+      find.text('요청 내역'),
+      300,
+      scrollable: find.byType(Scrollable).first,
+    );
+    await tester.tap(find.text('요청 내역'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('제품 정보 요청'), findsOneWidget);
+    expect(find.text('접수'), findsOneWidget);
+    final saved = await dataRepository.loadProductSubmissions();
+    expect(saved!.single.trackingToken, 'tracking-submission-sync');
+    expect(saved.single.status, ProductSubmissionStatus.received);
   });
 
   testWidgets('이전 단계로 돌아가도 제품 입력값이 유지된다', (tester) async {
@@ -770,12 +849,15 @@ void main() {
 
 Future<void> pumpApp(
   WidgetTester tester,
-  ProductDataRepository dataRepository,
-) async {
+  ProductDataRepository dataRepository, {
+  ProductSubmissionRepository submissionRepository =
+      const MemoryProductSubmissionRepository(),
+}) async {
   await tester.pumpWidget(
     CleanUpApp(
       dataRepository: dataRepository,
       catalogRepository: const LocalProductCatalogRepository(),
+      submissionRepository: submissionRepository,
     ),
   );
   await tester.pumpAndSettle();
@@ -792,6 +874,7 @@ class MemoryProductDataRepository extends ProductDataRepository {
   List<ZoneItem>? _products;
   List<CareRecord>? _records;
   List<ProductSearchRequest>? _searchRequests;
+  List<ProductSubmission>? _submissions;
   List<String> _recentSearches = [];
 
   @override
@@ -831,6 +914,18 @@ class MemoryProductDataRepository extends ProductDataRepository {
   }
 
   @override
+  Future<List<ProductSubmission>?> loadProductSubmissions() async {
+    return _submissions?.toList();
+  }
+
+  @override
+  Future<void> saveProductSubmissions(
+    List<ProductSubmission> submissions,
+  ) async {
+    _submissions = submissions.toList();
+  }
+
+  @override
   Future<List<String>> loadRecentProductSearches() async {
     return _recentSearches.toList();
   }
@@ -838,5 +933,24 @@ class MemoryProductDataRepository extends ProductDataRepository {
   @override
   Future<void> saveRecentProductSearches(List<String> searches) async {
     _recentSearches = searches.toList();
+  }
+}
+
+class MemoryProductSubmissionRepository implements ProductSubmissionRepository {
+  const MemoryProductSubmissionRepository();
+
+  @override
+  Future<ProductSubmission> submit(ProductSubmission submission) async {
+    return submission.copyWith(
+      trackingToken: 'tracking-${submission.id}',
+      updatedAt: DateTime(2026, 6, 11, 12),
+      status: ProductSubmissionStatus.received,
+      statusMessage: '운영팀 접수 대기열에 등록됐어요.',
+    );
+  }
+
+  @override
+  Future<ProductSubmission> refresh(ProductSubmission submission) async {
+    return submission;
   }
 }

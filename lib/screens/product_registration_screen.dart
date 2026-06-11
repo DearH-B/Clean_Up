@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import '../data/product_catalog.dart';
 import '../data/product_care_templates.dart';
 import '../models/product_search_request.dart';
+import '../models/product_submission.dart';
 import '../models/product_space.dart';
 import '../models/visual_product_candidate.dart';
 import '../models/zone_item.dart';
@@ -784,20 +785,27 @@ class _ProductRegistrationScreenState extends State<ProductRegistrationScreen> {
 
   Future<void> _requestProductInformation() async {
     final query = _searchController.text.trim();
+    final now = DateTime.now();
     final existing =
         await widget.dataRepository.loadProductSearchRequests() ?? [];
     final request = ProductSearchRequest(
-      id: 'request-${DateTime.now().microsecondsSinceEpoch}',
+      id: 'request-${now.microsecondsSinceEpoch}',
       query: query,
-      requestedAt: DateTime.now(),
+      requestedAt: now,
       registeredAsGeneral: false,
     );
     await widget.dataRepository.saveProductSearchRequests([
       request,
       ...existing,
     ]);
+    await _saveMissingProductSubmission(
+      id: request.id,
+      query: query,
+      now: now,
+      registeredAsGeneral: false,
+    );
     if (mounted) {
-      _showMessage('제품 정보 요청을 기기에 저장했어요.');
+      _showMessage('제품 정보 요청을 요청 내역에 저장했어요.');
     }
   }
 
@@ -995,21 +1003,28 @@ class _ProductRegistrationScreenState extends State<ProductRegistrationScreen> {
       return;
     }
     if (_startedFromSearchFailure) {
+      final now = DateTime.now();
       final existing =
           await widget.dataRepository.loadProductSearchRequests() ?? [];
       final request = ProductSearchRequest(
-        id: 'request-${DateTime.now().microsecondsSinceEpoch}',
+        id: 'request-${now.microsecondsSinceEpoch}',
         query: _searchQuery,
         categoryName: _categoryController.text.trim(),
         brand: _brandController.text.trim(),
         modelName: _modelController.text.trim(),
-        requestedAt: DateTime.now(),
+        requestedAt: now,
         registeredAsGeneral: true,
       );
       await widget.dataRepository.saveProductSearchRequests([
         request,
         ...existing,
       ]);
+      await _saveMissingProductSubmission(
+        id: request.id,
+        query: _searchQuery,
+        now: now,
+        registeredAsGeneral: true,
+      );
       if (!mounted) {
         return;
       }
@@ -1020,6 +1035,44 @@ class _ProductRegistrationScreenState extends State<ProductRegistrationScreen> {
         openDetails: openDetails,
       ),
     );
+  }
+
+  Future<void> _saveMissingProductSubmission({
+    required String id,
+    required String query,
+    required DateTime now,
+    required bool registeredAsGeneral,
+  }) async {
+    final existing = await widget.dataRepository.loadProductSubmissions() ?? [];
+    if (existing.any((submission) => submission.id == id)) {
+      return;
+    }
+    final category = _categoryController.text.trim();
+    final brand = _brandController.text.trim();
+    final model = _modelController.text.trim();
+    final detailParts = [
+      if (query.isNotEmpty) '검색어: $query',
+      if (category.isNotEmpty) '제품 종류: $category',
+      if (brand.isNotEmpty) '브랜드: $brand',
+      if (model.isNotEmpty) '모델명: $model',
+      registeredAsGeneral ? '제품군 일반 정보로 먼저 등록함' : '제품 정보 추가를 요청함',
+    ];
+    final submission = ProductSubmission(
+      id: id,
+      type: ProductSubmissionType.missingProduct,
+      title: query.isEmpty ? '검색되지 않는 제품 정보 요청' : '$query 제품 정보 요청',
+      details: detailParts.join('\n'),
+      categoryName: category.isEmpty ? null : category,
+      brand: brand.isEmpty ? null : brand,
+      modelName: model.isEmpty ? null : model,
+      createdAt: now,
+      updatedAt: now,
+      status: ProductSubmissionStatus.pendingUpload,
+    );
+    await widget.dataRepository.saveProductSubmissions([
+      submission,
+      ...existing,
+    ]);
   }
 
   void _clearSearch() {

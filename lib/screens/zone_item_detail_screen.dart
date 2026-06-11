@@ -8,11 +8,13 @@ import '../data/product_consumable_defaults.dart';
 import '../models/catalog_metadata.dart';
 import '../models/care_record.dart';
 import '../models/product_consumable.dart';
+import '../models/product_submission.dart';
 import '../models/zone_item.dart';
 import '../repositories/product_data_repository.dart';
 import '../repositories/product_catalog_repository.dart';
 import 'care_record_editor_screen.dart';
 import 'consumable_editor_screen.dart';
+import 'product_submission_form_screen.dart';
 
 class ZoneItemDetailScreen extends StatefulWidget {
   const ZoneItemDetailScreen({
@@ -313,8 +315,30 @@ class _ZoneItemDetailScreenState extends State<ZoneItemDetailScreen> {
         ],
         if (_item.productSources.isNotEmpty || _item.sourceTitle != null)
           _ProductEvidenceCard(item: _item, onOpenSource: _openProduct),
+        const SizedBox(height: 18),
+        OutlinedButton.icon(
+          onPressed: _openSubmissionForm,
+          icon: const Icon(Icons.flag_outlined),
+          label: const Text('제품 정보 오류 제보'),
+        ),
       ],
     );
+  }
+
+  Future<void> _openSubmissionForm() async {
+    final submission = await Navigator.of(context).push<ProductSubmission>(
+      MaterialPageRoute(
+        builder: (context) => ProductSubmissionFormScreen(
+          dataRepository: widget.dataRepository,
+          product: _item,
+        ),
+      ),
+    );
+    if (submission != null && mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('요청 내역에 저장했어요. 서버 연결 시 전송됩니다.')),
+      );
+    }
   }
 
   Future<void> _showProductInfoSheet() async {

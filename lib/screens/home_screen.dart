@@ -7,21 +7,25 @@ import '../models/product_space.dart';
 import '../models/zone_item.dart';
 import '../repositories/product_data_repository.dart';
 import '../repositories/product_catalog_repository.dart';
+import '../repositories/product_submission_repository.dart';
 import '../theme/app_theme.dart';
 import '../widgets/fairy_image.dart';
 import 'zone_item_detail_screen.dart';
+import 'product_submissions_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({
     required this.dataRepository,
     required this.catalogRepository,
     required this.onOpenProducts,
+    required this.submissionRepository,
     super.key,
   });
 
   final ProductDataRepository dataRepository;
   final ProductCatalogRepository catalogRepository;
   final VoidCallback onOpenProducts;
+  final ProductSubmissionRepository submissionRepository;
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
@@ -101,7 +105,11 @@ class _HomeScreenState extends State<HomeScreen> {
               const SizedBox(height: 10),
             ],
           const SizedBox(height: 14),
-          const _SectionTitle(title: '제품 정보 원칙'),
+          _SectionTitle(
+            title: '제품 정보 원칙',
+            actionLabel: '요청 내역',
+            onAction: _openSubmissions,
+          ),
           const SizedBox(height: 10),
           const _DirectionCard(),
         ],
@@ -140,6 +148,17 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
     );
     await _loadData();
+  }
+
+  Future<void> _openSubmissions() async {
+    await Navigator.of(context).push(
+      MaterialPageRoute<void>(
+        builder: (context) => ProductSubmissionsScreen(
+          dataRepository: widget.dataRepository,
+          submissionRepository: widget.submissionRepository,
+        ),
+      ),
+    );
   }
 
   ProductSpace? _spaceFor(ZoneItem item) {

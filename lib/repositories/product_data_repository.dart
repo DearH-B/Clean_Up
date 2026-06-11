@@ -8,6 +8,7 @@ import '../data/product_consumable_defaults.dart';
 import '../models/care_record.dart';
 import '../models/product_space.dart';
 import '../models/product_search_request.dart';
+import '../models/product_submission.dart';
 import '../models/zone_item.dart';
 
 class ProductDataRepository {
@@ -19,6 +20,7 @@ class ProductDataRepository {
   static const _careRecordsKey = 'cleaning_records_v1';
   static const _searchRequestsKey = 'product_search_requests_v1';
   static const _recentSearchesKey = 'recent_product_searches_v1';
+  static const _submissionsKey = 'product_submissions_v1';
 
   Future<List<ProductSpace>?> loadSpaces() async {
     return _loadList(_spacesKey, ProductSpace.fromJson);
@@ -75,6 +77,19 @@ class ProductDataRepository {
     );
   }
 
+  Future<List<ProductSubmission>?> loadProductSubmissions() async {
+    return _loadList(_submissionsKey, ProductSubmission.fromJson);
+  }
+
+  Future<void> saveProductSubmissions(
+    List<ProductSubmission> submissions,
+  ) async {
+    await _saveList(
+      _submissionsKey,
+      [for (final submission in submissions) submission.toJson()],
+    );
+  }
+
   Future<List<String>> loadRecentProductSearches() async {
     final preferences = await SharedPreferences.getInstance();
     return preferences.getStringList(_recentSearchesKey) ?? const [];
@@ -95,11 +110,21 @@ class ProductDataRepository {
       return null;
     }
 
-    final decoded = jsonDecode(saved) as List<dynamic>;
-    return [
-      for (final item in decoded)
-        fromJson(Map<String, Object?>.from(item as Map)),
-    ];
+    try {
+      return _decodeList(saved, fromJson);
+    } on Object {
+      final backup = preferences.getString(_backupKey(key));
+      if (backup == null) {
+        return null;
+      }
+      try {
+        final recovered = _decodeList(backup, fromJson);
+        await preferences.setString(key, backup);
+        return recovered;
+      } on Object {
+        return null;
+      }
+    }
   }
 
   Future<void> _saveList(
@@ -107,8 +132,25 @@ class ProductDataRepository {
     List<Map<String, Object?>> items,
   ) async {
     final preferences = await SharedPreferences.getInstance();
+    final current = preferences.getString(key);
+    if (current != null) {
+      await preferences.setString(_backupKey(key), current);
+    }
     await preferences.setString(key, jsonEncode(items));
   }
+
+  List<T> _decodeList<T>(
+    String encoded,
+    T Function(Map<String, Object?> json) fromJson,
+  ) {
+    final decoded = jsonDecode(encoded) as List<dynamic>;
+    return [
+      for (final item in decoded)
+        fromJson(Map<String, Object?>.from(item as Map)),
+    ];
+  }
+
+  String _backupKey(String key) => '${key}_backup';
 
   ZoneItem _enrichCatalogItem(ZoneItem item, void Function() markChanged) {
     final entry = findCatalogEntry(

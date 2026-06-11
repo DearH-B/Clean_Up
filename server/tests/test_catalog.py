@@ -1,7 +1,11 @@
 import unittest
+from datetime import UTC, datetime
 from pathlib import Path
+from tempfile import TemporaryDirectory
 
 from app.catalog import ProductCatalog
+from app.schemas import SubmissionCreate, SubmissionStatus, SubmissionType
+from app.submissions import SubmissionStore
 
 
 class ProductCatalogTest(unittest.TestCase):
@@ -66,6 +70,69 @@ class ProductCatalogTest(unittest.TestCase):
         )
 
         self.assertEqual([item.modelName for item in results], ["KQ65QNF70AFXKR"])
+
+
+class SubmissionStoreTest(unittest.TestCase):
+    def test_creates_and_reads_submission(self) -> None:
+        with TemporaryDirectory() as directory:
+            store = SubmissionStore(Path(directory) / "submissions.json")
+            payload = SubmissionCreate(
+                clientSubmissionId="request-1",
+                type=SubmissionType.missingProduct,
+                title="없는 모델 정보 요청",
+                details="모델명 ABC-123",
+                modelName="ABC-123",
+                createdAt=datetime.now(UTC),
+            )
+
+            created = store.create(payload)
+            loaded = store.get(created.trackingToken)
+
+            self.assertEqual(created.status, SubmissionStatus.received)
+            self.assertEqual(loaded, created)
+
+    def test_repeated_client_id_is_idempotent(self) -> None:
+        with TemporaryDirectory() as directory:
+            store = SubmissionStore(Path(directory) / "submissions.json")
+            payload = SubmissionCreate(
+                clientSubmissionId="request-duplicate",
+                type=SubmissionType.incorrectInfo,
+                title="제품 정보 확인",
+                details="출시 연도가 달라요.",
+                createdAt=datetime.now(UTC),
+            )
+
+            first = store.create(payload)
+            second = store.create(payload)
+
+            self.assertEqual(first.trackingToken, second.trackingToken)
+
+    def test_updates_status_with_review_history(self) -> None:
+        with TemporaryDirectory() as directory:
+            store = SubmissionStore(Path(directory) / "submissions.json")
+            payload = SubmissionCreate(
+                clientSubmissionId="request-status",
+                type=SubmissionType.unsafeGuide,
+                title="위험 안내 확인",
+                details="전원을 분리하라는 안내가 없어요.",
+                createdAt=datetime.now(UTC),
+            )
+            created = store.create(payload)
+
+            updated = store.update_status(
+                created.trackingToken,
+                status=SubmissionStatus.investigating,
+                operator="reviewer@example.com",
+                note="공식 설명서 대조 중",
+            )
+
+            self.assertIsNotNone(updated)
+            self.assertEqual(updated.status, SubmissionStatus.investigating)
+            self.assertEqual(len(updated.reviewHistory), 2)
+            self.assertEqual(
+                updated.reviewHistory[-1].operator,
+                "reviewer@example.com",
+            )
 
 
 if __name__ == "__main__":

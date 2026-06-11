@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../repositories/product_data_repository.dart';
 import '../repositories/product_catalog_repository.dart';
+import '../repositories/product_submission_repository.dart';
 import 'history_screen.dart';
 import 'home_screen.dart';
 import 'zones_screen.dart';
@@ -10,11 +11,13 @@ class MainShell extends StatefulWidget {
   const MainShell({
     required this.dataRepository,
     required this.catalogRepository,
+    required this.submissionRepository,
     super.key,
   });
 
   final ProductDataRepository dataRepository;
   final ProductCatalogRepository catalogRepository;
+  final ProductSubmissionRepository submissionRepository;
 
   @override
   State<MainShell> createState() => _MainShellState();
@@ -32,6 +35,7 @@ class _MainShellState extends State<MainShell> {
     _homeScreen = HomeScreen(
       dataRepository: widget.dataRepository,
       catalogRepository: widget.catalogRepository,
+      submissionRepository: widget.submissionRepository,
       onOpenProducts: () {
         setState(() {
           _selectedIndex = 1;

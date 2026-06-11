@@ -8,10 +8,14 @@ from .schemas import (
     ModelListResponse,
     ProductSearchResponse,
     StringListResponse,
+    SubmissionCreate,
+    SubmissionResponse,
 )
+from .submissions import SubmissionStore
 
 BASE_DIR = Path(__file__).resolve().parents[1]
 catalog = ProductCatalog(BASE_DIR / "data" / "products.json")
+submissions = SubmissionStore(BASE_DIR / "data" / "submissions.json")
 
 app = FastAPI(
     title="Home Product Care Catalog API",
@@ -61,3 +65,23 @@ def list_models(
 ) -> ModelListResponse:
     items = catalog.models(category=category, brand=brand, query=q)[:limit]
     return ModelListResponse(items=items, total=len(items))
+
+
+@app.post(
+    "/v1/submissions",
+    response_model=SubmissionResponse,
+    status_code=201,
+)
+def create_submission(payload: SubmissionCreate) -> SubmissionResponse:
+    return submissions.create(payload)
+
+
+@app.get(
+    "/v1/submissions/{tracking_token}",
+    response_model=SubmissionResponse,
+)
+def get_submission(tracking_token: str) -> SubmissionResponse:
+    submission = submissions.get(tracking_token)
+    if submission is None:
+        raise HTTPException(status_code=404, detail="Submission not found")
+    return submission

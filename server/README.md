@@ -37,3 +37,27 @@ Android 에뮬레이터에서는 PC의 `localhost`가 `10.0.2.2`로 보입니다
 - 관리 단계의 근거는 `stepSourceIds`로 연결합니다.
 - 존재하지 않는 출처 ID를 참조하면 서버가 시작되지 않습니다.
 - 마지막 검수 이력의 상태는 제품의 `reviewStatus`와 같아야 합니다.
+# 운영 도구
+
+카탈로그 품질 보고서:
+
+```powershell
+python manage.py catalog
+```
+
+접수된 사용자 제보:
+
+```powershell
+python manage.py submissions list
+python manage.py submissions list --status received
+```
+
+제보 처리 상태 변경:
+
+```powershell
+python manage.py submissions update <tracking_token> investigating `
+  --operator "reviewer@example.com" `
+  --note "공식 설명서 대조 중"
+```
+
+관리자 인증이 준비되기 전에는 상태 변경 API를 외부에 공개하지 않는다.

@@ -1,4 +1,4 @@
-from datetime import date
+from datetime import date, datetime
 from enum import StrEnum
 
 from pydantic import BaseModel, ConfigDict, Field, HttpUrl
@@ -132,3 +132,53 @@ class CatalogModelOption(BaseModel):
 class ModelListResponse(BaseModel):
     items: list[CatalogModelOption]
     total: int
+
+
+class SubmissionType(StrEnum):
+    missingProduct = "missingProduct"
+    incorrectInfo = "incorrectInfo"
+    brokenLink = "brokenLink"
+    incorrectGuide = "incorrectGuide"
+    unsafeGuide = "unsafeGuide"
+    officialSource = "officialSource"
+
+
+class SubmissionStatus(StrEnum):
+    received = "received"
+    investigating = "investigating"
+    confirmed = "confirmed"
+    completed = "completed"
+    rejected = "rejected"
+
+
+class SubmissionReviewEvent(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    status: SubmissionStatus
+    operator: str
+    changedAt: datetime
+    note: str
+
+
+class SubmissionCreate(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    clientSubmissionId: str = Field(min_length=1, max_length=120)
+    type: SubmissionType
+    title: str = Field(min_length=1, max_length=160)
+    details: str = Field(default="", max_length=2000)
+    productId: str | None = Field(default=None, max_length=160)
+    productName: str | None = Field(default=None, max_length=160)
+    categoryName: str | None = Field(default=None, max_length=120)
+    brand: str | None = Field(default=None, max_length=120)
+    modelName: str | None = Field(default=None, max_length=160)
+    sourceUrl: HttpUrl | None = None
+    createdAt: datetime
+
+
+class SubmissionResponse(SubmissionCreate):
+    trackingToken: str
+    status: SubmissionStatus
+    statusMessage: str | None = None
+    updatedAt: datetime
+    reviewHistory: list[SubmissionReviewEvent] = Field(default_factory=list)
