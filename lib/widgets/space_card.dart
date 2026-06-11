@@ -17,26 +17,18 @@ class SpaceCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const colors = [
-      AppColors.warmGray,
-      AppColors.steelSoft,
-      AppColors.coralSoft,
-      AppColors.graySoft,
-    ];
     const icons = [
       Icons.soup_kitchen_outlined,
       Icons.weekend_outlined,
       Icons.bathtub_outlined,
       Icons.bed_outlined,
     ];
-    final accent = colors[index % colors.length];
-
     return Card(
       clipBehavior: Clip.antiAlias,
       child: InkWell(
         onTap: onTap,
         child: Padding(
-          padding: const EdgeInsets.all(16),
+          padding: const EdgeInsets.fromLTRB(16, 14, 16, 14),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -45,11 +37,11 @@ class SpaceCard extends StatelessWidget {
                   Container(
                     width: 44,
                     height: 44,
-                    decoration: BoxDecoration(
-                      color: accent,
-                      borderRadius: BorderRadius.circular(8),
+                    color: AppColors.ink,
+                    child: Icon(
+                      icons[index % icons.length],
+                      color: Colors.white,
                     ),
-                    child: Icon(icons[index % icons.length]),
                   ),
                   const SizedBox(width: 10),
                   Expanded(
@@ -70,6 +62,8 @@ class SpaceCard extends StatelessWidget {
                 style: Theme.of(context).textTheme.bodyMedium,
               ),
               const Spacer(),
+              Container(height: 3, color: AppColors.coral),
+              const SizedBox(height: 10),
               Row(
                 children: [
                   Text(
@@ -77,7 +71,7 @@ class SpaceCard extends StatelessWidget {
                     style: const TextStyle(fontWeight: FontWeight.w800),
                   ),
                   const Spacer(),
-                  const Icon(Icons.arrow_forward_rounded, size: 18),
+                  const Icon(Icons.arrow_forward, size: 18),
                 ],
               ),
               const SizedBox(height: 8),

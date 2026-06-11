@@ -378,7 +378,7 @@ void main() {
     expect(find.text('내 제품'), findsOneWidget);
     expect(find.text('기록'), findsOneWidget);
     expect(find.text('자랑'), findsNothing);
-    expect(find.text('제품 관리 도우미'), findsOneWidget);
+    expect(find.text('CARE INDEX'), findsOneWidget);
     expect(find.text('등록 제품'), findsOneWidget);
   });
 

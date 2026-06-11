@@ -4,6 +4,7 @@ import '../models/product_space.dart';
 import '../models/zone_item.dart';
 import '../repositories/product_data_repository.dart';
 import '../repositories/product_catalog_repository.dart';
+import '../theme/app_theme.dart';
 import '../widgets/space_card.dart';
 import 'zone_detail_screen.dart';
 
@@ -40,21 +41,33 @@ class _ZonesScreenState extends State<ZonesScreen> {
           padding: const EdgeInsets.fromLTRB(20, 20, 20, 16),
           sliver: SliverToBoxAdapter(
             child: Row(
+              crossAxisAlignment: CrossAxisAlignment.end,
               children: [
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
+                      const Text(
+                        'PRODUCT LIBRARY',
+                        style: TextStyle(
+                          color: AppColors.coral,
+                          fontSize: 11,
+                          fontWeight: FontWeight.w900,
+                        ),
+                      ),
+                      const SizedBox(height: 7),
                       Text(
                         '내 제품',
-                        style: Theme.of(context).textTheme.headlineSmall,
+                        style: Theme.of(context).textTheme.headlineLarge,
                       ),
-                      const SizedBox(height: 4),
-                      const Text('공간별로 제품을 넣어두고 청소법을 바로 확인해요.'),
+                      const SizedBox(height: 7),
+                      Container(width: 52, height: 4, color: AppColors.coral),
+                      const SizedBox(height: 9),
+                      const Text('공간별 제품과 관리 정보를 빠르게 찾아보세요.'),
                     ],
                   ),
                 ),
-                IconButton.filledTonal(
+                IconButton.outlined(
                   onPressed: _showAddZoneSheet,
                   tooltip: '공간 추가',
                   icon: const Icon(Icons.add_home_work_outlined),

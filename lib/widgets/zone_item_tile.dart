@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../models/zone_item.dart';
+import '../theme/app_theme.dart';
 
 class ZoneItemTile extends StatelessWidget {
   const ZoneItemTile({
@@ -21,8 +22,11 @@ class ZoneItemTile extends StatelessWidget {
           horizontal: 16,
           vertical: 8,
         ),
-        leading: CircleAvatar(
-          child: Icon(_iconFor(item.type)),
+        leading: Container(
+          width: 48,
+          height: 58,
+          color: AppColors.ink,
+          child: Icon(_iconFor(item.type), color: Colors.white),
         ),
         title: Text(item.displayName),
         subtitle: Padding(
@@ -96,8 +100,9 @@ class _MiniBadge extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
       decoration: BoxDecoration(
-        color: const Color(0xFFFFF3F5),
-        borderRadius: BorderRadius.circular(4),
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(2),
+        border: Border.all(color: AppColors.ink),
       ),
       child: Text(
         label,

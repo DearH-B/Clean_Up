@@ -4,6 +4,7 @@ import '../models/product_space.dart';
 import '../models/zone_item.dart';
 import '../repositories/product_catalog_repository.dart';
 import '../repositories/product_data_repository.dart';
+import '../theme/app_theme.dart';
 import '../widgets/zone_item_tile.dart';
 import 'product_registration_screen.dart';
 import 'zone_item_detail_screen.dart';
@@ -76,11 +77,22 @@ class _ZoneDetailScreenState extends State<ZoneDetailScreen> {
           : ListView(
               padding: const EdgeInsets.fromLTRB(16, 12, 16, 96),
               children: [
+                const Text(
+                  'PRODUCT SECTION',
+                  style: TextStyle(
+                    color: AppColors.coral,
+                    fontSize: 11,
+                    fontWeight: FontWeight.w900,
+                  ),
+                ),
+                const SizedBox(height: 7),
                 Text(
                   '${widget.zone.name}의 제품',
-                  style: Theme.of(context).textTheme.titleLarge,
+                  style: Theme.of(context).textTheme.headlineSmall,
                 ),
-                const SizedBox(height: 6),
+                const SizedBox(height: 7),
+                Container(width: 52, height: 4, color: AppColors.coral),
+                const SizedBox(height: 9),
                 Text(
                   '제품을 선택하면 관리 정보와 단계별 방법을 볼 수 있어요.',
                   style: Theme.of(context).textTheme.bodyMedium,

@@ -12,6 +12,7 @@ import '../models/product_submission.dart';
 import '../models/zone_item.dart';
 import '../repositories/product_data_repository.dart';
 import '../repositories/product_catalog_repository.dart';
+import '../theme/app_theme.dart';
 import 'care_record_editor_screen.dart';
 import 'consumable_editor_screen.dart';
 import 'product_submission_form_screen.dart';
@@ -680,12 +681,9 @@ class _ProductHeader extends StatelessWidget {
             children: [
               Container(
                 width: 48,
-                height: 48,
-                decoration: BoxDecoration(
-                  color: Theme.of(context).colorScheme.secondaryContainer,
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: Icon(_productIcon(item.type)),
+                height: 64,
+                color: AppColors.ink,
+                child: Icon(_productIcon(item.type), color: Colors.white),
               ),
               const SizedBox(width: 12),
               Expanded(
@@ -700,6 +698,8 @@ class _ProductHeader extends StatelessWidget {
                       const SizedBox(height: 2),
                       Text(identity),
                     ],
+                    const SizedBox(height: 8),
+                    Container(width: 46, height: 4, color: AppColors.coral),
                     const SizedBox(height: 7),
                     _GuideSourceBadge(sourceType: item.guideSourceType),
                   ],
@@ -1107,12 +1107,13 @@ class _ScheduleCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
-        color: Theme.of(context).colorScheme.primaryContainer,
-        borderRadius: BorderRadius.circular(8),
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(3),
+        border: Border.all(color: AppColors.rule),
       ),
       child: Row(
         children: [
-          const Icon(Icons.event_available_outlined),
+          Container(width: 7, height: 54, color: AppColors.coral),
           const SizedBox(width: 12),
           Expanded(
             child: Column(

@@ -9,9 +9,8 @@ import '../repositories/product_data_repository.dart';
 import '../repositories/product_catalog_repository.dart';
 import '../repositories/product_submission_repository.dart';
 import '../theme/app_theme.dart';
-import '../widgets/fairy_image.dart';
-import 'zone_item_detail_screen.dart';
 import 'product_submissions_screen.dart';
+import 'zone_item_detail_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({
@@ -55,26 +54,10 @@ class _HomeScreenState extends State<HomeScreen> {
       child: ListView(
         padding: const EdgeInsets.fromLTRB(20, 20, 20, 28),
         children: [
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text('홈', style: Theme.of(context).textTheme.headlineSmall),
-                    const SizedBox(height: 4),
-                    Text(
-                      '우리집 제품의 청소법과 소모품을 한곳에 모아둘게요.',
-                      style: TextStyle(
-                        color: Theme.of(context).colorScheme.onSurfaceVariant,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              const FairyImage(size: 58),
-            ],
+          const _EditorialPageHeader(
+            eyebrow: 'HOME PRODUCT MANUAL',
+            title: '홈',
+            description: '우리집 제품의 관리법과 소모품을 한곳에서 확인하세요.',
           ),
           const SizedBox(height: 18),
           _HeroPanel(
@@ -213,64 +196,71 @@ class _HeroPanel extends StatelessWidget {
             : '등록된 제품 $itemCount개의 관리법과 추천용품을 정리해두고 있어요.';
 
     return Container(
-      height: 256,
+      height: 245,
       clipBehavior: Clip.antiAlias,
       decoration: BoxDecoration(
-        color: AppColors.steelSoft,
-        borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: const Color(0xFFD9E0E2)),
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(3),
+        border: Border.all(color: AppColors.rule, width: 1.5),
       ),
-      child: Stack(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          const Positioned(
-            right: 14,
-            bottom: 14,
-            child: Opacity(
-              opacity: 0.78,
-              child: FairyImage(size: 96),
-            ),
-          ),
-          Positioned.fill(
+          Container(height: 8, color: AppColors.coral),
+          Expanded(
             child: Padding(
-              padding: const EdgeInsets.all(20),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+              padding: const EdgeInsets.fromLTRB(20, 18, 20, 18),
+              child: Row(
                 children: [
-                  const _PillLabel(text: '제품 관리 도우미'),
-                  const SizedBox(height: 12),
-                  ConstrainedBox(
-                    constraints: const BoxConstraints(maxWidth: 260),
-                    child: Text(
-                      title,
-                      maxLines: 2,
-                      overflow: TextOverflow.visible,
-                      style: Theme.of(context).textTheme.titleLarge,
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const _PillLabel(text: 'CARE INDEX'),
+                        const SizedBox(height: 14),
+                        Text(
+                          title,
+                          maxLines: 2,
+                          style: Theme.of(context).textTheme.headlineSmall,
+                        ),
+                        const SizedBox(height: 8),
+                        Text(message, maxLines: 3),
+                        const Spacer(),
+                        Row(
+                          children: [
+                            FilledButton.icon(
+                              onPressed: onAddProduct,
+                              icon: const Icon(Icons.add, size: 18),
+                              label: const Text('제품 추가'),
+                            ),
+                            const SizedBox(width: 8),
+                            IconButton.outlined(
+                              onPressed: onFindGuide,
+                              tooltip: '관리법 찾기',
+                              icon: const Icon(Icons.manage_search_outlined),
+                            ),
+                          ],
+                        ),
+                      ],
                     ),
                   ),
-                  const SizedBox(height: 6),
-                  ConstrainedBox(
-                    constraints: const BoxConstraints(maxWidth: 250),
-                    child: Text(
-                      message,
-                      maxLines: 4,
-                      overflow: TextOverflow.visible,
+                  const SizedBox(width: 16),
+                  Container(
+                    width: 76,
+                    height: 118,
+                    alignment: Alignment.center,
+                    color: AppColors.ink,
+                    child: const RotatedBox(
+                      quarterTurns: 3,
+                      child: Text(
+                        'PRODUCT CARE',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 11,
+                          fontWeight: FontWeight.w900,
+                        ),
+                      ),
                     ),
-                  ),
-                  const Spacer(),
-                  Row(
-                    children: [
-                      FilledButton.icon(
-                        onPressed: onAddProduct,
-                        icon: const Icon(Icons.add, size: 18),
-                        label: const Text('제품 추가'),
-                      ),
-                      const SizedBox(width: 8),
-                      IconButton.filledTonal(
-                        onPressed: onFindGuide,
-                        tooltip: '관리법 찾기',
-                        icon: const Icon(Icons.manage_search_outlined),
-                      ),
-                    ],
                   ),
                 ],
               ),
@@ -344,13 +334,13 @@ class _StatTile extends StatelessWidget {
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: Theme.of(context).colorScheme.outlineVariant),
+        borderRadius: BorderRadius.circular(3),
+        border: Border.all(color: AppColors.rule),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Icon(icon, size: 19, color: AppColors.coral),
+          Container(width: 28, height: 5, color: AppColors.coral),
           const SizedBox(height: 8),
           Text(value, style: Theme.of(context).textTheme.titleLarge),
           const SizedBox(height: 2),
@@ -381,6 +371,8 @@ class _SectionTitle extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
+        Container(width: 5, height: 24, color: AppColors.coral),
+        const SizedBox(width: 10),
         Expanded(
           child: Text(title, style: Theme.of(context).textTheme.titleLarge),
         ),
@@ -408,14 +400,16 @@ class _HomeProductCard extends StatelessWidget {
     return Card(
       child: InkWell(
         onTap: onTap,
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.circular(3),
         child: Padding(
           padding: const EdgeInsets.all(14),
           child: Row(
             children: [
-              CircleAvatar(
-                radius: 24,
-                child: Icon(_iconFor(item.type)),
+              Container(
+                width: 48,
+                height: 58,
+                color: AppColors.ink,
+                child: Icon(_iconFor(item.type), color: Colors.white),
               ),
               const SizedBox(width: 12),
               Expanded(
@@ -500,8 +494,8 @@ class _EmptyProducts extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 24),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: Theme.of(context).colorScheme.outlineVariant),
+        borderRadius: BorderRadius.circular(3),
+        border: Border.all(color: AppColors.rule),
       ),
       child: Column(
         children: [
@@ -538,8 +532,8 @@ class _DirectionCard extends StatelessWidget {
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: Theme.of(context).colorScheme.outlineVariant),
+        borderRadius: BorderRadius.circular(3),
+        border: Border.all(color: AppColors.rule),
       ),
       child: const Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -578,7 +572,7 @@ class _DirectionRow extends StatelessWidget {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Icon(icon, size: 19, color: AppColors.coral),
+        Icon(icon, size: 19, color: AppColors.ink),
         const SizedBox(width: 10),
         Expanded(child: Text(text)),
       ],
@@ -596,15 +590,15 @@ class _PillLabel extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
       decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(20),
+        color: AppColors.coral,
+        borderRadius: BorderRadius.circular(2),
       ),
       child: Text(
         text,
         style: const TextStyle(
-          color: Color(0xFFB55567),
+          color: Colors.white,
           fontSize: 12,
-          fontWeight: FontWeight.w700,
+          fontWeight: FontWeight.w900,
         ),
       ),
     );
@@ -621,13 +615,52 @@ class _MiniBadge extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 3),
       decoration: BoxDecoration(
-        color: const Color(0xFFFFF3F5),
-        borderRadius: BorderRadius.circular(4),
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(2),
+        border: Border.all(color: AppColors.ink),
       ),
       child: Text(
         label,
-        style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w700),
+        style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w800),
       ),
+    );
+  }
+}
+
+class _EditorialPageHeader extends StatelessWidget {
+  const _EditorialPageHeader({
+    required this.eyebrow,
+    required this.title,
+    required this.description,
+  });
+
+  final String eyebrow;
+  final String title;
+  final String description;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          eyebrow,
+          style: const TextStyle(
+            color: AppColors.coral,
+            fontSize: 11,
+            fontWeight: FontWeight.w900,
+          ),
+        ),
+        const SizedBox(height: 7),
+        Text(title, style: Theme.of(context).textTheme.headlineLarge),
+        const SizedBox(height: 7),
+        Container(width: 52, height: 4, color: AppColors.coral),
+        const SizedBox(height: 9),
+        Text(
+          description,
+          style: const TextStyle(color: AppColors.muted),
+        ),
+      ],
     );
   }
 }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../models/care_record.dart';
+import '../theme/app_theme.dart';
 
 class RecordTile extends StatelessWidget {
   const RecordTile({
@@ -22,12 +23,11 @@ class RecordTile extends StatelessWidget {
       child: ListTile(
         onTap: onTap,
         contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 7),
-        leading: CircleAvatar(
-          backgroundColor: Theme.of(context).colorScheme.secondaryContainer,
-          child: Icon(
-            _iconFor(record.type),
-            color: Theme.of(context).colorScheme.secondary,
-          ),
+        leading: Container(
+          width: 44,
+          height: 54,
+          color: AppColors.ink,
+          child: Icon(_iconFor(record.type), color: Colors.white),
         ),
         title: Text(
           record.title,

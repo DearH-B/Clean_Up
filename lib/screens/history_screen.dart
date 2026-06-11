@@ -6,6 +6,7 @@ import '../models/care_record.dart';
 import '../models/product_space.dart';
 import '../models/zone_item.dart';
 import '../repositories/product_data_repository.dart';
+import '../theme/app_theme.dart';
 import '../widgets/record_tile.dart';
 import 'care_record_editor_screen.dart';
 
@@ -54,9 +55,20 @@ class _HistoryScreenState extends State<HistoryScreen> {
       child: ListView(
         padding: const EdgeInsets.fromLTRB(20, 20, 20, 28),
         children: [
-          Text('기록', style: Theme.of(context).textTheme.headlineSmall),
-          const SizedBox(height: 4),
-          const Text('제품별 청소, 점검, 교체와 문제 이력을 찾아볼 수 있어요.'),
+          const Text(
+            'CARE ARCHIVE',
+            style: TextStyle(
+              color: AppColors.coral,
+              fontSize: 11,
+              fontWeight: FontWeight.w900,
+            ),
+          ),
+          const SizedBox(height: 7),
+          Text('기록', style: Theme.of(context).textTheme.headlineLarge),
+          const SizedBox(height: 7),
+          Container(width: 52, height: 4, color: AppColors.coral),
+          const SizedBox(height: 9),
+          const Text('제품별 청소, 점검, 교체 이력을 날짜순으로 확인하세요.'),
           const SizedBox(height: 20),
           _HistorySummary(
             count: filtered.length,
@@ -383,12 +395,13 @@ class _HistorySummary extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(18),
       decoration: BoxDecoration(
-        color: Theme.of(context).colorScheme.primaryContainer,
-        borderRadius: BorderRadius.circular(8),
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(3),
+        border: Border.all(color: AppColors.rule),
       ),
       child: Row(
         children: [
-          const Icon(Icons.history_rounded, size: 30),
+          Container(width: 8, height: 54, color: AppColors.coral),
           const SizedBox(width: 14),
           Expanded(
             child: Column(
