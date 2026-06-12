@@ -7,13 +7,13 @@ import '../data/product_care_templates.dart';
 import '../models/product_search_request.dart';
 import '../models/product_submission.dart';
 import '../models/product_space.dart';
+import '../models/product_finder_result.dart';
 import '../models/visual_product_candidate.dart';
 import '../models/zone_item.dart';
 import '../repositories/product_catalog_repository.dart';
 import '../repositories/product_data_repository.dart';
 import 'product_code_scanner_screen.dart';
 import 'model_selection_screen.dart';
-import 'visual_product_finder_screen.dart';
 
 class ProductRegistrationResult {
   const ProductRegistrationResult._({
@@ -355,28 +355,16 @@ class _ProductRegistrationScreenState extends State<ProductRegistrationScreen> {
           }),
         ),
         const SizedBox(height: 14),
-        if (_canUseVisualFinder) ...[
-          FilledButton.tonalIcon(
-            onPressed: _openVisualProductFinder,
-            icon: const Icon(Icons.image_search_outlined),
-            label: Text(
-              _visualCandidate == null ? '이미지와 연식으로 제품 찾기' : '선택한 제품 형태 바꾸기',
-            ),
-          ),
-          if (_visualCandidate != null) ...[
-            const SizedBox(height: 10),
-            _VisualCandidateSummary(candidate: _visualCandidate!),
-          ],
-          const SizedBox(height: 14),
-        ],
-        OutlinedButton.icon(
+        FilledButton.tonalIcon(
           onPressed:
-              _brandController.text.trim().isEmpty ? null : _openModelSelection,
-          icon: const Icon(Icons.list_alt_outlined),
+              _brandController.text.trim().isEmpty ? null : _openProductFinder,
+          icon: const Icon(Icons.image_search_outlined),
           label: Text(
-            _modelController.text.trim().isEmpty
-                ? '모델 선택'
-                : _modelController.text.trim(),
+            _modelController.text.trim().isNotEmpty
+                ? _modelController.text.trim()
+                : _visualCandidate != null
+                    ? '선택한 제품 바꾸기'
+                    : '내 제품 찾기',
           ),
         ),
         if (_brandController.text.trim().isEmpty) ...[
@@ -399,6 +387,9 @@ class _ProductRegistrationScreenState extends State<ProductRegistrationScreen> {
               ),
             ],
           ),
+        ] else if (_visualCandidate != null) ...[
+          const SizedBox(height: 10),
+          _VisualCandidateSummary(candidate: _visualCandidate!),
         ],
         const SizedBox(height: 12),
         Text(
@@ -844,36 +835,13 @@ class _ProductRegistrationScreenState extends State<ProductRegistrationScreen> {
     _showMessage('코드를 읽었어요. 연결된 제품 정보를 찾고 있어요.');
   }
 
-  Future<void> _openVisualProductFinder() async {
-    final candidate = await Navigator.of(context).push<VisualProductCandidate>(
-      MaterialPageRoute(
-        builder: (context) => VisualProductFinderScreen(
-          categoryName: _categoryController.text.trim(),
-          brand: _brandController.text.trim(),
-        ),
-      ),
-    );
-    if (candidate == null || !mounted) {
-      return;
-    }
-    setState(() {
-      _visualCandidate = candidate;
-      _categoryController.text = candidate.categoryName;
-      if (_brandController.text.trim().isEmpty && candidate.brand != '브랜드 미상') {
-        _brandController.text = candidate.brand;
-      }
-      _modelController.clear();
-      _selectedType = ZoneItemType.appliance;
-    });
-  }
-
-  Future<void> _openModelSelection() async {
+  Future<void> _openProductFinder() async {
     final category = _categoryController.text.trim();
     final brand = _brandController.text.trim();
     if (brand.isEmpty) {
       return;
     }
-    final model = await Navigator.of(context).push<String>(
+    final result = await Navigator.of(context).push<ProductFinderResult>(
       MaterialPageRoute(
         builder: (context) => ModelSelectionScreen(
           categoryName: category,
@@ -885,13 +853,21 @@ class _ProductRegistrationScreenState extends State<ProductRegistrationScreen> {
         ),
       ),
     );
-    if (model == null || !mounted) {
+    if (result == null || !mounted) {
       return;
     }
     setState(() {
-      _modelController.text = model;
-      if (model.isNotEmpty) {
+      if (result.isExactModel) {
+        _modelController.text = result.modelName;
         _visualCandidate = null;
+      } else {
+        final candidate = result.visualCandidate;
+        if (candidate != null) {
+          _visualCandidate = candidate;
+          _categoryController.text = candidate.categoryName;
+          _modelController.clear();
+          _selectedType = ZoneItemType.appliance;
+        }
       }
     });
   }
@@ -1111,10 +1087,6 @@ class _ProductRegistrationScreenState extends State<ProductRegistrationScreen> {
       (space) => space.id == _selectedSpaceId,
       orElse: () => widget.space,
     );
-  }
-
-  bool get _canUseVisualFinder {
-    return _normalize(_categoryController.text).contains('냉장고');
   }
 
   IconData _iconFor(ZoneItemType type) {

@@ -710,12 +710,14 @@ void main() {
     await tester.pumpAndSettle();
     await tester.tap(find.text('삼성전자'));
     await tester.pumpAndSettle();
-    await tester.tap(find.text('이미지와 연식으로 제품 찾기'));
+    await tester.tap(find.text('내 제품 찾기'));
     await tester.pumpAndSettle();
 
-    expect(find.text('외형으로 제품 찾기'), findsOneWidget);
+    expect(find.text('내 제품 찾기'), findsOneWidget);
+    await tester.tap(find.text('외형으로 찾기'));
+    await tester.pumpAndSettle();
     expect(find.textContaining('4도어 냉장고'), findsOneWidget);
-    await tester.tap(find.text('이 제품과 비슷해요').first);
+    await tester.tap(find.text('비슷해요').first);
     await tester.pumpAndSettle();
 
     expect(find.text('유사 제품'), findsOneWidget);
@@ -752,14 +754,25 @@ void main() {
     expect(find.text('브랜드 미상'), findsNothing);
     await tester.tap(find.text('삼성전자'));
     await tester.pumpAndSettle();
-    final modelButton = find.widgetWithText(OutlinedButton, '모델 선택');
-    await tester.ensureVisible(modelButton);
+    final productFinderButton = find.widgetWithText(FilledButton, '내 제품 찾기');
+    await tester.ensureVisible(productFinderButton);
     await tester.pumpAndSettle();
-    await tester.tap(modelButton);
+    await tester.tap(productFinderButton);
     await tester.pumpAndSettle();
 
-    expect(find.text('RF85C90F1AP'), findsOneWidget);
-    await tester.tap(find.text('RF85C90F1AP'));
+    expect(find.text('RF85C90F1AP'), findsWidgets);
+    final targetModelCard = find
+        .ancestor(
+          of: find.text('RF85C90F1AP').first,
+          matching: find.byType(Card),
+        )
+        .first;
+    await tester.tap(
+      find.descendant(
+        of: targetModelCard,
+        matching: find.text('정확해요'),
+      ),
+    );
     await tester.pumpAndSettle();
 
     expect(find.text('선택한 모델: RF85C90F1AP'), findsOneWidget);
@@ -776,7 +789,7 @@ void main() {
     expect(products.single.visualCandidateId, isNull);
   });
 
-  testWidgets('모델 선택 화면을 반복해서 열고 닫아도 오류가 발생하지 않는다', (tester) async {
+  testWidgets('내 제품 찾기 화면을 반복해서 열고 닫아도 오류가 발생하지 않는다', (tester) async {
     await dataRepository.saveSpaces(productSpaces);
     await dataRepository.saveUserProducts([]);
     await pumpApp(tester, dataRepository);
@@ -792,25 +805,37 @@ void main() {
     await tester.tap(find.text('삼성전자'));
     await tester.pumpAndSettle();
 
-    final modelButton = find.widgetWithText(OutlinedButton, '모델 선택');
-    await tester.ensureVisible(modelButton);
+    final productFinderButton = find.widgetWithText(FilledButton, '내 제품 찾기');
+    await tester.ensureVisible(productFinderButton);
     await tester.pumpAndSettle();
-    await tester.tap(modelButton);
+    await tester.tap(productFinderButton);
     await tester.pumpAndSettle();
-    await tester.tap(find.text('RF85C90F1AP'));
+    final targetModelCard = find
+        .ancestor(
+          of: find.text('RF85C90F1AP').first,
+          matching: find.byType(Card),
+        )
+        .first;
+    await tester.tap(
+      find.descendant(
+        of: targetModelCard,
+        matching: find.text('정확해요'),
+      ),
+    );
     await tester.pumpAndSettle();
 
     expect(tester.takeException(), isNull);
-    final selectedButton = find.widgetWithText(OutlinedButton, 'RF85C90F1AP');
+    final selectedButton = find.widgetWithText(FilledButton, 'RF85C90F1AP');
     await tester.ensureVisible(selectedButton);
     await tester.pumpAndSettle();
     await tester.tap(selectedButton);
     await tester.pumpAndSettle();
-    await tester.tap(find.text('모델명을 모르겠어요'));
+    expect(find.text('내 제품 찾기'), findsOneWidget);
+    await tester.pageBack();
     await tester.pumpAndSettle();
 
     expect(tester.takeException(), isNull);
-    expect(find.widgetWithText(OutlinedButton, '모델 선택'), findsOneWidget);
+    expect(find.widgetWithText(FilledButton, 'RF85C90F1AP'), findsOneWidget);
   });
 
   testWidgets('검색 실패 시 제품 정보 요청을 저장할 수 있다', (tester) async {
