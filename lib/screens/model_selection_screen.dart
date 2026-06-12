@@ -163,7 +163,7 @@ class _ModelSelectionScreenState extends State<ModelSelectionScreen> {
                   model: model,
                   selected: widget.selectedModel == model.modelName,
                   onSelected: () => _finish(
-                    ProductFinderResult.exact(model.modelName),
+                    ProductFinderResult.exact(model),
                   ),
                 ),
             ],
@@ -249,7 +249,7 @@ class _ModelSelectionScreenState extends State<ModelSelectionScreen> {
       ),
     );
     if (model != null && mounted) {
-      _finish(ProductFinderResult.exact(model));
+      _finish(ProductFinderResult.manual(model));
     }
   }
 

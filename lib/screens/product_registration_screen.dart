@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 
 import '../data/product_catalog.dart';
 import '../data/product_care_templates.dart';
+import '../models/catalog_model_option.dart';
 import '../models/product_search_request.dart';
 import '../models/product_submission.dart';
 import '../models/product_space.dart';
@@ -83,6 +84,7 @@ class _ProductRegistrationScreenState extends State<ProductRegistrationScreen> {
   String? _scannedCodeFormat;
   String? _scannedSourceUrl;
   VisualProductCandidate? _visualCandidate;
+  CatalogModelOption? _exactModel;
   late String _selectedSpaceId;
 
   @override
@@ -293,6 +295,7 @@ class _ProductRegistrationScreenState extends State<ProductRegistrationScreen> {
           onChanged: (_) {
             setState(() {
               _visualCandidate = null;
+              _exactModel = null;
               _brandOptions = [];
             });
             _loadBrandOptions();
@@ -335,6 +338,7 @@ class _ProductRegistrationScreenState extends State<ProductRegistrationScreen> {
                       _brandController.text = brand;
                       _modelController.clear();
                       _visualCandidate = null;
+                      _exactModel = null;
                     });
                   },
                 ),
@@ -352,6 +356,7 @@ class _ProductRegistrationScreenState extends State<ProductRegistrationScreen> {
           onChanged: (_) => setState(() {
             _modelController.clear();
             _visualCandidate = null;
+            _exactModel = null;
           }),
         ),
         const SizedBox(height: 14),
@@ -382,7 +387,10 @@ class _ProductRegistrationScreenState extends State<ProductRegistrationScreen> {
               Expanded(child: Text('선택한 모델: ${_modelController.text.trim()}')),
               IconButton(
                 tooltip: '모델 선택 해제',
-                onPressed: () => setState(_modelController.clear),
+                onPressed: () => setState(() {
+                  _modelController.clear();
+                  _exactModel = null;
+                }),
                 icon: const Icon(Icons.close),
               ),
             ],
@@ -667,23 +675,32 @@ class _ProductRegistrationScreenState extends State<ProductRegistrationScreen> {
     final model = _modelController.text.trim();
     final template = findProductCareTemplate(category);
     if (template != null) {
-      return template.createProduct(
-        id: id,
-        zoneId: _selectedSpaceId,
-        nickname: nickname.isEmpty ? null : nickname,
-        purchaseDate: _purchaseDate,
-        installedDate: _installedDate,
-        note: note.isEmpty ? null : note,
-        manufacturer: brand.isEmpty ? null : brand,
-        modelName: model.isEmpty ? null : model,
-        scannedCode: _scannedCode,
-        scannedCodeFormat: _scannedCodeFormat,
-        scannedSourceUrl: _scannedSourceUrl,
-        visualCandidateId: _visualCandidate?.id,
-        releasePeriod: _visualCandidate?.releasePeriod,
-        productMethod: _visualCandidate?.formFactor,
-        isVisualMatch: _visualCandidate != null,
-      );
+      return template
+          .createProduct(
+            id: id,
+            zoneId: _selectedSpaceId,
+            nickname: nickname.isEmpty ? null : nickname,
+            purchaseDate: _purchaseDate,
+            installedDate: _installedDate,
+            note: note.isEmpty ? null : note,
+            manufacturer: brand.isEmpty ? null : brand,
+            modelName: model.isEmpty ? null : model,
+            scannedCode: _scannedCode,
+            scannedCodeFormat: _scannedCodeFormat,
+            scannedSourceUrl: _scannedSourceUrl,
+            visualCandidateId: _visualCandidate?.id,
+            releasePeriod: _visualCandidate?.releasePeriod,
+            productMethod: _visualCandidate?.formFactor,
+            isVisualMatch: _visualCandidate != null,
+          )
+          .copyWith(
+            modelDisplayName: _exactModel?.displayName,
+            modelReleaseYear: _exactModel?.releaseYear,
+            modelImageUrl: _exactModel?.imageUrl,
+            officialProductUrl: _exactModel?.productUrl,
+            modelFeatures: _exactModel?.features,
+            matchLevelLabel: _exactModel == null ? null : '공식 확인 모델',
+          );
     }
     final now = DateTime.now();
     return ZoneItem(
@@ -713,11 +730,20 @@ class _ProductRegistrationScreenState extends State<ProductRegistrationScreen> {
       ],
       manufacturer: brand.isEmpty ? null : brand,
       modelName: model.isEmpty ? null : model,
+      modelDisplayName: _exactModel?.displayName,
+      modelReleaseYear: _exactModel?.releaseYear,
+      modelImageUrl: _exactModel?.imageUrl,
+      officialProductUrl: _exactModel?.productUrl,
+      modelFeatures: _exactModel?.features ?? const [],
       productMethod: _visualCandidate?.formFactor,
       guideStatus: '이 제품군의 검수된 세부 관리법을 준비하고 있어요.',
       guideBasis: '잘못된 공통 청소법을 제공하지 않고 제조사 설명서를 우선하도록 안내해요.',
       guideSourceType: GuideSourceType.general,
-      matchLevelLabel: model.isEmpty ? '사용자 입력 제품군' : '사용자 입력 모델',
+      matchLevelLabel: _exactModel != null
+          ? '공식 확인 모델'
+          : model.isEmpty
+              ? '사용자 입력 제품군'
+              : '사용자 입력 모델',
       sourceTitle: '사용자 등록 정보',
       sourceCheckedAt: now,
       productSpecs: [
@@ -857,13 +883,15 @@ class _ProductRegistrationScreenState extends State<ProductRegistrationScreen> {
       return;
     }
     setState(() {
-      if (result.isExactModel) {
+      if (result.hasModelName) {
         _modelController.text = result.modelName;
+        _exactModel = result.exactModel;
         _visualCandidate = null;
       } else {
         final candidate = result.visualCandidate;
         if (candidate != null) {
           _visualCandidate = candidate;
+          _exactModel = null;
           _categoryController.text = candidate.categoryName;
           _modelController.clear();
           _selectedType = ZoneItemType.appliance;

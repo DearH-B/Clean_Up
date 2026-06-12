@@ -74,6 +74,49 @@ void main() {
     expect(restored.hasProductInfo, isTrue);
   });
 
+  test('공식 확인 모델 메타데이터는 저장과 복원에서도 유지된다', () {
+    final item = searchProductCatalog('Bespoke AI 4도어')
+        .first
+        .toZoneItem(id: 'exact-product', zoneId: 'kitchen')
+        .copyWith(
+          modelName: 'RM70F63R2A',
+          modelDisplayName: 'Bespoke AI 냉장고 4도어 키친핏 Max 640L',
+          modelReleaseYear: 2025,
+          modelImageUrl: 'https://example.com/refrigerator.png',
+          officialProductUrl: 'https://example.com/product',
+          modelFeatures: const ['키친핏 Max', '640L'],
+          matchLevelLabel: '공식 확인 모델',
+        );
+
+    final restored = ZoneItem.fromJson(item.toJson());
+
+    expect(restored.modelName, 'RM70F63R2A');
+    expect(restored.modelReleaseYear, 2025);
+    expect(restored.modelImageUrl, contains('refrigerator.png'));
+    expect(restored.officialProductUrl, contains('/product'));
+    expect(restored.modelFeatures, ['키친핏 Max', '640L']);
+    expect(restored.matchLevelLabel, '공식 확인 모델');
+  });
+
+  test('이전 버전의 정확한 모델은 로드할 때 공식 메타데이터로 보강된다', () async {
+    final legacyItem = searchProductCatalog('Bespoke AI 4도어')
+        .first
+        .toZoneItem(id: 'legacy-exact-product', zoneId: 'kitchen')
+        .copyWith(modelName: 'RM70F63R2A');
+    SharedPreferences.setMockInitialValues({
+      'zone_items_v1': jsonEncode([legacyItem.toJson()]),
+    });
+
+    final products = await const ProductDataRepository().loadUserProducts();
+    final upgraded = products!.single;
+
+    expect(upgraded.modelDisplayName, contains('키친핏 Max'));
+    expect(upgraded.modelReleaseYear, 2025);
+    expect(upgraded.modelImageUrl, isNotEmpty);
+    expect(upgraded.officialProductUrl, contains('samsung.com'));
+    expect(upgraded.matchLevelLabel, '공식 확인 모델');
+  });
+
   test('대표 브랜드 목록에는 브랜드 미상이 표시되지 않는다', () {
     expect(catalogBrandOptionsFor('냉장고'), isNot(contains('브랜드 미상')));
     expect(
@@ -603,6 +646,12 @@ void main() {
         products!.firstWhere((item) => item.id == 'series-refrigerator');
     expect(refrigerator.manufacturer, '삼성전자');
     expect(refrigerator.modelName, 'RM70F63R2A');
+    expect(refrigerator.modelDisplayName, contains('키친핏 Max'));
+    expect(refrigerator.modelReleaseYear, 2025);
+    expect(refrigerator.modelImageUrl, isNotEmpty);
+    expect(refrigerator.officialProductUrl, contains('samsung.com'));
+    expect(refrigerator.modelFeatures, contains('640L'));
+    expect(refrigerator.matchLevelLabel, '공식 확인 모델');
     expect(refrigerator.visualCandidateId, isNull);
   });
 

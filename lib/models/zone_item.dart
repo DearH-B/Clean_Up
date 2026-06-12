@@ -85,6 +85,11 @@ class ZoneItem {
     this.manufacturer,
     this.seriesName,
     this.modelName,
+    this.modelDisplayName,
+    this.modelReleaseYear,
+    this.modelImageUrl,
+    this.officialProductUrl,
+    this.modelFeatures = const [],
     this.productMethod,
     this.guideStatus,
     this.guideVideoUrl,
@@ -129,6 +134,11 @@ class ZoneItem {
   final String? manufacturer;
   final String? seriesName;
   final String? modelName;
+  final String? modelDisplayName;
+  final int? modelReleaseYear;
+  final String? modelImageUrl;
+  final String? officialProductUrl;
+  final List<String> modelFeatures;
   final String? productMethod;
   final String? guideStatus;
   final String? guideVideoUrl;
@@ -201,6 +211,12 @@ class ZoneItem {
       manufacturer: json['manufacturer'] as String?,
       seriesName: json['seriesName'] as String?,
       modelName: json['modelName'] as String?,
+      modelDisplayName: json['modelDisplayName'] as String?,
+      modelReleaseYear: json['modelReleaseYear'] as int?,
+      modelImageUrl: json['modelImageUrl'] as String?,
+      officialProductUrl: json['officialProductUrl'] as String?,
+      modelFeatures:
+          (json['modelFeatures'] as List<dynamic>? ?? const []).cast<String>(),
       productMethod: json['productMethod'] as String?,
       guideStatus: json['guideStatus'] as String?,
       guideVideoUrl: json['guideVideoUrl'] as String?,
@@ -274,6 +290,11 @@ class ZoneItem {
       'manufacturer': manufacturer,
       'seriesName': seriesName,
       'modelName': modelName,
+      'modelDisplayName': modelDisplayName,
+      'modelReleaseYear': modelReleaseYear,
+      'modelImageUrl': modelImageUrl,
+      'officialProductUrl': officialProductUrl,
+      'modelFeatures': modelFeatures,
       'productMethod': productMethod,
       'guideStatus': guideStatus,
       'guideVideoUrl': guideVideoUrl,
@@ -314,6 +335,11 @@ class ZoneItem {
     String? manufacturer,
     String? seriesName,
     String? modelName,
+    String? modelDisplayName,
+    int? modelReleaseYear,
+    String? modelImageUrl,
+    String? officialProductUrl,
+    List<String>? modelFeatures,
     String? guideStatus,
     String? sourceTitle,
     String? sourceUrl,
@@ -325,6 +351,8 @@ class ZoneItem {
     bool clearLastCleanedAt = false,
     bool clearNextDueAt = false,
     bool clearVisualCandidate = false,
+    bool clearExactModel = false,
+    bool clearSourceUrl = false,
     List<ProductConsumable>? consumables,
   }) {
     return ZoneItem(
@@ -355,6 +383,17 @@ class ZoneItem {
       manufacturer: manufacturer ?? this.manufacturer,
       seriesName: seriesName ?? this.seriesName,
       modelName: modelName ?? this.modelName,
+      modelDisplayName:
+          clearExactModel ? null : modelDisplayName ?? this.modelDisplayName,
+      modelReleaseYear:
+          clearExactModel ? null : modelReleaseYear ?? this.modelReleaseYear,
+      modelImageUrl:
+          clearExactModel ? null : modelImageUrl ?? this.modelImageUrl,
+      officialProductUrl: clearExactModel
+          ? null
+          : officialProductUrl ?? this.officialProductUrl,
+      modelFeatures:
+          clearExactModel ? const [] : modelFeatures ?? this.modelFeatures,
       productMethod: productMethod,
       guideStatus: guideStatus ?? this.guideStatus,
       guideVideoUrl: guideVideoUrl,
@@ -362,7 +401,7 @@ class ZoneItem {
       guideVideoChannel: guideVideoChannel,
       guideBasis: guideBasis,
       sourceTitle: sourceTitle ?? this.sourceTitle,
-      sourceUrl: sourceUrl ?? this.sourceUrl,
+      sourceUrl: clearSourceUrl ? null : sourceUrl ?? this.sourceUrl,
       sourceCheckedAt: sourceCheckedAt ?? this.sourceCheckedAt,
       matchLevelLabel: matchLevelLabel ?? this.matchLevelLabel,
       productSpecs: productSpecs ?? this.productSpecs,

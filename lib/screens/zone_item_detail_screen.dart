@@ -6,6 +6,7 @@ import 'package:url_launcher/url_launcher.dart';
 import '../data/product_catalog.dart';
 import '../data/product_consumable_defaults.dart';
 import '../models/catalog_metadata.dart';
+import '../models/catalog_model_option.dart';
 import '../models/care_record.dart';
 import '../models/product_consumable.dart';
 import '../models/product_finder_result.dart';
@@ -116,6 +117,10 @@ class _ZoneItemDetailScreenState extends State<ZoneItemDetailScreen> {
     return ListView(
       padding: const EdgeInsets.fromLTRB(16, 18, 16, 32),
       children: [
+        if (_item.modelImageUrl?.isNotEmpty == true) ...[
+          const _GuideScopeNotice(),
+          const SizedBox(height: 14),
+        ],
         Text(_item.summary),
         if (_item.guideStatus != null) ...[
           const SizedBox(height: 14),
@@ -296,6 +301,10 @@ class _ZoneItemDetailScreenState extends State<ZoneItemDetailScreen> {
     return ListView(
       padding: const EdgeInsets.fromLTRB(16, 18, 16, 32),
       children: [
+        if (_item.modelImageUrl?.isNotEmpty == true) ...[
+          _VerifiedModelCard(item: _item, onOpenSource: _openProduct),
+          const SizedBox(height: 18),
+        ],
         if (_item.hasProductInfo) _ProductInfo(item: _item),
         if (!_item.hasProductInfo)
           OutlinedButton.icon(
@@ -693,7 +702,16 @@ class _ProductHeader extends StatelessWidget {
                 width: 48,
                 height: 64,
                 color: AppColors.ink,
-                child: Icon(_productIcon(item.type), color: Colors.white),
+                child: item.modelImageUrl?.isNotEmpty == true
+                    ? Image.network(
+                        item.modelImageUrl!,
+                        fit: BoxFit.contain,
+                        errorBuilder: (_, __, ___) => Icon(
+                          _productIcon(item.type),
+                          color: Colors.white,
+                        ),
+                      )
+                    : Icon(_productIcon(item.type), color: Colors.white),
               ),
               const SizedBox(width: 12),
               Expanded(
@@ -719,6 +737,33 @@ class _ProductHeader extends StatelessWidget {
           ),
           const SizedBox(height: 14),
           _ScheduleCard(item: item, onComplete: onComplete),
+        ],
+      ),
+    );
+  }
+}
+
+class _GuideScopeNotice extends StatelessWidget {
+  const _GuideScopeNotice();
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(12),
+      decoration: BoxDecoration(
+        color: Theme.of(context).colorScheme.surfaceContainerLow,
+        border: const Border(
+          left: BorderSide(color: AppColors.coral, width: 4),
+        ),
+      ),
+      child: const Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Icon(Icons.info_outline, size: 20),
+          SizedBox(width: 8),
+          Expanded(
+            child: Text('제품은 정확한 모델로 확인했어요. 아래 관리법은 시리즈 공통 안내예요.'),
+          ),
         ],
       ),
     );
@@ -1624,6 +1669,7 @@ class _ProductInfoSheetState extends State<_ProductInfoSheet> {
   String _searchQuery = '';
   ProductCatalogEntry? _selectedCatalogEntry;
   VisualProductCandidate? _visualCandidate;
+  CatalogModelOption? _exactModel;
   List<ProductCatalogEntry> _searchResults = [];
   Timer? _searchDebounce;
   bool _isSearching = false;
@@ -1639,6 +1685,18 @@ class _ProductInfoSheetState extends State<_ProductInfoSheet> {
       text: widget.item.manufacturer,
     );
     _modelController = TextEditingController(text: widget.item.modelName);
+    if (widget.item.modelName?.isNotEmpty == true &&
+        (widget.item.modelImageUrl?.isNotEmpty == true ||
+            widget.item.officialProductUrl?.isNotEmpty == true)) {
+      _exactModel = CatalogModelOption(
+        modelName: widget.item.modelName!,
+        displayName: widget.item.modelDisplayName ?? widget.item.modelName!,
+        releaseYear: widget.item.modelReleaseYear,
+        imageUrl: widget.item.modelImageUrl,
+        productUrl: widget.item.officialProductUrl,
+        features: widget.item.modelFeatures,
+      );
+    }
     _customBrand = !catalogBrandOptionsFor(_categoryName).contains(
           widget.item.manufacturer,
         ) &&
@@ -1765,6 +1823,7 @@ class _ProductInfoSheetState extends State<_ProductInfoSheet> {
               onSelected: (modelName) {
                 setState(() {
                   _modelController.text = modelName;
+                  _exactModel = null;
                 });
               },
             ),
@@ -1776,6 +1835,7 @@ class _ProductInfoSheetState extends State<_ProductInfoSheet> {
                 labelText: '모델명 직접 입력 또는 선택',
                 hintText: '제품 라벨의 모델명을 그대로 적어도 좋아요.',
               ),
+              onChanged: (_) => setState(() => _exactModel = null),
               onSubmitted: (_) => _submit(),
             ),
             const SizedBox(height: 20),
@@ -1811,16 +1871,27 @@ class _ProductInfoSheetState extends State<_ProductInfoSheet> {
       widget.item.copyWith(
         manufacturer: manufacturer,
         modelName: modelName,
+        modelDisplayName: _exactModel?.displayName,
+        modelReleaseYear: _exactModel?.releaseYear,
+        modelImageUrl: _exactModel?.imageUrl,
+        officialProductUrl: _exactModel?.productUrl,
+        modelFeatures: _exactModel?.features,
         visualCandidateId: _visualCandidate?.id,
         releasePeriod: _visualCandidate?.releasePeriod,
         clearVisualCandidate: modelName.isNotEmpty && _visualCandidate == null,
+        clearExactModel: modelName.isEmpty || _exactModel == null,
         guideStatus: '등록된 제품 정보를 바탕으로 공식 안내를 확인할 수 있어요.',
-        sourceTitle: '사용자 등록 정보',
+        sourceTitle: _exactModel == null ? '사용자 등록 정보' : '제조사 공식 제품 페이지',
+        sourceUrl: _exactModel?.productUrl,
+        clearSourceUrl: _exactModel == null,
         sourceCheckedAt: DateTime.now(),
-        matchLevelLabel: '사용자 입력 정보',
+        matchLevelLabel: _exactModel == null ? '사용자 입력 정보' : '공식 확인 모델',
         productSpecs: [
           if (manufacturer.isNotEmpty) '브랜드/제조사: $manufacturer',
           if (modelName.isNotEmpty) '모델명: $modelName',
+          if (_exactModel?.releaseYear != null)
+            '출시 연도: ${_exactModel!.releaseYear}년',
+          ...?_exactModel?.features,
         ],
       ),
     );
@@ -1833,6 +1904,7 @@ class _ProductInfoSheetState extends State<_ProductInfoSheet> {
       _modelController.clear();
       _selectedCatalogEntry = null;
       _visualCandidate = null;
+      _exactModel = null;
     });
   }
 
@@ -1845,6 +1917,7 @@ class _ProductInfoSheetState extends State<_ProductInfoSheet> {
       _manufacturerController.text = entry.brand;
       _modelController.text = entry.modelName;
       _visualCandidate = null;
+      _exactModel = null;
       _customBrand = false;
     });
   }
@@ -1871,11 +1944,13 @@ class _ProductInfoSheetState extends State<_ProductInfoSheet> {
     }
     setState(() {
       _selectedCatalogEntry = null;
-      if (result.isExactModel) {
+      if (result.hasModelName) {
         _modelController.text = result.modelName;
+        _exactModel = result.exactModel;
         _visualCandidate = null;
       } else {
         _modelController.clear();
+        _exactModel = null;
         _visualCandidate = result.visualCandidate;
       }
     });
@@ -2044,6 +2119,107 @@ class _ProductInfo extends StatelessWidget {
         if (item.note?.trim().isNotEmpty == true)
           _InfoRow(label: '메모', value: item.note!.trim()),
       ],
+    );
+  }
+}
+
+class _VerifiedModelCard extends StatelessWidget {
+  const _VerifiedModelCard({
+    required this.item,
+    required this.onOpenSource,
+  });
+
+  final ZoneItem item;
+  final ValueChanged<String> onOpenSource;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(color: Theme.of(context).colorScheme.outlineVariant),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              SizedBox(
+                width: 104,
+                height: 104,
+                child: Image.network(
+                  item.modelImageUrl!,
+                  fit: BoxFit.contain,
+                  errorBuilder: (_, __, ___) =>
+                      const Icon(Icons.image_not_supported_outlined, size: 36),
+                ),
+              ),
+              const SizedBox(width: 14),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Chip(
+                      avatar: Icon(Icons.verified_outlined, size: 16),
+                      label: Text('공식 모델 확인'),
+                      visualDensity: VisualDensity.compact,
+                    ),
+                    const SizedBox(height: 8),
+                    Text(
+                      item.modelDisplayName ?? item.modelName ?? item.name,
+                      style: Theme.of(context).textTheme.titleMedium,
+                    ),
+                    if (item.modelName?.isNotEmpty == true)
+                      Text(
+                        item.modelName!,
+                        style: Theme.of(context).textTheme.bodySmall,
+                      ),
+                    if (item.modelReleaseYear != null)
+                      Text(
+                        '${item.modelReleaseYear}년 출시',
+                        style: Theme.of(context).textTheme.bodySmall,
+                      ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+          if (item.modelFeatures.isNotEmpty) ...[
+            const SizedBox(height: 12),
+            Wrap(
+              spacing: 6,
+              runSpacing: 6,
+              children: [
+                for (final feature in item.modelFeatures)
+                  Chip(
+                    label: Text(feature),
+                    visualDensity: VisualDensity.compact,
+                  ),
+              ],
+            ),
+          ],
+          const SizedBox(height: 14),
+          Row(
+            children: [
+              const Expanded(
+                child: Text(
+                  '제품 식별은 공식 모델 기준이며, 관리법은 현재 시리즈 공통 안내입니다.',
+                ),
+              ),
+              if (item.officialProductUrl?.isNotEmpty == true)
+                IconButton(
+                  tooltip: '공식 제품 페이지',
+                  onPressed: () => onOpenSource(item.officialProductUrl!),
+                  icon: const Icon(Icons.open_in_new),
+                ),
+            ],
+          ),
+        ],
+      ),
     );
   }
 }

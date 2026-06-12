@@ -177,6 +177,33 @@ class ProductDataRepository {
       }
     }
 
+    if (item.modelName?.isNotEmpty == true &&
+        item.modelImageUrl?.isNotEmpty != true) {
+      final categoryName =
+          findCatalogEntryById(item.catalogProductId ?? '')?.categoryName ??
+              item.name;
+      final models = catalogModelDetailsFor(
+        categoryName,
+        item.manufacturer ?? '',
+      );
+      for (final model in models) {
+        if (model.modelName == item.modelName &&
+            (model.imageUrl?.isNotEmpty == true ||
+                model.productUrl?.isNotEmpty == true)) {
+          markChanged();
+          item = item.copyWith(
+            modelDisplayName: model.displayName,
+            modelReleaseYear: model.releaseYear,
+            modelImageUrl: model.imageUrl,
+            officialProductUrl: model.productUrl,
+            modelFeatures: model.features,
+            matchLevelLabel: '공식 확인 모델',
+          );
+          break;
+        }
+      }
+    }
+
     if (item.catalogProductId == null &&
         item.manufacturer?.isNotEmpty == true &&
         item.modelName?.isNotEmpty == true) {

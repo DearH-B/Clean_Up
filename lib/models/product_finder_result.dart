@@ -1,12 +1,25 @@
+import 'catalog_model_option.dart';
 import 'visual_product_candidate.dart';
 
 class ProductFinderResult {
-  const ProductFinderResult.exact(this.modelName) : visualCandidate = null;
+  const ProductFinderResult.exact(this.exactModel)
+      : manualModelName = null,
+        visualCandidate = null;
 
-  const ProductFinderResult.similar(this.visualCandidate) : modelName = '';
+  const ProductFinderResult.manual(this.manualModelName)
+      : exactModel = null,
+        visualCandidate = null;
 
-  final String modelName;
+  const ProductFinderResult.similar(this.visualCandidate)
+      : exactModel = null,
+        manualModelName = null;
+
+  final CatalogModelOption? exactModel;
+  final String? manualModelName;
   final VisualProductCandidate? visualCandidate;
 
-  bool get isExactModel => modelName.isNotEmpty;
+  String get modelName => exactModel?.modelName ?? manualModelName ?? '';
+
+  bool get isExactModel => exactModel != null;
+  bool get hasModelName => modelName.isNotEmpty;
 }
