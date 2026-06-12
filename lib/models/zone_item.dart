@@ -324,6 +324,7 @@ class ZoneItem {
     DateTime? nextDueAt,
     bool clearLastCleanedAt = false,
     bool clearNextDueAt = false,
+    bool clearVisualCandidate = false,
     List<ProductConsumable>? consumables,
   }) {
     return ZoneItem(
@@ -334,8 +335,11 @@ class ZoneItem {
       scannedCode: scannedCode ?? this.scannedCode,
       scannedCodeFormat: scannedCodeFormat ?? this.scannedCodeFormat,
       scannedSourceUrl: scannedSourceUrl ?? this.scannedSourceUrl,
-      visualCandidateId: visualCandidateId ?? this.visualCandidateId,
-      releasePeriod: releasePeriod ?? this.releasePeriod,
+      visualCandidateId: clearVisualCandidate
+          ? null
+          : visualCandidateId ?? this.visualCandidateId,
+      releasePeriod:
+          clearVisualCandidate ? null : releasePeriod ?? this.releasePeriod,
       nickname: nickname ?? this.nickname,
       purchaseDate: purchaseDate ?? this.purchaseDate,
       installedDate: installedDate ?? this.installedDate,

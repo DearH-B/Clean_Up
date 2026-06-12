@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -93,6 +94,29 @@ void main() {
       models.map((item) => item.modelName),
       contains('KQ65QNF90AFXKR'),
     );
+  });
+
+  test('서버 모델 목록이 비어 있으면 앱 내장 후보를 사용한다', () async {
+    final server = await HttpServer.bind(InternetAddress.loopbackIPv4, 0);
+    server.listen((request) async {
+      request.response.headers.contentType = ContentType.json;
+      request.response.write('{"items":[],"total":0}');
+      await request.response.close();
+    });
+    final repository = RemoteFirstProductCatalogRepository(
+      baseUrl: 'http://${server.address.host}:${server.port}',
+    );
+
+    try {
+      final models = await repository.modelsFor(
+        category: '냉장고',
+        brand: '삼성전자',
+      );
+
+      expect(models.map((item) => item.modelName), contains('RF85C90F1AP'));
+    } finally {
+      await server.close(force: true);
+    }
   });
 
   test('카탈로그 제품 ID와 출처 정보는 저장 후에도 유지된다', () {
@@ -522,6 +546,56 @@ void main() {
     expect(saved.usedSupplies, isEmpty);
     expect(saved.result, isNull);
     expect(saved.note, '다음에는 안쪽 먼지도 확인');
+  });
+
+  testWidgets('이미 등록한 제품에서도 내 제품 찾기로 정확한 모델을 추가할 수 있다', (tester) async {
+    final seriesProduct =
+        findCatalogEntryById('samsung-bespoke-ai-refrigerator-4door')!
+            .toZoneItem(id: 'series-refrigerator', zoneId: 'zone-1');
+    await dataRepository.saveSpaces(productSpaces);
+    await dataRepository.saveUserProducts([seriesProduct]);
+    await pumpApp(tester, dataRepository);
+
+    await tester.tap(find.text('내 제품'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('주방'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('삼성 Bespoke AI 냉장고 4도어'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.byTooltip('제품 정보 수정'));
+    await tester.pumpAndSettle();
+
+    final finderButton = find.widgetWithText(FilledButton, '내 제품 찾기');
+    await tester.ensureVisible(finderButton);
+    await tester.tap(finderButton);
+    await tester.pumpAndSettle();
+
+    final targetModelCard = find
+        .ancestor(
+          of: find.text('RF85C90F1AP').first,
+          matching: find.byType(Card),
+        )
+        .first;
+    await tester.tap(
+      find.descendant(
+        of: targetModelCard,
+        matching: find.text('정확해요'),
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    expect(find.text('정확한 모델 바꾸기'), findsOneWidget);
+    final saveButton = find.widgetWithText(FilledButton, '제품 정보 저장');
+    await tester.ensureVisible(saveButton);
+    await tester.tap(saveButton);
+    await tester.pumpAndSettle();
+
+    final products = await dataRepository.loadUserProducts();
+    final refrigerator =
+        products!.firstWhere((item) => item.id == 'series-refrigerator');
+    expect(refrigerator.manufacturer, '삼성전자');
+    expect(refrigerator.modelName, 'RF85C90F1AP');
+    expect(refrigerator.visualCandidateId, isNull);
   });
 
   testWidgets('소모품 교체는 별도 교체 기록과 다음 교체일을 저장한다', (tester) async {

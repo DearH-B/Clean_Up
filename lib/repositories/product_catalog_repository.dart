@@ -159,13 +159,22 @@ class RemoteFirstProductCatalogRepository implements ProductCatalogRepository {
           'limit': '$limit',
         },
       );
-      return (decoded['items'] as List<dynamic>)
+      final models = (decoded['items'] as List<dynamic>)
           .map(
             (item) => CatalogModelOption.fromJson(
               Map<String, Object?>.from(item as Map),
             ),
           )
           .toList();
+      if (models.isNotEmpty) {
+        return models;
+      }
+      return fallback.modelsFor(
+        category: category,
+        brand: brand,
+        query: query,
+        limit: limit,
+      );
     } on Object {
       return fallback.modelsFor(
         category: category,

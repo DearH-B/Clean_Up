@@ -8,13 +8,16 @@ import '../data/product_consumable_defaults.dart';
 import '../models/catalog_metadata.dart';
 import '../models/care_record.dart';
 import '../models/product_consumable.dart';
+import '../models/product_finder_result.dart';
 import '../models/product_submission.dart';
+import '../models/visual_product_candidate.dart';
 import '../models/zone_item.dart';
 import '../repositories/product_data_repository.dart';
 import '../repositories/product_catalog_repository.dart';
 import '../theme/app_theme.dart';
 import 'care_record_editor_screen.dart';
 import 'consumable_editor_screen.dart';
+import 'model_selection_screen.dart';
 import 'product_submission_form_screen.dart';
 
 class ZoneItemDetailScreen extends StatefulWidget {
@@ -1620,9 +1623,14 @@ class _ProductInfoSheetState extends State<_ProductInfoSheet> {
   late bool _customBrand;
   String _searchQuery = '';
   ProductCatalogEntry? _selectedCatalogEntry;
+  VisualProductCandidate? _visualCandidate;
   List<ProductCatalogEntry> _searchResults = [];
   Timer? _searchDebounce;
   bool _isSearching = false;
+
+  String get _categoryName =>
+      findCatalogEntryById(widget.item.catalogProductId ?? '')?.categoryName ??
+      widget.item.name;
 
   @override
   void initState() {
@@ -1631,7 +1639,7 @@ class _ProductInfoSheetState extends State<_ProductInfoSheet> {
       text: widget.item.manufacturer,
     );
     _modelController = TextEditingController(text: widget.item.modelName);
-    _customBrand = !catalogBrandOptionsFor(widget.item.name).contains(
+    _customBrand = !catalogBrandOptionsFor(_categoryName).contains(
           widget.item.manufacturer,
         ) &&
         (widget.item.manufacturer?.isNotEmpty ?? false);
@@ -1697,7 +1705,7 @@ class _ProductInfoSheetState extends State<_ProductInfoSheet> {
             _ChoiceSection(
               title: '브랜드',
               helperText: '브랜드를 고르면 아래 모델 후보가 바뀌어요.',
-              options: catalogBrandOptionsFor(widget.item.name),
+              options: catalogBrandOptionsFor(_categoryName),
               selectedValue:
                   _customBrand ? null : _manufacturerController.text.trim(),
               onSelected: _selectBrand,
@@ -1728,13 +1736,31 @@ class _ProductInfoSheetState extends State<_ProductInfoSheet> {
               ),
             ],
             const SizedBox(height: 16),
+            FilledButton.tonalIcon(
+              onPressed: _manufacturerController.text.trim().isEmpty
+                  ? null
+                  : _openProductFinder,
+              icon: const Icon(Icons.image_search_outlined),
+              label: Text(
+                _modelController.text.trim().isEmpty ? '내 제품 찾기' : '정확한 모델 바꾸기',
+              ),
+            ),
+            if (_manufacturerController.text.trim().isEmpty)
+              Padding(
+                padding: const EdgeInsets.only(top: 6),
+                child: Text(
+                  '브랜드를 먼저 선택하면 이미지와 출시 시기로 제품을 찾을 수 있어요.',
+                  style: Theme.of(context).textTheme.bodySmall,
+                ),
+              ),
+            const SizedBox(height: 16),
             _ChoiceSection(
               title: '대표 모델',
               helperText: _manufacturerController.text.trim().isEmpty
                   ? '브랜드를 먼저 선택하면 대표 모델을 보여드려요.'
-                  : '${_manufacturerController.text.trim()} ${widget.item.name} 대표 모델이에요.',
+                  : '${_manufacturerController.text.trim()} $_categoryName 대표 모델이에요.',
               options: catalogModelOptionsFor(
-                  widget.item.name, _manufacturerController.text.trim()),
+                  _categoryName, _manufacturerController.text.trim()),
               selectedValue: _modelController.text.trim(),
               onSelected: (modelName) {
                 setState(() {
@@ -1771,7 +1797,7 @@ class _ProductInfoSheetState extends State<_ProductInfoSheet> {
     }
 
     final catalogEntry = findCatalogEntry(
-          categoryName: widget.item.name,
+          categoryName: _categoryName,
           brand: manufacturer,
           modelName: modelName,
         ) ??
@@ -1785,6 +1811,9 @@ class _ProductInfoSheetState extends State<_ProductInfoSheet> {
       widget.item.copyWith(
         manufacturer: manufacturer,
         modelName: modelName,
+        visualCandidateId: _visualCandidate?.id,
+        releasePeriod: _visualCandidate?.releasePeriod,
+        clearVisualCandidate: modelName.isNotEmpty && _visualCandidate == null,
         guideStatus: '등록된 제품 정보를 바탕으로 공식 안내를 확인할 수 있어요.',
         sourceTitle: '사용자 등록 정보',
         sourceCheckedAt: DateTime.now(),
@@ -1803,6 +1832,7 @@ class _ProductInfoSheetState extends State<_ProductInfoSheet> {
       _manufacturerController.text = brand;
       _modelController.clear();
       _selectedCatalogEntry = null;
+      _visualCandidate = null;
     });
   }
 
@@ -1814,7 +1844,40 @@ class _ProductInfoSheetState extends State<_ProductInfoSheet> {
       _searchQuery = _searchController.text;
       _manufacturerController.text = entry.brand;
       _modelController.text = entry.modelName;
+      _visualCandidate = null;
       _customBrand = false;
+    });
+  }
+
+  Future<void> _openProductFinder() async {
+    final brand = _manufacturerController.text.trim();
+    if (brand.isEmpty) {
+      return;
+    }
+    final result = await Navigator.of(context).push<ProductFinderResult>(
+      MaterialPageRoute(
+        builder: (context) => ModelSelectionScreen(
+          categoryName: _categoryName,
+          brand: brand,
+          catalogRepository: widget.catalogRepository,
+          selectedModel: _modelController.text.trim().isEmpty
+              ? null
+              : _modelController.text.trim(),
+        ),
+      ),
+    );
+    if (result == null || !mounted) {
+      return;
+    }
+    setState(() {
+      _selectedCatalogEntry = null;
+      if (result.isExactModel) {
+        _modelController.text = result.modelName;
+        _visualCandidate = null;
+      } else {
+        _modelController.clear();
+        _visualCandidate = result.visualCandidate;
+      }
     });
   }
 
@@ -1833,7 +1896,7 @@ class _ProductInfoSheetState extends State<_ProductInfoSheet> {
     _searchDebounce = Timer(const Duration(milliseconds: 300), () async {
       final results = await widget.catalogRepository.search(
         query,
-        category: widget.item.name,
+        category: _categoryName,
         limit: 4,
       );
       if (!mounted || query != _searchQuery) {
