@@ -31,5 +31,27 @@
     "productUrl": "https://www.samsung.com/sec/tvs/neo-qled-8k-qnf900-d2c/KQ75QNF900FXKR/",
     "sourceCheckedAt": "2026-06-09",
     "reviewStatus": "verified"
+  },
+  {
+    "categoryName": "세탁기",
+    "brand": "삼성전자",
+    "modelName": "WF25CB8895BW",
+    "displayName": "Bespoke AI 세탁기 25kg",
+    "releaseYear": 2023,
+    "imageUrl": null,
+    "productUrl": "https://www.samsung.com/sec/support/model/WF25CB8895BW/",
+    "sourceCheckedAt": "2026-06-12",
+    "reviewStatus": "reviewed"
+  },
+  {
+    "categoryName": "전자레인지",
+    "brand": "삼성전자",
+    "modelName": "MS23C3535AK",
+    "displayName": "삼성 전자레인지",
+    "releaseYear": null,
+    "imageUrl": null,
+    "productUrl": "https://www.samsung.com/sec/support/model/MS23C3535AK/",
+    "sourceCheckedAt": "2026-06-12",
+    "reviewStatus": "reviewed"
   }
 ]

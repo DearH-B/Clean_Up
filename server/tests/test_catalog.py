@@ -30,6 +30,31 @@ class ProductCatalogTest(unittest.TestCase):
         self.assertEqual(product.reviewStatus.value, "reviewed")
         self.assertIn("공식 관리 주기 미확인", product.frequency)
 
+    def test_contains_ten_representative_appliances(self) -> None:
+        expected_ids = {
+            "samsung-refrigerator-family",
+            "samsung-wf25cb8895bw",
+            "samsung-kq65qnf70afxkr",
+            "samsung-air-conditioner-family",
+            "samsung-ms23c3535ak",
+            "samsung-vacuum-family",
+            "samsung-dryer-family",
+            "samsung-air-purifier-family",
+            "samsung-dishwasher-family",
+            "samsung-kimchi-refrigerator-family",
+        }
+        actual_ids = {product.id for product in self.catalog.search("")}
+
+        self.assertTrue(expected_ids.issubset(actual_ids))
+        self.assertEqual(
+            self.catalog.search("WF25CB8895BW")[0].matchLevelLabel,
+            "모델명 일치",
+        )
+        self.assertEqual(
+            self.catalog.search("삼성 김치냉장고")[0].matchLevelLabel,
+            "브랜드 제품군 기준",
+        )
+
     def test_category_filter_accepts_product_name(self) -> None:
         results = self.catalog.search("DCS", category="에코업 음식물처리기")
         self.assertEqual(results[0].modelName, "DCS-HM4AG-W")
@@ -62,7 +87,7 @@ class ProductCatalogTest(unittest.TestCase):
 
     def test_lists_brands_by_category(self) -> None:
         self.assertIn("삼성전자", self.catalog.brands("TV"))
-        self.assertNotIn("삼성전자", self.catalog.brands("냉장고"))
+        self.assertIn("삼성전자", self.catalog.brands("냉장고"))
 
     def test_lists_verified_models_by_brand(self) -> None:
         results = self.catalog.models(category="TV", brand="삼성전자")

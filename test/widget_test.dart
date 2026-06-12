@@ -40,6 +40,34 @@ void main() {
     expect(searchProductCatalog('음처기').single.brand, '에코업');
   });
 
+  test('대표 가전 10종은 앱 내장 카탈로그에서 검색할 수 있다', () {
+    const ids = {
+      'samsung-refrigerator-family',
+      'samsung-wf25cb8895bw',
+      'samsung-kq65qnf70afxkr',
+      'samsung-air-conditioner-family',
+      'samsung-ms23c3535ak',
+      'samsung-vacuum-family',
+      'samsung-dryer-family',
+      'samsung-air-purifier-family',
+      'samsung-dishwasher-family',
+      'samsung-kimchi-refrigerator-family',
+    };
+
+    expect(
+      productCatalog.where((item) => ids.contains(item.id)).length,
+      ids.length,
+    );
+    expect(
+      searchProductCatalog('WF25CB8895BW').single.matchLevelLabel,
+      '모델명 일치',
+    );
+    expect(
+      searchProductCatalog('삼성 김치냉장고').single.matchLevelLabel,
+      '브랜드 제품군 기준',
+    );
+  });
+
   test('대표 브랜드 목록에는 브랜드 미상이 표시되지 않는다', () {
     expect(catalogBrandOptionsFor('냉장고'), isNot(contains('브랜드 미상')));
     expect(
@@ -603,6 +631,7 @@ void main() {
     );
     expect(registered.catalogProductId, 'eco-up-dcs-hm4ag-w');
     expect(registered.modelName, 'DCS-HM4AG-W');
+    expect(registered.nextDueAt, isNull);
   });
 
   testWidgets('모델명을 몰라도 제품 종류와 별칭으로 등록할 수 있다', (tester) async {

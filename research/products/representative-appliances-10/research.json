@@ -1,0 +1,118 @@
+{
+  "schemaVersion": 1,
+  "batchId": "representative-appliances-10",
+  "title": "국내 가정 대표 가전 10종 1차 카탈로그",
+  "checkedAt": "2026-06-12",
+  "selectionBasis": [
+    "국내 가정에서 널리 사용하는 생활 필수성과 보급성",
+    "정기 관리 또는 소모품 관리가 실제로 필요한 제품",
+    "국내 제조사의 공식 제품군 또는 모델 지원 페이지를 확인할 수 있는 제품",
+    "앱의 제품 검색, 모델 등록, 관리 가이드, 기록 기능을 폭넓게 시험할 수 있는 제품"
+  ],
+  "rankingCaution": "최신 전국 단일 통계의 정확한 보급률 1위부터 10위 순위가 아니라, 보급성과 앱 활용도를 함께 고려한 첫 대표 카탈로그다.",
+  "products": [
+    {
+      "id": "samsung-refrigerator-family",
+      "categoryName": "냉장고",
+      "brand": "삼성전자",
+      "modelName": null,
+      "identificationLevel": "similarFamily",
+      "officialUrl": "https://www.samsung.com/sec/refrigerators/all-refrigerators/",
+      "published": true
+    },
+    {
+      "id": "samsung-wf25cb8895bw",
+      "categoryName": "세탁기",
+      "brand": "삼성전자",
+      "modelName": "WF25CB8895BW",
+      "identificationLevel": "exactModel",
+      "officialUrl": "https://www.samsung.com/sec/support/model/WF25CB8895BW/",
+      "published": true
+    },
+    {
+      "id": "samsung-kq65qnf70afxkr",
+      "categoryName": "TV",
+      "brand": "삼성전자",
+      "modelName": "KQ65QNF70AFXKR",
+      "identificationLevel": "exactModel",
+      "officialUrl": "https://www.samsung.com/sec/support/model/KQ65QNF70AFXKR/",
+      "published": true
+    },
+    {
+      "id": "samsung-air-conditioner-family",
+      "categoryName": "에어컨",
+      "brand": "삼성전자",
+      "modelName": null,
+      "identificationLevel": "similarFamily",
+      "officialUrl": "https://www.samsung.com/sec/air-conditioners/all-air-conditioners/",
+      "published": true
+    },
+    {
+      "id": "samsung-ms23c3535ak",
+      "categoryName": "전자레인지",
+      "brand": "삼성전자",
+      "modelName": "MS23C3535AK",
+      "identificationLevel": "exactModel",
+      "officialUrl": "https://www.samsung.com/sec/support/model/MS23C3535AK/",
+      "published": true
+    },
+    {
+      "id": "samsung-vacuum-family",
+      "categoryName": "청소기",
+      "brand": "삼성전자",
+      "modelName": null,
+      "identificationLevel": "similarFamily",
+      "officialUrl": "https://www.samsung.com/sec/vacuum-cleaners/all-vacuum-cleaners/",
+      "published": true
+    },
+    {
+      "id": "samsung-dryer-family",
+      "categoryName": "건조기",
+      "brand": "삼성전자",
+      "modelName": null,
+      "identificationLevel": "similarFamily",
+      "officialUrl": "https://www.samsung.com/sec/washers-and-dryers/all-washers-and-dryers/",
+      "published": true
+    },
+    {
+      "id": "samsung-air-purifier-family",
+      "categoryName": "공기청정기",
+      "brand": "삼성전자",
+      "modelName": null,
+      "identificationLevel": "similarFamily",
+      "officialUrl": "https://www.samsung.com/sec/air-cleaner/all-air-cleaner/",
+      "published": true
+    },
+    {
+      "id": "samsung-dishwasher-family",
+      "categoryName": "식기세척기",
+      "brand": "삼성전자",
+      "modelName": null,
+      "identificationLevel": "similarFamily",
+      "officialUrl": "https://www.samsung.com/sec/dishwashers/all-dishwashers/",
+      "published": true
+    },
+    {
+      "id": "samsung-kimchi-refrigerator-family",
+      "categoryName": "김치냉장고",
+      "brand": "삼성전자",
+      "modelName": null,
+      "identificationLevel": "similarFamily",
+      "officialUrl": "https://www.samsung.com/sec/kimchi-refrigerators/all-kimchi-refrigerators/",
+      "published": true
+    }
+  ],
+  "quality": {
+    "status": "reviewed",
+    "confidenceGrade": "B",
+    "reviewedBy": "catalog-editor",
+    "reviewedAt": "2026-06-12",
+    "limitations": [
+      "모델 페이지까지 확인한 항목은 세탁기, TV, 전자레인지 3종이다.",
+      "나머지 7종은 공식 제품군 단위이므로 모델 전용 분해 또는 소모품 정보로 표시하지 않는다.",
+      "관리 순서와 주기는 앱 편집 제품군 가이드이며 공식 제조사 권장값처럼 표시하지 않는다.",
+      "정확한 모델 설명서와 라벨 데이터는 후속 조사에서 추가한다."
+    ]
+  }
+}
+

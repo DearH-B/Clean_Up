@@ -2,6 +2,7 @@ import json
 import re
 from pathlib import Path
 
+from .representative_catalog import representative_products
 from .schemas import CatalogModelOption, CatalogProduct, ReviewStatus
 
 
@@ -13,7 +14,10 @@ class ProductCatalog:
         self._models = self._load_models()
 
     def _load(self) -> list[CatalogProduct]:
-        raw_items = json.loads(self._data_path.read_text(encoding="utf-8"))
+        raw_items = [
+            *json.loads(self._data_path.read_text(encoding="utf-8")),
+            *representative_products(),
+        ]
         products = [CatalogProduct.model_validate(item) for item in raw_items]
         for product in products:
             _validate_source_references(product)
