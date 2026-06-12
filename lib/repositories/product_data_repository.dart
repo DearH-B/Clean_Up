@@ -186,6 +186,18 @@ class ProductDataRepository {
       }
     }
 
+    final catalogProductId = item.catalogProductId;
+    if (catalogProductId != null) {
+      final entry = findCatalogEntryById(catalogProductId);
+      final currentCheckedAt = item.sourceCheckedAt;
+      if (entry != null &&
+          (currentCheckedAt == null ||
+              entry.sourceCheckedAt.isAfter(currentCheckedAt))) {
+        markChanged();
+        return entry.mergeInto(item);
+      }
+    }
+
     if (!_usesLegacyGenericGuide(item)) {
       return item;
     }

@@ -405,7 +405,10 @@ class _ZoneItemDetailScreenState extends State<ZoneItemDetailScreen> {
     final now = DateTime.now();
     final updatedItem = _item.copyWith(
       lastCleanedAt: now,
-      nextDueAt: now.add(Duration(days: _item.recurrenceDays)),
+      nextDueAt: _item.recurrenceDays > 0
+          ? now.add(Duration(days: _item.recurrenceDays))
+          : null,
+      clearNextDueAt: _item.recurrenceDays <= 0,
     );
     final savedRecords = await widget.dataRepository.loadCareRecords();
     final records = [
@@ -650,7 +653,10 @@ class _ZoneItemDetailScreenState extends State<ZoneItemDetailScreen> {
     return item.copyWith(
       lastCleanedAt: latest.completedAt,
       nextDueAt: latest.nextCheckAt ??
-          latest.completedAt.add(Duration(days: item.recurrenceDays)),
+          (item.recurrenceDays > 0
+              ? latest.completedAt.add(Duration(days: item.recurrenceDays))
+              : null),
+      clearNextDueAt: latest.nextCheckAt == null && item.recurrenceDays <= 0,
     );
   }
 }

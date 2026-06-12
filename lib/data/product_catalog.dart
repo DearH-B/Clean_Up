@@ -233,7 +233,7 @@ class ProductCatalogEntry {
       guideSourceType: catalogItem.guideSourceType,
       recurrenceDays: catalogItem.recurrenceDays,
       lastCleanedAt: item.lastCleanedAt,
-      nextDueAt: item.nextDueAt,
+      nextDueAt: catalogItem.recurrenceDays > 0 ? item.nextDueAt : null,
       recommendedSupplies: catalogItem.recommendedSupplies,
       recommendedProducts: catalogItem.recommendedProducts,
       consumables: item.consumables,
@@ -331,22 +331,32 @@ final productCatalog = <ProductCatalogEntry>[
     manufacturer: '제이앤에이치컴퍼니',
     modelName: 'DCS-HM4AG-W',
     productMethod: '싱크대 내장형 · 습식분쇄 + 미생물',
-    guideStatus: '모델명과 처리방식을 확인했어요. 청소법은 공식 영상과 유사 제품군 기준을 함께 참고해요.',
-    guideBasis: '동일 모델명 DCS-HM4AG-W의 공개 스펙과 에코업 분쇄기 세척 영상을 기준으로 정리했어요.',
+    guideStatus:
+        '모델명과 처리방식은 확인했지만 공식 사용설명서는 아직 확보하지 못했어요. 손이 닿는 외부의 안전한 일상 관리만 안내해요.',
+    guideBasis:
+        'DCS-HM4AG-W의 공개 스펙과 에코업 세척 영상을 분리해 확인했어요. 공식 관리 주기와 내부 작업은 미확인 상태예요.',
     guideSourceType: GuideSourceType.officialVideo,
     matchLevelLabel: '모델명 일치',
-    sourceTitle: '다나와/에누리 공개 스펙 및 에코업 세척 영상',
+    sourceTitle: '다나와 공개 스펙 및 에코업 세척 영상',
     sourceUrl: 'https://prod.danawa.com/info/?pcode=96061655',
-    sourceCheckedAt: DateTime.parse(_checkedAt),
+    sourceCheckedAt: DateTime(2026, 6, 12),
     sources: [
       ProductSource(
         id: 'eco-up-spec',
-        title: 'DCS-HM4AG-W 공개 제품 스펙',
+        title: '제이앤에이치컴퍼니 에코업 DCS-HM4AG-W 상세 스펙',
         url: 'https://prod.danawa.com/info/?pcode=96061655',
         type: ProductSourceType.priceComparison,
         publisher: '다나와',
-        checkedAt: DateTime.parse(_checkedAt),
-        supports: const ['모델명', '처리방식', '설치형태', '처리용량', '크기와 무게'],
+        checkedAt: DateTime(2026, 6, 12),
+        supports: const [
+          '제조사',
+          '모델명',
+          '처리방식',
+          '설치형태',
+          '처리용량',
+          '소음',
+          '크기와 무게',
+        ],
         isOfficial: false,
         isActive: true,
       ),
@@ -374,9 +384,6 @@ final productCatalog = <ProductCatalogEntry>[
       '0': ['eco-up-cleaning-video'],
       '1': ['eco-up-cleaning-video'],
       '2': ['eco-up-cleaning-video'],
-      '3': ['eco-up-spec', 'eco-up-cleaning-video'],
-      '4': ['eco-up-cleaning-video'],
-      '5': ['eco-up-cleaning-video'],
     },
     reviewHistory: [
       CatalogReviewRecord(
@@ -386,10 +393,10 @@ final productCatalog = <ProductCatalogEntry>[
         note: '모델명과 공개 스펙을 확인하고 위험한 분해 단계를 제외함.',
       ),
       CatalogReviewRecord(
-        status: 'verified',
+        status: 'reviewed',
         reviewer: 'catalog-editor',
-        reviewedAt: DateTime(2026, 6, 8),
-        note: '공식 세척 영상과 제품 스펙 출처를 분리해 교차 확인함.',
+        reviewedAt: DateTime(2026, 6, 12),
+        note: '공식 설명서와 관리 주기를 확인하지 못해 외부 일상 관리 범위로 축소하고 미확인 값을 제거함.',
       ),
     ],
     installationType: '싱크대 내장형',
@@ -404,30 +411,18 @@ final productCatalog = <ProductCatalogEntry>[
       '크기: 약 360 x 395 x 260mm',
       '무게: 약 10kg',
     ],
-    summary: '싱크대 배수구 투입 방식의 에코업 하이브리드 음식물처리기예요.',
-    frequency: '주 1회 가볍게 · 냄새나 이상 소음이 있으면 사용 중단 후 문의',
-    recurrenceDays: 7,
-    estimatedMinutes: 12,
+    summary:
+        '싱크대 하부에 설치하는 습식분쇄·미생물 방식 음식물처리기예요. 공식 설명서를 확보하기 전에는 손이 닿는 외부만 관리해요.',
+    frequency: '공식 관리 주기 미확인 · 오염은 발견 즉시 닦고 이상이 있으면 사용 중단',
+    recurrenceDays: 0,
+    estimatedMinutes: 0,
     supplies: const ['부드러운 천', '작은 솔', '고무장갑'],
     recommendedSupplies: const [
       '입구 주변을 닦기 쉬운 부드러운 틈새 솔',
       '방수성이 좋은 니트릴 장갑',
       '싱크대 주변 물기를 닦을 극세사 천',
     ],
-    recommendedProducts: const [
-      CleaningProduct(
-        brand: '스카치브라이트',
-        name: '베이직 제로 스크래치 스펀지 수세미',
-        reason: '투입구 주변처럼 흠집이 걱정되는 곳을 부드럽게 닦을 때 참고하기 좋아요.',
-        url: 'https://www.coupang.com/np/categories/127929',
-      ),
-      CleaningProduct(
-        brand: '탐사',
-        name: '니트릴장갑 100매입',
-        reason: '음식물처리기 주변을 만질 때 위생과 냄새 부담을 줄이는 일회용 장갑이에요.',
-        url: 'https://www.coupang.com/np/categories/399685',
-      ),
-    ],
+    recommendedProducts: const [],
     cautions: const [
       '본체, 배관, 교반실을 임의로 분해하지 마세요.',
       '투입구 안에 손이나 청소 도구를 깊이 넣지 마세요.',
@@ -438,11 +433,18 @@ final productCatalog = <ProductCatalogEntry>[
       '제품이 작동 중이 아닌지 확인하고 투입구 주변을 비워요.',
       '투입구 가장자리에 남은 음식물 찌꺼기를 작은 솔로 조심스럽게 제거해요.',
       '부드러운 천에 소량의 물을 묻혀 투입구와 싱크대 접합부를 닦아요.',
-      '배수구 주변에 물고임, 누수 흔적, 변색이 없는지 눈으로 확인해요.',
-      '냄새나 소음이 평소와 다르면 사용을 멈추고 제조사 안내를 확인해요.',
-      '미생물 보충, 내부 세척, 배관 관리는 공식 설명서나 설치업체 안내에 따라 진행해요.',
     ],
-    keywords: const ['음처기', '음식물', '처리기', 'DCS', 'HM4AG', '에코업'],
+    keywords: const [
+      '음처기',
+      '음식물',
+      '처리기',
+      'DCS',
+      'HM4AG',
+      '에코업',
+      'DCS HM4AG W',
+      'DCS-HM4AGW',
+    ],
+    reviewStatus: 'reviewed',
   ),
   ProductCatalogEntry(
     id: 'generic-refrigerator',
@@ -705,6 +707,15 @@ ProductCatalogEntry? findCatalogEntry({
     if (categoryMatches &&
         brandMatches &&
         _normalize(entry.modelName) == normalizedModel) {
+      return entry;
+    }
+  }
+  return null;
+}
+
+ProductCatalogEntry? findCatalogEntryById(String id) {
+  for (final entry in productCatalog) {
+    if (entry.id == id) {
       return entry;
     }
   }

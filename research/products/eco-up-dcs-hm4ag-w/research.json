@@ -218,10 +218,9 @@
     ]
   },
   "catalogMapping": {
-    "publishToProducts": false,
+    "publishToProducts": true,
     "publishToModels": false,
     "catalogProductId": "eco-up-dcs-hm4ag-w",
-    "notes": "공식 설명서와 영상 재검수 후 기존 공개 카탈로그의 주기와 관리 단계를 갱신한다."
+    "notes": "2026-06-12에 확인된 모델 정보와 외부 일상 관리 범위만 공개 카탈로그에 반영했다. 공식 설명서와 관리 주기는 계속 조사한다."
   }
 }
-

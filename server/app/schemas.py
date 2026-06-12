@@ -67,8 +67,8 @@ class CatalogProduct(BaseModel):
     modelName: str
     summary: str
     frequency: str
-    recurrenceDays: int = Field(ge=1)
-    estimatedMinutes: int = Field(ge=1)
+    recurrenceDays: int = Field(ge=0)
+    estimatedMinutes: int = Field(ge=0)
     productMethod: str
     guideStatus: str
     guideBasis: str

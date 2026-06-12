@@ -312,9 +312,13 @@ class _HistoryScreenState extends State<HistoryScreen> {
         : product.copyWith(
             lastCleanedAt: latest.completedAt,
             nextDueAt: latest.nextCheckAt ??
-                latest.completedAt.add(
-                  Duration(days: product.recurrenceDays),
-                ),
+                (product.recurrenceDays > 0
+                    ? latest.completedAt.add(
+                        Duration(days: product.recurrenceDays),
+                      )
+                    : null),
+            clearNextDueAt:
+                latest.nextCheckAt == null && product.recurrenceDays <= 0,
           );
     final products = _products.toList();
     products[productIndex] = updated;

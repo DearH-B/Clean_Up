@@ -22,6 +22,14 @@ class ProductCatalogTest(unittest.TestCase):
         results = self.catalog.search("음처기")
         self.assertEqual(results[0].brand, "에코업")
 
+    def test_unconfirmed_schedule_is_not_published_as_a_number(self) -> None:
+        product = self.catalog.search("DCS-HM4AG-W")[0]
+
+        self.assertEqual(product.recurrenceDays, 0)
+        self.assertEqual(product.estimatedMinutes, 0)
+        self.assertEqual(product.reviewStatus.value, "reviewed")
+        self.assertIn("공식 관리 주기 미확인", product.frequency)
+
     def test_category_filter_accepts_product_name(self) -> None:
         results = self.catalog.search("DCS", category="에코업 음식물처리기")
         self.assertEqual(results[0].modelName, "DCS-HM4AG-W")

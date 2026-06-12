@@ -238,7 +238,13 @@ class _CareRecordEditorScreenState extends State<CareRecordEditorScreen> {
     final date = await showDatePicker(
       context: context,
       initialDate: _nextCheckAt ??
-          DateTime.now().add(Duration(days: widget.product.recurrenceDays)),
+          DateTime.now().add(
+            Duration(
+              days: widget.product.recurrenceDays > 0
+                  ? widget.product.recurrenceDays
+                  : 30,
+            ),
+          ),
       firstDate: DateTime.now(),
       lastDate: DateTime.now().add(const Duration(days: 3650)),
     );

@@ -339,6 +339,33 @@ void main() {
     expect(products.single.sourceTitle, '이전 버전에서 저장한 출처');
   });
 
+  test('연결된 제품은 더 최신인 검수 카탈로그로 자동 갱신된다', () async {
+    final savedProduct = productCatalog.first
+        .toZoneItem(id: 'saved-eco-up', zoneId: 'zone-1')
+        .toJson()
+      ..['nickname'] = '우리집 음처기'
+      ..['sourceCheckedAt'] = DateTime(2026, 6, 8).toIso8601String()
+      ..['frequency'] = '주 1회'
+      ..['recurrenceDays'] = 7
+      ..['estimatedMinutes'] = 12
+      ..['nextDueAt'] = DateTime(2026, 6, 20).toIso8601String();
+    SharedPreferences.setMockInitialValues({
+      'zone_items_v1': jsonEncode([savedProduct]),
+    });
+    const repository = ProductDataRepository();
+
+    final products = await repository.loadUserProducts();
+    final updated = products!.single;
+
+    expect(updated.nickname, '우리집 음처기');
+    expect(updated.sourceCheckedAt, DateTime(2026, 6, 12));
+    expect(updated.frequency, contains('공식 관리 주기 미확인'));
+    expect(updated.recurrenceDays, 0);
+    expect(updated.estimatedMinutes, 0);
+    expect(updated.nextDueAt, isNull);
+    expect(updated.recommendedProducts, isEmpty);
+  });
+
   test('이전 범용 식기세척기 관리법은 제품군 관리법으로 자동 갱신된다', () async {
     const legacyDishwasher = ZoneItem(
       id: 'legacy-dishwasher',
