@@ -126,6 +126,7 @@ class CatalogModelOption(BaseModel):
     releaseYear: int | None = None
     imageUrl: str | None = None
     productUrl: str | None = None
+    features: list[str] = Field(default_factory=list)
     sourceCheckedAt: date
     reviewStatus: ReviewStatus
 

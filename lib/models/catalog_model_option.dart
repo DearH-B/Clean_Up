@@ -5,6 +5,7 @@ class CatalogModelOption {
     this.releaseYear,
     this.imageUrl,
     this.productUrl,
+    this.features = const [],
   });
 
   final String modelName;
@@ -12,6 +13,7 @@ class CatalogModelOption {
   final int? releaseYear;
   final String? imageUrl;
   final String? productUrl;
+  final List<String> features;
 
   factory CatalogModelOption.fromJson(Map<String, Object?> json) {
     return CatalogModelOption(
@@ -21,6 +23,7 @@ class CatalogModelOption {
       releaseYear: json['releaseYear'] as int?,
       imageUrl: json['imageUrl'] as String?,
       productUrl: json['productUrl'] as String?,
+      features: (json['features'] as List<dynamic>? ?? const []).cast<String>(),
     );
   }
 }

@@ -1,5 +1,41 @@
 [
   {
+    "categoryName": "냉장고",
+    "brand": "삼성전자",
+    "modelName": "RM70F63R2A",
+    "displayName": "Bespoke AI 냉장고 4도어 키친핏 Max 640L",
+    "releaseYear": 2025,
+    "imageUrl": "https://images.samsung.com/kdp/goods/2025/02/24/49dd1432-b1cc-4b81-b97d-ce0a7f8ef465.png",
+    "productUrl": "https://www.samsung.com/sec/refrigerators/french-door-rm70f63r2a-d2c/RM70F63R2A/",
+    "features": ["키친핏 Max", "640L", "4도어"],
+    "sourceCheckedAt": "2026-06-12",
+    "reviewStatus": "verified"
+  },
+  {
+    "categoryName": "냉장고",
+    "brand": "삼성전자",
+    "modelName": "RM80F91H1W",
+    "displayName": "Bespoke AI 하이브리드 4도어 874L",
+    "releaseYear": 2025,
+    "imageUrl": "https://images.samsung.com/kdp/goods/2025/03/05/95443b88-5455-41d1-b3dd-8e9002e6d995.png",
+    "productUrl": "https://www.samsung.com/sec/refrigerators/french-door-rm80f91h1w-d2c/RM80F91H1W/",
+    "features": ["AI 하이브리드", "874L", "오토오픈도어"],
+    "sourceCheckedAt": "2026-06-12",
+    "reviewStatus": "verified"
+  },
+  {
+    "categoryName": "냉장고",
+    "brand": "삼성전자",
+    "modelName": "RM70F90M1ZD",
+    "displayName": "Bespoke AI 냉장고 4도어 902L",
+    "releaseYear": 2025,
+    "imageUrl": "https://images.samsung.com/kdp/goods/2025/06/27/75ffe596-f6fc-4119-827f-675e5ff47e09.png",
+    "productUrl": "https://www.samsung.com/sec/refrigerators/french-door-rm70f90m1zd-d2c/RM70F90M1ZD/",
+    "features": ["대용량", "902L", "4도어"],
+    "sourceCheckedAt": "2026-06-12",
+    "reviewStatus": "verified"
+  },
+  {
     "categoryName": "TV",
     "brand": "삼성전자",
     "modelName": "KQ65QNF90AFXKR",

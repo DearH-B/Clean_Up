@@ -300,6 +300,20 @@ class _ModelCard extends StatelessWidget {
                       '${model.releaseYear}년 출시',
                       style: Theme.of(context).textTheme.bodySmall,
                     ),
+                  if (model.features.isNotEmpty) ...[
+                    const SizedBox(height: 6),
+                    Wrap(
+                      spacing: 6,
+                      runSpacing: 6,
+                      children: [
+                        for (final feature in model.features)
+                          Chip(
+                            label: Text(feature),
+                            visualDensity: VisualDensity.compact,
+                          ),
+                      ],
+                    ),
+                  ],
                   const SizedBox(height: 10),
                   FilledButton.tonalIcon(
                     onPressed: onSelected,

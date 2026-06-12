@@ -1,4 +1,5 @@
 import '../models/catalog_metadata.dart';
+import '../models/catalog_model_option.dart';
 import '../models/zone_item.dart';
 
 class ProductCatalogEntry {
@@ -1181,7 +1182,7 @@ List<String> catalogModelOptionsFor(String categoryName, String brand) {
   }
   if (categoryName.contains('냉장고')) {
     if (brand == '삼성전자') {
-      options.addAll(['RF85C90F1AP', 'RF85C9141AP', 'RF60C9013AP']);
+      options.addAll(['RM70F63R2A', 'RM80F91H1W', 'RM70F90M1ZD']);
     }
     if (brand == 'LG전자') {
       options.addAll(['M874GBB031', 'T873MEE312', 'S834MTE10']);
@@ -1196,6 +1197,50 @@ List<String> catalogModelOptionsFor(String categoryName, String brand) {
     ]);
   }
   return options.toList()..sort();
+}
+
+List<CatalogModelOption> catalogModelDetailsFor(
+  String categoryName,
+  String brand,
+) {
+  if (categoryName.contains('냉장고') && brand == '삼성전자') {
+    return const [
+      CatalogModelOption(
+        modelName: 'RM70F63R2A',
+        displayName: 'Bespoke AI 냉장고 4도어 키친핏 Max 640L',
+        releaseYear: 2025,
+        imageUrl:
+            'https://images.samsung.com/kdp/goods/2025/02/24/49dd1432-b1cc-4b81-b97d-ce0a7f8ef465.png',
+        productUrl:
+            'https://www.samsung.com/sec/refrigerators/french-door-rm70f63r2a-d2c/RM70F63R2A/',
+        features: ['키친핏 Max', '640L', '4도어'],
+      ),
+      CatalogModelOption(
+        modelName: 'RM80F91H1W',
+        displayName: 'Bespoke AI 하이브리드 4도어 874L',
+        releaseYear: 2025,
+        imageUrl:
+            'https://images.samsung.com/kdp/goods/2025/03/05/95443b88-5455-41d1-b3dd-8e9002e6d995.png',
+        productUrl:
+            'https://www.samsung.com/sec/refrigerators/french-door-rm80f91h1w-d2c/RM80F91H1W/',
+        features: ['AI 하이브리드', '874L', '오토오픈도어'],
+      ),
+      CatalogModelOption(
+        modelName: 'RM70F90M1ZD',
+        displayName: 'Bespoke AI 냉장고 4도어 902L',
+        releaseYear: 2025,
+        imageUrl:
+            'https://images.samsung.com/kdp/goods/2025/06/27/75ffe596-f6fc-4119-827f-675e5ff47e09.png',
+        productUrl:
+            'https://www.samsung.com/sec/refrigerators/french-door-rm70f90m1zd-d2c/RM70F90M1ZD/',
+        features: ['대용량', '902L', '4도어'],
+      ),
+    ];
+  }
+  return [
+    for (final model in catalogModelOptionsFor(categoryName, brand))
+      CatalogModelOption(modelName: model, displayName: model),
+  ];
 }
 
 ProductCatalogEntry? findCatalogEntry({

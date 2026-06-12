@@ -113,7 +113,15 @@ void main() {
         brand: '삼성전자',
       );
 
-      expect(models.map((item) => item.modelName), contains('RF85C90F1AP'));
+      expect(
+        models.map((item) => item.modelName),
+        containsAll(['RM70F63R2A', 'RM80F91H1W', 'RM70F90M1ZD']),
+      );
+      for (final model in models) {
+        expect(model.releaseYear, 2025);
+        expect(model.imageUrl, isNotEmpty);
+        expect(model.features, isNotEmpty);
+      }
     } finally {
       await server.close(force: true);
     }
@@ -572,7 +580,7 @@ void main() {
 
     final targetModelCard = find
         .ancestor(
-          of: find.text('RF85C90F1AP').first,
+          of: find.text('RM70F63R2A').first,
           matching: find.byType(Card),
         )
         .first;
@@ -594,7 +602,7 @@ void main() {
     final refrigerator =
         products!.firstWhere((item) => item.id == 'series-refrigerator');
     expect(refrigerator.manufacturer, '삼성전자');
-    expect(refrigerator.modelName, 'RF85C90F1AP');
+    expect(refrigerator.modelName, 'RM70F63R2A');
     expect(refrigerator.visualCandidateId, isNull);
   });
 
@@ -834,10 +842,10 @@ void main() {
     await tester.tap(productFinderButton);
     await tester.pumpAndSettle();
 
-    expect(find.text('RF85C90F1AP'), findsWidgets);
+    expect(find.text('RM70F63R2A'), findsWidgets);
     final targetModelCard = find
         .ancestor(
-          of: find.text('RF85C90F1AP').first,
+          of: find.text('RM70F63R2A').first,
           matching: find.byType(Card),
         )
         .first;
@@ -849,7 +857,7 @@ void main() {
     );
     await tester.pumpAndSettle();
 
-    expect(find.text('선택한 모델: RF85C90F1AP'), findsOneWidget);
+    expect(find.text('선택한 모델: RM70F63R2A'), findsOneWidget);
     await tester.tap(find.widgetWithText(FilledButton, '이 정보로 계속'));
     await tester.pumpAndSettle();
     await tester.tap(find.widgetWithText(FilledButton, '등록 내용 확인'));
@@ -859,7 +867,7 @@ void main() {
 
     final products = await dataRepository.loadUserProducts();
     expect(products!.single.manufacturer, '삼성전자');
-    expect(products.single.modelName, 'RF85C90F1AP');
+    expect(products.single.modelName, 'RM70F63R2A');
     expect(products.single.visualCandidateId, isNull);
   });
 
@@ -886,7 +894,7 @@ void main() {
     await tester.pumpAndSettle();
     final targetModelCard = find
         .ancestor(
-          of: find.text('RF85C90F1AP').first,
+          of: find.text('RM70F63R2A').first,
           matching: find.byType(Card),
         )
         .first;
@@ -899,7 +907,7 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(tester.takeException(), isNull);
-    final selectedButton = find.widgetWithText(FilledButton, 'RF85C90F1AP');
+    final selectedButton = find.widgetWithText(FilledButton, 'RM70F63R2A');
     await tester.ensureVisible(selectedButton);
     await tester.pumpAndSettle();
     await tester.tap(selectedButton);
@@ -909,7 +917,7 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(tester.takeException(), isNull);
-    expect(find.widgetWithText(FilledButton, 'RF85C90F1AP'), findsOneWidget);
+    expect(find.widgetWithText(FilledButton, 'RM70F63R2A'), findsOneWidget);
   });
 
   testWidgets('검색 실패 시 제품 정보 요청을 저장할 수 있다', (tester) async {

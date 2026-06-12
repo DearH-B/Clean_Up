@@ -90,6 +90,17 @@ class ProductCatalogTest(unittest.TestCase):
         self.assertEqual(results[0].releaseYear, 2025)
         self.assertIn("KQ65QNF90AFXKR", {item.modelName for item in results})
 
+    def test_lists_verified_refrigerator_models_with_images(self) -> None:
+        results = self.catalog.models(category="냉장고", brand="삼성전자")
+
+        self.assertEqual(
+            {item.modelName for item in results},
+            {"RM70F63R2A", "RM80F91H1W", "RM70F90M1ZD"},
+        )
+        self.assertTrue(all(item.releaseYear == 2025 for item in results))
+        self.assertTrue(all(item.imageUrl for item in results))
+        self.assertTrue(all(item.features for item in results))
+
     def test_filters_model_search(self) -> None:
         results = self.catalog.models(
             category="TV",

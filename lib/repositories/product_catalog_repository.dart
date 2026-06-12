@@ -54,19 +54,17 @@ class LocalProductCatalogRepository implements ProductCatalogRepository {
     int limit = 50,
   }) async {
     final normalizedQuery = _normalize(query);
-    return catalogModelOptionsFor(category, brand)
+    return catalogModelDetailsFor(category, brand)
         .where(
           (model) =>
               normalizedQuery.isEmpty ||
-              _normalize(model).contains(normalizedQuery),
+              _normalize(model.modelName).contains(normalizedQuery) ||
+              _normalize(model.displayName).contains(normalizedQuery) ||
+              model.features.any(
+                (feature) => _normalize(feature).contains(normalizedQuery),
+              ),
         )
         .take(limit)
-        .map(
-          (model) => CatalogModelOption(
-            modelName: model,
-            displayName: model,
-          ),
-        )
         .toList();
   }
 }
