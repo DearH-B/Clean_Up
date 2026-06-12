@@ -674,6 +674,7 @@ class _ProductHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     final identity = [
       item.manufacturer,
+      item.seriesName,
       item.modelName,
     ].whereType<String>().where((value) => value.trim().isNotEmpty).join(' · ');
 
@@ -1808,7 +1809,8 @@ class _ProductInfoSheetState extends State<_ProductInfoSheet> {
   void _selectCatalogEntry(ProductCatalogEntry entry) {
     setState(() {
       _selectedCatalogEntry = entry;
-      _searchController.text = '${entry.brand} ${entry.modelName}'.trim();
+      _searchController.text =
+          '${entry.brand} ${entry.seriesName} ${entry.modelName}'.trim();
       _searchQuery = _searchController.text;
       _manufacturerController.text = entry.brand;
       _modelController.text = entry.modelName;
@@ -1893,9 +1895,12 @@ class _ProductCatalogResults extends StatelessWidget {
               ),
               title: Text(entry.name),
               subtitle: Text(
-                [entry.brand, entry.modelName, entry.matchLevelLabel]
-                    .where((text) => text.isNotEmpty)
-                    .join(' · '),
+                [
+                  entry.brand,
+                  entry.seriesName,
+                  entry.modelName,
+                  entry.matchLevelLabel,
+                ].where((text) => text.isNotEmpty).join(' · '),
               ),
             ),
           ),
@@ -1960,7 +1965,9 @@ class _ProductInfo extends StatelessWidget {
       children: [
         if (item.manufacturer != null)
           _InfoRow(label: '제조사', value: item.manufacturer!),
-        if (item.modelName != null)
+        if (item.seriesName?.isNotEmpty == true)
+          _InfoRow(label: '시리즈', value: item.seriesName!),
+        if (item.modelName?.isNotEmpty == true)
           _InfoRow(label: '모델명', value: item.modelName!),
         if (item.productMethod != null)
           _InfoRow(label: '처리 방식', value: item.productMethod!),

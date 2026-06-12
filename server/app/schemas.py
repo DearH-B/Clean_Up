@@ -65,6 +65,7 @@ class CatalogProduct(BaseModel):
     brand: str
     manufacturer: str
     modelName: str
+    seriesName: str = ""
     summary: str
     frequency: str
     recurrenceDays: int = Field(ge=0)

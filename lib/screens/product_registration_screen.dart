@@ -432,7 +432,11 @@ class _ProductRegistrationScreenState extends State<ProductRegistrationScreen> {
                         entry.name,
                         style: Theme.of(context).textTheme.titleMedium,
                       ),
-                      Text('${entry.brand} · ${entry.modelName}'),
+                      Text(
+                        [entry.brand, entry.seriesName, entry.modelName]
+                            .where((value) => value.isNotEmpty)
+                            .join(' · '),
+                      ),
                     ],
                   ),
                 ),
@@ -571,9 +575,13 @@ class _ProductRegistrationScreenState extends State<ProductRegistrationScreen> {
             child: Column(
               children: [
                 _InfoLine(label: '제품', value: product.name),
+                if (product.seriesName?.isNotEmpty == true)
+                  _InfoLine(label: '시리즈', value: product.seriesName!),
                 _InfoLine(
                   label: '모델',
-                  value: product.modelName ?? '모델 정보 없음',
+                  value: product.modelName?.isNotEmpty == true
+                      ? product.modelName!
+                      : '선택하지 않음',
                 ),
                 _InfoLine(
                   label: '관리 정보',
@@ -1185,7 +1193,11 @@ class _CatalogResultCard extends StatelessWidget {
         leading: const CircleAvatar(child: Icon(Icons.inventory_2_outlined)),
         title: Text(entry.name),
         subtitle: Text(
-          '${entry.brand} · ${entry.modelName}\n'
+          '${[
+            entry.brand,
+            entry.seriesName,
+            entry.modelName
+          ].where((value) => value.isNotEmpty).join(' · ')}\n'
           '${entry.categoryName} · ${_reviewStatusLabel(entry.reviewStatus)} · '
           '${_formatDate(entry.sourceCheckedAt)} 확인',
         ),

@@ -1,0 +1,66 @@
+{
+  "checkedAt": "2026-06-12",
+  "scope": "사용자가 정확한 모델명을 몰라도 선택할 수 있는 핵심 가전 시리즈 5종",
+  "products": [
+    {
+      "id": "samsung-bespoke-ai-refrigerator-4door",
+      "brand": "삼성전자",
+      "seriesName": "Bespoke AI 4도어",
+      "categoryName": "냉장고",
+      "officialSource": "https://www.samsung.com/sec/refrigerators/all-refrigerators/",
+      "officiallySupported": ["브랜드", "Bespoke AI 제품군", "4도어 형태"],
+      "guideScope": "시리즈 공통 외부·내부 관리",
+      "modelRequiredFor": ["부품 분리 순서", "필터 규격", "기능별 조작법"]
+    },
+    {
+      "id": "lg-dios-objet-refrigerator-top-bottom",
+      "brand": "LG전자",
+      "seriesName": "디오스 오브제컬렉션 상냉장·하냉동",
+      "categoryName": "냉장고",
+      "officialSource": "https://www.lge.co.kr/category/refrigerators",
+      "officiallySupported": ["브랜드", "LG Objet Collection", "상냉장·하냉동 분류"],
+      "guideScope": "시리즈 공통 외부·내부 관리",
+      "modelRequiredFor": ["부품 분리 순서", "필터 규격", "기능별 조작법"]
+    },
+    {
+      "id": "samsung-bespoke-ai-washer",
+      "brand": "삼성전자",
+      "seriesName": "Bespoke AI 세탁기",
+      "categoryName": "세탁기",
+      "officialSource": "https://www.samsung.com/sec/washers-and-dryers/all-washers-and-dryers/",
+      "officiallySupported": ["브랜드", "Bespoke AI 제품군", "세탁기 제품 유형"],
+      "guideScope": "세제함·도어 패킹·배수 필터의 공통 안전 관리",
+      "modelRequiredFor": ["통세척 코스명", "배수 필터 위치", "용량", "자동세제함 구조"]
+    },
+    {
+      "id": "lg-tromm-objet-drum-washer",
+      "brand": "LG전자",
+      "seriesName": "트롬 오브제컬렉션 드럼세탁기",
+      "categoryName": "세탁기",
+      "officialSource": "https://www.lge.co.kr/category/washing-machines?subCateId=CT50000102",
+      "officiallySupported": ["브랜드", "LG Objet Collection", "드럼세탁기 분류"],
+      "guideScope": "세제통·도어 패킹·배수 필터의 공통 안전 관리",
+      "modelRequiredFor": ["통살균 코스명", "배수 필터 위치", "용량", "자동세제함 구조"]
+    },
+    {
+      "id": "samsung-bespoke-ai-windfree-classic",
+      "brand": "삼성전자",
+      "seriesName": "Bespoke AI 무풍클래식",
+      "categoryName": "에어컨",
+      "officialSource": "https://www.samsung.com/sec/air-conditioners/all-air-conditioners/",
+      "officiallySupported": ["브랜드", "스탠드 에어컨 분류", "무풍 제품군"],
+      "guideScope": "흡입 필터와 외관의 공통 안전 관리",
+      "modelRequiredFor": ["필터 종류", "필터 분리 방향", "자동건조 기능", "내부 세척 절차"]
+    }
+  ],
+  "editorialPolicy": {
+    "officialSources": "시리즈 식별과 제품 분류의 근거로 사용",
+    "careGuide": "앱 편집팀이 작성한 시리즈 공통 안전 관리 가이드",
+    "excludedClaims": [
+      "모든 모델에 동일한 기능이 있다는 주장",
+      "확인되지 않은 부품 번호와 소모품",
+      "모델별 분해 방법",
+      "제조사가 보증하지 않은 세정제 사용"
+    ]
+  }
+}

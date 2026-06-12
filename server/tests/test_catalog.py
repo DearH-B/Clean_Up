@@ -30,29 +30,24 @@ class ProductCatalogTest(unittest.TestCase):
         self.assertEqual(product.reviewStatus.value, "reviewed")
         self.assertIn("공식 관리 주기 미확인", product.frequency)
 
-    def test_contains_ten_representative_appliances(self) -> None:
+    def test_contains_five_completed_series(self) -> None:
         expected_ids = {
-            "samsung-refrigerator-family",
-            "samsung-wf25cb8895bw",
-            "samsung-kq65qnf70afxkr",
-            "samsung-air-conditioner-family",
-            "samsung-ms23c3535ak",
-            "samsung-vacuum-family",
-            "samsung-dryer-family",
-            "samsung-air-purifier-family",
-            "samsung-dishwasher-family",
-            "samsung-kimchi-refrigerator-family",
+            "samsung-bespoke-ai-refrigerator-4door",
+            "lg-dios-objet-refrigerator-top-bottom",
+            "samsung-bespoke-ai-washer",
+            "lg-tromm-objet-drum-washer",
+            "samsung-bespoke-ai-windfree-classic",
         }
         actual_ids = {product.id for product in self.catalog.search("")}
 
         self.assertTrue(expected_ids.issubset(actual_ids))
         self.assertEqual(
-            self.catalog.search("WF25CB8895BW")[0].matchLevelLabel,
-            "모델명 일치",
+            self.catalog.search("트롬 오브제컬렉션")[0].seriesName,
+            "트롬 오브제컬렉션 드럼세탁기",
         )
         self.assertEqual(
-            self.catalog.search("삼성 김치냉장고")[0].matchLevelLabel,
-            "브랜드 제품군 기준",
+            self.catalog.search("무풍클래식")[0].matchLevelLabel,
+            "시리즈 기준",
         )
 
     def test_category_filter_accepts_product_name(self) -> None:

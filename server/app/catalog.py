@@ -128,6 +128,7 @@ def _search_text(product: CatalogProduct) -> str:
         product.categoryName,
         product.brand,
         product.manufacturer,
+        product.seriesName,
         product.modelName,
         product.productMethod,
         *product.keywords,

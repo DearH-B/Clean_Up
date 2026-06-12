@@ -40,18 +40,13 @@ void main() {
     expect(searchProductCatalog('음처기').single.brand, '에코업');
   });
 
-  test('대표 가전 10종은 앱 내장 카탈로그에서 검색할 수 있다', () {
+  test('핵심 5개 시리즈는 앱 내장 카탈로그에서 검색할 수 있다', () {
     const ids = {
-      'samsung-refrigerator-family',
-      'samsung-wf25cb8895bw',
-      'samsung-kq65qnf70afxkr',
-      'samsung-air-conditioner-family',
-      'samsung-ms23c3535ak',
-      'samsung-vacuum-family',
-      'samsung-dryer-family',
-      'samsung-air-purifier-family',
-      'samsung-dishwasher-family',
-      'samsung-kimchi-refrigerator-family',
+      'samsung-bespoke-ai-refrigerator-4door',
+      'lg-dios-objet-refrigerator-top-bottom',
+      'samsung-bespoke-ai-washer',
+      'lg-tromm-objet-drum-washer',
+      'samsung-bespoke-ai-windfree-classic',
     };
 
     expect(
@@ -59,13 +54,23 @@ void main() {
       ids.length,
     );
     expect(
-      searchProductCatalog('WF25CB8895BW').single.matchLevelLabel,
-      '모델명 일치',
+      searchProductCatalog('트롬 오브제컬렉션').first.seriesName,
+      '트롬 오브제컬렉션 드럼세탁기',
     );
     expect(
-      searchProductCatalog('삼성 김치냉장고').single.matchLevelLabel,
-      '브랜드 제품군 기준',
+      searchProductCatalog('무풍클래식').first.matchLevelLabel,
+      '시리즈 기준',
     );
+  });
+
+  test('시리즈 정보는 등록 후 저장과 복원에서도 유지된다', () {
+    final catalog = searchProductCatalog('Bespoke AI 4도어').first;
+    final saved = catalog.toZoneItem(id: 'series-product', zoneId: 'kitchen');
+    final restored = ZoneItem.fromJson(saved.toJson());
+
+    expect(restored.seriesName, 'Bespoke AI 4도어');
+    expect(restored.modelName, isEmpty);
+    expect(restored.hasProductInfo, isTrue);
   });
 
   test('대표 브랜드 목록에는 브랜드 미상이 표시되지 않는다', () {

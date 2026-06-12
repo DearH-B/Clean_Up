@@ -83,6 +83,7 @@ class ZoneItem {
     this.note,
     this.estimatedMinutes = 10,
     this.manufacturer,
+    this.seriesName,
     this.modelName,
     this.productMethod,
     this.guideStatus,
@@ -126,6 +127,7 @@ class ZoneItem {
   final List<String> steps;
   final int estimatedMinutes;
   final String? manufacturer;
+  final String? seriesName;
   final String? modelName;
   final String? productMethod;
   final String? guideStatus;
@@ -148,6 +150,7 @@ class ZoneItem {
 
   bool get hasProductInfo =>
       (manufacturer?.trim().isNotEmpty ?? false) ||
+      (seriesName?.trim().isNotEmpty ?? false) ||
       (modelName?.trim().isNotEmpty ?? false);
 
   String get displayName =>
@@ -196,6 +199,7 @@ class ZoneItem {
       steps: (json['steps'] as List<dynamic>).cast<String>(),
       estimatedMinutes: json['estimatedMinutes'] as int? ?? 10,
       manufacturer: json['manufacturer'] as String?,
+      seriesName: json['seriesName'] as String?,
       modelName: json['modelName'] as String?,
       productMethod: json['productMethod'] as String?,
       guideStatus: json['guideStatus'] as String?,
@@ -268,6 +272,7 @@ class ZoneItem {
       'steps': steps,
       'estimatedMinutes': estimatedMinutes,
       'manufacturer': manufacturer,
+      'seriesName': seriesName,
       'modelName': modelName,
       'productMethod': productMethod,
       'guideStatus': guideStatus,
@@ -307,6 +312,7 @@ class ZoneItem {
     DateTime? installedDate,
     String? note,
     String? manufacturer,
+    String? seriesName,
     String? modelName,
     String? guideStatus,
     String? sourceTitle,
@@ -343,6 +349,7 @@ class ZoneItem {
       steps: steps,
       estimatedMinutes: estimatedMinutes,
       manufacturer: manufacturer ?? this.manufacturer,
+      seriesName: seriesName ?? this.seriesName,
       modelName: modelName ?? this.modelName,
       productMethod: productMethod,
       guideStatus: guideStatus ?? this.guideStatus,

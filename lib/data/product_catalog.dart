@@ -10,6 +10,7 @@ class ProductCatalogEntry {
     required this.brand,
     required this.manufacturer,
     required this.modelName,
+    this.seriesName = '',
     required this.summary,
     required this.frequency,
     required this.recurrenceDays,
@@ -54,6 +55,7 @@ class ProductCatalogEntry {
   final String brand;
   final String manufacturer;
   final String modelName;
+  final String seriesName;
   final String summary;
   final String frequency;
   final int recurrenceDays;
@@ -99,6 +101,7 @@ class ProductCatalogEntry {
       brand: json['brand'] as String,
       manufacturer: json['manufacturer'] as String,
       modelName: json['modelName'] as String,
+      seriesName: json['seriesName'] as String? ?? '',
       summary: json['summary'] as String,
       frequency: json['frequency'] as String,
       recurrenceDays: json['recurrenceDays'] as int,
@@ -178,6 +181,7 @@ class ProductCatalogEntry {
       steps: steps,
       estimatedMinutes: estimatedMinutes,
       manufacturer: manufacturer,
+      seriesName: seriesName,
       modelName: modelName,
       productMethod: productMethod,
       guideStatus: guideStatus,
@@ -217,6 +221,7 @@ class ProductCatalogEntry {
       steps: catalogItem.steps,
       estimatedMinutes: catalogItem.estimatedMinutes,
       manufacturer: catalogItem.manufacturer,
+      seriesName: catalogItem.seriesName,
       modelName: catalogItem.modelName,
       productMethod: catalogItem.productMethod,
       guideStatus: catalogItem.guideStatus,
@@ -250,6 +255,7 @@ class ProductCatalogEntry {
       categoryName,
       brand,
       manufacturer,
+      seriesName,
       modelName,
       productMethod,
       ...keywords,
@@ -582,15 +588,16 @@ final productCatalog = <ProductCatalogEntry>[
 
 final _representativeApplianceCatalog = <ProductCatalogEntry>[
   _representativeAppliance(
-    id: 'samsung-refrigerator-family',
-    name: '삼성 냉장고',
+    id: 'samsung-bespoke-ai-refrigerator-4door',
+    name: '삼성 Bespoke AI 냉장고 4도어',
     categoryName: '냉장고',
-    productMethod: '삼성 가정용 냉장고 대표 제품군',
+    seriesName: 'Bespoke AI 4도어',
+    productMethod: '상냉장·하냉동 4도어 냉장고 시리즈',
     summary: '선반, 서랍, 문 고무패킹과 내부 물기를 중심으로 관리해요.',
     frequency: '내부 오염은 발견 즉시 · 전체 내부는 한 달마다',
     recurrenceDays: 30,
     estimatedMinutes: 20,
-    officialTitle: '삼성전자 냉장고 공식 제품군',
+    officialTitle: '삼성전자 Bespoke AI 4도어 냉장고 공식 제품군',
     officialUrl: 'https://www.samsung.com/sec/refrigerators/all-refrigerators/',
     supplies: const ['부드러운 천', '중성세제', '마른 수건'],
     cautions: const [
@@ -603,33 +610,79 @@ final _representativeApplianceCatalog = <ProductCatalogEntry>[
       '중성세제를 묻힌 부드러운 천으로 내부와 문 고무패킹을 닦아요.',
       '물기를 완전히 제거한 뒤 부품과 식품을 다시 넣어요.',
     ],
-    keywords: const ['냉장고', '비스포크', 'refrigerator', '삼성'],
+    productSpecs: const [
+      '시리즈: Bespoke AI',
+      '형태: 4도어 냉장고',
+      '정확한 모델명은 제품 내부 라벨에서 확인',
+    ],
+    keywords: const [
+      '냉장고',
+      '비스포크',
+      '비스포크 AI',
+      'Bespoke AI',
+      '4도어',
+      'refrigerator',
+      '삼성',
+    ],
   ),
   _representativeAppliance(
-    id: 'samsung-wf25cb8895bw',
+    id: 'lg-dios-objet-refrigerator-top-bottom',
+    name: 'LG 디오스 오브제컬렉션 냉장고',
+    categoryName: '냉장고',
+    brand: 'LG전자',
+    seriesName: '디오스 오브제컬렉션 상냉장·하냉동',
+    productMethod: '상냉장·하냉동 냉장고 시리즈',
+    summary: '선반, 서랍, 도어 패킹과 내부의 음식물 흔적을 안전하게 관리해요.',
+    frequency: '내부 오염은 발견 즉시 · 전체 내부는 한 달마다',
+    recurrenceDays: 30,
+    estimatedMinutes: 20,
+    officialTitle: 'LG전자 냉장고 공식 제품군',
+    officialUrl: 'https://www.lge.co.kr/category/refrigerators',
+    supplies: const ['부드러운 천', '중성세제', '마른 수건'],
+    cautions: const [
+      '유리 선반은 차가운 상태에서 뜨거운 물로 씻지 마세요.',
+      '조작부와 냉기 토출구에 물이나 세제를 직접 분사하지 마세요.',
+    ],
+    steps: const [
+      '상하기 쉬운 식품을 보냉 가방이나 다른 냉장 공간으로 옮겨요.',
+      '분리 가능한 선반과 서랍만 모델 설명서에 따라 꺼내요.',
+      '희석한 중성세제를 묻힌 부드러운 천으로 내부와 도어 패킹을 닦아요.',
+      '깨끗한 천으로 한 번 더 닦고 물기를 완전히 제거한 뒤 식품을 넣어요.',
+    ],
+    productSpecs: const [
+      '시리즈: LG 디오스 오브제컬렉션',
+      '형태: 상냉장·하냉동',
+      '정확한 모델명은 제품 내부 라벨에서 확인',
+    ],
+    keywords: const [
+      '냉장고',
+      '디오스',
+      '오브제컬렉션',
+      '상냉장',
+      '하냉동',
+      'refrigerator',
+      'LG',
+    ],
+  ),
+  _representativeAppliance(
+    id: 'samsung-bespoke-ai-washer',
     name: '삼성 Bespoke AI 세탁기',
     categoryName: '세탁기',
-    modelName: 'WF25CB8895BW',
-    productMethod: '드럼 세탁기 · 무세제통세척+ 지원',
-    summary: '세제함, 도어 패킹과 배수 필터를 관리하고 통세척 기능을 활용해요.',
+    seriesName: 'Bespoke AI 세탁기',
+    productMethod: '삼성 드럼 세탁기 시리즈',
+    summary: '세제함, 도어 패킹과 배수 필터를 관리하고 모델의 통세척 코스를 확인해요.',
     frequency: '세제함과 패킹은 오염 시 · 배수 필터는 한 달마다',
     recurrenceDays: 30,
     estimatedMinutes: 20,
-    officialTitle: 'Bespoke AI 세탁기 25kg 공식 지원',
-    officialUrl: 'https://www.samsung.com/sec/support/model/WF25CB8895BW/',
-    officialSupports: const ['모델명', '25kg 용량', '무세제통세척+', '출시년월'],
+    officialTitle: '삼성전자 Bespoke AI 세탁기 공식 제품군',
+    officialUrl:
+        'https://www.samsung.com/sec/washers-and-dryers/all-washers-and-dryers/',
+    officialSupports: const ['브랜드', '시리즈', '제품 유형'],
     productSpecs: const [
-      '모델명: WF25CB8895BW',
-      '세탁 용량: 25kg',
-      '관리 기능: 무세제통세척+',
-      '출시년월: 2023년 3월',
+      '시리즈: Bespoke AI 세탁기',
+      '제품 유형: 드럼 세탁기',
+      '정확한 모델명과 용량은 도어 안쪽 라벨에서 확인',
     ],
-    specSourceIds: const {
-      '모델명': ['samsung-wf25cb8895bw-official'],
-      '세탁 용량': ['samsung-wf25cb8895bw-official'],
-      '관리 기능': ['samsung-wf25cb8895bw-official'],
-      '출시년월': ['samsung-wf25cb8895bw-official'],
-    },
     supplies: const ['부드러운 천', '작은 솔', '고무장갑'],
     cautions: const [
       '필터를 열기 전에 전원을 끄고 잔수가 나올 수 있도록 수건을 준비하세요.',
@@ -639,10 +692,48 @@ final _representativeApplianceCatalog = <ProductCatalogEntry>[
       '세제함을 분리해 남은 세제와 섬유유연제를 씻어내요.',
       '도어 고무패킹의 이물질과 물기를 닦아요.',
       '배수 필터는 설명서의 분리 순서와 잔수 배출 방법을 따라 관리해요.',
-      '빈 통 상태에서 제품의 무세제통세척+ 코스를 실행해요.',
+      '빈 통 상태에서 모델 설명서에 표시된 통세척 코스를 실행해요.',
     ],
-    keywords: const ['세탁기', '드럼', 'WF25CB8895BW', '삼성'],
-    releaseYear: 2023,
+    keywords: const ['세탁기', '드럼', '비스포크 AI', 'Bespoke AI', '삼성'],
+  ),
+  _representativeAppliance(
+    id: 'lg-tromm-objet-drum-washer',
+    name: 'LG 트롬 오브제컬렉션 세탁기',
+    categoryName: '세탁기',
+    brand: 'LG전자',
+    seriesName: '트롬 오브제컬렉션 드럼세탁기',
+    productMethod: 'LG 드럼 세탁기 시리즈',
+    summary: '세제통, 도어 고무패킹과 배수 필터를 관리하고 통살균 코스를 모델별로 확인해요.',
+    frequency: '세제통과 패킹은 오염 시 · 배수 필터는 한 달마다 확인',
+    recurrenceDays: 30,
+    estimatedMinutes: 20,
+    officialTitle: 'LG전자 드럼세탁기 공식 제품군',
+    officialUrl:
+        'https://www.lge.co.kr/category/washing-machines?subCateId=CT50000102',
+    supplies: const ['부드러운 천', '작은 솔', '고무장갑', '낮은 받침 용기'],
+    cautions: const [
+      '배수 필터를 열기 전 전원을 끄고 잔수가 나올 수 있도록 용기와 수건을 준비하세요.',
+      '염소계 세정제나 임의 세정제 사용은 모델 설명서를 먼저 확인하세요.',
+    ],
+    steps: const [
+      '세제통을 모델 설명서에 따라 분리해 남은 세제와 섬유유연제를 씻어내요.',
+      '도어 고무패킹 주름 안쪽의 이물질과 물기를 부드러운 천으로 닦아요.',
+      '잔수를 먼저 배출한 뒤 배수 필터의 이물질을 제거하고 정확히 잠가요.',
+      '빈 통 상태에서 모델에 표시된 통살균 또는 통세척 코스를 실행해요.',
+    ],
+    productSpecs: const [
+      '시리즈: LG 트롬 오브제컬렉션',
+      '제품 유형: 드럼 세탁기',
+      '정확한 모델명과 용량은 도어 안쪽 라벨에서 확인',
+    ],
+    keywords: const [
+      '세탁기',
+      '드럼',
+      '트롬',
+      '오브제컬렉션',
+      'TROMM',
+      'LG',
+    ],
   ),
   _representativeAppliance(
     id: 'samsung-kq65qnf70afxkr',
@@ -684,15 +775,16 @@ final _representativeApplianceCatalog = <ProductCatalogEntry>[
     releaseYear: 2025,
   ),
   _representativeAppliance(
-    id: 'samsung-air-conditioner-family',
-    name: '삼성 스탠드 에어컨',
+    id: 'samsung-bespoke-ai-windfree-classic',
+    name: '삼성 Bespoke AI 무풍클래식',
     categoryName: '에어컨',
-    productMethod: '삼성 가정용 스탠드 에어컨 대표 제품군',
+    seriesName: 'Bespoke AI 무풍클래식',
+    productMethod: '삼성 스탠드형 무풍 에어컨 시리즈',
     summary: '흡입 필터의 먼지를 제거하고 완전히 건조한 뒤 다시 장착해요.',
     frequency: '흡입 필터는 2주마다 · 사용 전후 상태 확인',
     recurrenceDays: 14,
     estimatedMinutes: 20,
-    officialTitle: '삼성전자 에어컨 공식 제품군',
+    officialTitle: '삼성전자 스탠드 에어컨 공식 제품군',
     officialUrl:
         'https://www.samsung.com/sec/air-conditioners/all-air-conditioners/',
     supplies: const ['청소기 브러시', '부드러운 천', '고무장갑'],
@@ -706,7 +798,21 @@ final _representativeApplianceCatalog = <ProductCatalogEntry>[
       '물세척 가능한 필터만 세척하고 그늘에서 완전히 말려요.',
       '냄새, 누수 또는 이상 소음이 있으면 전문 서비스를 요청해요.',
     ],
-    keywords: const ['에어컨', '스탠드', '무풍', 'air conditioner', '삼성'],
+    productSpecs: const [
+      '시리즈: Bespoke AI 무풍클래식',
+      '제품 유형: 스탠드 에어컨',
+      '정확한 모델명은 측면 또는 하단 라벨에서 확인',
+    ],
+    keywords: const [
+      '에어컨',
+      '스탠드',
+      '무풍',
+      '무풍클래식',
+      '비스포크 AI',
+      'Bespoke AI',
+      'air conditioner',
+      '삼성',
+    ],
   ),
   _representativeAppliance(
     id: 'samsung-ms23c3535ak',
@@ -878,34 +984,50 @@ ProductCatalogEntry _representativeAppliance({
   required List<String> cautions,
   required List<String> steps,
   required List<String> keywords,
+  String brand = '삼성전자',
+  String seriesName = '',
   String modelName = '',
   List<String> officialSupports = const ['브랜드', '제품군'],
-  List<String> productSpecs = const ['삼성전자 대표 제품군 · 정확한 모델명은 제품 라벨에서 확인'],
+  List<String> productSpecs = const ['정확한 모델명은 제품 라벨에서 확인'],
   Map<String, List<String>> specSourceIds = const {},
   int? releaseYear,
 }) {
   final officialSourceId = '$id-official';
   final guideSourceId = '$id-editorial-guide';
+  final effectiveSpecSourceIds = specSourceIds.isNotEmpty
+      ? specSourceIds
+      : {
+          for (final spec in productSpecs)
+            if (spec.contains(':'))
+              spec.split(':').first.trim(): [officialSourceId],
+        };
   return ProductCatalogEntry(
     id: id,
     name: name,
     type: ZoneItemType.appliance,
     categoryName: categoryName,
-    brand: '삼성전자',
-    manufacturer: '삼성전자',
+    brand: brand,
+    manufacturer: brand,
+    seriesName: seriesName,
     modelName: modelName,
     summary: summary,
     frequency: frequency,
     recurrenceDays: recurrenceDays,
     estimatedMinutes: estimatedMinutes,
     productMethod: productMethod,
-    guideStatus: modelName.isEmpty
-        ? '삼성 공식 제품군을 확인했어요. 정확한 모델별 분해·세척 방법은 제품 라벨과 설명서를 우선해요.'
-        : '공식 지원 페이지에서 모델을 확인했어요. 관리 순서는 안전한 제품군 공통 범위로 안내해요.',
+    guideStatus: modelName.isNotEmpty
+        ? '공식 지원 페이지에서 모델을 확인했어요. 관리 순서는 안전한 제품군 공통 범위로 안내해요.'
+        : seriesName.isNotEmpty
+            ? '$brand 공식 시리즈를 확인했어요. 정확한 모델별 분해·세척 방법은 제품 라벨과 설명서를 우선해요.'
+            : '$brand 공식 제품군을 확인했어요. 정확한 시리즈와 모델은 제품 라벨과 설명서를 우선해요.',
     guideBasis: '공식 페이지는 제품 식별 근거로, 관리 순서는 앱 편집팀의 제품군 가이드로 분리해 표시해요.',
     guideSourceType:
         modelName.isEmpty ? GuideSourceType.general : GuideSourceType.official,
-    matchLevelLabel: modelName.isEmpty ? '브랜드 제품군 기준' : '모델명 일치',
+    matchLevelLabel: modelName.isNotEmpty
+        ? '모델명 일치'
+        : seriesName.isNotEmpty
+            ? '시리즈 기준'
+            : '브랜드 제품군 기준',
     sourceTitle: officialTitle,
     sourceUrl: officialUrl,
     sourceCheckedAt: DateTime(2026, 6, 12),
@@ -917,7 +1039,7 @@ ProductCatalogEntry _representativeAppliance({
         type: modelName.isEmpty
             ? ProductSourceType.officialProduct
             : ProductSourceType.officialSupport,
-        publisher: '삼성전자',
+        publisher: brand,
         checkedAt: DateTime(2026, 6, 12),
         supports: officialSupports,
         isOfficial: true,
@@ -934,7 +1056,7 @@ ProductCatalogEntry _representativeAppliance({
         isActive: true,
       ),
     ],
-    specSourceIds: specSourceIds,
+    specSourceIds: effectiveSpecSourceIds,
     stepSourceIds: {
       for (var index = 0; index < steps.length; index++)
         '$index': [guideSourceId],
@@ -983,6 +1105,7 @@ int _searchScore(ProductCatalogEntry entry, String query) {
     return 0;
   }
   final model = _normalize(entry.modelName);
+  final series = _normalize(entry.seriesName);
   final brand = _normalize(entry.brand);
   final category = _normalize(entry.categoryName);
   final name = _normalize(entry.name);
@@ -991,6 +1114,12 @@ int _searchScore(ProductCatalogEntry entry, String query) {
   }
   if (model.contains(normalizedQuery)) {
     return 500;
+  }
+  if (series == normalizedQuery) {
+    return 480;
+  }
+  if (series.contains(normalizedQuery)) {
+    return 460;
   }
   if (normalizedQuery.contains(brand) && normalizedQuery.contains(category)) {
     return 400;

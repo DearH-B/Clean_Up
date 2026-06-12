@@ -7,15 +7,16 @@ CHECKED_AT = "2026-06-12"
 def representative_products() -> list[dict[str, Any]]:
     return [
         _product(
-            id="samsung-refrigerator-family",
-            name="삼성 냉장고",
+            id="samsung-bespoke-ai-refrigerator-4door",
+            name="삼성 Bespoke AI 냉장고 4도어",
             category="냉장고",
-            method="삼성 가정용 냉장고 대표 제품군",
+            series="Bespoke AI 4도어",
+            method="상냉장·하냉동 4도어 냉장고 시리즈",
             summary="선반, 서랍, 문 고무패킹과 내부 물기를 중심으로 관리해요.",
             frequency="내부 오염은 발견 즉시 · 전체 내부는 한 달마다",
             days=30,
             minutes=20,
-            official_title="삼성전자 냉장고 공식 제품군",
+            official_title="삼성전자 Bespoke AI 4도어 냉장고 공식 제품군",
             official_url="https://www.samsung.com/sec/refrigerators/all-refrigerators/",
             supplies=["부드러운 천", "중성세제", "마른 수건"],
             cautions=[
@@ -28,20 +29,56 @@ def representative_products() -> list[dict[str, Any]]:
                 "중성세제를 묻힌 부드러운 천으로 내부와 문 고무패킹을 닦아요.",
                 "물기를 완전히 제거한 뒤 부품과 식품을 다시 넣어요.",
             ],
-            keywords=["냉장고", "비스포크", "refrigerator", "삼성"],
+            keywords=["냉장고", "비스포크", "비스포크 AI", "Bespoke AI", "4도어", "refrigerator", "삼성"],
+            specs=[
+                "시리즈: Bespoke AI",
+                "형태: 4도어 냉장고",
+                "정확한 모델명은 제품 내부 라벨에서 확인",
+            ],
         ),
         _product(
-            id="samsung-wf25cb8895bw",
+            id="lg-dios-objet-refrigerator-top-bottom",
+            name="LG 디오스 오브제컬렉션 냉장고",
+            category="냉장고",
+            brand="LG전자",
+            series="디오스 오브제컬렉션 상냉장·하냉동",
+            method="상냉장·하냉동 냉장고 시리즈",
+            summary="선반, 서랍, 도어 패킹과 내부의 음식물 흔적을 안전하게 관리해요.",
+            frequency="내부 오염은 발견 즉시 · 전체 내부는 한 달마다",
+            days=30,
+            minutes=20,
+            official_title="LG전자 냉장고 공식 제품군",
+            official_url="https://www.lge.co.kr/category/refrigerators",
+            supplies=["부드러운 천", "중성세제", "마른 수건"],
+            cautions=[
+                "유리 선반은 차가운 상태에서 뜨거운 물로 씻지 마세요.",
+                "조작부와 냉기 토출구에 물이나 세제를 직접 분사하지 마세요.",
+            ],
+            steps=[
+                "상하기 쉬운 식품을 보냉 가방이나 다른 냉장 공간으로 옮겨요.",
+                "분리 가능한 선반과 서랍만 모델 설명서에 따라 꺼내요.",
+                "희석한 중성세제를 묻힌 부드러운 천으로 내부와 도어 패킹을 닦아요.",
+                "깨끗한 천으로 한 번 더 닦고 물기를 완전히 제거한 뒤 식품을 넣어요.",
+            ],
+            keywords=["냉장고", "디오스", "오브제컬렉션", "상냉장", "하냉동", "refrigerator", "LG"],
+            specs=[
+                "시리즈: LG 디오스 오브제컬렉션",
+                "형태: 상냉장·하냉동",
+                "정확한 모델명은 제품 내부 라벨에서 확인",
+            ],
+        ),
+        _product(
+            id="samsung-bespoke-ai-washer",
             name="삼성 Bespoke AI 세탁기",
             category="세탁기",
-            model="WF25CB8895BW",
-            method="드럼 세탁기 · 무세제통세척+ 지원",
-            summary="세제함, 도어 패킹과 배수 필터를 관리하고 통세척 기능을 활용해요.",
+            series="Bespoke AI 세탁기",
+            method="삼성 드럼 세탁기 시리즈",
+            summary="세제함, 도어 패킹과 배수 필터를 관리하고 모델의 통세척 코스를 확인해요.",
             frequency="세제함과 패킹은 오염 시 · 배수 필터는 한 달마다",
             days=30,
             minutes=20,
-            official_title="Bespoke AI 세탁기 25kg 공식 지원",
-            official_url="https://www.samsung.com/sec/support/model/WF25CB8895BW/",
+            official_title="삼성전자 Bespoke AI 세탁기 공식 제품군",
+            official_url="https://www.samsung.com/sec/washers-and-dryers/all-washers-and-dryers/",
             supplies=["부드러운 천", "작은 솔", "고무장갑"],
             cautions=[
                 "필터를 열기 전에 전원을 끄고 잔수가 나올 수 있도록 수건을 준비하세요.",
@@ -51,16 +88,45 @@ def representative_products() -> list[dict[str, Any]]:
                 "세제함을 분리해 남은 세제와 섬유유연제를 씻어내요.",
                 "도어 고무패킹의 이물질과 물기를 닦아요.",
                 "배수 필터는 설명서의 분리 순서와 잔수 배출 방법을 따라 관리해요.",
-                "빈 통 상태에서 제품의 무세제통세척+ 코스를 실행해요.",
+                "빈 통 상태에서 모델 설명서에 표시된 통세척 코스를 실행해요.",
             ],
-            keywords=["세탁기", "드럼", "WF25CB8895BW", "삼성"],
+            keywords=["세탁기", "드럼", "비스포크 AI", "Bespoke AI", "삼성"],
             specs=[
-                "모델명: WF25CB8895BW",
-                "세탁 용량: 25kg",
-                "관리 기능: 무세제통세척+",
-                "출시년월: 2023년 3월",
+                "시리즈: Bespoke AI 세탁기",
+                "제품 유형: 드럼 세탁기",
+                "정확한 모델명과 용량은 도어 안쪽 라벨에서 확인",
             ],
-            release_year=2023,
+        ),
+        _product(
+            id="lg-tromm-objet-drum-washer",
+            name="LG 트롬 오브제컬렉션 세탁기",
+            category="세탁기",
+            brand="LG전자",
+            series="트롬 오브제컬렉션 드럼세탁기",
+            method="LG 드럼 세탁기 시리즈",
+            summary="세제통, 도어 고무패킹과 배수 필터를 관리하고 통살균 코스를 모델별로 확인해요.",
+            frequency="세제통과 패킹은 오염 시 · 배수 필터는 한 달마다 확인",
+            days=30,
+            minutes=20,
+            official_title="LG전자 드럼세탁기 공식 제품군",
+            official_url="https://www.lge.co.kr/category/washing-machines?subCateId=CT50000102",
+            supplies=["부드러운 천", "작은 솔", "고무장갑", "낮은 받침 용기"],
+            cautions=[
+                "배수 필터를 열기 전 전원을 끄고 잔수가 나올 수 있도록 용기와 수건을 준비하세요.",
+                "염소계 세정제나 임의 세정제 사용은 모델 설명서를 먼저 확인하세요.",
+            ],
+            steps=[
+                "세제통을 모델 설명서에 따라 분리해 남은 세제와 섬유유연제를 씻어내요.",
+                "도어 고무패킹 주름 안쪽의 이물질과 물기를 부드러운 천으로 닦아요.",
+                "잔수를 먼저 배출한 뒤 배수 필터의 이물질을 제거하고 정확히 잠가요.",
+                "빈 통 상태에서 모델에 표시된 통살균 또는 통세척 코스를 실행해요.",
+            ],
+            keywords=["세탁기", "드럼", "트롬", "오브제컬렉션", "TROMM", "LG"],
+            specs=[
+                "시리즈: LG 트롬 오브제컬렉션",
+                "제품 유형: 드럼 세탁기",
+                "정확한 모델명과 용량은 도어 안쪽 라벨에서 확인",
+            ],
         ),
         _product(
             id="samsung-kq65qnf70afxkr",
@@ -95,10 +161,11 @@ def representative_products() -> list[dict[str, Any]]:
             release_year=2025,
         ),
         _product(
-            id="samsung-air-conditioner-family",
-            name="삼성 스탠드 에어컨",
+            id="samsung-bespoke-ai-windfree-classic",
+            name="삼성 Bespoke AI 무풍클래식",
             category="에어컨",
-            method="삼성 가정용 스탠드 에어컨 대표 제품군",
+            series="Bespoke AI 무풍클래식",
+            method="삼성 스탠드형 무풍 에어컨 시리즈",
             summary="흡입 필터의 먼지를 제거하고 완전히 건조한 뒤 다시 장착해요.",
             frequency="흡입 필터는 2주마다 · 사용 전후 상태 확인",
             days=14,
@@ -116,7 +183,12 @@ def representative_products() -> list[dict[str, Any]]:
                 "물세척 가능한 필터만 세척하고 그늘에서 완전히 말려요.",
                 "냄새, 누수 또는 이상 소음이 있으면 전문 서비스를 요청해요.",
             ],
-            keywords=["에어컨", "스탠드", "무풍", "air conditioner", "삼성"],
+            keywords=["에어컨", "스탠드", "무풍", "무풍클래식", "비스포크 AI", "Bespoke AI", "air conditioner", "삼성"],
+            specs=[
+                "시리즈: Bespoke AI 무풍클래식",
+                "제품 유형: 스탠드 에어컨",
+                "정확한 모델명은 측면 또는 하단 라벨에서 확인",
+            ],
         ),
         _product(
             id="samsung-ms23c3535ak",
@@ -283,15 +355,15 @@ def _product(
     cautions: list[str],
     steps: list[str],
     keywords: list[str],
+    brand: str = "삼성전자",
+    series: str = "",
     model: str = "",
     specs: list[str] | None = None,
     release_year: int | None = None,
 ) -> dict[str, Any]:
     official_id = f"{id}-official"
     guide_id = f"{id}-editorial-guide"
-    product_specs = specs or [
-        "삼성전자 대표 제품군 · 정확한 모델명은 제품 라벨에서 확인"
-    ]
+    product_specs = specs or ["정확한 모델명은 제품 라벨에서 확인"]
     spec_source_ids = {
         spec.split(":", maxsplit=1)[0]: [official_id]
         for spec in product_specs
@@ -302,9 +374,10 @@ def _product(
         "name": name,
         "type": "appliance",
         "categoryName": category,
-        "brand": "삼성전자",
-        "manufacturer": "삼성전자",
+        "brand": brand,
+        "manufacturer": brand,
         "modelName": model,
+        "seriesName": series,
         "summary": summary,
         "frequency": frequency,
         "recurrenceDays": days,
@@ -313,11 +386,19 @@ def _product(
         "guideStatus": (
             "공식 지원 페이지에서 모델을 확인했어요. 관리 순서는 안전한 제품군 공통 범위로 안내해요."
             if model
-            else "삼성 공식 제품군을 확인했어요. 정확한 모델별 분해·세척 방법은 제품 라벨과 설명서를 우선해요."
+            else (
+                f"{brand} 공식 시리즈를 확인했어요. 정확한 모델별 분해·세척 방법은 제품 라벨과 설명서를 우선해요."
+                if series
+                else f"{brand} 공식 제품군을 확인했어요. 정확한 시리즈와 모델은 제품 라벨과 설명서를 우선해요."
+            )
         ),
         "guideBasis": "공식 페이지는 제품 식별 근거로, 관리 순서는 앱 편집팀의 제품군 가이드로 분리해 표시해요.",
         "guideSourceType": "official" if model else "general",
-        "matchLevelLabel": "모델명 일치" if model else "브랜드 제품군 기준",
+        "matchLevelLabel": (
+            "모델명 일치"
+            if model
+            else ("시리즈 기준" if series else "브랜드 제품군 기준")
+        ),
         "sourceTitle": official_title,
         "sourceUrl": official_url,
         "sourceCheckedAt": CHECKED_AT,
@@ -327,7 +408,7 @@ def _product(
                 "title": official_title,
                 "url": official_url,
                 "type": "officialSupport" if model else "officialProduct",
-                "publisher": "삼성전자",
+                "publisher": brand,
                 "checkedAt": CHECKED_AT,
                 "supports": ["모델명", "제품군"] if model else ["브랜드", "제품군"],
                 "isOfficial": True,
@@ -369,7 +450,7 @@ def _product(
         "keywords": keywords,
         "reviewStatus": "reviewed",
         "reviewedBy": "catalog-editor",
-        "reviewNote": "대표 제품군 10종 1차 검수. 정확 모델 설명서가 확인되면 모델 단위로 갱신.",
+        "reviewNote": "공식 식별 근거와 앱 편집 관리 가이드의 범위를 분리해 검수.",
         "officialManualUrl": None,
         "supportUrl": official_url,
         "servicePhone": "1588-3366",
