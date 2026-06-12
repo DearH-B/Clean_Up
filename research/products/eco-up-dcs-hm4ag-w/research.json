@@ -1,0 +1,227 @@
+{
+  "schemaVersion": 1,
+  "identity": {
+    "productId": "eco-up-dcs-hm4ag-w",
+    "productType": "appliance",
+    "categoryName": "음식물처리기",
+    "brand": "에코업",
+    "manufacturer": "제이앤에이치컴퍼니",
+    "productName": "에코업 음식물처리기",
+    "modelName": "DCS-HM4AG-W",
+    "modelAliases": [
+      "DCS HM4AG W",
+      "DCS-HM4AGW",
+      "HM4AG-W"
+    ],
+    "releaseYear": 2025,
+    "identificationLevel": "exactModel",
+    "identificationConfidence": "medium"
+  },
+  "recognition": {
+    "barcodes": [],
+    "qrPayloads": [],
+    "manufacturerProductCodes": [
+      "DCS-HM4AG-W"
+    ],
+    "labelKeywords": [
+      "에코업",
+      "제이앤에이치컴퍼니",
+      "DCS-HM4AG-W"
+    ],
+    "ocrAliases": [
+      "DCS HM4AG W",
+      "DCS-HM4AGW",
+      "DCS-HM4AG-W"
+    ],
+    "visualFeatures": [
+      "싱크대 하부에 설치하는 음식물처리기 본체",
+      "정확한 모델 식별에는 외관보다 제품 라벨 촬영이 필요함"
+    ],
+    "referenceImages": [
+      {
+        "url": "https://prod.danawa.com/info/?pcode=96061655",
+        "view": "other",
+        "rightsStatus": "linkOnly",
+        "sourceId": "eco-up-danawa-spec-2026"
+      }
+    ],
+    "labelPhotoGuidance": "싱크대 아래 본체의 제조사 라벨에서 모델명 DCS-HM4AG-W가 보이도록 촬영한다."
+  },
+  "usage": {
+    "primarySpaces": [
+      "주방"
+    ],
+    "materials": [],
+    "installationType": "싱크대 내장형",
+    "powerWaterDrainRequirements": [
+      "전원 연결",
+      "싱크대 배수 계통 연결"
+    ],
+    "childPetCautions": [
+      "투입구 내부에 손이나 도구를 넣지 않는다."
+    ]
+  },
+  "care": {
+    "routineCare": [
+      "투입구 가장자리와 싱크대 접합부의 음식물 찌꺼기와 물기를 제거한다."
+    ],
+    "periodicCare": [],
+    "conditionBasedCare": [
+      "평소와 다른 냄새나 소음이 있으면 사용을 중단하고 제조사 안내를 확인한다."
+    ],
+    "frequencyText": "공식 설명서에서 정기 관리 주기를 추가 확인해야 함",
+    "recurrenceDays": null,
+    "estimatedMinutes": null,
+    "professionalServiceRequired": true,
+    "steps": [
+      {
+        "order": 1,
+        "text": "제품이 작동 중이 아닌지 확인하고 투입구 주변을 비운다.",
+        "sourceIds": [
+          "eco-up-cleaning-video"
+        ]
+      },
+      {
+        "order": 2,
+        "text": "투입구 가장자리의 음식물 찌꺼기를 손이 닿는 외부 범위에서 제거한다.",
+        "sourceIds": [
+          "eco-up-cleaning-video"
+        ]
+      },
+      {
+        "order": 3,
+        "text": "부드러운 천으로 투입구와 싱크대 접합부를 닦고 물기를 제거한다.",
+        "sourceIds": [
+          "eco-up-cleaning-video"
+        ]
+      }
+    ],
+    "cautions": [
+      {
+        "text": "본체, 배관 또는 교반실을 임의로 분해하지 않는다.",
+        "severity": "danger",
+        "sourceIds": [
+          "eco-up-cleaning-video"
+        ]
+      },
+      {
+        "text": "투입구 안쪽에 손이나 청소 도구를 깊이 넣지 않는다.",
+        "severity": "danger",
+        "sourceIds": [
+          "eco-up-cleaning-video"
+        ]
+      },
+      {
+        "text": "제조사 확인 없이 락스나 강한 배수관 세정제를 사용하지 않는다.",
+        "severity": "warning",
+        "sourceIds": [
+          "eco-up-cleaning-video"
+        ]
+      }
+    ]
+  },
+  "consumables": [
+    {
+      "name": "미생물 제제",
+      "partNumber": null,
+      "compatibleModels": [
+        "DCS-HM4AG-W"
+      ],
+      "replacementGuidance": "가격비교 스펙에는 투입 주기 1년으로 표시되지만 공식 설명서 확인 전에는 확정 안내하지 않는다.",
+      "sourceIds": [
+        "eco-up-danawa-spec-2026"
+      ]
+    }
+  ],
+  "supplies": {
+    "required": [
+      "부드러운 천",
+      "고무장갑"
+    ],
+    "optional": [
+      "부드러운 작은 솔"
+    ],
+    "prohibited": [
+      "제조사가 허용하지 않은 강한 배수관 세정제",
+      "본체 분해 도구"
+    ]
+  },
+  "lifecycle": {
+    "warrantyGuidance": null,
+    "serviceUrl": null,
+    "servicePhone": null,
+    "discontinued": false,
+    "disposalGuidance": null
+  },
+  "sources": [
+    {
+      "id": "eco-up-danawa-spec-2026",
+      "title": "제이앤에이치컴퍼니 에코업 DCS-HM4AG-W 상세 스펙",
+      "url": "https://prod.danawa.com/info/?pcode=96061655",
+      "type": "priceComparison",
+      "publisher": "다나와",
+      "checkedAt": "2026-06-12",
+      "isOfficial": false,
+      "isActive": true,
+      "supports": [
+        "제조사",
+        "모델명",
+        "처리 방식",
+        "처리 용량",
+        "미생물 투입 주기",
+        "소음",
+        "크기",
+        "무게",
+        "등록 시기"
+      ],
+      "documentPages": [],
+      "archiveNote": "상품 이미지의 출처가 별도 판매처로 표시되어 있으므로 이미지 파일은 저장하지 않고 링크만 유지한다."
+    },
+    {
+      "id": "eco-up-cleaning-video",
+      "title": "분쇄기 세척방법",
+      "url": "https://www.youtube.com/watch?v=NhcPjcHIJkw",
+      "type": "officialVideo",
+      "publisher": "에코업 음식물처리기",
+      "checkedAt": "2026-06-08",
+      "isOfficial": true,
+      "isActive": true,
+      "supports": [
+        "투입구 주변 관리",
+        "세척 시 주의사항",
+        "이상 발생 시 대응"
+      ],
+      "documentPages": [],
+      "archiveNote": "기존 카탈로그에서 확인한 공식 영상. 2026-06-12 자동 조사 환경에서는 영상 내용을 다시 불러오지 못해 수동 재검수가 필요하다."
+    }
+  ],
+  "quality": {
+    "complexityLevel": "enhanced",
+    "requiredStandard": "detailed",
+    "status": "researching",
+    "confidenceGrade": "B",
+    "reviewedBy": null,
+    "reviewedAt": null,
+    "lastCheckedAt": "2026-06-12",
+    "missingInformation": [
+      "공식 제품 페이지",
+      "공식 사용설명서",
+      "제품 라벨 사진과 바코드",
+      "공식 고객지원 URL과 전화번호",
+      "공식 관리 주기",
+      "미생물 제제의 공식 부품명과 호환 규격",
+      "보증 및 폐기 안내"
+    ],
+    "conflicts": [
+      "기존 앱의 주 1회 관리 주기는 공식 근거를 확인하지 못했으므로 조사 데이터에서 제거함",
+      "2025년은 다나와 등록월 기준이며 실제 출시 연도와 다를 수 있음"
+    ]
+  },
+  "catalogMapping": {
+    "publishToProducts": false,
+    "publishToModels": false,
+    "catalogProductId": "eco-up-dcs-hm4ag-w",
+    "notes": "공식 설명서와 영상 재검수 후 기존 공개 카탈로그의 주기와 관리 단계를 갱신한다."
+  }
+}
+

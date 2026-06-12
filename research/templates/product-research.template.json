@@ -1,0 +1,117 @@
+{
+  "schemaVersion": 1,
+  "identity": {
+    "productId": "",
+    "productType": "appliance|furniture|consumable",
+    "categoryName": "",
+    "brand": "",
+    "manufacturer": "",
+    "productName": "",
+    "modelName": "",
+    "modelAliases": [],
+    "releaseYear": null,
+    "identificationLevel": "exactModel|similarFamily|generic|unidentified",
+    "identificationConfidence": "high|medium|low"
+  },
+  "recognition": {
+    "barcodes": [],
+    "qrPayloads": [],
+    "manufacturerProductCodes": [],
+    "labelKeywords": [],
+    "ocrAliases": [],
+    "visualFeatures": [],
+    "referenceImages": [
+      {
+        "url": "",
+        "view": "front|side|label|package|other",
+        "rightsStatus": "linkOnly|approved|selfCaptured|unknown",
+        "sourceId": ""
+      }
+    ],
+    "labelPhotoGuidance": ""
+  },
+  "usage": {
+    "primarySpaces": [],
+    "materials": [],
+    "installationType": null,
+    "powerWaterDrainRequirements": [],
+    "childPetCautions": []
+  },
+  "care": {
+    "routineCare": [],
+    "periodicCare": [],
+    "conditionBasedCare": [],
+    "frequencyText": "",
+    "recurrenceDays": null,
+    "estimatedMinutes": null,
+    "professionalServiceRequired": false,
+    "steps": [
+      {
+        "order": 1,
+        "text": "",
+        "sourceIds": []
+      }
+    ],
+    "cautions": [
+      {
+        "text": "",
+        "severity": "info|warning|danger",
+        "sourceIds": []
+      }
+    ]
+  },
+  "consumables": [
+    {
+      "name": "",
+      "partNumber": null,
+      "compatibleModels": [],
+      "replacementGuidance": "",
+      "sourceIds": []
+    }
+  ],
+  "supplies": {
+    "required": [],
+    "optional": [],
+    "prohibited": []
+  },
+  "lifecycle": {
+    "warrantyGuidance": null,
+    "serviceUrl": null,
+    "servicePhone": null,
+    "discontinued": null,
+    "disposalGuidance": null
+  },
+  "sources": [
+    {
+      "id": "",
+      "title": "",
+      "url": "",
+      "type": "officialProduct|officialManual|officialVideo|officialSupport|government|retailer|priceComparison|similarProduct|generalGuidance",
+      "publisher": "",
+      "checkedAt": "YYYY-MM-DD",
+      "isOfficial": false,
+      "isActive": true,
+      "supports": [],
+      "documentPages": [],
+      "archiveNote": ""
+    }
+  ],
+  "quality": {
+    "complexityLevel": "simple|standard|enhanced",
+    "requiredStandard": "basic|detailed",
+    "status": "candidate|researching|drafted|reviewing|reviewed|published|blocked",
+    "confidenceGrade": "A|B|C|D|unverified",
+    "reviewedBy": null,
+    "reviewedAt": null,
+    "lastCheckedAt": null,
+    "missingInformation": [],
+    "conflicts": []
+  },
+  "catalogMapping": {
+    "publishToProducts": false,
+    "publishToModels": false,
+    "catalogProductId": null,
+    "notes": ""
+  }
+}
+
