@@ -1,0 +1,2 @@
+publish,categoryName,brand,modelName,displayName,releaseYear,imageUrl,productUrl,features,sourceCheckedAt,reviewStatus
+false,세탁기,예시 브랜드,MODEL-001,예시 세탁기 25kg,2026,https://example.com/image.png,https://example.com/product,25kg|화이트,2026-06-13,verified

@@ -1,0 +1,2 @@
+productId,id,name,type,replacementDays,compatibilityLabel,partNumber,purchaseUrl,isSponsored,note
+example-product-id,example-filter,예시 필터,filter,180,MODEL-001 공식 확인,,,false,정확한 부품번호는 서비스센터에서 확인하세요.

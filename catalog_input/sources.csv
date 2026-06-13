@@ -1,0 +1,3 @@
+productId,sourceId,title,url,type,publisher,checkedAt,supports,isOfficial,isActive
+example-product-id,example-product-id-product,예시 공식 제품 페이지,https://example.com/product,officialProduct,예시 제조사,2026-06-13,제품명|모델명|출시 연도|대표 이미지,true,true
+example-product-id,example-product-id-manual,예시 공식 사용설명서,https://example.com/manual.pdf,officialManual,예시 제조사,2026-06-13,청소 안전사항|관리 순서,true,true

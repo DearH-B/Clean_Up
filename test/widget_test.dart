@@ -801,6 +801,36 @@ void main() {
     expect(refrigerator.visualCandidateId, isNull);
   });
 
+  testWidgets('제품 상세에서 제품을 삭제해도 이전 관리 기록은 유지된다', (tester) async {
+    seedSampleData(dataRepository);
+    final originalRecords = await dataRepository.loadCareRecords();
+    await pumpApp(tester, dataRepository);
+
+    await tester.tap(find.text('내 제품'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('주방'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('냉장고'));
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.byTooltip('제품 관리'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('제품 삭제'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('제품을 삭제할까요?'), findsOneWidget);
+    await tester.tap(find.widgetWithText(FilledButton, '삭제'));
+    await tester.pumpAndSettle();
+
+    final products = await dataRepository.loadUserProducts();
+    expect(products!.any((item) => item.name == '냉장고'), isFalse);
+    final remainingRecords = await dataRepository.loadCareRecords();
+    expect(
+      remainingRecords!.map((record) => record.id),
+      originalRecords!.map((record) => record.id),
+    );
+  });
+
   testWidgets('소모품 교체는 별도 교체 기록과 다음 교체일을 저장한다', (tester) async {
     seedSampleData(dataRepository);
     await pumpApp(tester, dataRepository);

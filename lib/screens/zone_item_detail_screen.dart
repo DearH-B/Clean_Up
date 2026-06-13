@@ -30,6 +30,7 @@ class ZoneItemDetailScreen extends StatefulWidget {
     required this.dataRepository,
     required this.catalogRepository,
     this.onItemUpdated,
+    this.onItemDeleted,
     super.key,
   });
 
@@ -39,6 +40,7 @@ class ZoneItemDetailScreen extends StatefulWidget {
   final ProductDataRepository dataRepository;
   final ProductCatalogRepository catalogRepository;
   final Future<void> Function(ZoneItem item)? onItemUpdated;
+  final Future<void> Function(String itemId)? onItemDeleted;
 
   @override
   State<ZoneItemDetailScreen> createState() => _ZoneItemDetailScreenState();
@@ -81,6 +83,25 @@ class _ZoneItemDetailScreenState extends State<ZoneItemDetailScreen> {
               tooltip: '제품 정보 수정',
               onPressed: _showProductInfoSheet,
               icon: const Icon(Icons.edit_outlined),
+            ),
+            PopupMenuButton<_ProductAction>(
+              tooltip: '제품 관리',
+              onSelected: (action) {
+                switch (action) {
+                  case _ProductAction.delete:
+                    _confirmDeleteProduct();
+                }
+              },
+              itemBuilder: (context) => const [
+                PopupMenuItem(
+                  value: _ProductAction.delete,
+                  child: ListTile(
+                    leading: Icon(Icons.delete_outline),
+                    title: Text('제품 삭제'),
+                    contentPadding: EdgeInsets.zero,
+                  ),
+                ),
+              ],
             ),
           ],
         ),
@@ -357,6 +378,21 @@ class _ZoneItemDetailScreenState extends State<ZoneItemDetailScreen> {
           icon: const Icon(Icons.flag_outlined),
           label: const Text('제품 정보 오류 제보'),
         ),
+        const SizedBox(height: 12),
+        FilledButton.tonalIcon(
+          onPressed: _showProductInfoSheet,
+          icon: const Icon(Icons.edit_outlined),
+          label: const Text('제품 정보 변경'),
+        ),
+        const SizedBox(height: 8),
+        TextButton.icon(
+          onPressed: _confirmDeleteProduct,
+          icon: const Icon(Icons.delete_outline),
+          label: const Text('제품 삭제'),
+          style: TextButton.styleFrom(
+            foregroundColor: Theme.of(context).colorScheme.error,
+          ),
+        ),
       ],
     );
   }
@@ -396,6 +432,48 @@ class _ZoneItemDetailScreenState extends State<ZoneItemDetailScreen> {
       _item = updatedItem;
     });
     await widget.onItemUpdated?.call(updatedItem);
+  }
+
+  Future<void> _confirmDeleteProduct() async {
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('제품을 삭제할까요?'),
+        content: Text(
+          '${_item.displayName}을(를) 내 제품에서 삭제해요. 이전 관리 기록은 기록 탭에 남아 있어요.',
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(false),
+            child: const Text('취소'),
+          ),
+          FilledButton(
+            onPressed: () => Navigator.of(context).pop(true),
+            style: FilledButton.styleFrom(
+              backgroundColor: Theme.of(context).colorScheme.error,
+            ),
+            child: const Text('삭제'),
+          ),
+        ],
+      ),
+    );
+    if (confirmed != true || !mounted) {
+      return;
+    }
+
+    if (widget.onItemDeleted != null) {
+      await widget.onItemDeleted!(_item.id);
+    } else {
+      final products = await widget.dataRepository.loadUserProducts() ?? [];
+      await widget.dataRepository.saveUserProducts([
+        for (final product in products)
+          if (product.id != _item.id) product,
+      ]);
+    }
+    if (!mounted) {
+      return;
+    }
+    Navigator.of(context).pop();
   }
 
   Future<void> _openGuideVideo(String url) async {
@@ -710,6 +788,8 @@ class _ZoneItemDetailScreenState extends State<ZoneItemDetailScreen> {
     );
   }
 }
+
+enum _ProductAction { delete }
 
 class _ProductHeader extends StatelessWidget {
   const _ProductHeader({

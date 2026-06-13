@@ -14,11 +14,21 @@ class ProductCatalog:
         self._models = self._load_models()
 
     def _load(self) -> list[CatalogProduct]:
+        imported_path = self._data_path.with_name("imported_products.json")
         raw_items = [
             *json.loads(self._data_path.read_text(encoding="utf-8")),
             *representative_products(),
+            *(
+                json.loads(imported_path.read_text(encoding="utf-8"))
+                if imported_path.exists()
+                else []
+            ),
         ]
-        products = [CatalogProduct.model_validate(item) for item in raw_items]
+        products_by_id = {
+            item["id"]: CatalogProduct.model_validate(item)
+            for item in raw_items
+        }
+        products = list(products_by_id.values())
         for product in products:
             _validate_source_references(product)
         return products
@@ -28,10 +38,28 @@ class ProductCatalog:
         self._models = self._load_models()
 
     def _load_models(self) -> list[CatalogModelOption]:
-        if not self._models_path.exists():
-            return []
-        raw_items = json.loads(self._models_path.read_text(encoding="utf-8"))
-        return [CatalogModelOption.model_validate(item) for item in raw_items]
+        imported_path = self._models_path.with_name("imported_models.json")
+        raw_items = [
+            *(
+                json.loads(self._models_path.read_text(encoding="utf-8"))
+                if self._models_path.exists()
+                else []
+            ),
+            *(
+                json.loads(imported_path.read_text(encoding="utf-8"))
+                if imported_path.exists()
+                else []
+            ),
+        ]
+        models_by_identity = {
+            (
+                item["categoryName"],
+                item["brand"],
+                item["modelName"],
+            ): CatalogModelOption.model_validate(item)
+            for item in raw_items
+        }
+        return list(models_by_identity.values())
 
     def search(
         self,

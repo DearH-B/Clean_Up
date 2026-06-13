@@ -1,0 +1,3 @@
+productId,order,text,sourceIds
+example-product-id,1,전원 플러그를 빼고 제품이 멈춘 것을 확인해요.,example-product-id-manual
+example-product-id,2,설명서에 따라 사용자가 분리할 수 있는 부품만 관리해요.,example-product-id-manual

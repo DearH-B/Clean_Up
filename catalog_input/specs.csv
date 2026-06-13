@@ -1,0 +1,3 @@
+productId,order,label,value,sourceIds
+example-product-id,1,출시 연도,2026년,example-product-id-product
+example-product-id,2,용량,25kg,example-product-id-product

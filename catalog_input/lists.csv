@@ -1,0 +1,8 @@
+productId,kind,order,value
+example-product-id,supply,1,부드러운 천
+example-product-id,recommendedSupply,1,표면이 거칠지 않은 극세사 천
+example-product-id,caution,1,청소 전에는 전원 플러그를 빼세요.
+example-product-id,caution,2,제품에 물을 직접 뿌리지 마세요.
+example-product-id,caution,3,본체를 임의로 분리하지 마세요.
+example-product-id,keyword,1,MODEL-001
+example-product-id,modelFeature,1,25kg

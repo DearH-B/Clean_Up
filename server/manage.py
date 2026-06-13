@@ -4,6 +4,7 @@ from datetime import date
 from pathlib import Path
 
 from app.catalog import ProductCatalog
+from app.catalog_import import CatalogImportError, import_catalog, write_outputs
 from app.release_validation import ReleaseValidator, render_markdown
 from app.schemas import SubmissionStatus
 from app.submissions import SubmissionStore
@@ -43,6 +44,23 @@ def build_parser() -> argparse.ArgumentParser:
         "--allow-blocked",
         action="store_true",
         help="차단 항목이 있어도 종료 코드를 0으로 반환",
+    )
+
+    importer = commands.add_parser(
+        "import-catalog",
+        help="CSV 폴더 또는 Excel 파일을 검증하고 앱·서버 카탈로그 생성",
+    )
+    importer.add_argument(
+        "source",
+        nargs="?",
+        type=Path,
+        default=BASE_DIR.parent / "catalog_input",
+        help="CSV 폴더 또는 .xlsx 파일 경로",
+    )
+    importer.add_argument(
+        "--check",
+        action="store_true",
+        help="검증만 하고 파일은 생성하지 않음",
     )
 
     submissions = commands.add_parser("submissions", help="사용자 제보 관리")
@@ -165,6 +183,26 @@ def release_report(
     return 0
 
 
+def import_catalog_data(source: Path, check_only: bool) -> int:
+    try:
+        result = import_catalog(source.resolve())
+    except (CatalogImportError, ValueError) as error:
+        print(f"카탈로그 입력 오류: {error}")
+        return 1
+
+    print(f"검증 완료: 제품 {len(result.products)}개, 모델 후보 {len(result.models)}개")
+    if check_only:
+        return 0
+    write_outputs(
+        result,
+        server_products=BASE_DIR / "data" / "imported_products.json",
+        server_models=BASE_DIR / "data" / "imported_models.json",
+        dart_output=BASE_DIR.parent / "lib" / "data" / "generated_product_catalog.dart",
+    )
+    print("앱·서버 생성 파일을 갱신했습니다.")
+    return 0
+
+
 def main() -> int:
     args = build_parser().parse_args()
     if args.command == "catalog":
@@ -175,6 +213,8 @@ def main() -> int:
             args.output,
             args.allow_blocked,
         )
+    if args.command == "import-catalog":
+        return import_catalog_data(args.source, args.check)
     if args.submission_command == "list":
         return list_submissions(args.status)
     return update_submission(

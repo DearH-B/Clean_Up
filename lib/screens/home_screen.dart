@@ -127,6 +127,7 @@ class _HomeScreenState extends State<HomeScreen> {
           dataRepository: widget.dataRepository,
           catalogRepository: widget.catalogRepository,
           onItemUpdated: _updateItem,
+          onItemDeleted: _deleteItem,
         ),
       ),
     );
@@ -166,6 +167,19 @@ class _HomeScreenState extends State<HomeScreen> {
     setState(() {
       _items = updatedItems;
     });
+  }
+
+  Future<void> _deleteItem(String itemId) async {
+    final savedItems = await widget.dataRepository.loadUserProducts() ?? [];
+    final updatedItems = [
+      for (final item in savedItems)
+        if (item.id != itemId) item,
+    ];
+    await widget.dataRepository.saveUserProducts(updatedItems);
+    if (!mounted) {
+      return;
+    }
+    setState(() => _items = updatedItems);
   }
 }
 

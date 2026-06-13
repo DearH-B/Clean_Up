@@ -2,6 +2,7 @@ import '../models/catalog_metadata.dart';
 import '../models/catalog_model_option.dart';
 import '../models/product_consumable.dart';
 import '../models/zone_item.dart';
+import 'generated_product_catalog.dart';
 
 class ProductCatalogEntry {
   const ProductCatalogEntry({
@@ -381,7 +382,7 @@ Map<String, List<String>> _sourceReferencesFromJson(Object? value) {
 
 const _checkedAt = '2026-06-08';
 
-final productCatalog = <ProductCatalogEntry>[
+final _builtInProductCatalog = <ProductCatalogEntry>[
   ProductCatalogEntry(
     id: 'eco-up-dcs-hm4ag-w',
     name: '에코업 음식물처리기',
@@ -1156,6 +1157,17 @@ final _representativeApplianceCatalog = <ProductCatalogEntry>[
   ),
 ];
 
+final _generatedProductCatalog =
+    generatedProductCatalogJson.map(ProductCatalogEntry.fromJson).toList();
+final _generatedProductIds = {
+  for (final entry in _generatedProductCatalog) entry.id,
+};
+final productCatalog = <ProductCatalogEntry>[
+  for (final entry in _builtInProductCatalog)
+    if (!_generatedProductIds.contains(entry.id)) entry,
+  ..._generatedProductCatalog,
+];
+
 ProductCatalogEntry _verifiedSamsungRefrigerator({
   required String id,
   required String name,
@@ -1625,6 +1637,10 @@ List<String> catalogBrandOptionsFor(String categoryName) {
           entry.brand.isNotEmpty &&
           entry.brand != '브랜드 미상')
         entry.brand,
+    for (final model in generatedModelCatalogJson)
+      if (_normalize(model['categoryName'] as String) ==
+          _normalize(categoryName))
+        model['brand'] as String,
   };
   if (categoryName.contains('음식물')) {
     options.addAll(['에코업', '제이앤에이치컴퍼니', '쿠쿠', '스마트카라']);
@@ -1679,9 +1695,17 @@ List<CatalogModelOption> catalogModelDetailsFor(
   String categoryName,
   String brand,
 ) {
+  final generatedModels = [
+    for (final model in generatedModelCatalogJson)
+      if (_normalize(model['categoryName'] as String) ==
+              _normalize(categoryName) &&
+          _normalize(model['brand'] as String) == _normalize(brand))
+        CatalogModelOption.fromJson(model),
+  ];
   if (categoryName.contains('냉장고') && brand == '삼성전자') {
-    return const [
-      CatalogModelOption(
+    return _uniqueModelOptions([
+      ...generatedModels,
+      const CatalogModelOption(
         modelName: 'RM70F63R2A',
         displayName: 'Bespoke AI 냉장고 4도어 키친핏 Max 640L',
         releaseYear: 2025,
@@ -1691,7 +1715,7 @@ List<CatalogModelOption> catalogModelDetailsFor(
             'https://www.samsung.com/sec/refrigerators/french-door-rm70f63r2a-d2c/RM70F63R2A/',
         features: ['키친핏 Max', '640L', '4도어'],
       ),
-      CatalogModelOption(
+      const CatalogModelOption(
         modelName: 'RM80F91H1W',
         displayName: 'Bespoke AI 하이브리드 4도어 874L',
         releaseYear: 2025,
@@ -1701,7 +1725,7 @@ List<CatalogModelOption> catalogModelDetailsFor(
             'https://www.samsung.com/sec/refrigerators/french-door-rm80f91h1w-d2c/RM80F91H1W/',
         features: ['AI 하이브리드', '874L', '오토오픈도어'],
       ),
-      CatalogModelOption(
+      const CatalogModelOption(
         modelName: 'RM70F90M1ZD',
         displayName: 'Bespoke AI 냉장고 4도어 902L',
         releaseYear: 2025,
@@ -1711,11 +1735,12 @@ List<CatalogModelOption> catalogModelDetailsFor(
             'https://www.samsung.com/sec/refrigerators/french-door-rm70f90m1zd-d2c/RM70F90M1ZD/',
         features: ['대용량', '902L', '4도어'],
       ),
-    ];
+    ]);
   }
   if (categoryName.contains('세탁기') && brand == '삼성전자') {
-    return const [
-      CatalogModelOption(
+    return _uniqueModelOptions([
+      ...generatedModels,
+      const CatalogModelOption(
         modelName: 'WF25DG8650BW',
         displayName: 'AI 세탁기 25kg (심플컨트롤)',
         releaseYear: 2025,
@@ -1724,7 +1749,7 @@ List<CatalogModelOption> catalogModelDetailsFor(
         productUrl: 'https://www.samsung.com/sec/support/model/WF25DG8650BW/',
         features: ['25kg', '심플컨트롤', '무세제통세척+'],
       ),
-      CatalogModelOption(
+      const CatalogModelOption(
         modelName: 'WF25DG8250BW',
         displayName: 'AI 세탁기 25kg',
         releaseYear: 2025,
@@ -1733,7 +1758,7 @@ List<CatalogModelOption> catalogModelDetailsFor(
         productUrl: 'https://www.samsung.com/sec/support/model/WF25DG8250BW/',
         features: ['25kg', '무세제통세척+', '화이트'],
       ),
-      CatalogModelOption(
+      const CatalogModelOption(
         modelName: 'WF25CB8895BW',
         displayName: 'Bespoke AI 세탁기 25kg (올인원컨트롤)',
         releaseYear: 2023,
@@ -1742,12 +1767,25 @@ List<CatalogModelOption> catalogModelDetailsFor(
         productUrl: 'https://www.samsung.com/sec/support/model/WF25CB8895BW/',
         features: ['25kg', '자동 세제함', '오토 오픈 도어'],
       ),
-    ];
+    ]);
+  }
+  if (generatedModels.isNotEmpty) {
+    return generatedModels;
   }
   return [
     for (final model in catalogModelOptionsFor(categoryName, brand))
       CatalogModelOption(modelName: model, displayName: model),
   ];
+}
+
+List<CatalogModelOption> _uniqueModelOptions(
+  Iterable<CatalogModelOption> options,
+) {
+  final unique = <String, CatalogModelOption>{};
+  for (final option in options) {
+    unique.putIfAbsent(_normalize(option.modelName), () => option);
+  }
+  return unique.values.toList();
 }
 
 ProductCatalogEntry? findCatalogEntry({

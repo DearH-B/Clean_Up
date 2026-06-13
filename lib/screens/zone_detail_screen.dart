@@ -181,6 +181,15 @@ class _ZoneDetailScreenState extends State<ZoneDetailScreen> {
             setState(() => _items[index] = updatedItem);
             await widget.onItemsChanged(widget.zone.id, _items);
           },
+          onItemDeleted: (itemId) async {
+            if (!mounted) {
+              return;
+            }
+            setState(() {
+              _items.removeWhere((candidate) => candidate.id == itemId);
+            });
+            await widget.onItemsChanged(widget.zone.id, _items);
+          },
         ),
       ),
     );
