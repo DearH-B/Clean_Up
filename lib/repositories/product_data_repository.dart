@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../data/product_catalog.dart';
@@ -235,7 +236,8 @@ class ProductDataRepository {
       final currentCheckedAt = item.sourceCheckedAt;
       if (entry != null &&
           (currentCheckedAt == null ||
-              entry.sourceCheckedAt.isAfter(currentCheckedAt))) {
+              entry.sourceCheckedAt.isAfter(currentCheckedAt) ||
+              _catalogGuideChanged(item, entry))) {
         markChanged();
         return entry.mergeInto(item);
       }
@@ -275,5 +277,17 @@ class ProductDataRepository {
         item.guideStatus?.contains('세부 관리법을 준비하고 있어요') == true ||
         (item.steps.length == 4 &&
             item.steps.any((step) => step.contains('주변의 물건과 먼지를 먼저 정리')));
+  }
+
+  bool _catalogGuideChanged(ZoneItem item, ProductCatalogEntry entry) {
+    return item.summary != entry.summary ||
+        item.guideStatus != entry.guideStatus ||
+        item.guideBasis != entry.guideBasis ||
+        item.officialManualUrl != entry.officialManualUrl ||
+        item.supportUrl != entry.supportUrl ||
+        !listEquals(item.supplies, entry.supplies) ||
+        !listEquals(item.steps, entry.steps) ||
+        !listEquals(item.cautions, entry.cautions) ||
+        !listEquals(item.productSpecs, entry.productSpecs);
   }
 }

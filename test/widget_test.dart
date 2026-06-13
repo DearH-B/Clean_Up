@@ -113,6 +113,11 @@ void main() {
       expect(product, isNotNull, reason: modelName);
       expect(product!.reviewStatus, 'verified');
       expect(product.matchLevelLabel, '공식 설명서 확인 모델');
+      expect(product.summary, isNot(contains('사용설명서')));
+      expect(
+        '정확한 모델과 공식 사용설명서를 확인했어요.'.allMatches(product.guideStatus).length,
+        1,
+      );
       expect(product.officialManualUrl, contains('DA68-04836T-01'));
       expect(
         product.sources.any(
@@ -519,6 +524,28 @@ void main() {
     expect(updated.estimatedMinutes, 0);
     expect(updated.nextDueAt, isNull);
     expect(updated.recommendedProducts, isEmpty);
+  });
+
+  test('같은 검수일이어도 변경된 카탈로그 관리 문구는 자동 갱신된다', () async {
+    final catalogProduct = findCatalogEntry(
+      categoryName: '냉장고',
+      brand: '삼성전자',
+      modelName: 'RM70F63R2A',
+    )!;
+    final savedProduct = catalogProduct
+        .toZoneItem(id: 'saved-refrigerator', zoneId: 'kitchen')
+        .toJson()
+      ..['summary'] = '삼성전자 공식 RF9000F 2025 사용설명서에 따라 문과 내부 부속품을 관리해요.';
+    SharedPreferences.setMockInitialValues({
+      'zone_items_v1': jsonEncode([savedProduct]),
+    });
+
+    final products = await const ProductDataRepository().loadUserProducts();
+    final updated = products!.single;
+
+    expect(updated.summary, catalogProduct.summary);
+    expect(updated.summary, isNot(contains('사용설명서에 따라')));
+    expect(updated.guideStatus, catalogProduct.guideStatus);
   });
 
   test('이전 범용 식기세척기 관리법은 제품군 관리법으로 자동 갱신된다', () async {

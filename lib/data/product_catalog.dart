@@ -1109,7 +1109,7 @@ ProductCatalogEntry _verifiedSamsungRefrigerator({
     manufacturer: '삼성전자',
     modelName: modelName,
     seriesName: 'Bespoke AI 4도어',
-    summary: '삼성전자 공식 RF9000F 2025 사용설명서에 따라 문, 내부 부속품, 고무 패킹과 후면 먼지를 관리해요.',
+    summary: '문, 내부 부속품, 고무 패킹과 제품 후면의 먼지를 안전하게 관리해요.',
     frequency: '오염은 발견 즉시 · 제품 뒷면 먼지는 1년에 한 번',
     recurrenceDays: 0,
     estimatedMinutes: 25,
