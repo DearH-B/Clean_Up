@@ -228,6 +228,23 @@ class ProductCatalogEntry {
 
   ZoneItem mergeInto(ZoneItem item) {
     final catalogItem = toZoneItem(id: item.id, zoneId: item.zoneId);
+    final managedConsumableIds = catalogManagedConsumableIds();
+    final previousConsumables = {
+      for (final consumable in item.consumables) consumable.id: consumable,
+    };
+    final mergedCatalogConsumables = [
+      for (final consumable in catalogItem.consumables)
+        previousConsumables[consumable.id] == null
+            ? consumable
+            : consumable.copyWith(
+                lastReplacedAt:
+                    previousConsumables[consumable.id]!.lastReplacedAt,
+                nextReplacementAt:
+                    previousConsumables[consumable.id]!.nextReplacementAt,
+              ),
+    ];
+    final userConsumables = item.consumables
+        .where((consumable) => !managedConsumableIds.contains(consumable.id));
     return ZoneItem(
       id: catalogItem.id,
       zoneId: catalogItem.zoneId,
@@ -273,9 +290,7 @@ class ProductCatalogEntry {
       nextDueAt: catalogItem.recurrenceDays > 0 ? item.nextDueAt : null,
       recommendedSupplies: catalogItem.recommendedSupplies,
       recommendedProducts: catalogItem.recommendedProducts,
-      consumables: catalogItem.consumables.isEmpty
-          ? item.consumables
-          : catalogItem.consumables,
+      consumables: [...mergedCatalogConsumables, ...userConsumables],
     );
   }
 
@@ -348,6 +363,11 @@ class ProductCatalogEntry {
     );
   }
 }
+
+Set<String> catalogManagedConsumableIds() => {
+      for (final product in productCatalog)
+        for (final consumable in product.consumableDetails) consumable.id,
+    };
 
 Map<String, List<String>> _sourceReferencesFromJson(Object? value) {
   if (value is! Map) {

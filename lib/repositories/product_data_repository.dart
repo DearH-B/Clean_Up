@@ -288,6 +288,13 @@ class ProductDataRepository {
         !listEquals(item.supplies, entry.supplies) ||
         !listEquals(item.steps, entry.steps) ||
         !listEquals(item.cautions, entry.cautions) ||
-        !listEquals(item.productSpecs, entry.productSpecs);
+        !listEquals(item.productSpecs, entry.productSpecs) ||
+        !setEquals(
+          item.consumables
+              .map((item) => item.id)
+              .where(catalogManagedConsumableIds().contains)
+              .toSet(),
+          entry.consumableDetails.map((item) => item.id).toSet(),
+        );
   }
 }

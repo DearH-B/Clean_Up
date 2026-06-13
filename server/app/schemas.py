@@ -10,6 +10,18 @@ class ReviewStatus(StrEnum):
     verified = "verified"
 
 
+class ReleaseCheckStatus(StrEnum):
+    passed = "passed"
+    failed = "failed"
+    blocked = "blocked"
+    notApplicable = "notApplicable"
+
+
+class ReleaseDecision(StrEnum):
+    approved = "approved"
+    blocked = "blocked"
+
+
 class SourceType(StrEnum):
     officialProduct = "officialProduct"
     officialManual = "officialManual"
@@ -43,6 +55,39 @@ class ReviewRecord(BaseModel):
     reviewer: str
     reviewedAt: date
     note: str
+
+
+class ReleaseEvidence(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    checkId: str
+    status: ReleaseCheckStatus
+    verifiedAt: date
+    verifier: str
+    evidence: str
+    note: str = ""
+
+
+class ProductReleaseProfile(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    productId: str
+    targetRelease: str
+    evidence: list[ReleaseEvidence] = Field(default_factory=list)
+
+
+class AppReleaseProfile(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    targetRelease: str
+    evidence: list[ReleaseEvidence] = Field(default_factory=list)
+
+
+class ReleaseReadinessData(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    app: AppReleaseProfile
+    products: list[ProductReleaseProfile]
 
 
 class CleaningProduct(BaseModel):

@@ -1,0 +1,161 @@
+{
+  "app": {
+    "targetRelease": "production-1.0",
+    "evidence": [
+      {
+        "checkId": "automated_regression",
+        "status": "passed",
+        "verifiedAt": "2026-06-13",
+        "verifier": "codex",
+        "evidence": "Flutter 50개 테스트와 서버 18개 테스트 통과"
+      },
+      {
+        "checkId": "android_emulator_flow",
+        "status": "passed",
+        "verifiedAt": "2026-06-13",
+        "verifier": "codex",
+        "evidence": "Android 에뮬레이터에서 RM70F63R2A 상세 화면 진입과 관리법 렌더링 확인"
+      },
+      {
+        "checkId": "saved_data_migration",
+        "status": "passed",
+        "verifiedAt": "2026-06-13",
+        "verifier": "codex",
+        "evidence": "같은 검수일의 카탈로그 문구 변경도 기존 저장 제품에 반영하는 회귀 테스트 통과"
+      },
+      {
+        "checkId": "offline_behavior",
+        "status": "blocked",
+        "verifiedAt": "2026-06-13",
+        "verifier": "codex",
+        "evidence": "네트워크 차단 상태의 등록·상세·출처 대체 안내 전체 흐름 미검증",
+        "note": "출시 전 실제 기기에서 비행기 모드 테스트 필요"
+      },
+      {
+        "checkId": "external_link_failure",
+        "status": "blocked",
+        "verifiedAt": "2026-06-13",
+        "verifier": "codex",
+        "evidence": "링크 실행 예외 안내와 주소 복사 복구 동작은 구현했으나 실제 실패 주입 검증은 미완료"
+      },
+      {
+        "checkId": "accessibility_large_text",
+        "status": "blocked",
+        "verifiedAt": "2026-06-13",
+        "verifier": "codex",
+        "evidence": "200% 글자 크기와 TalkBack 주요 흐름 미검증"
+      },
+      {
+        "checkId": "physical_android_device",
+        "status": "blocked",
+        "verifiedAt": "2026-06-13",
+        "verifier": "owner",
+        "evidence": "실제 Android 기기 설치 및 재실행 검증 기록 없음"
+      },
+      {
+        "checkId": "privacy_terms_disclaimer",
+        "status": "blocked",
+        "verifiedAt": "2026-06-13",
+        "verifier": "owner",
+        "evidence": "개인정보 처리방침, 이용약관과 제품 정보 책임 범위 최종본 미등록"
+      },
+      {
+        "checkId": "monitoring_and_recovery",
+        "status": "blocked",
+        "verifiedAt": "2026-06-13",
+        "verifier": "owner",
+        "evidence": "출시 서버 오류 모니터링, 백업과 복구 훈련 미완료"
+      },
+      {
+        "checkId": "release_signing",
+        "status": "blocked",
+        "verifiedAt": "2026-06-13",
+        "verifier": "owner",
+        "evidence": "출시용 Android 서명키, 패키지명과 스토어 배포 설정 미완료"
+      }
+    ]
+  },
+  "products": [
+    {
+      "productId": "samsung-rm70f63r2a",
+      "targetRelease": "production-1.0",
+      "evidence": [
+        {
+          "checkId": "model_ui_render",
+          "status": "passed",
+          "verifiedAt": "2026-06-13",
+          "verifier": "codex",
+          "evidence": "에뮬레이터에서 모델명, 제품 이미지, 공식 자료 배지와 관리법 표시 확인"
+        },
+        {
+          "checkId": "duplicate_copy",
+          "status": "passed",
+          "verifiedAt": "2026-06-13",
+          "verifier": "codex",
+          "evidence": "공식 사용설명서 확인 문구 1회 렌더링, 이전 중복 요약 0회 확인"
+        }
+      ]
+    },
+    {
+      "productId": "samsung-rm80f91h1w",
+      "targetRelease": "production-1.0",
+      "evidence": [
+        {
+          "checkId": "uv_filter_scope",
+          "status": "passed",
+          "verifiedAt": "2026-06-13",
+          "verifier": "codex",
+          "evidence": "UV 청정탈취 필터는 RM80F91H1W에만 노출되고 확인되지 않은 부품번호는 비워 둠"
+        },
+        {
+          "checkId": "model_ui_render",
+          "status": "passed",
+          "verifiedAt": "2026-06-13",
+          "verifier": "codex",
+          "evidence": "에뮬레이터에서 RM80F91H1W 관리법, 소모품과 제품 정보 탭 렌더링 확인"
+        },
+        {
+          "checkId": "official_support_render",
+          "status": "passed",
+          "verifiedAt": "2026-06-13",
+          "verifier": "codex",
+          "evidence": "제품 정보 탭에서 공식 설명서 링크와 서비스센터 1588-3366 표시 확인"
+        }
+      ]
+    },
+    {
+      "productId": "samsung-rm70f90m1zd",
+      "targetRelease": "production-1.0",
+      "evidence": [
+        {
+          "checkId": "model_ui_render",
+          "status": "passed",
+          "verifiedAt": "2026-06-13",
+          "verifier": "codex",
+          "evidence": "에뮬레이터에서 RM70F90M1ZD 관리법, 소모품과 제품 정보 탭 렌더링 확인"
+        },
+        {
+          "checkId": "model_specific_consumables",
+          "status": "passed",
+          "verifiedAt": "2026-06-13",
+          "verifier": "codex",
+          "evidence": "RM80에서 RM70F90M1ZD로 변경한 뒤 UV 청정탈취 필터가 0개로 자동 정리됨"
+        },
+        {
+          "checkId": "official_support_render",
+          "status": "passed",
+          "verifiedAt": "2026-06-13",
+          "verifier": "codex",
+          "evidence": "제품 정보 탭에서 공식 설명서 링크, 2025년 출시와 서비스센터 1588-3366 표시 확인"
+        },
+        {
+          "checkId": "image_origin_review",
+          "status": "passed",
+          "verifiedAt": "2026-06-13",
+          "verifier": "codex",
+          "evidence": "삼성전자 이미지 도메인의 공식 대표 이미지 URL을 사용"
+        }
+      ]
+    }
+  ]
+}

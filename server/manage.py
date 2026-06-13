@@ -4,6 +4,7 @@ from datetime import date
 from pathlib import Path
 
 from app.catalog import ProductCatalog
+from app.release_validation import ReleaseValidator, render_markdown
 from app.schemas import SubmissionStatus
 from app.submissions import SubmissionStore
 
@@ -11,6 +12,7 @@ from app.submissions import SubmissionStore
 BASE_DIR = Path(__file__).resolve().parent
 CATALOG_PATH = BASE_DIR / "data" / "products.json"
 SUBMISSIONS_PATH = BASE_DIR / "data" / "submissions.json"
+RELEASE_READINESS_PATH = BASE_DIR / "data" / "release_readiness.json"
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -23,6 +25,24 @@ def build_parser() -> argparse.ArgumentParser:
         type=int,
         default=180,
         help="재검수 대상으로 볼 출처 경과 일수",
+    )
+
+    release = commands.add_parser("release", help="실제 출시 준비 상태 검증")
+    release.add_argument(
+        "--product",
+        action="append",
+        dest="products",
+        help="검증할 제품 ID. 여러 번 지정할 수 있음",
+    )
+    release.add_argument(
+        "--output",
+        type=Path,
+        help="Markdown 보고서 저장 경로",
+    )
+    release.add_argument(
+        "--allow-blocked",
+        action="store_true",
+        help="차단 항목이 있어도 종료 코드를 0으로 반환",
     )
 
     submissions = commands.add_parser("submissions", help="사용자 제보 관리")
@@ -127,10 +147,34 @@ def update_submission(
     return 0
 
 
+def release_report(
+    product_ids: list[str] | None,
+    output: Path | None,
+    allow_blocked: bool,
+) -> int:
+    validator = ReleaseValidator(CATALOG_PATH, RELEASE_READINESS_PATH)
+    report = validator.validate(set(product_ids) if product_ids else None)
+    markdown = render_markdown(report)
+    print(markdown)
+    if output is not None:
+        output.parent.mkdir(parents=True, exist_ok=True)
+        output.write_text(markdown, encoding="utf-8")
+        print(f"\n보고서 저장: {output}")
+    if report.decision.value == "blocked" and not allow_blocked:
+        return 2
+    return 0
+
+
 def main() -> int:
     args = build_parser().parse_args()
     if args.command == "catalog":
         return catalog_report(args.stale_days)
+    if args.command == "release":
+        return release_report(
+            args.products,
+            args.output,
+            args.allow_blocked,
+        )
     if args.submission_command == "list":
         return list_submissions(args.status)
     return update_submission(

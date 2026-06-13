@@ -1,9 +1,10 @@
 import unittest
-from datetime import UTC, datetime
+from datetime import UTC, date, datetime
 from pathlib import Path
 from tempfile import TemporaryDirectory
 
 from app.catalog import ProductCatalog
+from app.release_validation import ReleaseValidator, render_markdown
 from app.schemas import SubmissionCreate, SubmissionStatus, SubmissionType
 from app.submissions import SubmissionStore
 
@@ -109,6 +110,79 @@ class ProductCatalogTest(unittest.TestCase):
         )
 
         self.assertEqual([item.modelName for item in results], ["KQ65QNF70AFXKR"])
+
+
+class ReleaseValidatorTest(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls) -> None:
+        data_dir = Path(__file__).resolve().parents[1] / "data"
+        cls.validator = ReleaseValidator(
+            data_dir / "products.json",
+            data_dir / "release_readiness.json",
+            today=date(2026, 6, 13),
+        )
+
+    def test_validates_three_refrigerators_individually(self) -> None:
+        report = self.validator.validate()
+
+        self.assertEqual(
+            {product.model_name for product in report.products},
+            {"RM70F63R2A", "RM80F91H1W", "RM70F90M1ZD"},
+        )
+        for product in report.products:
+            automated = {
+                check.check_id: check.status.value
+                for check in product.checks
+                if check.check_id
+                in {
+                    "catalog_verified",
+                    "official_identity_source",
+                    "official_manual_source",
+                    "source_traceability",
+                    "safety_guidance",
+                    "model_specific_claims",
+                    "support_information",
+                    "source_freshness",
+                }
+            }
+            self.assertTrue(automated)
+            self.assertTrue(all(status == "passed" for status in automated.values()))
+
+    def test_release_remains_blocked_until_manual_gates_pass(self) -> None:
+        report = self.validator.validate()
+
+        self.assertEqual(report.decision.value, "blocked")
+        self.assertTrue(
+            any(check.status.value == "blocked" for check in report.app_checks)
+        )
+        self.assertEqual(
+            next(
+                product
+                for product in report.products
+                if product.model_name == "RM70F63R2A"
+            ).decision.value,
+            "approved",
+        )
+        self.assertEqual(
+            next(
+                product
+                for product in report.products
+                if product.model_name == "RM80F91H1W"
+            ).decision.value,
+            "approved",
+        )
+        self.assertTrue(
+            all(product.decision.value == "approved" for product in report.products)
+        )
+
+    def test_markdown_report_names_blockers(self) -> None:
+        markdown = render_markdown(self.validator.validate())
+
+        self.assertIn("최종 판정: `blocked`", markdown)
+        self.assertIn("`physical_android_device`", markdown)
+        self.assertIn("RM70F63R2A", markdown)
+        self.assertIn("RM80F91H1W", markdown)
+        self.assertIn("RM70F90M1ZD", markdown)
 
 
 class SubmissionStoreTest(unittest.TestCase):

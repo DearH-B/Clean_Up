@@ -148,6 +148,55 @@ void main() {
     expect(kitchenFit.consumableDetails, isEmpty);
   });
 
+  test('정확 모델을 바꾸면 이전 모델 전용 소모품이 남지 않는다', () {
+    final hybrid = findCatalogEntry(
+      categoryName: '냉장고',
+      brand: '삼성전자',
+      modelName: 'RM80F91H1W',
+    )!;
+    final largeCapacity = findCatalogEntry(
+      categoryName: '냉장고',
+      brand: '삼성전자',
+      modelName: 'RM70F90M1ZD',
+    )!;
+    final hybridItem = hybrid.toZoneItem(id: 'fridge', zoneId: 'kitchen');
+
+    final changed = largeCapacity.mergeInto(hybridItem);
+
+    expect(changed.modelName, 'RM70F90M1ZD');
+    expect(changed.consumables, isEmpty);
+  });
+
+  test('카탈로그 소모품을 정리해도 사용자가 추가한 소모품은 유지한다', () {
+    final hybrid = findCatalogEntry(
+      categoryName: '냉장고',
+      brand: '삼성전자',
+      modelName: 'RM80F91H1W',
+    )!;
+    final largeCapacity = findCatalogEntry(
+      categoryName: '냉장고',
+      brand: '삼성전자',
+      modelName: 'RM70F90M1ZD',
+    )!;
+    final hybridItem =
+        hybrid.toZoneItem(id: 'fridge', zoneId: 'kitchen').copyWith(
+      consumables: [
+        ...hybrid.consumableDetails,
+        const ProductConsumable(
+          id: 'user-cleaner',
+          name: '사용자 등록 세정제',
+          type: ConsumableType.cleaner,
+          replacementDays: 90,
+          compatibilityLabel: '사용자 등록',
+        ),
+      ],
+    );
+
+    final changed = largeCapacity.mergeInto(hybridItem);
+
+    expect(changed.consumables.map((item) => item.id), ['user-cleaner']);
+  });
+
   test('이전 버전의 정확한 모델은 로드할 때 공식 메타데이터로 보강된다', () async {
     final legacyItem = searchProductCatalog('Bespoke AI 4도어')
         .first

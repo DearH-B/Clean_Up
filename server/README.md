@@ -45,6 +45,21 @@ Android 에뮬레이터에서는 PC의 `localhost`가 `10.0.2.2`로 보입니다
 python manage.py catalog
 ```
 
+실제 출시 준비 상태 검사:
+
+```powershell
+python manage.py release --allow-blocked
+python manage.py release --product samsung-rm70f63r2a
+python manage.py release --allow-blocked `
+  --output ..\docs\RELEASE_READINESS_REFRIGERATORS.md
+```
+
+- 필수 자동 검사와 수동 증거를 함께 판정합니다.
+- `FAIL` 또는 `BLOCKED`가 있으면 기본 종료 코드는 `2`입니다.
+- 진행 중 보고서를 만들 때만 `--allow-blocked`를 사용합니다.
+- 수동 증거는 `data/release_readiness.json`에 검증일, 검증자와 재현 가능한
+  근거를 기록합니다.
+
 접수된 사용자 제보:
 
 ```powershell

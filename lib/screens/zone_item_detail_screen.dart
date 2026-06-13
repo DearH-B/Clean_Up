@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../data/product_catalog.dart';
@@ -398,26 +399,41 @@ class _ZoneItemDetailScreenState extends State<ZoneItemDetailScreen> {
   }
 
   Future<void> _openGuideVideo(String url) async {
-    final opened = await launchUrl(
-      Uri.parse(url),
-      mode: LaunchMode.externalApplication,
+    await _openExternalLink(
+      url,
+      failureMessage: '영상을 열 수 없어요.',
     );
-
-    if (!opened && mounted) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('영상을 열 수 없어요. 잠시 후 다시 시도해 주세요.')),
-      );
-    }
   }
 
   Future<void> _openProduct(String url) async {
-    final opened = await launchUrl(
-      Uri.parse(url),
-      mode: LaunchMode.externalApplication,
-    );
+    await _openExternalLink(url, failureMessage: '공식 자료를 열 수 없어요.');
+  }
+
+  Future<void> _openExternalLink(
+    String url, {
+    required String failureMessage,
+  }) async {
+    var opened = false;
+    try {
+      final uri = Uri.tryParse(url);
+      if (uri != null && uri.hasScheme) {
+        opened = await launchUrl(
+          uri,
+          mode: LaunchMode.externalApplication,
+        );
+      }
+    } on PlatformException {
+      opened = false;
+    }
     if (!opened && mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('제품 페이지를 열 수 없어요.')),
+        SnackBar(
+          content: Text('$failureMessage 주소를 복사해 다시 확인할 수 있어요.'),
+          action: SnackBarAction(
+            label: '주소 복사',
+            onPressed: () => Clipboard.setData(ClipboardData(text: url)),
+          ),
+        ),
       );
     }
   }

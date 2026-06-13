@@ -41,3 +41,18 @@
 `verified` 카탈로그 상태는 공식 자료 기반 데이터 검수를 의미한다. 이 값만으로 실제
 출시 검증이 완료됐다고 판단하지 않는다.
 
+## 실행 방법
+
+냉장고 3종 출시 상태는 다음 명령으로 다시 계산한다.
+
+```powershell
+cd server
+python manage.py release --allow-blocked `
+  --output ..\docs\RELEASE_READINESS_REFRIGERATORS.md
+```
+
+진행 중에는 보고서 생성을 위해 `--allow-blocked`를 사용한다. 실제 배포 파이프라인은
+이 옵션 없이 실행해 차단 항목이 있을 때 종료 코드 `2`로 실패해야 한다.
+
+현재 결과는 [냉장고 3종 출시 검증 보고서](RELEASE_READINESS_REFRIGERATORS.md)에
+기록한다.
