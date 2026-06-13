@@ -95,60 +95,57 @@ class _HistoryScreenState extends State<HistoryScreen> {
             onChanged: (value) => setState(() => _query = value.trim()),
           ),
           const SizedBox(height: 12),
-          SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            child: Row(
-              children: [
-                _FilterMenu<String>(
-                  label: _selectedProductId == null
-                      ? '모든 제품'
-                      : _productName(_selectedProductId!),
-                  icon: Icons.inventory_2_outlined,
-                  value: _selectedProductId,
-                  entries: [
-                    const DropdownMenuEntry(value: null, label: '모든 제품'),
-                    for (final product in _products)
-                      DropdownMenuEntry(
-                        value: product.id,
-                        label: product.displayName,
-                      ),
-                  ],
-                  onSelected: (value) {
-                    setState(() => _selectedProductId = value);
-                  },
-                ),
-                const SizedBox(width: 8),
-                _FilterMenu<String>(
-                  label: _selectedSpaceId == null
-                      ? '모든 공간'
-                      : _spaceName(_selectedSpaceId!),
-                  icon: Icons.home_work_outlined,
-                  value: _selectedSpaceId,
-                  entries: [
-                    const DropdownMenuEntry(value: null, label: '모든 공간'),
-                    for (final space in _spaces)
-                      DropdownMenuEntry(value: space.id, label: space.name),
-                  ],
-                  onSelected: (value) {
-                    setState(() => _selectedSpaceId = value);
-                  },
-                ),
-                const SizedBox(width: 8),
-                _FilterMenu<CareRecordType>(
-                  label: _selectedType?.label ?? '모든 유형',
-                  icon: Icons.tune,
-                  value: _selectedType,
-                  entries: [
-                    const DropdownMenuEntry(value: null, label: '모든 유형'),
-                    for (final type in CareRecordType.values)
-                      DropdownMenuEntry(value: type, label: type.label),
-                  ],
-                  onSelected: (value) {
-                    setState(() => _selectedType = value);
-                  },
-                ),
-              ],
-            ),
+          Wrap(
+            spacing: 8,
+            runSpacing: 8,
+            children: [
+              _FilterMenu<String>(
+                label: _selectedProductId == null
+                    ? '모든 제품'
+                    : _productName(_selectedProductId!),
+                icon: Icons.inventory_2_outlined,
+                value: _selectedProductId,
+                entries: [
+                  const DropdownMenuEntry(value: null, label: '모든 제품'),
+                  for (final product in _products)
+                    DropdownMenuEntry(
+                      value: product.id,
+                      label: product.displayName,
+                    ),
+                ],
+                onSelected: (value) {
+                  setState(() => _selectedProductId = value);
+                },
+              ),
+              _FilterMenu<String>(
+                label: _selectedSpaceId == null
+                    ? '모든 공간'
+                    : _spaceName(_selectedSpaceId!),
+                icon: Icons.home_work_outlined,
+                value: _selectedSpaceId,
+                entries: [
+                  const DropdownMenuEntry(value: null, label: '모든 공간'),
+                  for (final space in _spaces)
+                    DropdownMenuEntry(value: space.id, label: space.name),
+                ],
+                onSelected: (value) {
+                  setState(() => _selectedSpaceId = value);
+                },
+              ),
+              _FilterMenu<CareRecordType>(
+                label: _selectedType?.label ?? '모든 유형',
+                icon: Icons.tune,
+                value: _selectedType,
+                entries: [
+                  const DropdownMenuEntry(value: null, label: '모든 유형'),
+                  for (final type in CareRecordType.values)
+                    DropdownMenuEntry(value: type, label: type.label),
+                ],
+                onSelected: (value) {
+                  setState(() => _selectedType = value);
+                },
+              ),
+            ],
           ),
           const SizedBox(height: 24),
           if (_isLoading)
