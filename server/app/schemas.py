@@ -55,6 +55,20 @@ class CleaningProduct(BaseModel):
     isSponsored: bool = False
 
 
+class ProductConsumable(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    id: str
+    name: str
+    type: str
+    replacementDays: int = Field(ge=0)
+    compatibilityLabel: str
+    partNumber: str | None = None
+    purchaseUrl: HttpUrl | None = None
+    isSponsored: bool = False
+    note: str | None = None
+
+
 class CatalogProduct(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
@@ -101,7 +115,9 @@ class CatalogProduct(BaseModel):
     releaseYear: int | None = None
     isDiscontinued: bool | None = None
     imageUrl: str | None = None
+    modelFeatures: list[str] = Field(default_factory=list)
     consumables: list[str] = Field(default_factory=list)
+    consumableDetails: list[ProductConsumable] = Field(default_factory=list)
     installationType: str | None = None
 
 

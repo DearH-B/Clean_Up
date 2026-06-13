@@ -20,8 +20,3 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
-  assets:
-    - 캐릭터/귀여운 분홍새.png
-    - 캐릭터/청소요정_시작.png
-    - 캐릭터/청소요정_진행.png
-    - 캐릭터/청소요정_완료.png

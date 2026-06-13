@@ -204,6 +204,22 @@ class ProductDataRepository {
       }
     }
 
+    if (item.manufacturer?.isNotEmpty == true &&
+        item.modelName?.isNotEmpty == true) {
+      final categoryName =
+          findCatalogEntryById(item.catalogProductId ?? '')?.categoryName ??
+              item.name;
+      final exactEntry = findCatalogEntry(
+        categoryName: categoryName,
+        brand: item.manufacturer!,
+        modelName: item.modelName!,
+      );
+      if (exactEntry != null && exactEntry.id != item.catalogProductId) {
+        markChanged();
+        return exactEntry.mergeInto(item);
+      }
+    }
+
     if (item.catalogProductId == null &&
         item.manufacturer?.isNotEmpty == true &&
         item.modelName?.isNotEmpty == true) {

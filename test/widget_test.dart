@@ -13,6 +13,7 @@ import 'package:clean_up/data/product_care_templates.dart';
 import 'package:clean_up/data/product_consumable_defaults.dart';
 import 'package:clean_up/data/visual_product_candidates.dart';
 import 'package:clean_up/models/care_record.dart';
+import 'package:clean_up/models/catalog_metadata.dart';
 import 'package:clean_up/models/product_space.dart';
 import 'package:clean_up/models/product_search_request.dart';
 import 'package:clean_up/models/product_submission.dart';
@@ -65,7 +66,8 @@ void main() {
   });
 
   test('시리즈 정보는 등록 후 저장과 복원에서도 유지된다', () {
-    final catalog = searchProductCatalog('Bespoke AI 4도어').first;
+    final catalog =
+        findCatalogEntryById('samsung-bespoke-ai-refrigerator-4door')!;
     final saved = catalog.toZoneItem(id: 'series-product', zoneId: 'kitchen');
     final restored = ZoneItem.fromJson(saved.toJson());
 
@@ -98,6 +100,49 @@ void main() {
     expect(restored.matchLevelLabel, '공식 확인 모델');
   });
 
+  test('삼성 냉장고 3개 모델은 공식 설명서가 연결된 검수 카탈로그다', () {
+    const models = ['RM70F63R2A', 'RM80F91H1W', 'RM70F90M1ZD'];
+
+    for (final modelName in models) {
+      final product = findCatalogEntry(
+        categoryName: '냉장고',
+        brand: '삼성전자',
+        modelName: modelName,
+      );
+
+      expect(product, isNotNull, reason: modelName);
+      expect(product!.reviewStatus, 'verified');
+      expect(product.matchLevelLabel, '공식 설명서 확인 모델');
+      expect(product.officialManualUrl, contains('DA68-04836T-01'));
+      expect(
+        product.sources.any(
+          (source) => source.type == ProductSourceType.officialManual,
+        ),
+        isTrue,
+      );
+      expect(product.steps, hasLength(5));
+      expect(product.cautions, contains('청소 전에는 전원 플러그를 빼세요.'));
+    }
+  });
+
+  test('RM80F91H1W만 확인된 UV 청정탈취 필터를 제공한다', () {
+    final hybrid = findCatalogEntry(
+      categoryName: '냉장고',
+      brand: '삼성전자',
+      modelName: 'RM80F91H1W',
+    )!;
+    final kitchenFit = findCatalogEntry(
+      categoryName: '냉장고',
+      brand: '삼성전자',
+      modelName: 'RM70F63R2A',
+    )!;
+
+    expect(hybrid.consumableDetails, hasLength(1));
+    expect(hybrid.consumableDetails.single.name, 'UV 청정탈취 필터');
+    expect(hybrid.consumableDetails.single.replacementDays, 3650);
+    expect(kitchenFit.consumableDetails, isEmpty);
+  });
+
   test('이전 버전의 정확한 모델은 로드할 때 공식 메타데이터로 보강된다', () async {
     final legacyItem = searchProductCatalog('Bespoke AI 4도어')
         .first
@@ -114,7 +159,9 @@ void main() {
     expect(upgraded.modelReleaseYear, 2025);
     expect(upgraded.modelImageUrl, isNotEmpty);
     expect(upgraded.officialProductUrl, contains('samsung.com'));
-    expect(upgraded.matchLevelLabel, '공식 확인 모델');
+    expect(upgraded.officialManualUrl, contains('DA68-04836T-01'));
+    expect(upgraded.catalogProductId, 'samsung-rm70f63r2a');
+    expect(upgraded.matchLevelLabel, '공식 설명서 확인 모델');
   });
 
   test('대표 브랜드 목록에는 브랜드 미상이 표시되지 않는다', () {
@@ -444,7 +491,7 @@ void main() {
     final products = await repository.loadUserProducts();
 
     expect(products!.single.catalogProductId, 'eco-up-dcs-hm4ag-w');
-    expect(products.single.sourceTitle, '이전 버전에서 저장한 출처');
+    expect(products.single.sourceTitle, contains('에코업'));
   });
 
   test('연결된 제품은 더 최신인 검수 카탈로그로 자동 갱신된다', () async {
@@ -651,7 +698,9 @@ void main() {
     expect(refrigerator.modelImageUrl, isNotEmpty);
     expect(refrigerator.officialProductUrl, contains('samsung.com'));
     expect(refrigerator.modelFeatures, contains('640L'));
-    expect(refrigerator.matchLevelLabel, '공식 확인 모델');
+    expect(refrigerator.officialManualUrl, contains('DA68-04836T-01'));
+    expect(refrigerator.catalogProductId, 'samsung-rm70f63r2a');
+    expect(refrigerator.matchLevelLabel, '공식 설명서 확인 모델');
     expect(refrigerator.visualCandidateId, isNull);
   });
 

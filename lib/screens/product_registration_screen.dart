@@ -673,6 +673,24 @@ class _ProductRegistrationScreenState extends State<ProductRegistrationScreen> {
     final category = _categoryController.text.trim();
     final brand = _brandController.text.trim();
     final model = _modelController.text.trim();
+    if (_exactModel != null) {
+      final exactEntry = findCatalogEntry(
+        categoryName: category,
+        brand: brand,
+        modelName: model,
+      );
+      if (exactEntry != null) {
+        return exactEntry.toZoneItem(id: id, zoneId: _selectedSpaceId).copyWith(
+              scannedCode: _scannedCode,
+              scannedCodeFormat: _scannedCodeFormat,
+              scannedSourceUrl: _scannedSourceUrl,
+              nickname: nickname.isEmpty ? null : nickname,
+              purchaseDate: _purchaseDate,
+              installedDate: _installedDate,
+              note: note.isEmpty ? null : note,
+            );
+      }
+    }
     final template = findProductCareTemplate(category);
     if (template != null) {
       return template

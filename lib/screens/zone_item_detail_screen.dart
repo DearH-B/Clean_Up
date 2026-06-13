@@ -50,7 +50,11 @@ class _ZoneItemDetailScreenState extends State<ZoneItemDetailScreen> {
   @override
   void initState() {
     super.initState();
-    final defaults = widget.item.consumables.isEmpty
+    final catalogEntry =
+        findCatalogEntryById(widget.item.catalogProductId ?? '');
+    final hasExactCatalogModel =
+        catalogEntry != null && catalogEntry.modelName.isNotEmpty;
+    final defaults = widget.item.consumables.isEmpty && !hasExactCatalogModel
         ? defaultConsumablesFor(widget.item.name)
         : const <ProductConsumable>[];
     _item = defaults.isEmpty
@@ -118,7 +122,9 @@ class _ZoneItemDetailScreenState extends State<ZoneItemDetailScreen> {
       padding: const EdgeInsets.fromLTRB(16, 18, 16, 32),
       children: [
         if (_item.modelImageUrl?.isNotEmpty == true) ...[
-          const _GuideScopeNotice(),
+          _GuideScopeNotice(
+            hasOfficialManual: _item.officialManualUrl?.isNotEmpty == true,
+          ),
           const SizedBox(height: 14),
         ],
         Text(_item.summary),
@@ -303,6 +309,28 @@ class _ZoneItemDetailScreenState extends State<ZoneItemDetailScreen> {
       children: [
         if (_item.modelImageUrl?.isNotEmpty == true) ...[
           _VerifiedModelCard(item: _item, onOpenSource: _openProduct),
+          const SizedBox(height: 18),
+        ],
+        if (_item.officialManualUrl?.isNotEmpty == true ||
+            _item.supportUrl?.isNotEmpty == true) ...[
+          Wrap(
+            spacing: 8,
+            runSpacing: 8,
+            children: [
+              if (_item.officialManualUrl?.isNotEmpty == true)
+                FilledButton.tonalIcon(
+                  onPressed: () => _openProduct(_item.officialManualUrl!),
+                  icon: const Icon(Icons.menu_book_outlined),
+                  label: const Text('공식 설명서'),
+                ),
+              if (_item.supportUrl?.isNotEmpty == true)
+                OutlinedButton.icon(
+                  onPressed: () => _openProduct(_item.supportUrl!),
+                  icon: const Icon(Icons.support_agent_outlined),
+                  label: const Text('공식 지원'),
+                ),
+            ],
+          ),
           const SizedBox(height: 18),
         ],
         if (_item.hasProductInfo) _ProductInfo(item: _item),
@@ -744,7 +772,9 @@ class _ProductHeader extends StatelessWidget {
 }
 
 class _GuideScopeNotice extends StatelessWidget {
-  const _GuideScopeNotice();
+  const _GuideScopeNotice({required this.hasOfficialManual});
+
+  final bool hasOfficialManual;
 
   @override
   Widget build(BuildContext context) {
@@ -756,13 +786,17 @@ class _GuideScopeNotice extends StatelessWidget {
           left: BorderSide(color: AppColors.coral, width: 4),
         ),
       ),
-      child: const Row(
+      child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Icon(Icons.info_outline, size: 20),
-          SizedBox(width: 8),
+          const Icon(Icons.info_outline, size: 20),
+          const SizedBox(width: 8),
           Expanded(
-            child: Text('제품은 정확한 모델로 확인했어요. 아래 관리법은 시리즈 공통 안내예요.'),
+            child: Text(
+              hasOfficialManual
+                  ? '정확한 모델과 공식 설명서를 확인했어요. 해당 기능이 있는 경우에만 기능별 관리법을 적용하세요.'
+                  : '제품은 정확한 모델로 확인했어요. 아래 관리법은 시리즈 공통 안내예요.',
+            ),
           ),
         ],
       ),
@@ -2107,6 +2141,8 @@ class _ProductInfo extends StatelessWidget {
           _InfoRow(label: '시리즈', value: item.seriesName!),
         if (item.modelName?.isNotEmpty == true)
           _InfoRow(label: '모델명', value: item.modelName!),
+        if (item.modelReleaseYear != null)
+          _InfoRow(label: '출시 연도', value: '${item.modelReleaseYear}년'),
         if (item.productMethod != null)
           _InfoRow(label: '처리 방식', value: item.productMethod!),
         if (item.releasePeriod != null)
@@ -2118,6 +2154,8 @@ class _ProductInfo extends StatelessWidget {
               label: '설치일', value: _formatProductDate(item.installedDate!)),
         if (item.note?.trim().isNotEmpty == true)
           _InfoRow(label: '메모', value: item.note!.trim()),
+        if (item.servicePhone?.isNotEmpty == true)
+          _InfoRow(label: '서비스센터', value: item.servicePhone!),
       ],
     );
   }
@@ -2205,9 +2243,11 @@ class _VerifiedModelCard extends StatelessWidget {
           const SizedBox(height: 14),
           Row(
             children: [
-              const Expanded(
+              Expanded(
                 child: Text(
-                  '제품 식별은 공식 모델 기준이며, 관리법은 현재 시리즈 공통 안내입니다.',
+                  item.officialManualUrl?.isNotEmpty == true
+                      ? '제품 식별과 기본 관리법을 삼성전자 공식 설명서로 확인했습니다.'
+                      : '제품 식별은 공식 모델 기준이며, 관리법은 현재 시리즈 공통 안내입니다.',
                 ),
               ),
               if (item.officialProductUrl?.isNotEmpty == true)

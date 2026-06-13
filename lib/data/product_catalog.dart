@@ -1,5 +1,6 @@
 import '../models/catalog_metadata.dart';
 import '../models/catalog_model_option.dart';
+import '../models/product_consumable.dart';
 import '../models/zone_item.dart';
 
 class ProductCatalogEntry {
@@ -40,7 +41,9 @@ class ProductCatalogEntry {
     this.releaseYear,
     this.isDiscontinued,
     this.imageUrl,
+    this.modelFeatures = const [],
     this.consumables = const [],
+    this.consumableDetails = const [],
     this.installationType,
     this.guideVideoUrl,
     this.guideVideoTitle,
@@ -85,7 +88,9 @@ class ProductCatalogEntry {
   final int? releaseYear;
   final bool? isDiscontinued;
   final String? imageUrl;
+  final List<String> modelFeatures;
   final List<String> consumables;
+  final List<ProductConsumable> consumableDetails;
   final String? installationType;
   final String? guideVideoUrl;
   final String? guideVideoTitle;
@@ -153,8 +158,18 @@ class ProductCatalogEntry {
       releaseYear: json['releaseYear'] as int?,
       isDiscontinued: json['isDiscontinued'] as bool?,
       imageUrl: json['imageUrl'] as String?,
+      modelFeatures:
+          (json['modelFeatures'] as List<dynamic>? ?? const []).cast<String>(),
       consumables:
           (json['consumables'] as List<dynamic>? ?? const []).cast<String>(),
+      consumableDetails:
+          (json['consumableDetails'] as List<dynamic>? ?? const [])
+              .map(
+                (item) => ProductConsumable.fromJson(
+                  Map<String, Object?>.from(item as Map),
+                ),
+              )
+              .toList(),
       installationType: json['installationType'] as String?,
       guideVideoUrl: json['guideVideoUrl'] as String?,
       guideVideoTitle: json['guideVideoTitle'] as String?,
@@ -184,6 +199,14 @@ class ProductCatalogEntry {
       manufacturer: manufacturer,
       seriesName: seriesName,
       modelName: modelName,
+      modelDisplayName: modelName.isEmpty ? null : name,
+      modelReleaseYear: releaseYear,
+      modelImageUrl: imageUrl,
+      officialProductUrl: sourceUrl.isEmpty ? null : sourceUrl,
+      officialManualUrl: officialManualUrl,
+      supportUrl: supportUrl,
+      servicePhone: servicePhone,
+      modelFeatures: modelFeatures,
       productMethod: productMethod,
       guideStatus: guideStatus,
       guideVideoUrl: guideVideoUrl,
@@ -194,6 +217,7 @@ class ProductCatalogEntry {
       recurrenceDays: recurrenceDays,
       recommendedSupplies: recommendedSupplies,
       recommendedProducts: recommendedProducts,
+      consumables: consumableDetails,
       sourceTitle: sourceTitle,
       sourceUrl: sourceUrl,
       sourceCheckedAt: sourceCheckedAt,
@@ -224,6 +248,14 @@ class ProductCatalogEntry {
       manufacturer: catalogItem.manufacturer,
       seriesName: catalogItem.seriesName,
       modelName: catalogItem.modelName,
+      modelDisplayName: catalogItem.modelDisplayName,
+      modelReleaseYear: catalogItem.modelReleaseYear,
+      modelImageUrl: catalogItem.modelImageUrl,
+      officialProductUrl: catalogItem.officialProductUrl,
+      officialManualUrl: catalogItem.officialManualUrl,
+      supportUrl: catalogItem.supportUrl,
+      servicePhone: catalogItem.servicePhone,
+      modelFeatures: catalogItem.modelFeatures,
       productMethod: catalogItem.productMethod,
       guideStatus: catalogItem.guideStatus,
       guideVideoUrl: catalogItem.guideVideoUrl,
@@ -241,7 +273,9 @@ class ProductCatalogEntry {
       nextDueAt: catalogItem.recurrenceDays > 0 ? item.nextDueAt : null,
       recommendedSupplies: catalogItem.recommendedSupplies,
       recommendedProducts: catalogItem.recommendedProducts,
-      consumables: item.consumables,
+      consumables: catalogItem.consumables.isEmpty
+          ? item.consumables
+          : catalogItem.consumables,
     );
   }
 
@@ -451,6 +485,82 @@ final productCatalog = <ProductCatalogEntry>[
       'DCS-HM4AGW',
     ],
     reviewStatus: 'reviewed',
+  ),
+  _verifiedSamsungRefrigerator(
+    id: 'samsung-rm70f63r2a',
+    name: 'Bespoke AI 냉장고 4도어 키친핏 Max 640L',
+    modelName: 'RM70F63R2A',
+    productMethod: '4도어 · 키친핏 Max',
+    productUrl:
+        'https://www.samsung.com/sec/refrigerators/french-door-rm70f63r2a-d2c/RM70F63R2A/',
+    imageUrl:
+        'https://images.samsung.com/kdp/goods/2025/02/24/49dd1432-b1cc-4b81-b97d-ce0a7f8ef465.png',
+    modelFeatures: const ['키친핏 Max', '640L', '4도어'],
+    productSpecs: const [
+      '용량: 640L',
+      '도어: 4도어',
+      '설치 형태: 키친핏 Max',
+      '최소 좌우 설치 간격: 각 4mm',
+      '출시 연도: 2025년',
+    ],
+    installationType: '키친핏 Max · 좌우 각 4mm 설치 간격',
+  ),
+  _verifiedSamsungRefrigerator(
+    id: 'samsung-rm80f91h1w',
+    name: 'Bespoke AI 하이브리드 4도어 874L',
+    modelName: 'RM80F91H1W',
+    productMethod: '4도어 · AI 하이브리드 · 오토오픈도어',
+    productUrl:
+        'https://www.samsung.com/sec/refrigerators/french-door-rm80f91h1w-d2c/RM80F91H1W/',
+    imageUrl:
+        'https://images.samsung.com/kdp/goods/2025/03/05/95443b88-5455-41d1-b3dd-8e9002e6d995.png',
+    modelFeatures: const ['AI 하이브리드', '874L', '오토오픈도어'],
+    productSpecs: const [
+      '용량: 874L',
+      '도어: 4도어',
+      '주요 기능: AI 하이브리드 · 오토오픈도어 · 베버리지 존',
+      'UV 청정탈취 필터 권장 사용기간: 10년',
+      '출시 연도: 2025년',
+    ],
+    installationType: '프리스탠딩 4도어',
+    consumables: const ['UV 청정탈취 필터'],
+    consumableDetails: const [
+      ProductConsumable(
+        id: 'rm80f91h1w-uv-deodorizing-filter',
+        name: 'UV 청정탈취 필터',
+        type: ConsumableType.filter,
+        replacementDays: 3650,
+        compatibilityLabel: 'RM80F91H1W 공식 확인',
+        note: '삼성전자 권장 사용기간은 10년이며 실제 수명은 사용 환경에 따라 달라질 수 있어요. '
+            '정확한 부품번호와 교체 가능 여부는 서비스센터에서 확인하세요.',
+      ),
+    ],
+    installationGuideUrls: const [
+      'https://downloadcenter.samsung.com/content/EM/202604/20260401071252508/DA68-04370A-05_IB_REF_KO_KO_260304.pdf',
+      'https://downloadcenter.samsung.com/content/EM/202211/20221125151638571/DA68-02624H-02_MANUAL_INSTRUCTION_TTYPE_KO_220725.pdf',
+    ],
+  ),
+  _verifiedSamsungRefrigerator(
+    id: 'samsung-rm70f90m1zd',
+    name: 'Bespoke AI 냉장고 4도어 902L',
+    modelName: 'RM70F90M1ZD',
+    productMethod: '4도어 · 대용량',
+    productUrl:
+        'https://www.samsung.com/sec/refrigerators/french-door-rm70f90m1zd-d2c/RM70F90M1ZD/',
+    imageUrl:
+        'https://images.samsung.com/kdp/goods/2025/06/27/75ffe596-f6fc-4119-827f-675e5ff47e09.png',
+    modelFeatures: const ['대용량', '902L', '4도어'],
+    productSpecs: const [
+      '용량: 902L',
+      '도어: 4도어',
+      '설치 형태: 프리스탠딩',
+      '출시 연도: 2025년',
+    ],
+    installationType: '프리스탠딩 4도어',
+    installationGuideUrls: const [
+      'https://downloadcenter.samsung.com/content/EM/202604/20260401071252508/DA68-04370A-05_IB_REF_KO_KO_260304.pdf',
+      'https://downloadcenter.samsung.com/content/EM/202211/20221125151638571/DA68-02624H-02_MANUAL_INSTRUCTION_TTYPE_KO_220725.pdf',
+    ],
   ),
   ProductCatalogEntry(
     id: 'generic-refrigerator',
@@ -969,6 +1079,166 @@ final _representativeApplianceCatalog = <ProductCatalogEntry>[
     keywords: const ['김치냉장고', '김치플러스', 'kimchi refrigerator', '삼성'],
   ),
 ];
+
+ProductCatalogEntry _verifiedSamsungRefrigerator({
+  required String id,
+  required String name,
+  required String modelName,
+  required String productMethod,
+  required String productUrl,
+  required String imageUrl,
+  required List<String> modelFeatures,
+  required List<String> productSpecs,
+  required String installationType,
+  List<String> consumables = const [],
+  List<ProductConsumable> consumableDetails = const [],
+  List<String> installationGuideUrls = const [],
+}) {
+  const manualUrl =
+      'https://downloadcenter.samsung.com/content/UM/202605/20260519113115223/DA68-04836T-01_RF9000F_2025_KO_260515.pdf';
+  const htmlManualUrl =
+      'https://downloadcenter.samsung.com/content/PM/202605/20260519113245024/KO/start_here.html';
+  final productSourceId = '$id-product';
+  final manualSourceId = '$id-manual';
+  return ProductCatalogEntry(
+    id: id,
+    name: name,
+    type: ZoneItemType.appliance,
+    categoryName: '냉장고',
+    brand: '삼성전자',
+    manufacturer: '삼성전자',
+    modelName: modelName,
+    seriesName: 'Bespoke AI 4도어',
+    summary: '삼성전자 공식 RF9000F 2025 사용설명서에 따라 문, 내부 부속품, 고무 패킹과 후면 먼지를 관리해요.',
+    frequency: '오염은 발견 즉시 · 제품 뒷면 먼지는 1년에 한 번',
+    recurrenceDays: 0,
+    estimatedMinutes: 25,
+    productMethod: productMethod,
+    guideStatus: '정확한 모델과 공식 사용설명서를 확인했어요. 기능별 항목은 내 제품에 해당할 때만 적용하세요.',
+    guideBasis: '삼성전자 공식 제품 페이지와 RF9000F 2025 사용자 매뉴얼 ver.4.0을 '
+        '2026년 6월 13일 교차 확인했어요.',
+    guideSourceType: GuideSourceType.official,
+    matchLevelLabel: '공식 설명서 확인 모델',
+    sourceTitle: '$name 공식 제품 페이지',
+    sourceUrl: productUrl,
+    sourceCheckedAt: DateTime(2026, 6, 13),
+    sources: [
+      ProductSource(
+        id: productSourceId,
+        title: '$name 공식 제품 페이지',
+        url: productUrl,
+        type: ProductSourceType.officialProduct,
+        publisher: '삼성전자',
+        checkedAt: DateTime(2026, 6, 13),
+        supports: const ['제품명', '모델명', '용량', '주요 기능', '출시 연도', '대표 이미지'],
+        isOfficial: true,
+        isActive: true,
+      ),
+      ProductSource(
+        id: manualSourceId,
+        title: 'RF9000F 2025 사용자 매뉴얼 ver.4.0',
+        url: manualUrl,
+        type: ProductSourceType.officialManual,
+        publisher: '삼성전자',
+        checkedAt: DateTime(2026, 6, 13),
+        supports: const [
+          '청소 안전사항',
+          '문 재질별 청소',
+          '내부와 부속품 관리',
+          '고무 패킹 관리',
+          '제품 후면 먼지 관리',
+          '기능별 조건부 관리',
+        ],
+        isOfficial: true,
+        isActive: true,
+      ),
+      ProductSource(
+        id: '$id-html-manual',
+        title: 'RF9000F 2025 HTML 사용설명서',
+        url: htmlManualUrl,
+        type: ProductSourceType.officialManual,
+        publisher: '삼성전자',
+        checkedAt: DateTime(2026, 6, 13),
+        supports: const ['모바일용 사용설명서'],
+        isOfficial: true,
+        isActive: true,
+      ),
+      for (var index = 0; index < installationGuideUrls.length; index++)
+        ProductSource(
+          id: '$id-install-${index + 1}',
+          title: '삼성 냉장고 설치 안내 ${index + 1}',
+          url: installationGuideUrls[index],
+          type: ProductSourceType.officialManual,
+          publisher: '삼성전자',
+          checkedAt: DateTime(2026, 6, 13),
+          supports: const ['설치 안전사항'],
+          isOfficial: true,
+          isActive: true,
+        ),
+    ],
+    specSourceIds: {
+      for (final spec in productSpecs)
+        if (spec.contains(':')) spec.split(':').first.trim(): [productSourceId],
+    },
+    stepSourceIds: {
+      '0': [manualSourceId],
+      '1': [manualSourceId],
+      '2': [manualSourceId],
+      '3': [manualSourceId],
+      '4': [manualSourceId],
+    },
+    reviewHistory: [
+      CatalogReviewRecord(
+        status: 'verified',
+        reviewer: 'catalog-editor',
+        reviewedAt: DateTime(2026, 6, 13),
+        note: '공식 제품 페이지, 공통 사용자 매뉴얼과 설치 안내를 확인하고 '
+            '사용자가 직접 수행할 수 있는 관리 범위만 반영함.',
+      ),
+    ],
+    officialManualUrl: manualUrl,
+    supportUrl: productUrl,
+    servicePhone: '1588-3366',
+    releaseYear: 2025,
+    isDiscontinued: false,
+    imageUrl: imageUrl,
+    modelFeatures: modelFeatures,
+    consumables: consumables,
+    consumableDetails: consumableDetails,
+    installationType: installationType,
+    productSpecs: productSpecs,
+    supplies: const ['부드러운 천', '마른 천 또는 수건', '면봉', '진공청소기'],
+    recommendedSupplies: const [
+      '표면이 거칠지 않은 극세사 천',
+      '문 고무 패킹 홈을 닦을 면봉',
+      '제품 후면 먼지를 제거할 진공청소기',
+    ],
+    recommendedProducts: const [],
+    cautions: const [
+      '청소 전에는 전원 플러그를 빼세요.',
+      '제품에 물을 직접 뿌리지 마세요.',
+      '락스, 아세톤, 시너, 알코올, 염화물, 벤젠을 사용하지 마세요.',
+      '솔, 수세미, 거친 헝겊처럼 표면이 거친 도구를 사용하지 마세요.',
+      '유리 선반은 따뜻한 물로 씻거나 충격을 가하지 마세요.',
+      'LED 램프와 제품 내부 부품을 임의로 분리하지 마세요.',
+    ],
+    steps: const [
+      '전원 플러그를 빼고 상하기 쉬운 식품을 다른 냉장 공간으로 옮겨요.',
+      '문 재질을 확인해요. 스테인리스는 깨끗한 물을 묻힌 극세사 천으로, 유리는 유리 세정제 또는 중성세제를 묻힌 천으로 가볍게 닦고 마른 천으로 마무리해요.',
+      '제품 내부와 분리한 박스·선반은 깨끗한 물을 묻힌 부드러운 천으로 닦고 완전히 말려요.',
+      '문 고무 패킹은 깨끗한 물을 묻힌 부드러운 천으로 닦고 홈 사이는 면봉으로 닦아요.',
+      '제품 뒷면은 1년에 한 번 정도 진공청소기로 먼지를 제거해요.',
+    ],
+    keywords: [
+      modelName,
+      modelName.replaceAll('-', ''),
+      '비스포크 냉장고',
+      'Bespoke AI 냉장고',
+      'RF9000F',
+    ],
+    reviewStatus: 'verified',
+  );
+}
 
 ProductCatalogEntry _representativeAppliance({
   required String id,

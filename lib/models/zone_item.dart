@@ -89,6 +89,9 @@ class ZoneItem {
     this.modelReleaseYear,
     this.modelImageUrl,
     this.officialProductUrl,
+    this.officialManualUrl,
+    this.supportUrl,
+    this.servicePhone,
     this.modelFeatures = const [],
     this.productMethod,
     this.guideStatus,
@@ -138,6 +141,9 @@ class ZoneItem {
   final int? modelReleaseYear;
   final String? modelImageUrl;
   final String? officialProductUrl;
+  final String? officialManualUrl;
+  final String? supportUrl;
+  final String? servicePhone;
   final List<String> modelFeatures;
   final String? productMethod;
   final String? guideStatus;
@@ -215,6 +221,9 @@ class ZoneItem {
       modelReleaseYear: json['modelReleaseYear'] as int?,
       modelImageUrl: json['modelImageUrl'] as String?,
       officialProductUrl: json['officialProductUrl'] as String?,
+      officialManualUrl: json['officialManualUrl'] as String?,
+      supportUrl: json['supportUrl'] as String?,
+      servicePhone: json['servicePhone'] as String?,
       modelFeatures:
           (json['modelFeatures'] as List<dynamic>? ?? const []).cast<String>(),
       productMethod: json['productMethod'] as String?,
@@ -294,6 +303,9 @@ class ZoneItem {
       'modelReleaseYear': modelReleaseYear,
       'modelImageUrl': modelImageUrl,
       'officialProductUrl': officialProductUrl,
+      'officialManualUrl': officialManualUrl,
+      'supportUrl': supportUrl,
+      'servicePhone': servicePhone,
       'modelFeatures': modelFeatures,
       'productMethod': productMethod,
       'guideStatus': guideStatus,
@@ -339,6 +351,9 @@ class ZoneItem {
     int? modelReleaseYear,
     String? modelImageUrl,
     String? officialProductUrl,
+    String? officialManualUrl,
+    String? supportUrl,
+    String? servicePhone,
     List<String>? modelFeatures,
     String? guideStatus,
     String? sourceTitle,
@@ -392,6 +407,10 @@ class ZoneItem {
       officialProductUrl: clearExactModel
           ? null
           : officialProductUrl ?? this.officialProductUrl,
+      officialManualUrl:
+          clearExactModel ? null : officialManualUrl ?? this.officialManualUrl,
+      supportUrl: clearExactModel ? null : supportUrl ?? this.supportUrl,
+      servicePhone: clearExactModel ? null : servicePhone ?? this.servicePhone,
       modelFeatures:
           clearExactModel ? const [] : modelFeatures ?? this.modelFeatures,
       productMethod: productMethod,
