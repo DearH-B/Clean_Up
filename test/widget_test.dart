@@ -151,6 +151,55 @@ void main() {
     }
   });
 
+  test('신규 삼성 가전 15개 모델은 공식 자료와 제품군별 관리법이 연결된다', () {
+    const groups = {
+      '에어컨': (
+        ['AF60F17D11WRT', 'AF70F19D11BRT', 'AF90H19D35WRT'],
+        ['필터', '실외기'],
+      ),
+      '공기청정기': (
+        ['AP90H10198UDD', 'AP90H03163UGD', 'AP70F06103RVD'],
+        ['필터', '흡입구'],
+      ),
+      '식기세척기': (
+        ['DW80F71Y1UEWS', 'DW90F79F1USWS', 'DW80F73Y1UEWS'],
+        ['필터', '분사 노즐'],
+      ),
+      '건조기': (
+        ['DV21DG8200BV', 'DV80H20DDW', 'DV90F22CDS'],
+        ['보풀 필터', '열교환기'],
+      ),
+      '청소기': (
+        ['VS28D950ACB', 'VS90F40CNK', 'VS90F40CSK'],
+        ['먼지통', '브러시'],
+      ),
+    };
+
+    for (final MapEntry(key: categoryName, value: group) in groups.entries) {
+      final (models, careTerms) = group;
+      for (final modelName in models) {
+        final product = findCatalogEntry(
+          categoryName: categoryName,
+          brand: '삼성전자',
+          modelName: modelName,
+        );
+
+        expect(product, isNotNull, reason: '$categoryName $modelName');
+        expect(product!.reviewStatus, 'verified');
+        expect(product.matchLevelLabel, '공식 설명서 확인 모델');
+        expect(
+            product.officialManualUrl, contains('downloadcenter.samsung.com'));
+        expect(product.imageUrl, contains('images.samsung.com'));
+        expect(product.releaseYear, isNotNull);
+        expect(product.sources, hasLength(2));
+        expect(product.steps.length, greaterThanOrEqualTo(5));
+        for (final term in careTerms) {
+          expect(product.steps.join(' '), contains(term), reason: modelName);
+        }
+      }
+    }
+  });
+
   test('RM80F91H1W만 확인된 UV 청정탈취 필터를 제공한다', () {
     final hybrid = findCatalogEntry(
       categoryName: '냉장고',

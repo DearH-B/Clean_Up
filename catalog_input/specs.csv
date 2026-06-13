@@ -1,3 +1,52 @@
-productId,order,label,value,sourceIds
+﻿productId,order,label,value,sourceIds
 example-product-id,1,출시 연도,2026년,example-product-id-product
 example-product-id,2,용량,25kg,example-product-id-product
+samsung-af60f17d11wrt,1,출시 연도,2025년,samsung-af60f17d11wrt-product
+samsung-af60f17d11wrt,2,냉방 면적,스탠드 56.9㎡ / 벽걸이 18.7㎡,samsung-af60f17d11wrt-product
+samsung-af60f17d11wrt,3,구성,스탠드형 + 벽걸이형,samsung-af60f17d11wrt-product
+samsung-af70f19d11brt,1,출시 연도,2025년,samsung-af70f19d11brt-product
+samsung-af70f19d11brt,2,냉방 면적,스탠드 62.6㎡ / 벽걸이 18.7㎡,samsung-af70f19d11brt-product
+samsung-af70f19d11brt,3,구성,스탠드형 + 벽걸이형,samsung-af70f19d11brt-product
+samsung-af90h19d35wrt,1,출시 연도,2026년,samsung-af90h19d35wrt-product
+samsung-af90h19d35wrt,2,냉방 면적,스탠드 62.6㎡ / 벽걸이 18.7㎡,samsung-af90h19d35wrt-product
+samsung-af90h19d35wrt,3,기능,청정 기능,samsung-af90h19d35wrt-product
+samsung-ap90h10198udd,1,출시 연도,2026년,samsung-ap90h10198udd-product
+samsung-ap90h10198udd,2,사용 면적,100㎡,samsung-ap90h10198udd-product
+samsung-ap90h10198udd,3,필터,리유저블 필터,samsung-ap90h10198udd-product
+samsung-ap90h10198udd,4,기능,AI+ 청정 / UV LED 살균,samsung-ap90h10198udd-product
+samsung-ap90h03163ugd,1,출시 연도,2026년,samsung-ap90h03163ugd-product
+samsung-ap90h03163ugd,2,사용 면적,33㎡,samsung-ap90h03163ugd-product
+samsung-ap90h03163ugd,3,필터,S 필터,samsung-ap90h03163ugd-product
+samsung-ap90h03163ugd,4,기능,AI+ 청정 / UV LED 살균,samsung-ap90h03163ugd-product
+samsung-ap70f06103rvd,1,출시 연도,2025년,samsung-ap70f06103rvd-product
+samsung-ap70f06103rvd,2,사용 면적,60㎡,samsung-ap70f06103rvd-product
+samsung-ap70f06103rvd,3,필터,극세 필터 / 집진 필터 / 숯 탈취 필터,samsung-ap70f06103rvd-product
+samsung-ap70f06103rvd,4,기능,AI 청정,samsung-ap70f06103rvd-product
+samsung-dw80f71y1uews,1,출시 연도,2025년,samsung-dw80f71y1uews-product
+samsung-dw80f71y1uews,2,용량,12인용,samsung-dw80f71y1uews-product
+samsung-dw80f71y1uews,3,설치 형태,빌트인,samsung-dw80f71y1uews-product
+samsung-dw90f79f1usws,1,출시 연도,2025년,samsung-dw90f79f1usws-product
+samsung-dw90f79f1usws,2,용량,14인용,samsung-dw90f79f1usws-product
+samsung-dw90f79f1usws,3,설치 형태,빌트인,samsung-dw90f79f1usws-product
+samsung-dw90f79f1usws,4,기능,필터 내장형 / 컵 맞춤 세척,samsung-dw90f79f1usws-product
+samsung-dw80f73y1uews,1,출시 연도,2025년,samsung-dw80f73y1uews-product
+samsung-dw80f73y1uews,2,용량,14인용,samsung-dw80f73y1uews-product
+samsung-dw80f73y1uews,3,설치 형태,빌트인,samsung-dw80f73y1uews-product
+samsung-dv21dg8200bv,1,출시 연도,2024년,samsung-dv21dg8200bv-product
+samsung-dv21dg8200bv,2,건조 용량,21kg,samsung-dv21dg8200bv-product
+samsung-dv21dg8200bv,3,제품 유형,AI 건조기,samsung-dv21dg8200bv-product
+samsung-dv80h20ddw,1,출시 연도,2026년,samsung-dv80h20ddw-product
+samsung-dv80h20ddw,2,건조 용량,20kg,samsung-dv80h20ddw-product
+samsung-dv80h20ddw,3,조작부,71.1mm LCD + 다이얼,samsung-dv80h20ddw-product
+samsung-dv90f22cds,1,출시 연도,2025년,samsung-dv90f22cds-product
+samsung-dv90f22cds,2,건조 용량,22kg,samsung-dv90f22cds-product
+samsung-dv90f22cds,3,조작부,177.8mm LCD,samsung-dv90f22cds-product
+samsung-vs28d950acb,1,출시 연도,2024년,samsung-vs28d950acb-product
+samsung-vs28d950acb,2,최대 흡입력,280W,samsung-vs28d950acb-product
+samsung-vs28d950acb,3,제품군,Bespoke AI 제트 Lite,samsung-vs28d950acb-product
+samsung-vs90f40cnk,1,출시 연도,2026년,samsung-vs90f40cnk-product
+samsung-vs90f40cnk,2,최대 흡입력,400W,samsung-vs90f40cnk-product
+samsung-vs90f40cnk,3,구성,펫브러시 패키지,samsung-vs90f40cnk-product
+samsung-vs90f40csk,1,출시 연도,2026년,samsung-vs90f40csk-product
+samsung-vs90f40csk,2,최대 흡입력,400W,samsung-vs90f40csk-product
+samsung-vs90f40csk,3,제품군,Bespoke AI 제트,samsung-vs90f40csk-product

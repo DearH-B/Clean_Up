@@ -1,4 +1,4 @@
-productId,kind,order,value
+﻿productId,kind,order,value
 example-product-id,supply,1,부드러운 천
 example-product-id,recommendedSupply,1,표면이 거칠지 않은 극세사 천
 example-product-id,caution,1,청소 전에는 전원 플러그를 빼세요.
@@ -6,3 +6,271 @@ example-product-id,caution,2,제품에 물을 직접 뿌리지 마세요.
 example-product-id,caution,3,본체를 임의로 분리하지 마세요.
 example-product-id,keyword,1,MODEL-001
 example-product-id,modelFeature,1,25kg
+samsung-af60f17d11wrt,supply,1,부드러운 천
+samsung-af60f17d11wrt,supply,2,부드러운 솔
+samsung-af60f17d11wrt,supply,3,진공청소기
+samsung-af60f17d11wrt,recommendedSupply,1,표면이 거칠지 않은 극세사 천
+samsung-af60f17d11wrt,recommendedSupply,2,필터 먼지 제거용 부드러운 브러시
+samsung-af60f17d11wrt,caution,1,청소 전에는 전원 플러그를 빼세요.
+samsung-af60f17d11wrt,caution,2,제품에 물을 직접 뿌리지 마세요.
+samsung-af60f17d11wrt,caution,3,냉매 배관과 전기 부품을 임의로 분리하지 마세요.
+samsung-af60f17d11wrt,caution,4,물세척이 금지된 필터는 물에 담그지 마세요.
+samsung-af60f17d11wrt,keyword,1,에어컨
+samsung-af60f17d11wrt,keyword,2,필터
+samsung-af60f17d11wrt,keyword,3,흡입구
+samsung-af60f17d11wrt,keyword,4,실외기
+samsung-af60f17d11wrt,keyword,5,AF60F17D11WRT
+samsung-af60f17d11wrt,keyword,6,AI Q9000
+samsung-af60f17d11wrt,modelFeature,1,56.9/18.7㎡
+samsung-af60f17d11wrt,modelFeature,2,스탠드형+벽걸이형
+samsung-af60f17d11wrt,modelFeature,3,리모컨 포함
+samsung-af70f19d11brt,supply,1,부드러운 천
+samsung-af70f19d11brt,supply,2,부드러운 솔
+samsung-af70f19d11brt,supply,3,진공청소기
+samsung-af70f19d11brt,recommendedSupply,1,표면이 거칠지 않은 극세사 천
+samsung-af70f19d11brt,recommendedSupply,2,필터 먼지 제거용 부드러운 브러시
+samsung-af70f19d11brt,caution,1,청소 전에는 전원 플러그를 빼세요.
+samsung-af70f19d11brt,caution,2,제품에 물을 직접 뿌리지 마세요.
+samsung-af70f19d11brt,caution,3,냉매 배관과 전기 부품을 임의로 분리하지 마세요.
+samsung-af70f19d11brt,caution,4,물세척이 금지된 필터는 물에 담그지 마세요.
+samsung-af70f19d11brt,keyword,1,에어컨
+samsung-af70f19d11brt,keyword,2,필터
+samsung-af70f19d11brt,keyword,3,흡입구
+samsung-af70f19d11brt,keyword,4,실외기
+samsung-af70f19d11brt,keyword,5,AF70F19D11BRT
+samsung-af70f19d11brt,keyword,6,Bespoke AI 무풍 클래식
+samsung-af70f19d11brt,modelFeature,1,62.6/18.7㎡
+samsung-af70f19d11brt,modelFeature,2,무풍 클래식
+samsung-af70f19d11brt,modelFeature,3,리모컨 포함
+samsung-af90h19d35wrt,supply,1,부드러운 천
+samsung-af90h19d35wrt,supply,2,부드러운 솔
+samsung-af90h19d35wrt,supply,3,진공청소기
+samsung-af90h19d35wrt,recommendedSupply,1,표면이 거칠지 않은 극세사 천
+samsung-af90h19d35wrt,recommendedSupply,2,필터 먼지 제거용 부드러운 브러시
+samsung-af90h19d35wrt,caution,1,청소 전에는 전원 플러그를 빼세요.
+samsung-af90h19d35wrt,caution,2,제품에 물을 직접 뿌리지 마세요.
+samsung-af90h19d35wrt,caution,3,냉매 배관과 전기 부품을 임의로 분리하지 마세요.
+samsung-af90h19d35wrt,caution,4,물세척이 금지된 필터는 물에 담그지 마세요.
+samsung-af90h19d35wrt,keyword,1,에어컨
+samsung-af90h19d35wrt,keyword,2,필터
+samsung-af90h19d35wrt,keyword,3,흡입구
+samsung-af90h19d35wrt,keyword,4,실외기
+samsung-af90h19d35wrt,keyword,5,AF90H19D35WRT
+samsung-af90h19d35wrt,keyword,6,Bespoke AI 무풍콤보 갤러리 프로
+samsung-af90h19d35wrt,modelFeature,1,62.6/18.7㎡
+samsung-af90h19d35wrt,modelFeature,2,무풍콤보
+samsung-af90h19d35wrt,modelFeature,3,청정 기능
+samsung-ap90h10198udd,supply,1,부드러운 천
+samsung-ap90h10198udd,supply,2,부드러운 솔
+samsung-ap90h10198udd,supply,3,진공청소기
+samsung-ap90h10198udd,recommendedSupply,1,표면이 거칠지 않은 극세사 천
+samsung-ap90h10198udd,recommendedSupply,2,흡입구 먼지 제거용 부드러운 브러시
+samsung-ap90h10198udd,caution,1,청소 전에는 전원 플러그를 빼세요.
+samsung-ap90h10198udd,caution,2,제품에 물을 직접 뿌리지 마세요.
+samsung-ap90h10198udd,caution,3,집진·탈취 필터를 임의로 물세척하지 마세요.
+samsung-ap90h10198udd,caution,4,센서와 전기 부품을 임의로 분리하지 마세요.
+samsung-ap90h10198udd,keyword,1,공기청정기
+samsung-ap90h10198udd,keyword,2,필터
+samsung-ap90h10198udd,keyword,3,흡입구
+samsung-ap90h10198udd,keyword,4,탈취필터
+samsung-ap90h10198udd,keyword,5,AP90H10198UDD
+samsung-ap90h10198udd,keyword,6,Infinite AI
+samsung-ap90h10198udd,modelFeature,1,100㎡
+samsung-ap90h10198udd,modelFeature,2,리유저블 필터
+samsung-ap90h10198udd,modelFeature,3,AI+ 청정
+samsung-ap90h10198udd,modelFeature,4,UV LED 살균
+samsung-ap90h03163ugd,supply,1,부드러운 천
+samsung-ap90h03163ugd,supply,2,부드러운 솔
+samsung-ap90h03163ugd,supply,3,진공청소기
+samsung-ap90h03163ugd,recommendedSupply,1,표면이 거칠지 않은 극세사 천
+samsung-ap90h03163ugd,recommendedSupply,2,흡입구 먼지 제거용 부드러운 브러시
+samsung-ap90h03163ugd,caution,1,청소 전에는 전원 플러그를 빼세요.
+samsung-ap90h03163ugd,caution,2,제품에 물을 직접 뿌리지 마세요.
+samsung-ap90h03163ugd,caution,3,집진·탈취 필터를 임의로 물세척하지 마세요.
+samsung-ap90h03163ugd,caution,4,센서와 전기 부품을 임의로 분리하지 마세요.
+samsung-ap90h03163ugd,keyword,1,공기청정기
+samsung-ap90h03163ugd,keyword,2,필터
+samsung-ap90h03163ugd,keyword,3,흡입구
+samsung-ap90h03163ugd,keyword,4,탈취필터
+samsung-ap90h03163ugd,keyword,5,AP90H03163UGD
+samsung-ap90h03163ugd,keyword,6,Infinite AI
+samsung-ap90h03163ugd,modelFeature,1,33㎡
+samsung-ap90h03163ugd,modelFeature,2,S 필터
+samsung-ap90h03163ugd,modelFeature,3,AI+ 청정
+samsung-ap90h03163ugd,modelFeature,4,UV LED 살균
+samsung-ap70f06103rvd,supply,1,부드러운 천
+samsung-ap70f06103rvd,supply,2,부드러운 솔
+samsung-ap70f06103rvd,supply,3,진공청소기
+samsung-ap70f06103rvd,recommendedSupply,1,표면이 거칠지 않은 극세사 천
+samsung-ap70f06103rvd,recommendedSupply,2,흡입구 먼지 제거용 부드러운 브러시
+samsung-ap70f06103rvd,caution,1,청소 전에는 전원 플러그를 빼세요.
+samsung-ap70f06103rvd,caution,2,제품에 물을 직접 뿌리지 마세요.
+samsung-ap70f06103rvd,caution,3,집진·탈취 필터를 임의로 물세척하지 마세요.
+samsung-ap70f06103rvd,caution,4,센서와 전기 부품을 임의로 분리하지 마세요.
+samsung-ap70f06103rvd,keyword,1,공기청정기
+samsung-ap70f06103rvd,keyword,2,필터
+samsung-ap70f06103rvd,keyword,3,흡입구
+samsung-ap70f06103rvd,keyword,4,탈취필터
+samsung-ap70f06103rvd,keyword,5,AP70F06103RVD
+samsung-ap70f06103rvd,keyword,6,블루스카이 5500
+samsung-ap70f06103rvd,modelFeature,1,60㎡
+samsung-ap70f06103rvd,modelFeature,2,AI 청정
+samsung-ap70f06103rvd,modelFeature,3,숯 탈취 필터
+samsung-dw80f71y1uews,supply,1,부드러운 천
+samsung-dw80f71y1uews,supply,2,부드러운 솔
+samsung-dw80f71y1uews,recommendedSupply,1,식기세척기 전용 클리너
+samsung-dw80f71y1uews,recommendedSupply,2,필터 틈새용 부드러운 브러시
+samsung-dw80f71y1uews,caution,1,청소 전에는 전원을 끄고 뜨거운 물과 내부 부품이 식을 때까지 기다리세요.
+samsung-dw80f71y1uews,caution,2,제품에 물을 직접 뿌리지 마세요.
+samsung-dw80f71y1uews,caution,3,펌프와 배수 부품을 임의로 분리하지 마세요.
+samsung-dw80f71y1uews,caution,4,일반 주방세제처럼 거품이 많이 나는 세제는 사용하지 마세요.
+samsung-dw80f71y1uews,keyword,1,식기세척기
+samsung-dw80f71y1uews,keyword,2,필터
+samsung-dw80f71y1uews,keyword,3,분사노즐
+samsung-dw80f71y1uews,keyword,4,도어패킹
+samsung-dw80f71y1uews,keyword,5,DW80F71Y1UEWS
+samsung-dw80f71y1uews,keyword,6,Bespoke AI
+samsung-dw80f71y1uews,modelFeature,1,12인용
+samsung-dw80f71y1uews,modelFeature,2,빌트인
+samsung-dw80f71y1uews,modelFeature,3,Bespoke AI
+samsung-dw90f79f1usws,supply,1,부드러운 천
+samsung-dw90f79f1usws,supply,2,부드러운 솔
+samsung-dw90f79f1usws,recommendedSupply,1,식기세척기 전용 클리너
+samsung-dw90f79f1usws,recommendedSupply,2,필터 틈새용 부드러운 브러시
+samsung-dw90f79f1usws,caution,1,청소 전에는 전원을 끄고 뜨거운 물과 내부 부품이 식을 때까지 기다리세요.
+samsung-dw90f79f1usws,caution,2,제품에 물을 직접 뿌리지 마세요.
+samsung-dw90f79f1usws,caution,3,펌프와 배수 부품을 임의로 분리하지 마세요.
+samsung-dw90f79f1usws,caution,4,일반 주방세제처럼 거품이 많이 나는 세제는 사용하지 마세요.
+samsung-dw90f79f1usws,keyword,1,식기세척기
+samsung-dw90f79f1usws,keyword,2,필터
+samsung-dw90f79f1usws,keyword,3,분사노즐
+samsung-dw90f79f1usws,keyword,4,도어패킹
+samsung-dw90f79f1usws,keyword,5,DW90F79F1USWS
+samsung-dw90f79f1usws,keyword,6,Bespoke AI
+samsung-dw90f79f1usws,modelFeature,1,14인용
+samsung-dw90f79f1usws,modelFeature,2,필터 내장형
+samsung-dw90f79f1usws,modelFeature,3,컵 맞춤 세척
+samsung-dw80f73y1uews,supply,1,부드러운 천
+samsung-dw80f73y1uews,supply,2,부드러운 솔
+samsung-dw80f73y1uews,recommendedSupply,1,식기세척기 전용 클리너
+samsung-dw80f73y1uews,recommendedSupply,2,필터 틈새용 부드러운 브러시
+samsung-dw80f73y1uews,caution,1,청소 전에는 전원을 끄고 뜨거운 물과 내부 부품이 식을 때까지 기다리세요.
+samsung-dw80f73y1uews,caution,2,제품에 물을 직접 뿌리지 마세요.
+samsung-dw80f73y1uews,caution,3,펌프와 배수 부품을 임의로 분리하지 마세요.
+samsung-dw80f73y1uews,caution,4,일반 주방세제처럼 거품이 많이 나는 세제는 사용하지 마세요.
+samsung-dw80f73y1uews,keyword,1,식기세척기
+samsung-dw80f73y1uews,keyword,2,필터
+samsung-dw80f73y1uews,keyword,3,분사노즐
+samsung-dw80f73y1uews,keyword,4,도어패킹
+samsung-dw80f73y1uews,keyword,5,DW80F73Y1UEWS
+samsung-dw80f73y1uews,keyword,6,Bespoke AI
+samsung-dw80f73y1uews,modelFeature,1,14인용
+samsung-dw80f73y1uews,modelFeature,2,빌트인
+samsung-dw80f73y1uews,modelFeature,3,Bespoke AI
+samsung-dv21dg8200bv,supply,1,부드러운 천
+samsung-dv21dg8200bv,supply,2,부드러운 솔
+samsung-dv21dg8200bv,supply,3,진공청소기
+samsung-dv21dg8200bv,recommendedSupply,1,보풀 제거용 부드러운 브러시
+samsung-dv21dg8200bv,recommendedSupply,2,표면이 거칠지 않은 극세사 천
+samsung-dv21dg8200bv,caution,1,청소 전에는 전원 플러그를 빼세요.
+samsung-dv21dg8200bv,caution,2,제품에 물을 직접 뿌리지 마세요.
+samsung-dv21dg8200bv,caution,3,열교환기 핀과 내부 부품을 임의로 분리하지 마세요.
+samsung-dv21dg8200bv,caution,4,젖은 필터를 장착하지 마세요.
+samsung-dv21dg8200bv,keyword,1,건조기
+samsung-dv21dg8200bv,keyword,2,보풀필터
+samsung-dv21dg8200bv,keyword,3,열교환기
+samsung-dv21dg8200bv,keyword,4,습도센서
+samsung-dv21dg8200bv,keyword,5,DV21DG8200BV
+samsung-dv21dg8200bv,keyword,6,AI 건조기
+samsung-dv21dg8200bv,modelFeature,1,21kg
+samsung-dv21dg8200bv,modelFeature,2,AI 건조
+samsung-dv80h20ddw,supply,1,부드러운 천
+samsung-dv80h20ddw,supply,2,부드러운 솔
+samsung-dv80h20ddw,supply,3,진공청소기
+samsung-dv80h20ddw,recommendedSupply,1,보풀 제거용 부드러운 브러시
+samsung-dv80h20ddw,recommendedSupply,2,표면이 거칠지 않은 극세사 천
+samsung-dv80h20ddw,caution,1,청소 전에는 전원 플러그를 빼세요.
+samsung-dv80h20ddw,caution,2,제품에 물을 직접 뿌리지 마세요.
+samsung-dv80h20ddw,caution,3,열교환기 핀과 내부 부품을 임의로 분리하지 마세요.
+samsung-dv80h20ddw,caution,4,젖은 필터를 장착하지 마세요.
+samsung-dv80h20ddw,keyword,1,건조기
+samsung-dv80h20ddw,keyword,2,보풀필터
+samsung-dv80h20ddw,keyword,3,열교환기
+samsung-dv80h20ddw,keyword,4,습도센서
+samsung-dv80h20ddw,keyword,5,DV80H20DDW
+samsung-dv80h20ddw,keyword,6,Bespoke AI
+samsung-dv80h20ddw,modelFeature,1,20kg
+samsung-dv80h20ddw,modelFeature,2,71.1mm LCD
+samsung-dv80h20ddw,modelFeature,3,다이얼
+samsung-dv90f22cds,supply,1,부드러운 천
+samsung-dv90f22cds,supply,2,부드러운 솔
+samsung-dv90f22cds,supply,3,진공청소기
+samsung-dv90f22cds,recommendedSupply,1,보풀 제거용 부드러운 브러시
+samsung-dv90f22cds,recommendedSupply,2,표면이 거칠지 않은 극세사 천
+samsung-dv90f22cds,caution,1,청소 전에는 전원 플러그를 빼세요.
+samsung-dv90f22cds,caution,2,제품에 물을 직접 뿌리지 마세요.
+samsung-dv90f22cds,caution,3,열교환기 핀과 내부 부품을 임의로 분리하지 마세요.
+samsung-dv90f22cds,caution,4,젖은 필터를 장착하지 마세요.
+samsung-dv90f22cds,keyword,1,건조기
+samsung-dv90f22cds,keyword,2,보풀필터
+samsung-dv90f22cds,keyword,3,열교환기
+samsung-dv90f22cds,keyword,4,습도센서
+samsung-dv90f22cds,keyword,5,DV90F22CDS
+samsung-dv90f22cds,keyword,6,Bespoke AI
+samsung-dv90f22cds,modelFeature,1,22kg
+samsung-dv90f22cds,modelFeature,2,177.8mm LCD
+samsung-dv90f22cds,modelFeature,3,Bespoke AI
+samsung-vs28d950acb,supply,1,부드러운 천
+samsung-vs28d950acb,supply,2,부드러운 솔
+samsung-vs28d950acb,recommendedSupply,1,브러시 이물질 제거용 청소 도구
+samsung-vs28d950acb,recommendedSupply,2,표면이 거칠지 않은 극세사 천
+samsung-vs28d950acb,caution,1,청소 전에는 전원을 끄고 충전기에서 분리하세요.
+samsung-vs28d950acb,caution,2,제품과 충전기에 물을 직접 뿌리지 마세요.
+samsung-vs28d950acb,caution,3,모터·배터리·전기 부품을 임의로 분리하지 마세요.
+samsung-vs28d950acb,caution,4,세척한 필터가 완전히 마르기 전에 장착하지 마세요.
+samsung-vs28d950acb,keyword,1,청소기
+samsung-vs28d950acb,keyword,2,먼지통
+samsung-vs28d950acb,keyword,3,필터
+samsung-vs28d950acb,keyword,4,브러시
+samsung-vs28d950acb,keyword,5,청정스테이션
+samsung-vs28d950acb,keyword,6,VS28D950ACB
+samsung-vs28d950acb,keyword,7,Bespoke AI 제트 Lite
+samsung-vs28d950acb,modelFeature,1,280W
+samsung-vs28d950acb,modelFeature,2,AI 제트 Lite
+samsung-vs28d950acb,modelFeature,3,무선 스틱
+samsung-vs90f40cnk,supply,1,부드러운 천
+samsung-vs90f40cnk,supply,2,부드러운 솔
+samsung-vs90f40cnk,recommendedSupply,1,브러시 이물질 제거용 청소 도구
+samsung-vs90f40cnk,recommendedSupply,2,표면이 거칠지 않은 극세사 천
+samsung-vs90f40cnk,caution,1,청소 전에는 전원을 끄고 충전기에서 분리하세요.
+samsung-vs90f40cnk,caution,2,제품과 충전기에 물을 직접 뿌리지 마세요.
+samsung-vs90f40cnk,caution,3,모터·배터리·전기 부품을 임의로 분리하지 마세요.
+samsung-vs90f40cnk,caution,4,세척한 필터가 완전히 마르기 전에 장착하지 마세요.
+samsung-vs90f40cnk,keyword,1,청소기
+samsung-vs90f40cnk,keyword,2,먼지통
+samsung-vs90f40cnk,keyword,3,필터
+samsung-vs90f40cnk,keyword,4,브러시
+samsung-vs90f40cnk,keyword,5,청정스테이션
+samsung-vs90f40cnk,keyword,6,VS90F40CNK
+samsung-vs90f40cnk,keyword,7,Bespoke AI 제트
+samsung-vs90f40cnk,modelFeature,1,400W
+samsung-vs90f40cnk,modelFeature,2,펫브러시 패키지
+samsung-vs90f40cnk,modelFeature,3,AI 제트
+samsung-vs90f40csk,supply,1,부드러운 천
+samsung-vs90f40csk,supply,2,부드러운 솔
+samsung-vs90f40csk,recommendedSupply,1,브러시 이물질 제거용 청소 도구
+samsung-vs90f40csk,recommendedSupply,2,표면이 거칠지 않은 극세사 천
+samsung-vs90f40csk,caution,1,청소 전에는 전원을 끄고 충전기에서 분리하세요.
+samsung-vs90f40csk,caution,2,제품과 충전기에 물을 직접 뿌리지 마세요.
+samsung-vs90f40csk,caution,3,모터·배터리·전기 부품을 임의로 분리하지 마세요.
+samsung-vs90f40csk,caution,4,세척한 필터가 완전히 마르기 전에 장착하지 마세요.
+samsung-vs90f40csk,keyword,1,청소기
+samsung-vs90f40csk,keyword,2,먼지통
+samsung-vs90f40csk,keyword,3,필터
+samsung-vs90f40csk,keyword,4,브러시
+samsung-vs90f40csk,keyword,5,청정스테이션
+samsung-vs90f40csk,keyword,6,VS90F40CSK
+samsung-vs90f40csk,keyword,7,Bespoke AI 제트
+samsung-vs90f40csk,modelFeature,1,400W
+samsung-vs90f40csk,modelFeature,2,AI 제트
+samsung-vs90f40csk,modelFeature,3,무선 스틱

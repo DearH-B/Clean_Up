@@ -1,1 +1,243 @@
-[]
+[
+  {
+    "categoryName": "에어컨",
+    "brand": "삼성전자",
+    "modelName": "AF60F17D11WRT",
+    "displayName": "AI Q9000 56.9/18.7㎡ (리모컨 포함)",
+    "releaseYear": 2025,
+    "imageUrl": "https://images.samsung.com/kdp/goods/2024/12/30/436761a4-4fca-440a-8987-4a14a0e8a110.png",
+    "productUrl": "https://www.samsung.com/sec/air-conditioners/package-af60f17d11wrt-d2c/AF60F17D11WRT/",
+    "features": [
+      "56.9/18.7㎡",
+      "스탠드형+벽걸이형",
+      "리모컨 포함"
+    ],
+    "sourceCheckedAt": "2026-06-13",
+    "reviewStatus": "verified"
+  },
+  {
+    "categoryName": "에어컨",
+    "brand": "삼성전자",
+    "modelName": "AF70F19D11BRT",
+    "displayName": "Bespoke AI 무풍 클래식 62.6/18.7㎡ (리모컨 포함)",
+    "releaseYear": 2025,
+    "imageUrl": "https://images.samsung.com/kdp/goods/2024/12/30/c5d96b47-45b3-4c9e-85ea-40f05f32f217.png",
+    "productUrl": "https://www.samsung.com/sec/air-conditioners/package-af70f19d11brt-d2c/AF70F19D11BRT/",
+    "features": [
+      "62.6/18.7㎡",
+      "무풍 클래식",
+      "리모컨 포함"
+    ],
+    "sourceCheckedAt": "2026-06-13",
+    "reviewStatus": "verified"
+  },
+  {
+    "categoryName": "에어컨",
+    "brand": "삼성전자",
+    "modelName": "AF90H19D35WRT",
+    "displayName": "Bespoke AI 무풍콤보 갤러리 프로 청정 62.6/18.7㎡",
+    "releaseYear": 2026,
+    "imageUrl": "https://images.samsung.com/kdp/goods/2026/02/09/4afb9a68-dbdf-4f85-93c1-4bab95c4268a.png",
+    "productUrl": "https://www.samsung.com/sec/air-conditioners/package-af90h19d35wrt-d2c/AF90H19D35WRT/",
+    "features": [
+      "62.6/18.7㎡",
+      "무풍콤보",
+      "청정 기능"
+    ],
+    "sourceCheckedAt": "2026-06-13",
+    "reviewStatus": "verified"
+  },
+  {
+    "categoryName": "공기청정기",
+    "brand": "삼성전자",
+    "modelName": "AP90H10198UDD",
+    "displayName": "Infinite AI 공기청정기 (100㎡, 리유저블 필터)",
+    "releaseYear": 2026,
+    "imageUrl": "https://images.samsung.com/kdp/static/pcd/air-cleaners/re/tip_table_pro01_v2.png",
+    "productUrl": "https://www.samsung.com/sec/air-cleaner/air-purifier-ap90h10198dd-d2c/AP90H10198UDD/",
+    "features": [
+      "100㎡",
+      "리유저블 필터",
+      "AI+ 청정",
+      "UV LED 살균"
+    ],
+    "sourceCheckedAt": "2026-06-13",
+    "reviewStatus": "verified"
+  },
+  {
+    "categoryName": "공기청정기",
+    "brand": "삼성전자",
+    "modelName": "AP90H03163UGD",
+    "displayName": "Infinite AI 공기청정기 (33㎡, S 필터)",
+    "releaseYear": 2026,
+    "imageUrl": "https://images.samsung.com/kdp/static/pcd/air-cleaners/re/tip_table_pro04_v2.png",
+    "productUrl": "https://www.samsung.com/sec/air-cleaner/air-purifier-ap90h03163gd-d2c/AP90H03163UGD/",
+    "features": [
+      "33㎡",
+      "S 필터",
+      "AI+ 청정",
+      "UV LED 살균"
+    ],
+    "sourceCheckedAt": "2026-06-13",
+    "reviewStatus": "verified"
+  },
+  {
+    "categoryName": "공기청정기",
+    "brand": "삼성전자",
+    "modelName": "AP70F06103RVD",
+    "displayName": "블루스카이 5500 (60㎡)",
+    "releaseYear": 2025,
+    "imageUrl": "https://images.samsung.com/kdp/static/pcd/air-cleaners/re/tip_table_pro03_v3.png",
+    "productUrl": "https://www.samsung.com/sec/air-cleaner/air-purifier-ap70f06103rd-d2c/AP70F06103RVD/",
+    "features": [
+      "60㎡",
+      "AI 청정",
+      "숯 탈취 필터"
+    ],
+    "sourceCheckedAt": "2026-06-13",
+    "reviewStatus": "verified"
+  },
+  {
+    "categoryName": "식기세척기",
+    "brand": "삼성전자",
+    "modelName": "DW80F71Y1UEWS",
+    "displayName": "Bespoke AI 식기세척기 빌트인 12인용",
+    "releaseYear": 2025,
+    "imageUrl": "https://images.samsung.com/kdp/goods/2025/02/27/7d393411-e6dd-4e69-8e8d-50c8d699548c.png",
+    "productUrl": "https://www.samsung.com/sec/dishwashers/built-in-dw80f71y1uews-d2c/DW80F71Y1UEWS/",
+    "features": [
+      "12인용",
+      "빌트인",
+      "Bespoke AI"
+    ],
+    "sourceCheckedAt": "2026-06-13",
+    "reviewStatus": "verified"
+  },
+  {
+    "categoryName": "식기세척기",
+    "brand": "삼성전자",
+    "modelName": "DW90F79F1USWS",
+    "displayName": "Bespoke AI 식기세척기 빌트인 14인용 (필터 내장형, 컵 맞춤 세척)",
+    "releaseYear": 2025,
+    "imageUrl": "https://images.samsung.com/kdp/goods/2025/02/18/3d64e9e0-7528-404e-9dad-b502f13c817e.png",
+    "productUrl": "https://www.samsung.com/sec/dishwashers/built-in-dw90f79f1usws-d2c/DW90F79F1USWS/",
+    "features": [
+      "14인용",
+      "필터 내장형",
+      "컵 맞춤 세척"
+    ],
+    "sourceCheckedAt": "2026-06-13",
+    "reviewStatus": "verified"
+  },
+  {
+    "categoryName": "식기세척기",
+    "brand": "삼성전자",
+    "modelName": "DW80F73Y1UEWS",
+    "displayName": "Bespoke AI 식기세척기 빌트인 14인용",
+    "releaseYear": 2025,
+    "imageUrl": "https://images.samsung.com/kdp/goods/2025/02/27/b8d46c23-55c5-4b60-9cc8-4a8450d9ca9f.png",
+    "productUrl": "https://www.samsung.com/sec/dishwashers/built-in-dw80f73y1uews-d2c/DW80F73Y1UEWS/",
+    "features": [
+      "14인용",
+      "빌트인",
+      "Bespoke AI"
+    ],
+    "sourceCheckedAt": "2026-06-13",
+    "reviewStatus": "verified"
+  },
+  {
+    "categoryName": "건조기",
+    "brand": "삼성전자",
+    "modelName": "DV21DG8200BV",
+    "displayName": "AI 건조기 21kg",
+    "releaseYear": 2024,
+    "imageUrl": "https://images.samsung.com/kdp/goods/2024/12/03/a0c41801-d60d-4ef3-9c2a-6e6ccd2842c7.png",
+    "productUrl": "https://www.samsung.com/sec/dryers/dryer-dv21dg8200bv-d2c/DV21DG8200BV/",
+    "features": [
+      "21kg",
+      "AI 건조"
+    ],
+    "sourceCheckedAt": "2026-06-13",
+    "reviewStatus": "verified"
+  },
+  {
+    "categoryName": "건조기",
+    "brand": "삼성전자",
+    "modelName": "DV80H20DDW",
+    "displayName": "Bespoke AI 건조기 20kg (71.1mm LCD+다이얼)",
+    "releaseYear": 2026,
+    "imageUrl": "https://images.samsung.com/kdp/goods/2026/01/28/ce9c2ae7-37ba-4f97-a8d3-7cefe42d86c2.png",
+    "productUrl": "https://www.samsung.com/sec/dryers/dryer-dv80h20ddw-d2c/DV80H20DDW/",
+    "features": [
+      "20kg",
+      "71.1mm LCD",
+      "다이얼"
+    ],
+    "sourceCheckedAt": "2026-06-13",
+    "reviewStatus": "verified"
+  },
+  {
+    "categoryName": "건조기",
+    "brand": "삼성전자",
+    "modelName": "DV90F22CDS",
+    "displayName": "Bespoke AI 건조기 22kg (177.8mm LCD)",
+    "releaseYear": 2025,
+    "imageUrl": "https://images.samsung.com/kdp/goods/2025/04/02/bc17e027-c7c5-444a-8584-ca9bc27cab65.png",
+    "productUrl": "https://www.samsung.com/sec/dryers/dryer-dv90f22cds-d2c/DV90F22CDS/",
+    "features": [
+      "22kg",
+      "177.8mm LCD",
+      "Bespoke AI"
+    ],
+    "sourceCheckedAt": "2026-06-13",
+    "reviewStatus": "verified"
+  },
+  {
+    "categoryName": "청소기",
+    "brand": "삼성전자",
+    "modelName": "VS28D950ACB",
+    "displayName": "Bespoke AI 제트 Lite 280W",
+    "releaseYear": 2024,
+    "imageUrl": "https://images.samsung.com/kdp/goods/2024/11/25/e6ac0c3b-e6a3-4b3e-a769-3a6d39a1e3e1.png",
+    "productUrl": "https://www.samsung.com/sec/vacuum-cleaners/bespoke-jet-vs28d950ac-d2c/VS28D950ACB/",
+    "features": [
+      "280W",
+      "AI 제트 Lite",
+      "무선 스틱"
+    ],
+    "sourceCheckedAt": "2026-06-13",
+    "reviewStatus": "verified"
+  },
+  {
+    "categoryName": "청소기",
+    "brand": "삼성전자",
+    "modelName": "VS90F40CNK",
+    "displayName": "Bespoke AI 제트 400W 펫브러시 패키지",
+    "releaseYear": 2026,
+    "imageUrl": "https://images.samsung.com/kdp/goods/2026/05/19/cf7dd3d6-dac5-483e-8196-96ecd2493667.png",
+    "productUrl": "https://www.samsung.com/sec/vacuum-cleaners/bespoke-jet-vs90f40cn-d2c/VS90F40CNK/",
+    "features": [
+      "400W",
+      "펫브러시 패키지",
+      "AI 제트"
+    ],
+    "sourceCheckedAt": "2026-06-13",
+    "reviewStatus": "verified"
+  },
+  {
+    "categoryName": "청소기",
+    "brand": "삼성전자",
+    "modelName": "VS90F40CSK",
+    "displayName": "Bespoke AI 제트 400W",
+    "releaseYear": 2026,
+    "imageUrl": "https://images.samsung.com/kdp/goods/2026/05/19/c4b87462-cbbc-4bda-a55d-db126895e7e9.png",
+    "productUrl": "https://www.samsung.com/sec/vacuum-cleaners/bespoke-jet-vs90f40cs-d2c/VS90F40CSK/",
+    "features": [
+      "400W",
+      "AI 제트",
+      "무선 스틱"
+    ],
+    "sourceCheckedAt": "2026-06-13",
+    "reviewStatus": "verified"
+  }
+]

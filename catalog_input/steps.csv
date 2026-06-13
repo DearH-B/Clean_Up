@@ -1,3 +1,90 @@
-productId,order,text,sourceIds
+﻿productId,order,text,sourceIds
 example-product-id,1,전원 플러그를 빼고 제품이 멈춘 것을 확인해요.,example-product-id-manual
 example-product-id,2,설명서에 따라 사용자가 분리할 수 있는 부품만 관리해요.,example-product-id-manual
+samsung-af60f17d11wrt,1,운전을 정지하고 전원 플러그를 뺀 뒤 제품이 완전히 멈춘 것을 확인해요.,samsung-af60f17d11wrt-manual
+samsung-af60f17d11wrt,2,공식 설명서에 따라 사용자가 관리할 수 있는 필터만 분리해요.,samsung-af60f17d11wrt-manual
+samsung-af60f17d11wrt,3,필터의 먼지를 제거하고 물세척이 허용된 필터만 흐르는 물로 세척해요.,samsung-af60f17d11wrt-manual
+samsung-af60f17d11wrt,4,필터를 직사광선을 피해 완전히 말리고 흡입구와 외관은 부드러운 천으로 닦아요.,samsung-af60f17d11wrt-manual
+samsung-af60f17d11wrt,5,필터를 원래 위치에 장착하고 실외기 주변의 통풍을 막는 물건이 없는지 확인해요.,samsung-af60f17d11wrt-manual
+samsung-af70f19d11brt,1,운전을 정지하고 전원 플러그를 뺀 뒤 제품이 완전히 멈춘 것을 확인해요.,samsung-af70f19d11brt-manual
+samsung-af70f19d11brt,2,공식 설명서에 따라 사용자가 관리할 수 있는 필터만 분리해요.,samsung-af70f19d11brt-manual
+samsung-af70f19d11brt,3,필터의 먼지를 제거하고 물세척이 허용된 필터만 흐르는 물로 세척해요.,samsung-af70f19d11brt-manual
+samsung-af70f19d11brt,4,필터를 직사광선을 피해 완전히 말리고 흡입구와 외관은 부드러운 천으로 닦아요.,samsung-af70f19d11brt-manual
+samsung-af70f19d11brt,5,필터를 원래 위치에 장착하고 실외기 주변의 통풍을 막는 물건이 없는지 확인해요.,samsung-af70f19d11brt-manual
+samsung-af90h19d35wrt,1,운전을 정지하고 전원 플러그를 뺀 뒤 제품이 완전히 멈춘 것을 확인해요.,samsung-af90h19d35wrt-manual
+samsung-af90h19d35wrt,2,공식 설명서에 따라 사용자가 관리할 수 있는 필터만 분리해요.,samsung-af90h19d35wrt-manual
+samsung-af90h19d35wrt,3,필터의 먼지를 제거하고 물세척이 허용된 필터만 흐르는 물로 세척해요.,samsung-af90h19d35wrt-manual
+samsung-af90h19d35wrt,4,필터를 직사광선을 피해 완전히 말리고 흡입구와 외관은 부드러운 천으로 닦아요.,samsung-af90h19d35wrt-manual
+samsung-af90h19d35wrt,5,필터를 원래 위치에 장착하고 실외기 주변의 통풍을 막는 물건이 없는지 확인해요.,samsung-af90h19d35wrt-manual
+samsung-ap90h10198udd,1,운전을 정지하고 전원 플러그를 뺀 뒤 제품이 완전히 멈춘 것을 확인해요.,samsung-ap90h10198udd-manual
+samsung-ap90h10198udd,2,흡입구와 배출구의 먼지를 진공청소기나 부드러운 솔로 제거해요.,samsung-ap90h10198udd-manual
+samsung-ap90h10198udd,3,공식 설명서에 따라 사용자가 관리할 수 있는 필터만 분리해요.,samsung-ap90h10198udd-manual
+samsung-ap90h10198udd,4,물세척이 허용된 필터만 세척하고 그늘에서 완전히 말려요.,samsung-ap90h10198udd-manual
+samsung-ap90h10198udd,5,물세척이 금지된 집진·탈취 필터는 오염 상태와 교체 알림에 따라 교체해요.,samsung-ap90h10198udd-manual
+samsung-ap90h10198udd,6,필터를 원래 위치에 장착하고 필요한 경우 필터 알림을 초기화해요.,samsung-ap90h10198udd-manual
+samsung-ap90h03163ugd,1,운전을 정지하고 전원 플러그를 뺀 뒤 제품이 완전히 멈춘 것을 확인해요.,samsung-ap90h03163ugd-manual
+samsung-ap90h03163ugd,2,흡입구와 배출구의 먼지를 진공청소기나 부드러운 솔로 제거해요.,samsung-ap90h03163ugd-manual
+samsung-ap90h03163ugd,3,공식 설명서에 따라 사용자가 관리할 수 있는 필터만 분리해요.,samsung-ap90h03163ugd-manual
+samsung-ap90h03163ugd,4,물세척이 허용된 필터만 세척하고 그늘에서 완전히 말려요.,samsung-ap90h03163ugd-manual
+samsung-ap90h03163ugd,5,물세척이 금지된 집진·탈취 필터는 오염 상태와 교체 알림에 따라 교체해요.,samsung-ap90h03163ugd-manual
+samsung-ap90h03163ugd,6,필터를 원래 위치에 장착하고 필요한 경우 필터 알림을 초기화해요.,samsung-ap90h03163ugd-manual
+samsung-ap70f06103rvd,1,운전을 정지하고 전원 플러그를 뺀 뒤 제품이 완전히 멈춘 것을 확인해요.,samsung-ap70f06103rvd-manual
+samsung-ap70f06103rvd,2,흡입구와 배출구의 먼지를 진공청소기나 부드러운 솔로 제거해요.,samsung-ap70f06103rvd-manual
+samsung-ap70f06103rvd,3,공식 설명서에 따라 사용자가 관리할 수 있는 필터만 분리해요.,samsung-ap70f06103rvd-manual
+samsung-ap70f06103rvd,4,물세척이 허용된 필터만 세척하고 그늘에서 완전히 말려요.,samsung-ap70f06103rvd-manual
+samsung-ap70f06103rvd,5,물세척이 금지된 집진·탈취 필터는 오염 상태와 교체 알림에 따라 교체해요.,samsung-ap70f06103rvd-manual
+samsung-ap70f06103rvd,6,필터를 원래 위치에 장착하고 필요한 경우 필터 알림을 초기화해요.,samsung-ap70f06103rvd-manual
+samsung-dw80f71y1uews,1,작동을 멈추고 전원을 끈 뒤 내부가 충분히 식었는지 확인해요.,samsung-dw80f71y1uews-manual
+samsung-dw80f71y1uews,2,하단 필터를 공식 설명서의 방향대로 분리하고 음식물과 이물질을 제거해요.,samsung-dw80f71y1uews-manual
+samsung-dw80f71y1uews,3,세척이 허용된 필터를 흐르는 물과 부드러운 솔로 닦고 원래 위치에 단단히 장착해요.,samsung-dw80f71y1uews-manual
+samsung-dw80f71y1uews,4,분사 노즐의 구멍이 막히지 않았는지 확인하고 사용자가 분리할 수 있는 노즐만 관리해요.,samsung-dw80f71y1uews-manual
+samsung-dw80f71y1uews,5,도어 가장자리와 패킹을 부드러운 천으로 닦고 내부 물기를 말려요.,samsung-dw80f71y1uews-manual
+samsung-dw80f71y1uews,6,제품이 안내하는 전용 관리 코스와 허용된 세정제만 사용해 내부를 관리해요.,samsung-dw80f71y1uews-manual
+samsung-dw90f79f1usws,1,작동을 멈추고 전원을 끈 뒤 내부가 충분히 식었는지 확인해요.,samsung-dw90f79f1usws-manual
+samsung-dw90f79f1usws,2,하단 필터를 공식 설명서의 방향대로 분리하고 음식물과 이물질을 제거해요.,samsung-dw90f79f1usws-manual
+samsung-dw90f79f1usws,3,세척이 허용된 필터를 흐르는 물과 부드러운 솔로 닦고 원래 위치에 단단히 장착해요.,samsung-dw90f79f1usws-manual
+samsung-dw90f79f1usws,4,분사 노즐의 구멍이 막히지 않았는지 확인하고 사용자가 분리할 수 있는 노즐만 관리해요.,samsung-dw90f79f1usws-manual
+samsung-dw90f79f1usws,5,도어 가장자리와 패킹을 부드러운 천으로 닦고 내부 물기를 말려요.,samsung-dw90f79f1usws-manual
+samsung-dw90f79f1usws,6,제품이 안내하는 전용 관리 코스와 허용된 세정제만 사용해 내부를 관리해요.,samsung-dw90f79f1usws-manual
+samsung-dw80f73y1uews,1,작동을 멈추고 전원을 끈 뒤 내부가 충분히 식었는지 확인해요.,samsung-dw80f73y1uews-manual
+samsung-dw80f73y1uews,2,하단 필터를 공식 설명서의 방향대로 분리하고 음식물과 이물질을 제거해요.,samsung-dw80f73y1uews-manual
+samsung-dw80f73y1uews,3,세척이 허용된 필터를 흐르는 물과 부드러운 솔로 닦고 원래 위치에 단단히 장착해요.,samsung-dw80f73y1uews-manual
+samsung-dw80f73y1uews,4,분사 노즐의 구멍이 막히지 않았는지 확인하고 사용자가 분리할 수 있는 노즐만 관리해요.,samsung-dw80f73y1uews-manual
+samsung-dw80f73y1uews,5,도어 가장자리와 패킹을 부드러운 천으로 닦고 내부 물기를 말려요.,samsung-dw80f73y1uews-manual
+samsung-dw80f73y1uews,6,제품이 안내하는 전용 관리 코스와 허용된 세정제만 사용해 내부를 관리해요.,samsung-dw80f73y1uews-manual
+samsung-dv21dg8200bv,1,작동을 멈추고 전원 플러그를 뺀 뒤 제품이 충분히 식었는지 확인해요.,samsung-dv21dg8200bv-manual
+samsung-dv21dg8200bv,2,보풀 필터를 분리해 먼지와 보풀을 제거해요.,samsung-dv21dg8200bv-manual
+samsung-dv21dg8200bv,3,물세척이 허용된 필터만 흐르는 물로 씻고 완전히 말린 뒤 다시 장착해요.,samsung-dv21dg8200bv-manual
+samsung-dv21dg8200bv,4,드럼 내부와 습도 센서를 부드러운 마른 천으로 닦아요.,samsung-dv21dg8200bv-manual
+samsung-dv21dg8200bv,5,열교환기 관리 방식은 모델별 공식 설명서를 확인하고 사용자가 접근 가능한 부분만 관리해요.,samsung-dv21dg8200bv-manual
+samsung-dv21dg8200bv,6,필터와 덮개가 정확히 장착됐는지 확인한 뒤 사용해요.,samsung-dv21dg8200bv-manual
+samsung-dv80h20ddw,1,작동을 멈추고 전원 플러그를 뺀 뒤 제품이 충분히 식었는지 확인해요.,samsung-dv80h20ddw-manual
+samsung-dv80h20ddw,2,보풀 필터를 분리해 먼지와 보풀을 제거해요.,samsung-dv80h20ddw-manual
+samsung-dv80h20ddw,3,물세척이 허용된 필터만 흐르는 물로 씻고 완전히 말린 뒤 다시 장착해요.,samsung-dv80h20ddw-manual
+samsung-dv80h20ddw,4,드럼 내부와 습도 센서를 부드러운 마른 천으로 닦아요.,samsung-dv80h20ddw-manual
+samsung-dv80h20ddw,5,열교환기 관리 방식은 모델별 공식 설명서를 확인하고 사용자가 접근 가능한 부분만 관리해요.,samsung-dv80h20ddw-manual
+samsung-dv80h20ddw,6,필터와 덮개가 정확히 장착됐는지 확인한 뒤 사용해요.,samsung-dv80h20ddw-manual
+samsung-dv90f22cds,1,작동을 멈추고 전원 플러그를 뺀 뒤 제품이 충분히 식었는지 확인해요.,samsung-dv90f22cds-manual
+samsung-dv90f22cds,2,보풀 필터를 분리해 먼지와 보풀을 제거해요.,samsung-dv90f22cds-manual
+samsung-dv90f22cds,3,물세척이 허용된 필터만 흐르는 물로 씻고 완전히 말린 뒤 다시 장착해요.,samsung-dv90f22cds-manual
+samsung-dv90f22cds,4,드럼 내부와 습도 센서를 부드러운 마른 천으로 닦아요.,samsung-dv90f22cds-manual
+samsung-dv90f22cds,5,열교환기 관리 방식은 모델별 공식 설명서를 확인하고 사용자가 접근 가능한 부분만 관리해요.,samsung-dv90f22cds-manual
+samsung-dv90f22cds,6,필터와 덮개가 정확히 장착됐는지 확인한 뒤 사용해요.,samsung-dv90f22cds-manual
+samsung-vs28d950acb,1,제품 전원을 끄고 충전기에서 분리한 뒤 분리형 배터리는 제품 안내에 따라 분리해요.,samsung-vs28d950acb-manual
+samsung-vs28d950acb,2,먼지통을 비우고 먼지가 날리지 않도록 내부 이물질을 제거해요.,samsung-vs28d950acb-manual
+samsung-vs28d950acb,3,공식 설명서에서 물세척이 허용된 먼지통과 필터만 흐르는 물로 세척해요.,samsung-vs28d950acb-manual
+samsung-vs28d950acb,4,세척한 부품을 통풍이 잘되는 그늘에서 완전히 말린 뒤 장착해요.,samsung-vs28d950acb-manual
+samsung-vs28d950acb,5,브러시에 감긴 머리카락과 실을 제거하고 회전부가 부드럽게 움직이는지 확인해요.,samsung-vs28d950acb-manual
+samsung-vs28d950acb,6,청정스테이션의 먼지봉투와 필터는 알림과 공식 교체 안내에 따라 관리해요.,samsung-vs28d950acb-manual
+samsung-vs90f40cnk,1,제품 전원을 끄고 충전기에서 분리한 뒤 분리형 배터리는 제품 안내에 따라 분리해요.,samsung-vs90f40cnk-manual
+samsung-vs90f40cnk,2,먼지통을 비우고 먼지가 날리지 않도록 내부 이물질을 제거해요.,samsung-vs90f40cnk-manual
+samsung-vs90f40cnk,3,공식 설명서에서 물세척이 허용된 먼지통과 필터만 흐르는 물로 세척해요.,samsung-vs90f40cnk-manual
+samsung-vs90f40cnk,4,세척한 부품을 통풍이 잘되는 그늘에서 완전히 말린 뒤 장착해요.,samsung-vs90f40cnk-manual
+samsung-vs90f40cnk,5,브러시에 감긴 머리카락과 실을 제거하고 회전부가 부드럽게 움직이는지 확인해요.,samsung-vs90f40cnk-manual
+samsung-vs90f40cnk,6,청정스테이션의 먼지봉투와 필터는 알림과 공식 교체 안내에 따라 관리해요.,samsung-vs90f40cnk-manual
+samsung-vs90f40csk,1,제품 전원을 끄고 충전기에서 분리한 뒤 분리형 배터리는 제품 안내에 따라 분리해요.,samsung-vs90f40csk-manual
+samsung-vs90f40csk,2,먼지통을 비우고 먼지가 날리지 않도록 내부 이물질을 제거해요.,samsung-vs90f40csk-manual
+samsung-vs90f40csk,3,공식 설명서에서 물세척이 허용된 먼지통과 필터만 흐르는 물로 세척해요.,samsung-vs90f40csk-manual
+samsung-vs90f40csk,4,세척한 부품을 통풍이 잘되는 그늘에서 완전히 말린 뒤 장착해요.,samsung-vs90f40csk-manual
+samsung-vs90f40csk,5,브러시에 감긴 머리카락과 실을 제거하고 회전부가 부드럽게 움직이는지 확인해요.,samsung-vs90f40csk-manual
+samsung-vs90f40csk,6,청정스테이션의 먼지봉투와 필터는 알림과 공식 교체 안내에 따라 관리해요.,samsung-vs90f40csk-manual
