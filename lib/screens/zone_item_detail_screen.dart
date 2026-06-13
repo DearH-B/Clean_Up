@@ -121,12 +121,6 @@ class _ZoneItemDetailScreenState extends State<ZoneItemDetailScreen> {
     return ListView(
       padding: const EdgeInsets.fromLTRB(16, 18, 16, 32),
       children: [
-        if (_item.modelImageUrl?.isNotEmpty == true) ...[
-          _GuideScopeNotice(
-            hasOfficialManual: _item.officialManualUrl?.isNotEmpty == true,
-          ),
-          const SizedBox(height: 14),
-        ],
         Text(_item.summary),
         if (_item.guideStatus != null) ...[
           const SizedBox(height: 14),
@@ -765,39 +759,6 @@ class _ProductHeader extends StatelessWidget {
           ),
           const SizedBox(height: 14),
           _ScheduleCard(item: item, onComplete: onComplete),
-        ],
-      ),
-    );
-  }
-}
-
-class _GuideScopeNotice extends StatelessWidget {
-  const _GuideScopeNotice({required this.hasOfficialManual});
-
-  final bool hasOfficialManual;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(12),
-      decoration: BoxDecoration(
-        color: Theme.of(context).colorScheme.surfaceContainerLow,
-        border: const Border(
-          left: BorderSide(color: AppColors.coral, width: 4),
-        ),
-      ),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const Icon(Icons.info_outline, size: 20),
-          const SizedBox(width: 8),
-          Expanded(
-            child: Text(
-              hasOfficialManual
-                  ? '정확한 모델과 공식 설명서를 확인했어요. 해당 기능이 있는 경우에만 기능별 관리법을 적용하세요.'
-                  : '제품은 정확한 모델로 확인했어요. 아래 관리법은 시리즈 공통 안내예요.',
-            ),
-          ),
         ],
       ),
     );
