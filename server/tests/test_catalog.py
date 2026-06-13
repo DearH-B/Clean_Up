@@ -102,6 +102,21 @@ class ProductCatalogTest(unittest.TestCase):
         self.assertTrue(all(item.imageUrl for item in results))
         self.assertTrue(all(item.features for item in results))
 
+    def test_lists_verified_washer_models_with_images(self) -> None:
+        results = self.catalog.models(category="세탁기", brand="삼성전자")
+
+        self.assertEqual(
+            {item.modelName for item in results},
+            {"WF25CB8895BW", "WF25DG8650BW", "WF25DG8250BW"},
+        )
+        self.assertTrue(all(item.imageUrl for item in results))
+        for model in {item.modelName for item in results}:
+            product = self.catalog.search(model)[0]
+            self.assertEqual(product.reviewStatus.value, "verified")
+            self.assertIn("downloadcenter.samsung.com", product.officialManualUrl)
+            self.assertIn("배수필터", " ".join(product.steps))
+            self.assertIn("무세제통세척", " ".join(product.steps))
+
     def test_filters_model_search(self) -> None:
         results = self.catalog.models(
             category="TV",
@@ -122,12 +137,19 @@ class ReleaseValidatorTest(unittest.TestCase):
             today=date(2026, 6, 13),
         )
 
-    def test_validates_three_refrigerators_individually(self) -> None:
+    def test_validates_six_release_products_individually(self) -> None:
         report = self.validator.validate()
 
         self.assertEqual(
             {product.model_name for product in report.products},
-            {"RM70F63R2A", "RM80F91H1W", "RM70F90M1ZD"},
+            {
+                "RM70F63R2A",
+                "RM80F91H1W",
+                "RM70F90M1ZD",
+                "WF25CB8895BW",
+                "WF25DG8650BW",
+                "WF25DG8250BW",
+            },
         )
         for product in report.products:
             automated = {
@@ -172,8 +194,20 @@ class ReleaseValidatorTest(unittest.TestCase):
             "approved",
         )
         self.assertTrue(
-            all(product.decision.value == "approved" for product in report.products)
+            all(
+                product.decision.value == "approved"
+                for product in report.products
+                if product.model_name.startswith("RM")
+            )
         )
+        washer_decisions = {
+            product.model_name: product.decision.value
+            for product in report.products
+            if product.model_name.startswith("WF")
+        }
+        self.assertEqual(washer_decisions["WF25CB8895BW"], "approved")
+        self.assertEqual(washer_decisions["WF25DG8650BW"], "blocked")
+        self.assertEqual(washer_decisions["WF25DG8250BW"], "blocked")
 
     def test_markdown_report_names_blockers(self) -> None:
         markdown = render_markdown(self.validator.validate())
@@ -183,6 +217,7 @@ class ReleaseValidatorTest(unittest.TestCase):
         self.assertIn("RM70F63R2A", markdown)
         self.assertIn("RM80F91H1W", markdown)
         self.assertIn("RM70F90M1ZD", markdown)
+        self.assertIn("WF25CB8895BW", markdown)
 
 
 class SubmissionStoreTest(unittest.TestCase):

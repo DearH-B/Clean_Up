@@ -130,6 +130,27 @@ void main() {
     }
   });
 
+  test('삼성 세탁기 3개 모델은 공식 설명서가 연결된 검수 카탈로그다', () {
+    const models = ['WF25CB8895BW', 'WF25DG8650BW', 'WF25DG8250BW'];
+
+    for (final modelName in models) {
+      final product = findCatalogEntry(
+        categoryName: '세탁기',
+        brand: '삼성전자',
+        modelName: modelName,
+      );
+
+      expect(product, isNotNull, reason: modelName);
+      expect(product!.reviewStatus, 'verified');
+      expect(product.matchLevelLabel, '공식 설명서 확인 모델');
+      expect(product.officialManualUrl, contains('downloadcenter.samsung.com'));
+      expect(product.imageUrl, contains('images.samsung.com'));
+      expect(product.releaseYear, isNotNull);
+      expect(product.steps.join(' '), contains('배수필터'));
+      expect(product.steps.join(' '), contains('무세제통세척'));
+    }
+  });
+
   test('RM80F91H1W만 확인된 UV 청정탈취 필터를 제공한다', () {
     final hybrid = findCatalogEntry(
       categoryName: '냉장고',
@@ -1017,6 +1038,7 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.text('RM70F63R2A'), findsWidgets);
+    expect(find.text('공식 관리법 준비됨'), findsWidgets);
     final targetModelCard = find
         .ancestor(
           of: find.text('RM70F63R2A').first,

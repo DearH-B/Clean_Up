@@ -1,0 +1,31 @@
+{
+  "checkedAt": "2026-06-13",
+  "publisher": "삼성전자",
+  "models": [
+    {
+      "modelName": "WF25CB8895BW",
+      "releaseYear": 2023,
+      "supportUrl": "https://www.samsung.com/sec/support/model/WF25CB8895BW/",
+      "manualUrl": "https://downloadcenter.samsung.com/content/UM/202603/20260330081210316/OID63540_IB_WF8000CK-AD_BEST_SimpleUX_WF25CB8895_KO_260206.pdf"
+    },
+    {
+      "modelName": "WF25DG8650BW",
+      "releaseYear": 2025,
+      "supportUrl": "https://www.samsung.com/sec/support/model/WF25DG8650BW/",
+      "manualUrl": "https://downloadcenter.samsung.com/content/UM/202603/20260330082143525/OID83489_IB_WF8000D-MD_SimpleUX_KO_260206.pdf"
+    },
+    {
+      "modelName": "WF25DG8250BW",
+      "releaseYear": 2025,
+      "supportUrl": "https://www.samsung.com/sec/support/model/WF25DG8250BW/",
+      "manualUrl": "https://downloadcenter.samsung.com/content/UM/202603/20260330082650980/OID83684_IB_WF8000D-MD_KO_260206.pdf"
+    }
+  ],
+  "verifiedCareAreas": [
+    "세제함",
+    "도어와 고무 패킹",
+    "잔수 제거와 배수필터",
+    "무세제통세척",
+    "외관 직접 물 분사 금지"
+  ]
+}

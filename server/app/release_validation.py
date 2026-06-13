@@ -310,7 +310,7 @@ def render_markdown(report: ReleaseReport) -> str:
         ReleaseCheckStatus.notApplicable: "N/A",
     }
     lines = [
-        "# 냉장고 3종 출시 검증 보고서",
+        "# 제품 출시 검증 보고서",
         "",
         f"- 대상 릴리스: `{report.target_release}`",
         f"- 생성일: {report.generated_at.isoformat()}",

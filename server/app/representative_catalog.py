@@ -336,7 +336,115 @@ def representative_products() -> list[dict[str, Any]]:
             ],
             keywords=["김치냉장고", "김치플러스", "kimchi refrigerator", "삼성"],
         ),
+        *_verified_samsung_washers(),
     ]
+
+
+def _verified_samsung_washers() -> list[dict[str, Any]]:
+    models = [
+        (
+            "samsung-wf25cb8895bw",
+            "Bespoke AI 세탁기 25kg (올인원컨트롤)",
+            "WF25CB8895BW",
+            2023,
+            "드럼 · 25kg · 올인원컨트롤",
+            "https://images.samsung.com/kdp/goods/2023/01/16/77817fed-97aa-4f52-a0eb-3f11e19775d2.png?$450_N_PNG$",
+            "https://www.samsung.com/sec/support/model/WF25CB8895BW/",
+            "https://downloadcenter.samsung.com/content/UM/202603/20260330081210316/OID63540_IB_WF8000CK-AD_BEST_SimpleUX_WF25CB8895_KO_260206.pdf",
+            ["25kg", "자동 세제함", "오토 오픈 도어"],
+            ["세탁 용량: 25kg", "크기: 686 × 984 × 875mm", "무게: 104kg", "출시 연도: 2023년"],
+        ),
+        (
+            "samsung-wf25dg8650bw",
+            "AI 세탁기 25kg",
+            "WF25DG8650BW",
+            2025,
+            "드럼 · 25kg · 심플컨트롤",
+            "https://images.samsung.com/kdp/goods/2024/12/03/44ba347c-8feb-46de-b163-ee2926d98ef2.png?$450_N_PNG$",
+            "https://www.samsung.com/sec/support/model/WF25DG8650BW/",
+            "https://downloadcenter.samsung.com/content/UM/202603/20260330082143525/OID83489_IB_WF8000D-MD_SimpleUX_KO_260206.pdf",
+            ["25kg", "심플컨트롤", "무세제통세척+"],
+            ["세탁 용량: 25kg", "크기: 686 × 984 × 875mm", "무게: 98kg", "출시 연도: 2025년"],
+        ),
+        (
+            "samsung-wf25dg8250bw",
+            "AI 세탁기 25kg",
+            "WF25DG8250BW",
+            2025,
+            "드럼 · 25kg",
+            "https://images.samsung.com/kdp/goods/2025/01/03/7f1a3ccc-3e4b-435e-b98e-2dccc0fda7ef.png?$450_N_PNG$",
+            "https://www.samsung.com/sec/support/model/WF25DG8250BW/",
+            "https://downloadcenter.samsung.com/content/UM/202603/20260330082650980/OID83684_IB_WF8000D-MD_KO_260206.pdf",
+            ["25kg", "무세제통세척+", "화이트"],
+            ["세탁 용량: 25kg", "색상: 화이트", "출시 연도: 2025년"],
+        ),
+    ]
+    return [_verified_samsung_washer(*model) for model in models]
+
+
+def _verified_samsung_washer(
+    id: str,
+    name: str,
+    model: str,
+    year: int,
+    method: str,
+    image: str,
+    support: str,
+    manual: str,
+    features: list[str],
+    specs: list[str],
+) -> dict[str, Any]:
+    product_source = f"{id}-product"
+    manual_source = f"{id}-manual"
+    steps = [
+        "전원 플러그를 빼고 세탁조 안에 세탁물이 없는지 확인해요.",
+        "세제함을 설명서 순서대로 분리해 굳은 세제와 섬유유연제를 제거하고 완전히 말려 다시 끼워요.",
+        "도어 유리와 고무 패킹의 주름 사이에서 이물질을 제거한 뒤 부드러운 천으로 닦고 도어를 열어 말려요.",
+        "잔수 제거 호스로 물을 먼저 뺀 뒤 배수필터의 이물질을 제거하고 누수되지 않도록 정확히 다시 끼워요.",
+        "세탁조를 비운 상태에서 무세제통세척 코스를 실행하고 세제나 세탁물을 넣지 않아요.",
+    ]
+    return {
+        "id": id, "name": name, "type": "appliance", "categoryName": "세탁기",
+        "brand": "삼성전자", "manufacturer": "삼성전자", "modelName": model,
+        "seriesName": "삼성 드럼세탁기 25kg",
+        "summary": "세제함, 도어와 고무 패킹, 배수필터, 세탁조를 모델 설명서에 맞춰 관리해요.",
+        "frequency": "오염은 발견 즉시 · 세제함은 매주 확인 · 통세척 알림 시 실행",
+        "recurrenceDays": 0, "estimatedMinutes": 25, "productMethod": method,
+        "guideStatus": "정확한 모델과 공식 사용설명서를 확인했어요.",
+        "guideBasis": f"삼성전자 공식 지원 페이지와 {model} 사용자 매뉴얼을 2026년 6월 13일 교차 확인했어요.",
+        "guideSourceType": "official", "matchLevelLabel": "공식 설명서 확인 모델",
+        "sourceTitle": f"{name} 공식 지원 페이지", "sourceUrl": support,
+        "sourceCheckedAt": "2026-06-13",
+        "sources": [
+            {"id": product_source, "title": f"{name} 공식 지원 페이지", "url": support,
+             "type": "officialProduct", "publisher": "삼성전자", "checkedAt": "2026-06-13",
+             "supports": ["제품명", "모델명", "용량", "크기", "무게", "출시 연도", "대표 이미지"],
+             "isOfficial": True, "isActive": True},
+            {"id": manual_source, "title": f"{model} 사용자 매뉴얼", "url": manual,
+             "type": "officialManual", "publisher": "삼성전자", "checkedAt": "2026-06-13",
+             "supports": ["세제함 청소", "도어와 고무 패킹 관리", "배수필터 관리", "무세제통세척", "청소 안전사항"],
+             "isOfficial": True, "isActive": True},
+        ],
+        "specSourceIds": {spec.split(":", 1)[0].strip(): [product_source] for spec in specs},
+        "stepSourceIds": {str(index): [manual_source] for index in range(len(steps))},
+        "reviewHistory": [{"status": "verified", "reviewer": "catalog-editor",
+                           "reviewedAt": "2026-06-13",
+                           "note": "공식 지원 페이지와 해당 모델 사용자 매뉴얼의 자가 관리 범위를 확인함."}],
+        "productSpecs": specs,
+        "supplies": ["부드러운 천", "마른 수건", "작은 부드러운 솔", "낮은 물받이"],
+        "recommendedSupplies": ["부드러운 극세사 천", "작은 부드러운 솔", "낮은 물받이와 수건"],
+        "recommendedProducts": [],
+        "cautions": ["청소 전에는 전원 플러그를 빼세요.", "제품에 물을 직접 뿌리지 마세요.",
+                     "배수필터를 열기 전 세탁수가 식었는지 확인하고 잔수를 먼저 제거하세요.",
+                     "금속 수세미나 거친 도구를 사용하지 마세요.", "부품과 본체를 임의로 분리하지 마세요."],
+        "steps": steps, "keywords": [model, "삼성 세탁기", "드럼세탁기", "25kg", "무세제통세척"],
+        "reviewStatus": "verified", "reviewedBy": "catalog-editor",
+        "reviewNote": "공식 지원 페이지와 해당 모델 사용자 매뉴얼 확인.",
+        "officialManualUrl": manual, "supportUrl": support, "servicePhone": "1588-3366",
+        "releaseYear": year, "isDiscontinued": False, "imageUrl": image,
+        "modelFeatures": features, "consumables": [], "consumableDetails": [],
+        "installationType": "프론트 로드 드럼세탁기",
+    }
 
 
 def _product(

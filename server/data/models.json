@@ -72,12 +72,37 @@
     "categoryName": "세탁기",
     "brand": "삼성전자",
     "modelName": "WF25CB8895BW",
-    "displayName": "Bespoke AI 세탁기 25kg",
+    "displayName": "Bespoke AI 세탁기 25kg (올인원컨트롤)",
     "releaseYear": 2023,
-    "imageUrl": null,
+    "imageUrl": "https://images.samsung.com/kdp/goods/2023/01/16/77817fed-97aa-4f52-a0eb-3f11e19775d2.png?$450_N_PNG$",
     "productUrl": "https://www.samsung.com/sec/support/model/WF25CB8895BW/",
-    "sourceCheckedAt": "2026-06-12",
-    "reviewStatus": "reviewed"
+    "features": ["25kg", "자동 세제함", "오토 오픈 도어"],
+    "sourceCheckedAt": "2026-06-13",
+    "reviewStatus": "verified"
+  },
+  {
+    "categoryName": "세탁기",
+    "brand": "삼성전자",
+    "modelName": "WF25DG8650BW",
+    "displayName": "AI 세탁기 25kg (심플컨트롤)",
+    "releaseYear": 2025,
+    "imageUrl": "https://images.samsung.com/kdp/goods/2024/12/03/44ba347c-8feb-46de-b163-ee2926d98ef2.png?$450_N_PNG$",
+    "productUrl": "https://www.samsung.com/sec/support/model/WF25DG8650BW/",
+    "features": ["25kg", "심플컨트롤", "무세제통세척+"],
+    "sourceCheckedAt": "2026-06-13",
+    "reviewStatus": "verified"
+  },
+  {
+    "categoryName": "세탁기",
+    "brand": "삼성전자",
+    "modelName": "WF25DG8250BW",
+    "displayName": "AI 세탁기 25kg",
+    "releaseYear": 2025,
+    "imageUrl": "https://images.samsung.com/kdp/goods/2025/01/03/7f1a3ccc-3e4b-435e-b98e-2dccc0fda7ef.png?$450_N_PNG$",
+    "productUrl": "https://www.samsung.com/sec/support/model/WF25DG8250BW/",
+    "features": ["25kg", "무세제통세척+", "화이트"],
+    "sourceCheckedAt": "2026-06-13",
+    "reviewStatus": "verified"
   },
   {
     "categoryName": "전자레인지",

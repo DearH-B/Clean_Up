@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../data/visual_product_candidates.dart';
+import '../data/product_catalog.dart';
 import '../models/catalog_model_option.dart';
 import '../models/product_finder_result.dart';
 import '../models/visual_product_candidate.dart';
@@ -48,7 +49,15 @@ class _ModelSelectionScreenState extends State<ModelSelectionScreen> {
                   _normalize(model.modelName).contains(normalizedQuery) ||
                   _normalize(model.displayName).contains(normalizedQuery)),
         )
-        .toList();
+        .toList()
+      ..sort((a, b) {
+        final aVerified = _hasVerifiedGuide(a);
+        final bVerified = _hasVerifiedGuide(b);
+        if (aVerified != bVerified) {
+          return aVerified ? -1 : 1;
+        }
+        return (b.releaseYear ?? 0).compareTo(a.releaseYear ?? 0);
+      });
     final visualCandidates = visualCandidatesFor(
       categoryName: widget.categoryName,
       brand: widget.brand,
@@ -161,6 +170,7 @@ class _ModelSelectionScreenState extends State<ModelSelectionScreen> {
               for (final model in filteredModels)
                 _ModelCard(
                   model: model,
+                  hasVerifiedGuide: _hasVerifiedGuide(model),
                   selected: widget.selectedModel == model.modelName,
                   onSelected: () => _finish(
                     ProductFinderResult.exact(model),
@@ -193,6 +203,16 @@ class _ModelSelectionScreenState extends State<ModelSelectionScreen> {
         ],
       ),
     );
+  }
+
+  bool _hasVerifiedGuide(CatalogModelOption model) {
+    final entry = findCatalogEntry(
+      categoryName: widget.categoryName,
+      brand: widget.brand,
+      modelName: model.modelName,
+    );
+    return entry?.reviewStatus == 'verified' &&
+        entry?.officialManualUrl?.isNotEmpty == true;
   }
 
   Future<void> _loadModels() async {
@@ -266,11 +286,13 @@ class _ModelSelectionScreenState extends State<ModelSelectionScreen> {
 class _ModelCard extends StatelessWidget {
   const _ModelCard({
     required this.model,
+    required this.hasVerifiedGuide,
     required this.selected,
     required this.onSelected,
   });
 
   final CatalogModelOption model;
+  final bool hasVerifiedGuide;
   final bool selected;
   final VoidCallback onSelected;
 
@@ -295,6 +317,8 @@ class _ModelCard extends StatelessWidget {
                   ),
                   const SizedBox(height: 4),
                   Text(model.modelName),
+                  const SizedBox(height: 6),
+                  _GuideStatusLabel(hasVerifiedGuide: hasVerifiedGuide),
                   if (model.releaseYear != null)
                     Text(
                       '${model.releaseYear}년 출시',
@@ -328,6 +352,39 @@ class _ModelCard extends StatelessWidget {
           ],
         ),
       ),
+    );
+  }
+}
+
+class _GuideStatusLabel extends StatelessWidget {
+  const _GuideStatusLabel({required this.hasVerifiedGuide});
+
+  final bool hasVerifiedGuide;
+
+  @override
+  Widget build(BuildContext context) {
+    final colors = Theme.of(context).colorScheme;
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Icon(
+          hasVerifiedGuide ? Icons.verified_outlined : Icons.info_outline,
+          size: 16,
+          color: hasVerifiedGuide ? colors.primary : colors.onSurfaceVariant,
+        ),
+        const SizedBox(width: 4),
+        Flexible(
+          child: Text(
+            hasVerifiedGuide ? '공식 관리법 준비됨' : '모델 정보만 확인',
+            style: Theme.of(context).textTheme.labelMedium?.copyWith(
+                  color: hasVerifiedGuide
+                      ? colors.primary
+                      : colors.onSurfaceVariant,
+                  fontWeight: FontWeight.w600,
+                ),
+          ),
+        ),
+      ],
     );
   }
 }
