@@ -1629,6 +1629,3333 @@ const generatedProductCatalogJson = <Map<String, Object?>>[
     "consumables": [],
     "consumableDetails": [],
     "installationType": "무선 스틱형"
+  },
+  {
+    "id": "samsung-rm70f64q1xj",
+    "name": "Bespoke AI 하이브리드 4도어 키친핏 Max 623L (빅아이스/큐브)",
+    "type": "appliance",
+    "categoryName": "냉장고",
+    "brand": "삼성전자",
+    "manufacturer": "삼성전자",
+    "modelName": "RM70F64Q1XJ",
+    "seriesName": "Bespoke AI 하이브리드 4도어 키친핏 Max 623L",
+    "summary": "선반과 서랍을 분리 가능한 범위에서 닦고 도어 패킹과 내부를 완전히 말려 관리해요.",
+    "frequency": "오염이나 냄새가 느껴질 때",
+    "recurrenceDays": 0,
+    "estimatedMinutes": 25,
+    "productMethod": "선반·서랍·도어 패킹 관리",
+    "guideStatus": "공식 설명서를 확인했어요.",
+    "guideBasis": "삼성전자 공식 제품 페이지와 해당 모델의 공식 사용설명서를 확인했어요.",
+    "guideSourceType": "official",
+    "matchLevelLabel": "공식 설명서 확인 모델",
+    "sourceTitle": "삼성전자 Bespoke AI 하이브리드 4도어 키친핏 Max 623L (빅아이스/큐브) 공식 제품 페이지",
+    "sourceUrl":
+        "https://www.samsung.com/sec/refrigerators/french-door-rm70f64q1xj-d2c/RM70F64Q1XJ/",
+    "sourceCheckedAt": "2026-06-14",
+    "sources": [
+      {
+        "id": "samsung-rm70f64q1xj-product",
+        "title": "삼성전자 Bespoke AI 하이브리드 4도어 키친핏 Max 623L (빅아이스/큐브) 공식 제품 페이지",
+        "url":
+            "https://www.samsung.com/sec/refrigerators/french-door-rm70f64q1xj-d2c/RM70F64Q1XJ/",
+        "type": "officialProduct",
+        "publisher": "삼성전자",
+        "checkedAt": "2026-06-14",
+        "supports": ["제품명", "모델명", "출시 연식", "대표 이미지", "주요 구분"],
+        "isOfficial": true,
+        "isActive": true
+      },
+      {
+        "id": "samsung-rm70f64q1xj-manual",
+        "title": "삼성전자 RM70F64Q1XJ 공식 사용설명서",
+        "url":
+            "https://downloadcenter.samsung.com/content/UM/202605/20260519113115223/DA68-04836T-01_RF9000F_2025_KO_260515.pdf",
+        "type": "officialManual",
+        "publisher": "삼성전자",
+        "checkedAt": "2026-06-14",
+        "supports": ["청소 안전사항", "관리 대상", "관리 순서"],
+        "isOfficial": true,
+        "isActive": true
+      }
+    ],
+    "specSourceIds": {
+      "출시 연도": ["samsung-rm70f64q1xj-product"],
+      "모델명": ["samsung-rm70f64q1xj-product"],
+      "주요 구분": ["samsung-rm70f64q1xj-product"],
+      "공식 제품명": ["samsung-rm70f64q1xj-product"]
+    },
+    "stepSourceIds": {
+      "0": ["samsung-rm70f64q1xj-manual"],
+      "1": ["samsung-rm70f64q1xj-manual"],
+      "2": ["samsung-rm70f64q1xj-manual"],
+      "3": ["samsung-rm70f64q1xj-manual"],
+      "4": ["samsung-rm70f64q1xj-manual"]
+    },
+    "reviewHistory": [
+      {
+        "status": "verified",
+        "reviewer": "catalog-editor",
+        "reviewedAt": "2026-06-14",
+        "note": "공식 제품 페이지와 모델별 공식 사용설명서 교차 검수 완료"
+      }
+    ],
+    "productSpecs": [
+      "출시 연도: 2025년",
+      "모델명: RM70F64Q1XJ",
+      "주요 구분: 623L / 키친핏 Max / 키친핏",
+      "공식 제품명: Bespoke AI 하이브리드 4도어 키친핏 Max 623L (빅아이스/큐브)"
+    ],
+    "supplies": ["부드러운 천", "부드러운 솔", "중성세제"],
+    "recommendedSupplies": ["표면이 거칠지 않은 극세사 천", "패킹 틈새용 부드러운 브러시"],
+    "recommendedProducts": [],
+    "cautions": [
+      "청소 전에는 전원 플러그를 빼거나 제품의 전원을 차단하세요.",
+      "제품 안팎에 물을 직접 뿌리지 마세요.",
+      "냉각 장치와 내부 배선을 임의로 분리하지 마세요.",
+      "차가운 유리 선반에 뜨거운 물을 바로 사용하지 마세요."
+    ],
+    "steps": [
+      "식품을 다른 냉장 공간으로 옮기고 전원 플러그를 빼거나 설명서의 청소 준비 절차를 따라요.",
+      "공식 설명서에서 사용자가 분리할 수 있다고 안내한 선반과 서랍만 꺼내요.",
+      "분리한 부품은 급격한 온도 변화 없이 부드러운 천과 중성세제로 닦아요.",
+      "냉장고 안쪽과 도어 패킹의 이물질을 부드러운 천으로 닦고 물기를 제거해요.",
+      "부품을 완전히 말려 원래 위치에 장착하고 전원을 다시 연결해 온도를 확인해요."
+    ],
+    "keywords": [
+      "냉장고",
+      "선반",
+      "서랍",
+      "도어패킹",
+      "RM70F64Q1XJ",
+      "Bespoke AI 하이브리드 4도어 키친핏 Max 623L"
+    ],
+    "reviewStatus": "verified",
+    "reviewedBy": "catalog-editor",
+    "reviewNote": "공식 제품 페이지와 모델별 공식 사용설명서 교차 검수 완료",
+    "officialManualUrl":
+        "https://downloadcenter.samsung.com/content/UM/202605/20260519113115223/DA68-04836T-01_RF9000F_2025_KO_260515.pdf",
+    "supportUrl": "https://www.samsung.com/sec/support/model/RM70F64Q1XJ/",
+    "servicePhone": "1588-3366",
+    "releaseYear": 2025,
+    "isDiscontinued": false,
+    "imageUrl":
+        "https://images.samsung.com/kdp/goods/2025/02/24/66a3ed19-7ba2-404f-8d68-a72446136d9f.png",
+    "modelFeatures": ["623L", "키친핏 Max", "키친핏"],
+    "consumables": [],
+    "consumableDetails": [],
+    "installationType": "제품 페이지의 설치 유형 확인"
+  },
+  {
+    "id": "samsung-rm90f91d1w",
+    "name": "Bespoke AI 하이브리드 4도어 864L (AI 홈)",
+    "type": "appliance",
+    "categoryName": "냉장고",
+    "brand": "삼성전자",
+    "manufacturer": "삼성전자",
+    "modelName": "RM90F91D1W",
+    "seriesName": "Bespoke AI 하이브리드 4도어 864L",
+    "summary": "선반과 서랍을 분리 가능한 범위에서 닦고 도어 패킹과 내부를 완전히 말려 관리해요.",
+    "frequency": "오염이나 냄새가 느껴질 때",
+    "recurrenceDays": 0,
+    "estimatedMinutes": 25,
+    "productMethod": "선반·서랍·도어 패킹 관리",
+    "guideStatus": "공식 설명서를 확인했어요.",
+    "guideBasis": "삼성전자 공식 제품 페이지와 해당 모델의 공식 사용설명서를 확인했어요.",
+    "guideSourceType": "official",
+    "matchLevelLabel": "공식 설명서 확인 모델",
+    "sourceTitle": "삼성전자 Bespoke AI 하이브리드 4도어 864L (AI 홈) 공식 제품 페이지",
+    "sourceUrl":
+        "https://www.samsung.com/sec/refrigerators/french-door-rm90f91d1w-d2c/RM90F91D1W/",
+    "sourceCheckedAt": "2026-06-14",
+    "sources": [
+      {
+        "id": "samsung-rm90f91d1w-product",
+        "title": "삼성전자 Bespoke AI 하이브리드 4도어 864L (AI 홈) 공식 제품 페이지",
+        "url":
+            "https://www.samsung.com/sec/refrigerators/french-door-rm90f91d1w-d2c/RM90F91D1W/",
+        "type": "officialProduct",
+        "publisher": "삼성전자",
+        "checkedAt": "2026-06-14",
+        "supports": ["제품명", "모델명", "출시 연식", "대표 이미지", "주요 구분"],
+        "isOfficial": true,
+        "isActive": true
+      },
+      {
+        "id": "samsung-rm90f91d1w-manual",
+        "title": "삼성전자 RM90F91D1W 공식 사용설명서",
+        "url":
+            "https://downloadcenter.samsung.com/content/UM/202605/20260519113115223/DA68-04836T-01_RF9000F_2025_KO_260515.pdf",
+        "type": "officialManual",
+        "publisher": "삼성전자",
+        "checkedAt": "2026-06-14",
+        "supports": ["청소 안전사항", "관리 대상", "관리 순서"],
+        "isOfficial": true,
+        "isActive": true
+      }
+    ],
+    "specSourceIds": {
+      "출시 연도": ["samsung-rm90f91d1w-product"],
+      "모델명": ["samsung-rm90f91d1w-product"],
+      "주요 구분": ["samsung-rm90f91d1w-product"],
+      "공식 제품명": ["samsung-rm90f91d1w-product"]
+    },
+    "stepSourceIds": {
+      "0": ["samsung-rm90f91d1w-manual"],
+      "1": ["samsung-rm90f91d1w-manual"],
+      "2": ["samsung-rm90f91d1w-manual"],
+      "3": ["samsung-rm90f91d1w-manual"],
+      "4": ["samsung-rm90f91d1w-manual"]
+    },
+    "reviewHistory": [
+      {
+        "status": "verified",
+        "reviewer": "catalog-editor",
+        "reviewedAt": "2026-06-14",
+        "note": "공식 제품 페이지와 모델별 공식 사용설명서 교차 검수 완료"
+      }
+    ],
+    "productSpecs": [
+      "출시 연도: 2025년",
+      "모델명: RM90F91D1W",
+      "주요 구분: 864L / AI 홈",
+      "공식 제품명: Bespoke AI 하이브리드 4도어 864L (AI 홈)"
+    ],
+    "supplies": ["부드러운 천", "부드러운 솔", "중성세제"],
+    "recommendedSupplies": ["표면이 거칠지 않은 극세사 천", "패킹 틈새용 부드러운 브러시"],
+    "recommendedProducts": [],
+    "cautions": [
+      "청소 전에는 전원 플러그를 빼거나 제품의 전원을 차단하세요.",
+      "제품 안팎에 물을 직접 뿌리지 마세요.",
+      "냉각 장치와 내부 배선을 임의로 분리하지 마세요.",
+      "차가운 유리 선반에 뜨거운 물을 바로 사용하지 마세요."
+    ],
+    "steps": [
+      "식품을 다른 냉장 공간으로 옮기고 전원 플러그를 빼거나 설명서의 청소 준비 절차를 따라요.",
+      "공식 설명서에서 사용자가 분리할 수 있다고 안내한 선반과 서랍만 꺼내요.",
+      "분리한 부품은 급격한 온도 변화 없이 부드러운 천과 중성세제로 닦아요.",
+      "냉장고 안쪽과 도어 패킹의 이물질을 부드러운 천으로 닦고 물기를 제거해요.",
+      "부품을 완전히 말려 원래 위치에 장착하고 전원을 다시 연결해 온도를 확인해요."
+    ],
+    "keywords": [
+      "냉장고",
+      "선반",
+      "서랍",
+      "도어패킹",
+      "RM90F91D1W",
+      "Bespoke AI 하이브리드 4도어 864L"
+    ],
+    "reviewStatus": "verified",
+    "reviewedBy": "catalog-editor",
+    "reviewNote": "공식 제품 페이지와 모델별 공식 사용설명서 교차 검수 완료",
+    "officialManualUrl":
+        "https://downloadcenter.samsung.com/content/UM/202605/20260519113115223/DA68-04836T-01_RF9000F_2025_KO_260515.pdf",
+    "supportUrl": "https://www.samsung.com/sec/support/model/RM90F91D1W/",
+    "servicePhone": "1588-3366",
+    "releaseYear": 2025,
+    "isDiscontinued": false,
+    "imageUrl":
+        "https://images.samsung.com/kdp/goods/2025/03/04/3fa58408-2189-4998-bb4f-f54446717881.png",
+    "modelFeatures": ["864L", "AI 홈"],
+    "consumables": [],
+    "consumableDetails": [],
+    "installationType": "제품 페이지의 설치 유형 확인"
+  },
+  {
+    "id": "samsung-rm90h64p2w",
+    "name": "Bespoke AI 패밀리허브 4도어 키친핏 Max 602L (22.5cm, AI 푸드매니저)",
+    "type": "appliance",
+    "categoryName": "냉장고",
+    "brand": "삼성전자",
+    "manufacturer": "삼성전자",
+    "modelName": "RM90H64P2W",
+    "seriesName": "Bespoke AI 패밀리허브 4도어 키친핏 Max 602L",
+    "summary": "선반과 서랍을 분리 가능한 범위에서 닦고 도어 패킹과 내부를 완전히 말려 관리해요.",
+    "frequency": "오염이나 냄새가 느껴질 때",
+    "recurrenceDays": 0,
+    "estimatedMinutes": 25,
+    "productMethod": "선반·서랍·도어 패킹 관리",
+    "guideStatus": "공식 설명서를 확인했어요.",
+    "guideBasis": "삼성전자 공식 제품 페이지와 해당 모델의 공식 사용설명서를 확인했어요.",
+    "guideSourceType": "official",
+    "matchLevelLabel": "공식 설명서 확인 모델",
+    "sourceTitle":
+        "삼성전자 Bespoke AI 패밀리허브 4도어 키친핏 Max 602L (22.5cm, AI 푸드매니저) 공식 제품 페이지",
+    "sourceUrl":
+        "https://www.samsung.com/sec/refrigerators/french-door-rm90h64p2w-d2c/RM90H64P2W/",
+    "sourceCheckedAt": "2026-06-14",
+    "sources": [
+      {
+        "id": "samsung-rm90h64p2w-product",
+        "title":
+            "삼성전자 Bespoke AI 패밀리허브 4도어 키친핏 Max 602L (22.5cm, AI 푸드매니저) 공식 제품 페이지",
+        "url":
+            "https://www.samsung.com/sec/refrigerators/french-door-rm90h64p2w-d2c/RM90H64P2W/",
+        "type": "officialProduct",
+        "publisher": "삼성전자",
+        "checkedAt": "2026-06-14",
+        "supports": ["제품명", "모델명", "출시 연식", "대표 이미지", "주요 구분"],
+        "isOfficial": true,
+        "isActive": true
+      },
+      {
+        "id": "samsung-rm90h64p2w-manual",
+        "title": "삼성전자 RM90H64P2W 공식 사용설명서",
+        "url":
+            "https://downloadcenter.samsung.com/content/UM/202603/20260330152001327/OID140047-00_RM90H_2026_KO_260313.pdf",
+        "type": "officialManual",
+        "publisher": "삼성전자",
+        "checkedAt": "2026-06-14",
+        "supports": ["청소 안전사항", "관리 대상", "관리 순서"],
+        "isOfficial": true,
+        "isActive": true
+      }
+    ],
+    "specSourceIds": {
+      "출시 연도": ["samsung-rm90h64p2w-product"],
+      "모델명": ["samsung-rm90h64p2w-product"],
+      "주요 구분": ["samsung-rm90h64p2w-product"],
+      "공식 제품명": ["samsung-rm90h64p2w-product"]
+    },
+    "stepSourceIds": {
+      "0": ["samsung-rm90h64p2w-manual"],
+      "1": ["samsung-rm90h64p2w-manual"],
+      "2": ["samsung-rm90h64p2w-manual"],
+      "3": ["samsung-rm90h64p2w-manual"],
+      "4": ["samsung-rm90h64p2w-manual"]
+    },
+    "reviewHistory": [
+      {
+        "status": "verified",
+        "reviewer": "catalog-editor",
+        "reviewedAt": "2026-06-14",
+        "note": "공식 제품 페이지와 모델별 공식 사용설명서 교차 검수 완료"
+      }
+    ],
+    "productSpecs": [
+      "출시 연도: 2026년",
+      "모델명: RM90H64P2W",
+      "주요 구분: 602L / 22.5cm / 키친핏 Max / 키친핏",
+      "공식 제품명: Bespoke AI 패밀리허브 4도어 키친핏 Max 602L (22.5cm, AI 푸드매니저)"
+    ],
+    "supplies": ["부드러운 천", "부드러운 솔", "중성세제"],
+    "recommendedSupplies": ["표면이 거칠지 않은 극세사 천", "패킹 틈새용 부드러운 브러시"],
+    "recommendedProducts": [],
+    "cautions": [
+      "청소 전에는 전원 플러그를 빼거나 제품의 전원을 차단하세요.",
+      "제품 안팎에 물을 직접 뿌리지 마세요.",
+      "냉각 장치와 내부 배선을 임의로 분리하지 마세요.",
+      "차가운 유리 선반에 뜨거운 물을 바로 사용하지 마세요."
+    ],
+    "steps": [
+      "식품을 다른 냉장 공간으로 옮기고 전원 플러그를 빼거나 설명서의 청소 준비 절차를 따라요.",
+      "공식 설명서에서 사용자가 분리할 수 있다고 안내한 선반과 서랍만 꺼내요.",
+      "분리한 부품은 급격한 온도 변화 없이 부드러운 천과 중성세제로 닦아요.",
+      "냉장고 안쪽과 도어 패킹의 이물질을 부드러운 천으로 닦고 물기를 제거해요.",
+      "부품을 완전히 말려 원래 위치에 장착하고 전원을 다시 연결해 온도를 확인해요."
+    ],
+    "keywords": [
+      "냉장고",
+      "선반",
+      "서랍",
+      "도어패킹",
+      "RM90H64P2W",
+      "Bespoke AI 패밀리허브 4도어 키친핏 Max 602L"
+    ],
+    "reviewStatus": "verified",
+    "reviewedBy": "catalog-editor",
+    "reviewNote": "공식 제품 페이지와 모델별 공식 사용설명서 교차 검수 완료",
+    "officialManualUrl":
+        "https://downloadcenter.samsung.com/content/UM/202603/20260330152001327/OID140047-00_RM90H_2026_KO_260313.pdf",
+    "supportUrl": "https://www.samsung.com/sec/support/model/RM90H64P2W/",
+    "servicePhone": "1588-3366",
+    "releaseYear": 2026,
+    "isDiscontinued": false,
+    "imageUrl":
+        "https://images.samsung.com/kdp/goods/2026/03/11/71ffeb5e-057f-4fc1-b906-e74308ad059c.png",
+    "modelFeatures": ["602L", "22.5cm", "키친핏 Max", "키친핏"],
+    "consumables": [],
+    "consumableDetails": [],
+    "installationType": "제품 페이지의 설치 유형 확인"
+  },
+  {
+    "id": "samsung-rk70f49d1a",
+    "name": "Bespoke AI 김치플러스 4도어 487L (맞춤숙성실)",
+    "type": "appliance",
+    "categoryName": "김치냉장고",
+    "brand": "삼성전자",
+    "manufacturer": "삼성전자",
+    "modelName": "RK70F49D1A",
+    "seriesName": "Bespoke AI 김치플러스 4도어 487L",
+    "summary": "김치통과 저장실의 음식물 자국을 닦고 패킹과 냄새가 남지 않도록 충분히 건조해요.",
+    "frequency": "내용물을 교체하거나 냄새가 느껴질 때",
+    "recurrenceDays": 0,
+    "estimatedMinutes": 25,
+    "productMethod": "김치통·저장실·도어 패킹 관리",
+    "guideStatus": "공식 설명서를 확인했어요.",
+    "guideBasis": "삼성전자 공식 제품 페이지와 해당 모델의 공식 사용설명서를 확인했어요.",
+    "guideSourceType": "official",
+    "matchLevelLabel": "공식 설명서 확인 모델",
+    "sourceTitle": "삼성전자 Bespoke AI 김치플러스 4도어 487L (맞춤숙성실) 공식 제품 페이지",
+    "sourceUrl":
+        "https://www.samsung.com/sec/kimchi-refrigerators/kimchi-stand-rk70f49d1a-d2c/RK70F49D1A/",
+    "sourceCheckedAt": "2026-06-14",
+    "sources": [
+      {
+        "id": "samsung-rk70f49d1a-product",
+        "title": "삼성전자 Bespoke AI 김치플러스 4도어 487L (맞춤숙성실) 공식 제품 페이지",
+        "url":
+            "https://www.samsung.com/sec/kimchi-refrigerators/kimchi-stand-rk70f49d1a-d2c/RK70F49D1A/",
+        "type": "officialProduct",
+        "publisher": "삼성전자",
+        "checkedAt": "2026-06-14",
+        "supports": ["제품명", "모델명", "출시 연식", "대표 이미지", "주요 구분"],
+        "isOfficial": true,
+        "isActive": true
+      },
+      {
+        "id": "samsung-rk70f49d1a-manual",
+        "title": "삼성전자 RK70F49D1A 공식 사용설명서",
+        "url":
+            "https://downloadcenter.samsung.com/content/UM/202603/20260330141606358/OID131798-00_RK80F_RK70F_KO_260313.pdf",
+        "type": "officialManual",
+        "publisher": "삼성전자",
+        "checkedAt": "2026-06-14",
+        "supports": ["청소 안전사항", "관리 대상", "관리 순서"],
+        "isOfficial": true,
+        "isActive": true
+      }
+    ],
+    "specSourceIds": {
+      "출시 연도": ["samsung-rk70f49d1a-product"],
+      "모델명": ["samsung-rk70f49d1a-product"],
+      "주요 구분": ["samsung-rk70f49d1a-product"],
+      "공식 제품명": ["samsung-rk70f49d1a-product"]
+    },
+    "stepSourceIds": {
+      "0": ["samsung-rk70f49d1a-manual"],
+      "1": ["samsung-rk70f49d1a-manual"],
+      "2": ["samsung-rk70f49d1a-manual"],
+      "3": ["samsung-rk70f49d1a-manual"],
+      "4": ["samsung-rk70f49d1a-manual"]
+    },
+    "reviewHistory": [
+      {
+        "status": "verified",
+        "reviewer": "catalog-editor",
+        "reviewedAt": "2026-06-14",
+        "note": "공식 제품 페이지와 모델별 공식 사용설명서 교차 검수 완료"
+      }
+    ],
+    "productSpecs": [
+      "출시 연도: 2025년",
+      "모델명: RK70F49D1A",
+      "주요 구분: 487L / 맞춤숙성실",
+      "공식 제품명: Bespoke AI 김치플러스 4도어 487L (맞춤숙성실)"
+    ],
+    "supplies": ["부드러운 천", "부드러운 솔", "중성세제"],
+    "recommendedSupplies": ["냄새가 남지 않는 주방용 중성세제", "패킹 틈새용 부드러운 브러시"],
+    "recommendedProducts": [],
+    "cautions": [
+      "청소 전에는 전원 플러그를 빼거나 제품의 전원을 차단하세요.",
+      "제품 안팎에 물을 직접 뿌리지 마세요.",
+      "냉각 장치와 도어 부품을 임의로 분리하지 마세요.",
+      "연마제와 강한 산성·알칼리성 세제를 사용하지 마세요."
+    ],
+    "steps": [
+      "내용물을 다른 냉장 공간으로 옮기고 전원 플러그를 빼거나 설명서의 청소 준비 절차를 따라요.",
+      "김치통과 사용자가 분리할 수 있는 선반·서랍만 꺼내 음식물 자국을 제거해요.",
+      "분리한 김치통과 부품을 부드러운 천과 중성세제로 닦고 충분히 헹궈요.",
+      "저장실 안쪽과 도어 패킹을 부드러운 천으로 닦고 남은 물기를 제거해요.",
+      "모든 부품을 완전히 말려 원래 위치에 장착하고 설정 온도를 다시 확인해요."
+    ],
+    "keywords": [
+      "김치냉장고",
+      "김치통",
+      "저장실",
+      "도어패킹",
+      "RK70F49D1A",
+      "Bespoke AI 김치플러스 4도어 487L"
+    ],
+    "reviewStatus": "verified",
+    "reviewedBy": "catalog-editor",
+    "reviewNote": "공식 제품 페이지와 모델별 공식 사용설명서 교차 검수 완료",
+    "officialManualUrl":
+        "https://downloadcenter.samsung.com/content/UM/202603/20260330141606358/OID131798-00_RK80F_RK70F_KO_260313.pdf",
+    "supportUrl": "https://www.samsung.com/sec/support/model/RK70F49D1A/",
+    "servicePhone": "1588-3366",
+    "releaseYear": 2025,
+    "isDiscontinued": false,
+    "imageUrl":
+        "https://images.samsung.com/kdp/goods/2025/08/01/9a07d27d-86c5-4b5b-8d45-52a7a702f3dc.png",
+    "modelFeatures": ["487L", "맞춤숙성실"],
+    "consumables": [],
+    "consumableDetails": [],
+    "installationType": "스탠드형 또는 뚜껑형"
+  },
+  {
+    "id": "samsung-rk80f42c2a",
+    "name": "Bespoke AI 김치플러스 4도어 키친핏 Max 418L (맞춤숙성실)",
+    "type": "appliance",
+    "categoryName": "김치냉장고",
+    "brand": "삼성전자",
+    "manufacturer": "삼성전자",
+    "modelName": "RK80F42C2A",
+    "seriesName": "Bespoke AI 김치플러스 4도어 키친핏 Max 418L",
+    "summary": "김치통과 저장실의 음식물 자국을 닦고 패킹과 냄새가 남지 않도록 충분히 건조해요.",
+    "frequency": "내용물을 교체하거나 냄새가 느껴질 때",
+    "recurrenceDays": 0,
+    "estimatedMinutes": 25,
+    "productMethod": "김치통·저장실·도어 패킹 관리",
+    "guideStatus": "공식 설명서를 확인했어요.",
+    "guideBasis": "삼성전자 공식 제품 페이지와 해당 모델의 공식 사용설명서를 확인했어요.",
+    "guideSourceType": "official",
+    "matchLevelLabel": "공식 설명서 확인 모델",
+    "sourceTitle": "삼성전자 Bespoke AI 김치플러스 4도어 키친핏 Max 418L (맞춤숙성실) 공식 제품 페이지",
+    "sourceUrl":
+        "https://www.samsung.com/sec/kimchi-refrigerators/kimchi-stand-rk80f42c2a-d2c/RK80F42C2A/",
+    "sourceCheckedAt": "2026-06-14",
+    "sources": [
+      {
+        "id": "samsung-rk80f42c2a-product",
+        "title": "삼성전자 Bespoke AI 김치플러스 4도어 키친핏 Max 418L (맞춤숙성실) 공식 제품 페이지",
+        "url":
+            "https://www.samsung.com/sec/kimchi-refrigerators/kimchi-stand-rk80f42c2a-d2c/RK80F42C2A/",
+        "type": "officialProduct",
+        "publisher": "삼성전자",
+        "checkedAt": "2026-06-14",
+        "supports": ["제품명", "모델명", "출시 연식", "대표 이미지", "주요 구분"],
+        "isOfficial": true,
+        "isActive": true
+      },
+      {
+        "id": "samsung-rk80f42c2a-manual",
+        "title": "삼성전자 RK80F42C2A 공식 사용설명서",
+        "url":
+            "https://downloadcenter.samsung.com/content/UM/202603/20260330141606358/OID131798-00_RK80F_RK70F_KO_260313.pdf",
+        "type": "officialManual",
+        "publisher": "삼성전자",
+        "checkedAt": "2026-06-14",
+        "supports": ["청소 안전사항", "관리 대상", "관리 순서"],
+        "isOfficial": true,
+        "isActive": true
+      }
+    ],
+    "specSourceIds": {
+      "출시 연도": ["samsung-rk80f42c2a-product"],
+      "모델명": ["samsung-rk80f42c2a-product"],
+      "주요 구분": ["samsung-rk80f42c2a-product"],
+      "공식 제품명": ["samsung-rk80f42c2a-product"]
+    },
+    "stepSourceIds": {
+      "0": ["samsung-rk80f42c2a-manual"],
+      "1": ["samsung-rk80f42c2a-manual"],
+      "2": ["samsung-rk80f42c2a-manual"],
+      "3": ["samsung-rk80f42c2a-manual"],
+      "4": ["samsung-rk80f42c2a-manual"]
+    },
+    "reviewHistory": [
+      {
+        "status": "verified",
+        "reviewer": "catalog-editor",
+        "reviewedAt": "2026-06-14",
+        "note": "공식 제품 페이지와 모델별 공식 사용설명서 교차 검수 완료"
+      }
+    ],
+    "productSpecs": [
+      "출시 연도: 2025년",
+      "모델명: RK80F42C2A",
+      "주요 구분: 418L / 키친핏 Max / 키친핏 / 맞춤숙성실",
+      "공식 제품명: Bespoke AI 김치플러스 4도어 키친핏 Max 418L (맞춤숙성실)"
+    ],
+    "supplies": ["부드러운 천", "부드러운 솔", "중성세제"],
+    "recommendedSupplies": ["냄새가 남지 않는 주방용 중성세제", "패킹 틈새용 부드러운 브러시"],
+    "recommendedProducts": [],
+    "cautions": [
+      "청소 전에는 전원 플러그를 빼거나 제품의 전원을 차단하세요.",
+      "제품 안팎에 물을 직접 뿌리지 마세요.",
+      "냉각 장치와 도어 부품을 임의로 분리하지 마세요.",
+      "연마제와 강한 산성·알칼리성 세제를 사용하지 마세요."
+    ],
+    "steps": [
+      "내용물을 다른 냉장 공간으로 옮기고 전원 플러그를 빼거나 설명서의 청소 준비 절차를 따라요.",
+      "김치통과 사용자가 분리할 수 있는 선반·서랍만 꺼내 음식물 자국을 제거해요.",
+      "분리한 김치통과 부품을 부드러운 천과 중성세제로 닦고 충분히 헹궈요.",
+      "저장실 안쪽과 도어 패킹을 부드러운 천으로 닦고 남은 물기를 제거해요.",
+      "모든 부품을 완전히 말려 원래 위치에 장착하고 설정 온도를 다시 확인해요."
+    ],
+    "keywords": [
+      "김치냉장고",
+      "김치통",
+      "저장실",
+      "도어패킹",
+      "RK80F42C2A",
+      "Bespoke AI 김치플러스 4도어 키친핏 Max 418L"
+    ],
+    "reviewStatus": "verified",
+    "reviewedBy": "catalog-editor",
+    "reviewNote": "공식 제품 페이지와 모델별 공식 사용설명서 교차 검수 완료",
+    "officialManualUrl":
+        "https://downloadcenter.samsung.com/content/UM/202603/20260330141606358/OID131798-00_RK80F_RK70F_KO_260313.pdf",
+    "supportUrl": "https://www.samsung.com/sec/support/model/RK80F42C2A/",
+    "servicePhone": "1588-3366",
+    "releaseYear": 2025,
+    "isDiscontinued": false,
+    "imageUrl":
+        "https://images.samsung.com/kdp/goods/2025/07/30/118dad20-b5f3-46b8-8f59-f0abe70e2f34.png",
+    "modelFeatures": ["418L", "키친핏 Max", "키친핏", "맞춤숙성실"],
+    "consumables": [],
+    "consumableDetails": [],
+    "installationType": "스탠드형 또는 뚜껑형"
+  },
+  {
+    "id": "samsung-rk80f58b1a",
+    "name": "Bespoke AI 김치플러스 4도어 583L (냄새케어 메탈쿨링 김치통)",
+    "type": "appliance",
+    "categoryName": "김치냉장고",
+    "brand": "삼성전자",
+    "manufacturer": "삼성전자",
+    "modelName": "RK80F58B1A",
+    "seriesName": "Bespoke AI 김치플러스 4도어 583L",
+    "summary": "김치통과 저장실의 음식물 자국을 닦고 패킹과 냄새가 남지 않도록 충분히 건조해요.",
+    "frequency": "내용물을 교체하거나 냄새가 느껴질 때",
+    "recurrenceDays": 0,
+    "estimatedMinutes": 25,
+    "productMethod": "김치통·저장실·도어 패킹 관리",
+    "guideStatus": "공식 설명서를 확인했어요.",
+    "guideBasis": "삼성전자 공식 제품 페이지와 해당 모델의 공식 사용설명서를 확인했어요.",
+    "guideSourceType": "official",
+    "matchLevelLabel": "공식 설명서 확인 모델",
+    "sourceTitle": "삼성전자 Bespoke AI 김치플러스 4도어 583L (냄새케어 메탈쿨링 김치통) 공식 제품 페이지",
+    "sourceUrl":
+        "https://www.samsung.com/sec/kimchi-refrigerators/kimchi-stand-rk80f58b1a-d2c/RK80F58B1A/",
+    "sourceCheckedAt": "2026-06-14",
+    "sources": [
+      {
+        "id": "samsung-rk80f58b1a-product",
+        "title": "삼성전자 Bespoke AI 김치플러스 4도어 583L (냄새케어 메탈쿨링 김치통) 공식 제품 페이지",
+        "url":
+            "https://www.samsung.com/sec/kimchi-refrigerators/kimchi-stand-rk80f58b1a-d2c/RK80F58B1A/",
+        "type": "officialProduct",
+        "publisher": "삼성전자",
+        "checkedAt": "2026-06-14",
+        "supports": ["제품명", "모델명", "출시 연식", "대표 이미지", "주요 구분"],
+        "isOfficial": true,
+        "isActive": true
+      },
+      {
+        "id": "samsung-rk80f58b1a-manual",
+        "title": "삼성전자 RK80F58B1A 공식 사용설명서",
+        "url":
+            "https://downloadcenter.samsung.com/content/UM/202603/20260330141606358/OID131798-00_RK80F_RK70F_KO_260313.pdf",
+        "type": "officialManual",
+        "publisher": "삼성전자",
+        "checkedAt": "2026-06-14",
+        "supports": ["청소 안전사항", "관리 대상", "관리 순서"],
+        "isOfficial": true,
+        "isActive": true
+      }
+    ],
+    "specSourceIds": {
+      "출시 연도": ["samsung-rk80f58b1a-product"],
+      "모델명": ["samsung-rk80f58b1a-product"],
+      "주요 구분": ["samsung-rk80f58b1a-product"],
+      "공식 제품명": ["samsung-rk80f58b1a-product"]
+    },
+    "stepSourceIds": {
+      "0": ["samsung-rk80f58b1a-manual"],
+      "1": ["samsung-rk80f58b1a-manual"],
+      "2": ["samsung-rk80f58b1a-manual"],
+      "3": ["samsung-rk80f58b1a-manual"],
+      "4": ["samsung-rk80f58b1a-manual"]
+    },
+    "reviewHistory": [
+      {
+        "status": "verified",
+        "reviewer": "catalog-editor",
+        "reviewedAt": "2026-06-14",
+        "note": "공식 제품 페이지와 모델별 공식 사용설명서 교차 검수 완료"
+      }
+    ],
+    "productSpecs": [
+      "출시 연도: 2025년",
+      "모델명: RK80F58B1A",
+      "주요 구분: 583L",
+      "공식 제품명: Bespoke AI 김치플러스 4도어 583L (냄새케어 메탈쿨링 김치통)"
+    ],
+    "supplies": ["부드러운 천", "부드러운 솔", "중성세제"],
+    "recommendedSupplies": ["냄새가 남지 않는 주방용 중성세제", "패킹 틈새용 부드러운 브러시"],
+    "recommendedProducts": [],
+    "cautions": [
+      "청소 전에는 전원 플러그를 빼거나 제품의 전원을 차단하세요.",
+      "제품 안팎에 물을 직접 뿌리지 마세요.",
+      "냉각 장치와 도어 부품을 임의로 분리하지 마세요.",
+      "연마제와 강한 산성·알칼리성 세제를 사용하지 마세요."
+    ],
+    "steps": [
+      "내용물을 다른 냉장 공간으로 옮기고 전원 플러그를 빼거나 설명서의 청소 준비 절차를 따라요.",
+      "김치통과 사용자가 분리할 수 있는 선반·서랍만 꺼내 음식물 자국을 제거해요.",
+      "분리한 김치통과 부품을 부드러운 천과 중성세제로 닦고 충분히 헹궈요.",
+      "저장실 안쪽과 도어 패킹을 부드러운 천으로 닦고 남은 물기를 제거해요.",
+      "모든 부품을 완전히 말려 원래 위치에 장착하고 설정 온도를 다시 확인해요."
+    ],
+    "keywords": [
+      "김치냉장고",
+      "김치통",
+      "저장실",
+      "도어패킹",
+      "RK80F58B1A",
+      "Bespoke AI 김치플러스 4도어 583L"
+    ],
+    "reviewStatus": "verified",
+    "reviewedBy": "catalog-editor",
+    "reviewNote": "공식 제품 페이지와 모델별 공식 사용설명서 교차 검수 완료",
+    "officialManualUrl":
+        "https://downloadcenter.samsung.com/content/UM/202603/20260330141606358/OID131798-00_RK80F_RK70F_KO_260313.pdf",
+    "supportUrl": "https://www.samsung.com/sec/support/model/RK80F58B1A/",
+    "servicePhone": "1588-3366",
+    "releaseYear": 2025,
+    "isDiscontinued": false,
+    "imageUrl":
+        "https://images.samsung.com/kdp/goods/2025/08/01/940282f4-ce11-489b-af4e-16d61ddbb262.png",
+    "modelFeatures": ["583L"],
+    "consumables": [],
+    "consumableDetails": [],
+    "installationType": "스탠드형 또는 뚜껑형"
+  },
+  {
+    "id": "samsung-rq33db74e1ap",
+    "name": "Bespoke 김치플러스 3도어 키친핏 313L",
+    "type": "appliance",
+    "categoryName": "김치냉장고",
+    "brand": "삼성전자",
+    "manufacturer": "삼성전자",
+    "modelName": "RQ33DB74E1AP",
+    "seriesName": "Bespoke 김치플러스 3도어 키친핏 313L",
+    "summary": "김치통과 저장실의 음식물 자국을 닦고 패킹과 냄새가 남지 않도록 충분히 건조해요.",
+    "frequency": "내용물을 교체하거나 냄새가 느껴질 때",
+    "recurrenceDays": 0,
+    "estimatedMinutes": 25,
+    "productMethod": "김치통·저장실·도어 패킹 관리",
+    "guideStatus": "공식 설명서를 확인했어요.",
+    "guideBasis": "삼성전자 공식 제품 페이지와 해당 모델의 공식 사용설명서를 확인했어요.",
+    "guideSourceType": "official",
+    "matchLevelLabel": "공식 설명서 확인 모델",
+    "sourceTitle": "삼성전자 Bespoke 김치플러스 3도어 키친핏 313L 공식 제품 페이지",
+    "sourceUrl":
+        "https://www.samsung.com/sec/kimchi-refrigerators/kimchi-stand-rq33db74e1ap-d2c/RQ33DB74E1AP/",
+    "sourceCheckedAt": "2026-06-14",
+    "sources": [
+      {
+        "id": "samsung-rq33db74e1ap-product",
+        "title": "삼성전자 Bespoke 김치플러스 3도어 키친핏 313L 공식 제품 페이지",
+        "url":
+            "https://www.samsung.com/sec/kimchi-refrigerators/kimchi-stand-rq33db74e1ap-d2c/RQ33DB74E1AP/",
+        "type": "officialProduct",
+        "publisher": "삼성전자",
+        "checkedAt": "2026-06-14",
+        "supports": ["제품명", "모델명", "출시 연식", "대표 이미지", "주요 구분"],
+        "isOfficial": true,
+        "isActive": true
+      },
+      {
+        "id": "samsung-rq33db74e1ap-manual",
+        "title": "삼성전자 RQ33DB74E1AP 공식 사용설명서",
+        "url":
+            "https://downloadcenter.samsung.com/content/UM/202603/20260331083201561/DA68-04752K_IB_FULL_RQ7000B_RQ33A74_KO_260313.pdf",
+        "type": "officialManual",
+        "publisher": "삼성전자",
+        "checkedAt": "2026-06-14",
+        "supports": ["청소 안전사항", "관리 대상", "관리 순서"],
+        "isOfficial": true,
+        "isActive": true
+      }
+    ],
+    "specSourceIds": {
+      "출시 연도": ["samsung-rq33db74e1ap-product"],
+      "모델명": ["samsung-rq33db74e1ap-product"],
+      "주요 구분": ["samsung-rq33db74e1ap-product"],
+      "공식 제품명": ["samsung-rq33db74e1ap-product"]
+    },
+    "stepSourceIds": {
+      "0": ["samsung-rq33db74e1ap-manual"],
+      "1": ["samsung-rq33db74e1ap-manual"],
+      "2": ["samsung-rq33db74e1ap-manual"],
+      "3": ["samsung-rq33db74e1ap-manual"],
+      "4": ["samsung-rq33db74e1ap-manual"]
+    },
+    "reviewHistory": [
+      {
+        "status": "verified",
+        "reviewer": "catalog-editor",
+        "reviewedAt": "2026-06-14",
+        "note": "공식 제품 페이지와 모델별 공식 사용설명서 교차 검수 완료"
+      }
+    ],
+    "productSpecs": [
+      "출시 연도: 2024년",
+      "모델명: RQ33DB74E1AP",
+      "주요 구분: 313L / 키친핏",
+      "공식 제품명: Bespoke 김치플러스 3도어 키친핏 313L"
+    ],
+    "supplies": ["부드러운 천", "부드러운 솔", "중성세제"],
+    "recommendedSupplies": ["냄새가 남지 않는 주방용 중성세제", "패킹 틈새용 부드러운 브러시"],
+    "recommendedProducts": [],
+    "cautions": [
+      "청소 전에는 전원 플러그를 빼거나 제품의 전원을 차단하세요.",
+      "제품 안팎에 물을 직접 뿌리지 마세요.",
+      "냉각 장치와 도어 부품을 임의로 분리하지 마세요.",
+      "연마제와 강한 산성·알칼리성 세제를 사용하지 마세요."
+    ],
+    "steps": [
+      "내용물을 다른 냉장 공간으로 옮기고 전원 플러그를 빼거나 설명서의 청소 준비 절차를 따라요.",
+      "김치통과 사용자가 분리할 수 있는 선반·서랍만 꺼내 음식물 자국을 제거해요.",
+      "분리한 김치통과 부품을 부드러운 천과 중성세제로 닦고 충분히 헹궈요.",
+      "저장실 안쪽과 도어 패킹을 부드러운 천으로 닦고 남은 물기를 제거해요.",
+      "모든 부품을 완전히 말려 원래 위치에 장착하고 설정 온도를 다시 확인해요."
+    ],
+    "keywords": [
+      "김치냉장고",
+      "김치통",
+      "저장실",
+      "도어패킹",
+      "RQ33DB74E1AP",
+      "Bespoke 김치플러스 3도어 키친핏 313L"
+    ],
+    "reviewStatus": "verified",
+    "reviewedBy": "catalog-editor",
+    "reviewNote": "공식 제품 페이지와 모델별 공식 사용설명서 교차 검수 완료",
+    "officialManualUrl":
+        "https://downloadcenter.samsung.com/content/UM/202603/20260331083201561/DA68-04752K_IB_FULL_RQ7000B_RQ33A74_KO_260313.pdf",
+    "supportUrl": "https://www.samsung.com/sec/support/model/RQ33DB74E1AP/",
+    "servicePhone": "1588-3366",
+    "releaseYear": 2024,
+    "isDiscontinued": false,
+    "imageUrl":
+        "https://images.samsung.com/kdp/goods/2025/01/08/2e5afc78-ba7d-454d-a27d-ae13a3cbb72b.png",
+    "modelFeatures": ["313L", "키친핏"],
+    "consumables": [],
+    "consumableDetails": [],
+    "installationType": "스탠드형 또는 뚜껑형"
+  },
+  {
+    "id": "samsung-rq34c7915ap",
+    "name": "Bespoke AI 김치플러스 1도어 키친핏 348L (좌열림)",
+    "type": "appliance",
+    "categoryName": "김치냉장고",
+    "brand": "삼성전자",
+    "manufacturer": "삼성전자",
+    "modelName": "RQ34C7915AP",
+    "seriesName": "Bespoke AI 김치플러스 1도어 키친핏 348L",
+    "summary": "김치통과 저장실의 음식물 자국을 닦고 패킹과 냄새가 남지 않도록 충분히 건조해요.",
+    "frequency": "내용물을 교체하거나 냄새가 느껴질 때",
+    "recurrenceDays": 0,
+    "estimatedMinutes": 25,
+    "productMethod": "김치통·저장실·도어 패킹 관리",
+    "guideStatus": "공식 설명서를 확인했어요.",
+    "guideBasis": "삼성전자 공식 제품 페이지와 해당 모델의 공식 사용설명서를 확인했어요.",
+    "guideSourceType": "official",
+    "matchLevelLabel": "공식 설명서 확인 모델",
+    "sourceTitle": "삼성전자 Bespoke AI 김치플러스 1도어 키친핏 348L (좌열림) 공식 제품 페이지",
+    "sourceUrl":
+        "https://www.samsung.com/sec/kimchi-refrigerators/kimchi-stand-rq34c7815ap-d2c/RQ34C7915AP/",
+    "sourceCheckedAt": "2026-06-14",
+    "sources": [
+      {
+        "id": "samsung-rq34c7915ap-product",
+        "title": "삼성전자 Bespoke AI 김치플러스 1도어 키친핏 348L (좌열림) 공식 제품 페이지",
+        "url":
+            "https://www.samsung.com/sec/kimchi-refrigerators/kimchi-stand-rq34c7815ap-d2c/RQ34C7915AP/",
+        "type": "officialProduct",
+        "publisher": "삼성전자",
+        "checkedAt": "2026-06-14",
+        "supports": ["제품명", "모델명", "출시 연식", "대표 이미지", "주요 구분"],
+        "isOfficial": true,
+        "isActive": true
+      },
+      {
+        "id": "samsung-rq34c7915ap-manual",
+        "title": "삼성전자 RQ34C7915AP 공식 사용설명서",
+        "url":
+            "https://downloadcenter.samsung.com/content/UM/202603/20260330155521180/DA68-04752M_IB_FULL_RR7000_RQ34_KO_260313.pdf",
+        "type": "officialManual",
+        "publisher": "삼성전자",
+        "checkedAt": "2026-06-14",
+        "supports": ["청소 안전사항", "관리 대상", "관리 순서"],
+        "isOfficial": true,
+        "isActive": true
+      }
+    ],
+    "specSourceIds": {
+      "출시 연도": ["samsung-rq34c7915ap-product"],
+      "모델명": ["samsung-rq34c7915ap-product"],
+      "주요 구분": ["samsung-rq34c7915ap-product"],
+      "공식 제품명": ["samsung-rq34c7915ap-product"]
+    },
+    "stepSourceIds": {
+      "0": ["samsung-rq34c7915ap-manual"],
+      "1": ["samsung-rq34c7915ap-manual"],
+      "2": ["samsung-rq34c7915ap-manual"],
+      "3": ["samsung-rq34c7915ap-manual"],
+      "4": ["samsung-rq34c7915ap-manual"]
+    },
+    "reviewHistory": [
+      {
+        "status": "verified",
+        "reviewer": "catalog-editor",
+        "reviewedAt": "2026-06-14",
+        "note": "공식 제품 페이지와 모델별 공식 사용설명서 교차 검수 완료"
+      }
+    ],
+    "productSpecs": [
+      "출시 연도: 2023년",
+      "모델명: RQ34C7915AP",
+      "주요 구분: 348L / 키친핏",
+      "공식 제품명: Bespoke AI 김치플러스 1도어 키친핏 348L (좌열림)"
+    ],
+    "supplies": ["부드러운 천", "부드러운 솔", "중성세제"],
+    "recommendedSupplies": ["냄새가 남지 않는 주방용 중성세제", "패킹 틈새용 부드러운 브러시"],
+    "recommendedProducts": [],
+    "cautions": [
+      "청소 전에는 전원 플러그를 빼거나 제품의 전원을 차단하세요.",
+      "제품 안팎에 물을 직접 뿌리지 마세요.",
+      "냉각 장치와 도어 부품을 임의로 분리하지 마세요.",
+      "연마제와 강한 산성·알칼리성 세제를 사용하지 마세요."
+    ],
+    "steps": [
+      "내용물을 다른 냉장 공간으로 옮기고 전원 플러그를 빼거나 설명서의 청소 준비 절차를 따라요.",
+      "김치통과 사용자가 분리할 수 있는 선반·서랍만 꺼내 음식물 자국을 제거해요.",
+      "분리한 김치통과 부품을 부드러운 천과 중성세제로 닦고 충분히 헹궈요.",
+      "저장실 안쪽과 도어 패킹을 부드러운 천으로 닦고 남은 물기를 제거해요.",
+      "모든 부품을 완전히 말려 원래 위치에 장착하고 설정 온도를 다시 확인해요."
+    ],
+    "keywords": [
+      "김치냉장고",
+      "김치통",
+      "저장실",
+      "도어패킹",
+      "RQ34C7915AP",
+      "Bespoke AI 김치플러스 1도어 키친핏 348L"
+    ],
+    "reviewStatus": "verified",
+    "reviewedBy": "catalog-editor",
+    "reviewNote": "공식 제품 페이지와 모델별 공식 사용설명서 교차 검수 완료",
+    "officialManualUrl":
+        "https://downloadcenter.samsung.com/content/UM/202603/20260330155521180/DA68-04752M_IB_FULL_RR7000_RQ34_KO_260313.pdf",
+    "supportUrl": "https://www.samsung.com/sec/support/model/RQ34C7915AP/",
+    "servicePhone": "1588-3366",
+    "releaseYear": 2023,
+    "isDiscontinued": false,
+    "imageUrl":
+        "https://images.samsung.com/kdp/goods/2023/05/11/160e8026-c76c-41a5-b8ae-851fffc3d87d.png",
+    "modelFeatures": ["348L", "키친핏"],
+    "consumables": [],
+    "consumableDetails": [],
+    "installationType": "스탠드형 또는 뚜껑형"
+  },
+  {
+    "id": "samsung-rp20c3111eg",
+    "name": "김치플러스 뚜껑형 202L",
+    "type": "appliance",
+    "categoryName": "김치냉장고",
+    "brand": "삼성전자",
+    "manufacturer": "삼성전자",
+    "modelName": "RP20C3111EG",
+    "seriesName": "김치플러스 뚜껑형 202L",
+    "summary": "김치통과 저장실의 음식물 자국을 닦고 패킹과 냄새가 남지 않도록 충분히 건조해요.",
+    "frequency": "내용물을 교체하거나 냄새가 느껴질 때",
+    "recurrenceDays": 0,
+    "estimatedMinutes": 25,
+    "productMethod": "김치통·저장실·도어 패킹 관리",
+    "guideStatus": "공식 설명서를 확인했어요.",
+    "guideBasis": "삼성전자 공식 제품 페이지와 해당 모델의 공식 사용설명서를 확인했어요.",
+    "guideSourceType": "official",
+    "matchLevelLabel": "공식 설명서 확인 모델",
+    "sourceTitle": "삼성전자 김치플러스 뚜껑형 202L 공식 제품 페이지",
+    "sourceUrl":
+        "https://www.samsung.com/sec/kimchi-refrigerators/kimchi-top-loadingrp20c3111eg-d2c/RP20C3111EG/",
+    "sourceCheckedAt": "2026-06-14",
+    "sources": [
+      {
+        "id": "samsung-rp20c3111eg-product",
+        "title": "삼성전자 김치플러스 뚜껑형 202L 공식 제품 페이지",
+        "url":
+            "https://www.samsung.com/sec/kimchi-refrigerators/kimchi-top-loadingrp20c3111eg-d2c/RP20C3111EG/",
+        "type": "officialProduct",
+        "publisher": "삼성전자",
+        "checkedAt": "2026-06-14",
+        "supports": ["제품명", "모델명", "출시 연식", "대표 이미지", "주요 구분"],
+        "isOfficial": true,
+        "isActive": true
+      },
+      {
+        "id": "samsung-rp20c3111eg-manual",
+        "title": "삼성전자 RP20C3111EG 공식 사용설명서",
+        "url":
+            "https://downloadcenter.samsung.com/content/UM/202603/20260331083704779/DA68-04752L_IB_FULL_RP3000_RP22A_KO_260313.pdf",
+        "type": "officialManual",
+        "publisher": "삼성전자",
+        "checkedAt": "2026-06-14",
+        "supports": ["청소 안전사항", "관리 대상", "관리 순서"],
+        "isOfficial": true,
+        "isActive": true
+      }
+    ],
+    "specSourceIds": {
+      "출시 연도": ["samsung-rp20c3111eg-product"],
+      "모델명": ["samsung-rp20c3111eg-product"],
+      "주요 구분": ["samsung-rp20c3111eg-product"],
+      "공식 제품명": ["samsung-rp20c3111eg-product"]
+    },
+    "stepSourceIds": {
+      "0": ["samsung-rp20c3111eg-manual"],
+      "1": ["samsung-rp20c3111eg-manual"],
+      "2": ["samsung-rp20c3111eg-manual"],
+      "3": ["samsung-rp20c3111eg-manual"],
+      "4": ["samsung-rp20c3111eg-manual"]
+    },
+    "reviewHistory": [
+      {
+        "status": "verified",
+        "reviewer": "catalog-editor",
+        "reviewedAt": "2026-06-14",
+        "note": "공식 제품 페이지와 모델별 공식 사용설명서 교차 검수 완료"
+      }
+    ],
+    "productSpecs": [
+      "출시 연도: 2023년",
+      "모델명: RP20C3111EG",
+      "주요 구분: 202L",
+      "공식 제품명: 김치플러스 뚜껑형 202L"
+    ],
+    "supplies": ["부드러운 천", "부드러운 솔", "중성세제"],
+    "recommendedSupplies": ["냄새가 남지 않는 주방용 중성세제", "패킹 틈새용 부드러운 브러시"],
+    "recommendedProducts": [],
+    "cautions": [
+      "청소 전에는 전원 플러그를 빼거나 제품의 전원을 차단하세요.",
+      "제품 안팎에 물을 직접 뿌리지 마세요.",
+      "냉각 장치와 도어 부품을 임의로 분리하지 마세요.",
+      "연마제와 강한 산성·알칼리성 세제를 사용하지 마세요."
+    ],
+    "steps": [
+      "내용물을 다른 냉장 공간으로 옮기고 전원 플러그를 빼거나 설명서의 청소 준비 절차를 따라요.",
+      "김치통과 사용자가 분리할 수 있는 선반·서랍만 꺼내 음식물 자국을 제거해요.",
+      "분리한 김치통과 부품을 부드러운 천과 중성세제로 닦고 충분히 헹궈요.",
+      "저장실 안쪽과 도어 패킹을 부드러운 천으로 닦고 남은 물기를 제거해요.",
+      "모든 부품을 완전히 말려 원래 위치에 장착하고 설정 온도를 다시 확인해요."
+    ],
+    "keywords": [
+      "김치냉장고",
+      "김치통",
+      "저장실",
+      "도어패킹",
+      "RP20C3111EG",
+      "김치플러스 뚜껑형 202L"
+    ],
+    "reviewStatus": "verified",
+    "reviewedBy": "catalog-editor",
+    "reviewNote": "공식 제품 페이지와 모델별 공식 사용설명서 교차 검수 완료",
+    "officialManualUrl":
+        "https://downloadcenter.samsung.com/content/UM/202603/20260331083704779/DA68-04752L_IB_FULL_RP3000_RP22A_KO_260313.pdf",
+    "supportUrl": "https://www.samsung.com/sec/support/model/RP20C3111EG/",
+    "servicePhone": "1588-3366",
+    "releaseYear": 2023,
+    "isDiscontinued": false,
+    "imageUrl":
+        "https://images.samsung.com/kdp/goods/2023/05/12/a0650725-eb60-4873-9c58-4ce9d1bfaf53.png",
+    "modelFeatures": ["202L"],
+    "consumables": [],
+    "consumableDetails": [],
+    "installationType": "스탠드형 또는 뚜껑형"
+  },
+  {
+    "id": "samsung-rr40c7895ap",
+    "name": "Bespoke AI 냉장고 1도어 키친핏 408L (우열림, 냉장전용)",
+    "type": "appliance",
+    "categoryName": "냉장고",
+    "brand": "삼성전자",
+    "manufacturer": "삼성전자",
+    "modelName": "RR40C7895AP",
+    "seriesName": "Bespoke AI 냉장고 1도어 키친핏 408L",
+    "summary": "선반과 서랍을 분리 가능한 범위에서 닦고 도어 패킹과 내부를 완전히 말려 관리해요.",
+    "frequency": "오염이나 냄새가 느껴질 때",
+    "recurrenceDays": 0,
+    "estimatedMinutes": 25,
+    "productMethod": "선반·서랍·도어 패킹 관리",
+    "guideStatus": "공식 설명서를 확인했어요.",
+    "guideBasis": "삼성전자 공식 제품 페이지와 해당 모델의 공식 사용설명서를 확인했어요.",
+    "guideSourceType": "official",
+    "matchLevelLabel": "공식 설명서 확인 모델",
+    "sourceTitle": "삼성전자 Bespoke AI 냉장고 1도어 키친핏 408L (우열림, 냉장전용) 공식 제품 페이지",
+    "sourceUrl":
+        "https://www.samsung.com/sec/refrigerators/one-door-rr40c7895ap-d2c/RR40C7895AP/",
+    "sourceCheckedAt": "2026-06-14",
+    "sources": [
+      {
+        "id": "samsung-rr40c7895ap-product",
+        "title": "삼성전자 Bespoke AI 냉장고 1도어 키친핏 408L (우열림, 냉장전용) 공식 제품 페이지",
+        "url":
+            "https://www.samsung.com/sec/refrigerators/one-door-rr40c7895ap-d2c/RR40C7895AP/",
+        "type": "officialProduct",
+        "publisher": "삼성전자",
+        "checkedAt": "2026-06-14",
+        "supports": ["제품명", "모델명", "출시 연식", "대표 이미지", "주요 구분"],
+        "isOfficial": true,
+        "isActive": true
+      },
+      {
+        "id": "samsung-rr40c7895ap-manual",
+        "title": "삼성전자 RR40C7895AP 공식 사용설명서",
+        "url":
+            "https://downloadcenter.samsung.com/content/UM/202603/20260330160225232/DA68-04752S_IB_FULL_RR7000M_RR40x7_KO_260313.pdf",
+        "type": "officialManual",
+        "publisher": "삼성전자",
+        "checkedAt": "2026-06-14",
+        "supports": ["청소 안전사항", "관리 대상", "관리 순서"],
+        "isOfficial": true,
+        "isActive": true
+      }
+    ],
+    "specSourceIds": {
+      "출시 연도": ["samsung-rr40c7895ap-product"],
+      "모델명": ["samsung-rr40c7895ap-product"],
+      "주요 구분": ["samsung-rr40c7895ap-product"],
+      "공식 제품명": ["samsung-rr40c7895ap-product"]
+    },
+    "stepSourceIds": {
+      "0": ["samsung-rr40c7895ap-manual"],
+      "1": ["samsung-rr40c7895ap-manual"],
+      "2": ["samsung-rr40c7895ap-manual"],
+      "3": ["samsung-rr40c7895ap-manual"],
+      "4": ["samsung-rr40c7895ap-manual"]
+    },
+    "reviewHistory": [
+      {
+        "status": "verified",
+        "reviewer": "catalog-editor",
+        "reviewedAt": "2026-06-14",
+        "note": "공식 제품 페이지와 모델별 공식 사용설명서 교차 검수 완료"
+      }
+    ],
+    "productSpecs": [
+      "출시 연도: 2023년",
+      "모델명: RR40C7895AP",
+      "주요 구분: 408L / 키친핏",
+      "공식 제품명: Bespoke AI 냉장고 1도어 키친핏 408L (우열림, 냉장전용)"
+    ],
+    "supplies": ["부드러운 천", "부드러운 솔", "중성세제"],
+    "recommendedSupplies": ["표면이 거칠지 않은 극세사 천", "패킹 틈새용 부드러운 브러시"],
+    "recommendedProducts": [],
+    "cautions": [
+      "청소 전에는 전원 플러그를 빼거나 제품의 전원을 차단하세요.",
+      "제품 안팎에 물을 직접 뿌리지 마세요.",
+      "냉각 장치와 내부 배선을 임의로 분리하지 마세요.",
+      "차가운 유리 선반에 뜨거운 물을 바로 사용하지 마세요."
+    ],
+    "steps": [
+      "식품을 다른 냉장 공간으로 옮기고 전원 플러그를 빼거나 설명서의 청소 준비 절차를 따라요.",
+      "공식 설명서에서 사용자가 분리할 수 있다고 안내한 선반과 서랍만 꺼내요.",
+      "분리한 부품은 급격한 온도 변화 없이 부드러운 천과 중성세제로 닦아요.",
+      "냉장고 안쪽과 도어 패킹의 이물질을 부드러운 천으로 닦고 물기를 제거해요.",
+      "부품을 완전히 말려 원래 위치에 장착하고 전원을 다시 연결해 온도를 확인해요."
+    ],
+    "keywords": [
+      "냉장고",
+      "선반",
+      "서랍",
+      "도어패킹",
+      "RR40C7895AP",
+      "Bespoke AI 냉장고 1도어 키친핏 408L"
+    ],
+    "reviewStatus": "verified",
+    "reviewedBy": "catalog-editor",
+    "reviewNote": "공식 제품 페이지와 모델별 공식 사용설명서 교차 검수 완료",
+    "officialManualUrl":
+        "https://downloadcenter.samsung.com/content/UM/202603/20260330160225232/DA68-04752S_IB_FULL_RR7000M_RR40x7_KO_260313.pdf",
+    "supportUrl": "https://www.samsung.com/sec/support/model/RR40C7895AP/",
+    "servicePhone": "1588-3366",
+    "releaseYear": 2023,
+    "isDiscontinued": false,
+    "imageUrl":
+        "https://images.samsung.com/kdp/goods/2023/09/19/2f60aad8-b502-418b-80b8-8aa257202e4b.png",
+    "modelFeatures": ["408L", "키친핏"],
+    "consumables": [],
+    "consumableDetails": [],
+    "installationType": "제품 페이지의 설치 유형 확인"
+  },
+  {
+    "id": "samsung-wa30dg2120ee",
+    "name": "아가사랑 3kg",
+    "type": "appliance",
+    "categoryName": "세탁기",
+    "brand": "삼성전자",
+    "manufacturer": "삼성전자",
+    "modelName": "WA30DG2120EE",
+    "seriesName": "아가사랑 3kg",
+    "summary": "세제함과 필터를 모델 안내에 맞게 관리하고 전용 통세척 코스로 내부를 관리해요.",
+    "frequency": "통세척 알림 또는 냄새·이물질이 느껴질 때",
+    "recurrenceDays": 0,
+    "estimatedMinutes": 20,
+    "productMethod": "세제함·필터·세탁조 관리",
+    "guideStatus": "공식 설명서를 확인했어요.",
+    "guideBasis": "삼성전자 공식 제품 페이지와 해당 모델의 공식 사용설명서를 확인했어요.",
+    "guideSourceType": "official",
+    "matchLevelLabel": "공식 설명서 확인 모델",
+    "sourceTitle": "삼성전자 아가사랑 3kg 공식 제품 페이지",
+    "sourceUrl":
+        "https://www.samsung.com/sec/washing-machines/wa30dg2120ee-d2c/WA30DG2120EE/",
+    "sourceCheckedAt": "2026-06-14",
+    "sources": [
+      {
+        "id": "samsung-wa30dg2120ee-product",
+        "title": "삼성전자 아가사랑 3kg 공식 제품 페이지",
+        "url":
+            "https://www.samsung.com/sec/washing-machines/wa30dg2120ee-d2c/WA30DG2120EE/",
+        "type": "officialProduct",
+        "publisher": "삼성전자",
+        "checkedAt": "2026-06-14",
+        "supports": ["제품명", "모델명", "출시 연식", "대표 이미지", "주요 구분"],
+        "isOfficial": true,
+        "isActive": true
+      },
+      {
+        "id": "samsung-wa30dg2120ee-manual",
+        "title": "삼성전자 WA30DG2120EE 공식 사용설명서",
+        "url":
+            "https://downloadcenter.samsung.com/content/UM/202507/20250729075729379/BABY_WA30DG2120_250728.pdf",
+        "type": "officialManual",
+        "publisher": "삼성전자",
+        "checkedAt": "2026-06-14",
+        "supports": ["청소 안전사항", "관리 대상", "관리 순서"],
+        "isOfficial": true,
+        "isActive": true
+      }
+    ],
+    "specSourceIds": {
+      "출시 연도": ["samsung-wa30dg2120ee-product"],
+      "모델명": ["samsung-wa30dg2120ee-product"],
+      "주요 구분": ["samsung-wa30dg2120ee-product"],
+      "공식 제품명": ["samsung-wa30dg2120ee-product"]
+    },
+    "stepSourceIds": {
+      "0": ["samsung-wa30dg2120ee-manual"],
+      "1": ["samsung-wa30dg2120ee-manual"],
+      "2": ["samsung-wa30dg2120ee-manual"],
+      "3": ["samsung-wa30dg2120ee-manual"],
+      "4": ["samsung-wa30dg2120ee-manual"]
+    },
+    "reviewHistory": [
+      {
+        "status": "verified",
+        "reviewer": "catalog-editor",
+        "reviewedAt": "2026-06-14",
+        "note": "공식 제품 페이지와 모델별 공식 사용설명서 교차 검수 완료"
+      }
+    ],
+    "productSpecs": [
+      "출시 연도: 2024년",
+      "모델명: WA30DG2120EE",
+      "주요 구분: 3kg",
+      "공식 제품명: 아가사랑 3kg"
+    ],
+    "supplies": ["부드러운 천", "부드러운 솔"],
+    "recommendedSupplies": ["세제함 틈새용 부드러운 브러시", "세탁기 전용 통세척제"],
+    "recommendedProducts": [],
+    "cautions": [
+      "청소 전에는 전원 플러그를 빼세요.",
+      "제품에 물을 직접 뿌리지 마세요.",
+      "배수펌프와 전기 부품을 임의로 분리하지 마세요.",
+      "필터를 열기 전에는 내부의 뜨거운 물을 충분히 식히세요."
+    ],
+    "steps": [
+      "작동을 멈추고 전원 플러그를 뺀 뒤 급수와 내부 회전이 멈췄는지 확인해요.",
+      "세제함을 설명서에 따라 분리해 남은 세제와 섬유유연제를 씻어내요.",
+      "사용자가 관리하도록 안내된 배수필터나 거름망이 있는 경우 이물질을 제거해요.",
+      "도어와 고무 패킹 또는 세탁조 가장자리를 부드러운 천으로 닦아요.",
+      "제품이 안내하는 무세제통세척·통세척 코스를 실행하고 끝난 뒤 내부를 환기해요."
+    ],
+    "keywords": ["세탁기", "세제함", "배수필터", "통세척", "WA30DG2120EE", "아가사랑 3kg"],
+    "reviewStatus": "verified",
+    "reviewedBy": "catalog-editor",
+    "reviewNote": "공식 제품 페이지와 모델별 공식 사용설명서 교차 검수 완료",
+    "officialManualUrl":
+        "https://downloadcenter.samsung.com/content/UM/202507/20250729075729379/BABY_WA30DG2120_250728.pdf",
+    "supportUrl": "https://www.samsung.com/sec/support/model/WA30DG2120EE/",
+    "servicePhone": "1588-3366",
+    "releaseYear": 2024,
+    "isDiscontinued": false,
+    "imageUrl":
+        "https://images.samsung.com/kdp/goods/2026/01/05/620fef4e-671f-4c42-8c70-5066a134ce92.png",
+    "modelFeatures": ["3kg"],
+    "consumables": [],
+    "consumableDetails": [],
+    "installationType": "드럼·통돌이·콤보형"
+  },
+  {
+    "id": "samsung-wa80f19skb",
+    "name": "AI 통버블 세탁기 19kg",
+    "type": "appliance",
+    "categoryName": "세탁기",
+    "brand": "삼성전자",
+    "manufacturer": "삼성전자",
+    "modelName": "WA80F19SKB",
+    "seriesName": "AI 통버블 세탁기 19kg",
+    "summary": "세제함과 필터를 모델 안내에 맞게 관리하고 전용 통세척 코스로 내부를 관리해요.",
+    "frequency": "통세척 알림 또는 냄새·이물질이 느껴질 때",
+    "recurrenceDays": 0,
+    "estimatedMinutes": 20,
+    "productMethod": "세제함·필터·세탁조 관리",
+    "guideStatus": "공식 설명서를 확인했어요.",
+    "guideBasis": "삼성전자 공식 제품 페이지와 해당 모델의 공식 사용설명서를 확인했어요.",
+    "guideSourceType": "official",
+    "matchLevelLabel": "공식 설명서 확인 모델",
+    "sourceTitle": "삼성전자 AI 통버블 세탁기 19kg 공식 제품 페이지",
+    "sourceUrl":
+        "https://www.samsung.com/sec/washing-machines/top-loader-wa80f19skb-d2c/WA80F19SKB/",
+    "sourceCheckedAt": "2026-06-14",
+    "sources": [
+      {
+        "id": "samsung-wa80f19skb-product",
+        "title": "삼성전자 AI 통버블 세탁기 19kg 공식 제품 페이지",
+        "url":
+            "https://www.samsung.com/sec/washing-machines/top-loader-wa80f19skb-d2c/WA80F19SKB/",
+        "type": "officialProduct",
+        "publisher": "삼성전자",
+        "checkedAt": "2026-06-14",
+        "supports": ["제품명", "모델명", "출시 연식", "대표 이미지", "주요 구분"],
+        "isOfficial": true,
+        "isActive": true
+      },
+      {
+        "id": "samsung-wa80f19skb-manual",
+        "title": "삼성전자 WA80F19SKB 공식 사용설명서",
+        "url":
+            "https://downloadcenter.samsung.com/content/UM/202603/20260330093356470/OID84043_IB_WA6000F_BestBetter_KO_260318.pdf",
+        "type": "officialManual",
+        "publisher": "삼성전자",
+        "checkedAt": "2026-06-14",
+        "supports": ["청소 안전사항", "관리 대상", "관리 순서"],
+        "isOfficial": true,
+        "isActive": true
+      }
+    ],
+    "specSourceIds": {
+      "출시 연도": ["samsung-wa80f19skb-product"],
+      "모델명": ["samsung-wa80f19skb-product"],
+      "주요 구분": ["samsung-wa80f19skb-product"],
+      "공식 제품명": ["samsung-wa80f19skb-product"]
+    },
+    "stepSourceIds": {
+      "0": ["samsung-wa80f19skb-manual"],
+      "1": ["samsung-wa80f19skb-manual"],
+      "2": ["samsung-wa80f19skb-manual"],
+      "3": ["samsung-wa80f19skb-manual"],
+      "4": ["samsung-wa80f19skb-manual"]
+    },
+    "reviewHistory": [
+      {
+        "status": "verified",
+        "reviewer": "catalog-editor",
+        "reviewedAt": "2026-06-14",
+        "note": "공식 제품 페이지와 모델별 공식 사용설명서 교차 검수 완료"
+      }
+    ],
+    "productSpecs": [
+      "출시 연도: 2025년",
+      "모델명: WA80F19SKB",
+      "주요 구분: 19kg",
+      "공식 제품명: AI 통버블 세탁기 19kg"
+    ],
+    "supplies": ["부드러운 천", "부드러운 솔"],
+    "recommendedSupplies": ["세제함 틈새용 부드러운 브러시", "세탁기 전용 통세척제"],
+    "recommendedProducts": [],
+    "cautions": [
+      "청소 전에는 전원 플러그를 빼세요.",
+      "제품에 물을 직접 뿌리지 마세요.",
+      "배수펌프와 전기 부품을 임의로 분리하지 마세요.",
+      "필터를 열기 전에는 내부의 뜨거운 물을 충분히 식히세요."
+    ],
+    "steps": [
+      "작동을 멈추고 전원 플러그를 뺀 뒤 급수와 내부 회전이 멈췄는지 확인해요.",
+      "세제함을 설명서에 따라 분리해 남은 세제와 섬유유연제를 씻어내요.",
+      "사용자가 관리하도록 안내된 배수필터나 거름망이 있는 경우 이물질을 제거해요.",
+      "도어와 고무 패킹 또는 세탁조 가장자리를 부드러운 천으로 닦아요.",
+      "제품이 안내하는 무세제통세척·통세척 코스를 실행하고 끝난 뒤 내부를 환기해요."
+    ],
+    "keywords": ["세탁기", "세제함", "배수필터", "통세척", "WA80F19SKB", "AI 통버블 세탁기 19kg"],
+    "reviewStatus": "verified",
+    "reviewedBy": "catalog-editor",
+    "reviewNote": "공식 제품 페이지와 모델별 공식 사용설명서 교차 검수 완료",
+    "officialManualUrl":
+        "https://downloadcenter.samsung.com/content/UM/202603/20260330093356470/OID84043_IB_WA6000F_BestBetter_KO_260318.pdf",
+    "supportUrl": "https://www.samsung.com/sec/support/model/WA80F19SKB/",
+    "servicePhone": "1588-3366",
+    "releaseYear": 2025,
+    "isDiscontinued": false,
+    "imageUrl":
+        "https://images.samsung.com/kdp/goods/2025/02/25/98281ad9-f790-45df-8284-8356b4131632.png",
+    "modelFeatures": ["19kg"],
+    "consumables": [],
+    "consumableDetails": [],
+    "installationType": "드럼·통돌이·콤보형"
+  },
+  {
+    "id": "samsung-wd90h25ahs",
+    "name": "Bespoke AI 콤보 25/20kg (177.8mm LCD)",
+    "type": "appliance",
+    "categoryName": "세탁기",
+    "brand": "삼성전자",
+    "manufacturer": "삼성전자",
+    "modelName": "WD90H25AHS",
+    "seriesName": "Bespoke AI 콤보 25/20kg",
+    "summary": "세제함과 필터를 모델 안내에 맞게 관리하고 전용 통세척 코스로 내부를 관리해요.",
+    "frequency": "통세척 알림 또는 냄새·이물질이 느껴질 때",
+    "recurrenceDays": 0,
+    "estimatedMinutes": 20,
+    "productMethod": "세제함·필터·세탁조 관리",
+    "guideStatus": "공식 설명서를 확인했어요.",
+    "guideBasis": "삼성전자 공식 제품 페이지와 해당 모델의 공식 사용설명서를 확인했어요.",
+    "guideSourceType": "official",
+    "matchLevelLabel": "공식 설명서 확인 모델",
+    "sourceTitle": "삼성전자 Bespoke AI 콤보 25/20kg (177.8mm LCD) 공식 제품 페이지",
+    "sourceUrl":
+        "https://www.samsung.com/sec/laundry-combo/combo-wd90h25ahs-d2c/WD90H25AHS/",
+    "sourceCheckedAt": "2026-06-14",
+    "sources": [
+      {
+        "id": "samsung-wd90h25ahs-product",
+        "title": "삼성전자 Bespoke AI 콤보 25/20kg (177.8mm LCD) 공식 제품 페이지",
+        "url":
+            "https://www.samsung.com/sec/laundry-combo/combo-wd90h25ahs-d2c/WD90H25AHS/",
+        "type": "officialProduct",
+        "publisher": "삼성전자",
+        "checkedAt": "2026-06-14",
+        "supports": ["제품명", "모델명", "출시 연식", "대표 이미지", "주요 구분"],
+        "isOfficial": true,
+        "isActive": true
+      },
+      {
+        "id": "samsung-wd90h25ahs-manual",
+        "title": "삼성전자 WD90H25AHS 공식 사용설명서",
+        "url":
+            "https://downloadcenter.samsung.com/content/UM/202604/20260401073944814/OID140081_IB_WD80H-AD_7LCD_KO_260331.pdf",
+        "type": "officialManual",
+        "publisher": "삼성전자",
+        "checkedAt": "2026-06-14",
+        "supports": ["청소 안전사항", "관리 대상", "관리 순서"],
+        "isOfficial": true,
+        "isActive": true
+      }
+    ],
+    "specSourceIds": {
+      "출시 연도": ["samsung-wd90h25ahs-product"],
+      "모델명": ["samsung-wd90h25ahs-product"],
+      "주요 구분": ["samsung-wd90h25ahs-product"],
+      "공식 제품명": ["samsung-wd90h25ahs-product"]
+    },
+    "stepSourceIds": {
+      "0": ["samsung-wd90h25ahs-manual"],
+      "1": ["samsung-wd90h25ahs-manual"],
+      "2": ["samsung-wd90h25ahs-manual"],
+      "3": ["samsung-wd90h25ahs-manual"],
+      "4": ["samsung-wd90h25ahs-manual"]
+    },
+    "reviewHistory": [
+      {
+        "status": "verified",
+        "reviewer": "catalog-editor",
+        "reviewedAt": "2026-06-14",
+        "note": "공식 제품 페이지와 모델별 공식 사용설명서 교차 검수 완료"
+      }
+    ],
+    "productSpecs": [
+      "출시 연도: 2026년",
+      "모델명: WD90H25AHS",
+      "주요 구분: 25/20kg",
+      "공식 제품명: Bespoke AI 콤보 25/20kg (177.8mm LCD)"
+    ],
+    "supplies": ["부드러운 천", "부드러운 솔"],
+    "recommendedSupplies": ["세제함 틈새용 부드러운 브러시", "세탁기 전용 통세척제"],
+    "recommendedProducts": [],
+    "cautions": [
+      "청소 전에는 전원 플러그를 빼세요.",
+      "제품에 물을 직접 뿌리지 마세요.",
+      "배수펌프와 전기 부품을 임의로 분리하지 마세요.",
+      "필터를 열기 전에는 내부의 뜨거운 물을 충분히 식히세요."
+    ],
+    "steps": [
+      "작동을 멈추고 전원 플러그를 뺀 뒤 급수와 내부 회전이 멈췄는지 확인해요.",
+      "세제함을 설명서에 따라 분리해 남은 세제와 섬유유연제를 씻어내요.",
+      "사용자가 관리하도록 안내된 배수필터나 거름망이 있는 경우 이물질을 제거해요.",
+      "도어와 고무 패킹 또는 세탁조 가장자리를 부드러운 천으로 닦아요.",
+      "제품이 안내하는 무세제통세척·통세척 코스를 실행하고 끝난 뒤 내부를 환기해요."
+    ],
+    "keywords": [
+      "세탁기",
+      "세제함",
+      "배수필터",
+      "통세척",
+      "WD90H25AHS",
+      "Bespoke AI 콤보 25/20kg"
+    ],
+    "reviewStatus": "verified",
+    "reviewedBy": "catalog-editor",
+    "reviewNote": "공식 제품 페이지와 모델별 공식 사용설명서 교차 검수 완료",
+    "officialManualUrl":
+        "https://downloadcenter.samsung.com/content/UM/202604/20260401073944814/OID140081_IB_WD80H-AD_7LCD_KO_260331.pdf",
+    "supportUrl": "https://www.samsung.com/sec/support/model/WD90H25AHS/",
+    "servicePhone": "1588-3366",
+    "releaseYear": 2026,
+    "isDiscontinued": false,
+    "imageUrl":
+        "https://images.samsung.com/kdp/goods/2026/02/20/40c0a20c-4ae3-4c8a-b997-444629a2c626.png",
+    "modelFeatures": ["25/20kg"],
+    "consumables": [],
+    "consumableDetails": [],
+    "installationType": "드럼·통돌이·콤보형"
+  },
+  {
+    "id": "samsung-wd99f25ahr",
+    "name": "Infinite AI 콤보 25/18kg (177.8mm LCD)",
+    "type": "appliance",
+    "categoryName": "세탁기",
+    "brand": "삼성전자",
+    "manufacturer": "삼성전자",
+    "modelName": "WD99F25AHR",
+    "seriesName": "Infinite AI 콤보 25/18kg",
+    "summary": "세제함과 필터를 모델 안내에 맞게 관리하고 전용 통세척 코스로 내부를 관리해요.",
+    "frequency": "통세척 알림 또는 냄새·이물질이 느껴질 때",
+    "recurrenceDays": 0,
+    "estimatedMinutes": 20,
+    "productMethod": "세제함·필터·세탁조 관리",
+    "guideStatus": "공식 설명서를 확인했어요.",
+    "guideBasis": "삼성전자 공식 제품 페이지와 해당 모델의 공식 사용설명서를 확인했어요.",
+    "guideSourceType": "official",
+    "matchLevelLabel": "공식 설명서 확인 모델",
+    "sourceTitle": "삼성전자 Infinite AI 콤보 25/18kg (177.8mm LCD) 공식 제품 페이지",
+    "sourceUrl":
+        "https://www.samsung.com/sec/laundry-combo/combo-wd99f25ahr-d2c/WD99F25AHR/",
+    "sourceCheckedAt": "2026-06-14",
+    "sources": [
+      {
+        "id": "samsung-wd99f25ahr-product",
+        "title": "삼성전자 Infinite AI 콤보 25/18kg (177.8mm LCD) 공식 제품 페이지",
+        "url":
+            "https://www.samsung.com/sec/laundry-combo/combo-wd99f25ahr-d2c/WD99F25AHR/",
+        "type": "officialProduct",
+        "publisher": "삼성전자",
+        "checkedAt": "2026-06-14",
+        "supports": ["제품명", "모델명", "출시 연식", "대표 이미지", "주요 구분"],
+        "isOfficial": true,
+        "isActive": true
+      },
+      {
+        "id": "samsung-wd99f25ahr-manual",
+        "title": "삼성전자 WD99F25AHR 공식 사용설명서",
+        "url":
+            "https://downloadcenter.samsung.com/content/UM/202603/20260330082955121/OID96711_IB_T-PJT_WD99F-AD_7LCD_KO_260206.pdf",
+        "type": "officialManual",
+        "publisher": "삼성전자",
+        "checkedAt": "2026-06-14",
+        "supports": ["청소 안전사항", "관리 대상", "관리 순서"],
+        "isOfficial": true,
+        "isActive": true
+      }
+    ],
+    "specSourceIds": {
+      "출시 연도": ["samsung-wd99f25ahr-product"],
+      "모델명": ["samsung-wd99f25ahr-product"],
+      "주요 구분": ["samsung-wd99f25ahr-product"],
+      "공식 제품명": ["samsung-wd99f25ahr-product"]
+    },
+    "stepSourceIds": {
+      "0": ["samsung-wd99f25ahr-manual"],
+      "1": ["samsung-wd99f25ahr-manual"],
+      "2": ["samsung-wd99f25ahr-manual"],
+      "3": ["samsung-wd99f25ahr-manual"],
+      "4": ["samsung-wd99f25ahr-manual"]
+    },
+    "reviewHistory": [
+      {
+        "status": "verified",
+        "reviewer": "catalog-editor",
+        "reviewedAt": "2026-06-14",
+        "note": "공식 제품 페이지와 모델별 공식 사용설명서 교차 검수 완료"
+      }
+    ],
+    "productSpecs": [
+      "출시 연도: 2025년",
+      "모델명: WD99F25AHR",
+      "주요 구분: 25/18kg",
+      "공식 제품명: Infinite AI 콤보 25/18kg (177.8mm LCD)"
+    ],
+    "supplies": ["부드러운 천", "부드러운 솔"],
+    "recommendedSupplies": ["세제함 틈새용 부드러운 브러시", "세탁기 전용 통세척제"],
+    "recommendedProducts": [],
+    "cautions": [
+      "청소 전에는 전원 플러그를 빼세요.",
+      "제품에 물을 직접 뿌리지 마세요.",
+      "배수펌프와 전기 부품을 임의로 분리하지 마세요.",
+      "필터를 열기 전에는 내부의 뜨거운 물을 충분히 식히세요."
+    ],
+    "steps": [
+      "작동을 멈추고 전원 플러그를 뺀 뒤 급수와 내부 회전이 멈췄는지 확인해요.",
+      "세제함을 설명서에 따라 분리해 남은 세제와 섬유유연제를 씻어내요.",
+      "사용자가 관리하도록 안내된 배수필터나 거름망이 있는 경우 이물질을 제거해요.",
+      "도어와 고무 패킹 또는 세탁조 가장자리를 부드러운 천으로 닦아요.",
+      "제품이 안내하는 무세제통세척·통세척 코스를 실행하고 끝난 뒤 내부를 환기해요."
+    ],
+    "keywords": [
+      "세탁기",
+      "세제함",
+      "배수필터",
+      "통세척",
+      "WD99F25AHR",
+      "Infinite AI 콤보 25/18kg"
+    ],
+    "reviewStatus": "verified",
+    "reviewedBy": "catalog-editor",
+    "reviewNote": "공식 제품 페이지와 모델별 공식 사용설명서 교차 검수 완료",
+    "officialManualUrl":
+        "https://downloadcenter.samsung.com/content/UM/202603/20260330082955121/OID96711_IB_T-PJT_WD99F-AD_7LCD_KO_260206.pdf",
+    "supportUrl": "https://www.samsung.com/sec/support/model/WD99F25AHR/",
+    "servicePhone": "1588-3366",
+    "releaseYear": 2025,
+    "isDiscontinued": false,
+    "imageUrl":
+        "https://images.samsung.com/kdp/goods/2025/04/01/d42104ba-5b1e-4a62-9c42-c1d27c75b52a.png",
+    "modelFeatures": ["25/18kg"],
+    "consumables": [],
+    "consumableDetails": [],
+    "installationType": "드럼·통돌이·콤보형"
+  },
+  {
+    "id": "samsung-wf90f25adt",
+    "name": "Bespoke AI 세탁기 25kg (177.8mm LCD)",
+    "type": "appliance",
+    "categoryName": "세탁기",
+    "brand": "삼성전자",
+    "manufacturer": "삼성전자",
+    "modelName": "WF90F25ADT",
+    "seriesName": "Bespoke AI 세탁기 25kg",
+    "summary": "세제함과 필터를 모델 안내에 맞게 관리하고 전용 통세척 코스로 내부를 관리해요.",
+    "frequency": "통세척 알림 또는 냄새·이물질이 느껴질 때",
+    "recurrenceDays": 0,
+    "estimatedMinutes": 20,
+    "productMethod": "세제함·필터·세탁조 관리",
+    "guideStatus": "공식 설명서를 확인했어요.",
+    "guideBasis": "삼성전자 공식 제품 페이지와 해당 모델의 공식 사용설명서를 확인했어요.",
+    "guideSourceType": "official",
+    "matchLevelLabel": "공식 설명서 확인 모델",
+    "sourceTitle": "삼성전자 Bespoke AI 세탁기 25kg (177.8mm LCD) 공식 제품 페이지",
+    "sourceUrl":
+        "https://www.samsung.com/sec/washing-machines/wf90f25adt-d2c/WF90F25ADT/",
+    "sourceCheckedAt": "2026-06-14",
+    "sources": [
+      {
+        "id": "samsung-wf90f25adt-product",
+        "title": "삼성전자 Bespoke AI 세탁기 25kg (177.8mm LCD) 공식 제품 페이지",
+        "url":
+            "https://www.samsung.com/sec/washing-machines/wf90f25adt-d2c/WF90F25ADT/",
+        "type": "officialProduct",
+        "publisher": "삼성전자",
+        "checkedAt": "2026-06-14",
+        "supports": ["제품명", "모델명", "출시 연식", "대표 이미지", "주요 구분"],
+        "isOfficial": true,
+        "isActive": true
+      },
+      {
+        "id": "samsung-wf90f25adt-manual",
+        "title": "삼성전자 WF90F25ADT 공식 사용설명서",
+        "url":
+            "https://downloadcenter.samsung.com/content/UM/202604/20260406082045918/OID96622_IB_WF90F-AD_7LCD_KO_260401.pdf",
+        "type": "officialManual",
+        "publisher": "삼성전자",
+        "checkedAt": "2026-06-14",
+        "supports": ["청소 안전사항", "관리 대상", "관리 순서"],
+        "isOfficial": true,
+        "isActive": true
+      }
+    ],
+    "specSourceIds": {
+      "출시 연도": ["samsung-wf90f25adt-product"],
+      "모델명": ["samsung-wf90f25adt-product"],
+      "주요 구분": ["samsung-wf90f25adt-product"],
+      "공식 제품명": ["samsung-wf90f25adt-product"]
+    },
+    "stepSourceIds": {
+      "0": ["samsung-wf90f25adt-manual"],
+      "1": ["samsung-wf90f25adt-manual"],
+      "2": ["samsung-wf90f25adt-manual"],
+      "3": ["samsung-wf90f25adt-manual"],
+      "4": ["samsung-wf90f25adt-manual"]
+    },
+    "reviewHistory": [
+      {
+        "status": "verified",
+        "reviewer": "catalog-editor",
+        "reviewedAt": "2026-06-14",
+        "note": "공식 제품 페이지와 모델별 공식 사용설명서 교차 검수 완료"
+      }
+    ],
+    "productSpecs": [
+      "출시 연도: 2025년",
+      "모델명: WF90F25ADT",
+      "주요 구분: 25kg",
+      "공식 제품명: Bespoke AI 세탁기 25kg (177.8mm LCD)"
+    ],
+    "supplies": ["부드러운 천", "부드러운 솔"],
+    "recommendedSupplies": ["세제함 틈새용 부드러운 브러시", "세탁기 전용 통세척제"],
+    "recommendedProducts": [],
+    "cautions": [
+      "청소 전에는 전원 플러그를 빼세요.",
+      "제품에 물을 직접 뿌리지 마세요.",
+      "배수펌프와 전기 부품을 임의로 분리하지 마세요.",
+      "필터를 열기 전에는 내부의 뜨거운 물을 충분히 식히세요."
+    ],
+    "steps": [
+      "작동을 멈추고 전원 플러그를 뺀 뒤 급수와 내부 회전이 멈췄는지 확인해요.",
+      "세제함을 설명서에 따라 분리해 남은 세제와 섬유유연제를 씻어내요.",
+      "사용자가 관리하도록 안내된 배수필터나 거름망이 있는 경우 이물질을 제거해요.",
+      "도어와 고무 패킹 또는 세탁조 가장자리를 부드러운 천으로 닦아요.",
+      "제품이 안내하는 무세제통세척·통세척 코스를 실행하고 끝난 뒤 내부를 환기해요."
+    ],
+    "keywords": [
+      "세탁기",
+      "세제함",
+      "배수필터",
+      "통세척",
+      "WF90F25ADT",
+      "Bespoke AI 세탁기 25kg"
+    ],
+    "reviewStatus": "verified",
+    "reviewedBy": "catalog-editor",
+    "reviewNote": "공식 제품 페이지와 모델별 공식 사용설명서 교차 검수 완료",
+    "officialManualUrl":
+        "https://downloadcenter.samsung.com/content/UM/202604/20260406082045918/OID96622_IB_WF90F-AD_7LCD_KO_260401.pdf",
+    "supportUrl": "https://www.samsung.com/sec/support/model/WF90F25ADT/",
+    "servicePhone": "1588-3366",
+    "releaseYear": 2025,
+    "isDiscontinued": false,
+    "imageUrl":
+        "https://images.samsung.com/kdp/goods/2025/04/01/2f47cd8d-dcc0-4791-9246-b45b7bbb487a.png",
+    "modelFeatures": ["25kg"],
+    "consumables": [],
+    "consumableDetails": [],
+    "installationType": "드럼·통돌이·콤보형"
+  },
+  {
+    "id": "samsung-af60f19d12wrt",
+    "name": "AI Q9000 청정 62.6/18.7㎡ (리모컨 포함)",
+    "type": "appliance",
+    "categoryName": "에어컨",
+    "brand": "삼성전자",
+    "manufacturer": "삼성전자",
+    "modelName": "AF60F19D12WRT",
+    "seriesName": "AI Q9000 청정 62.6/18.7㎡",
+    "summary": "필터와 흡입구를 중심으로 관리하고 완전히 건조한 뒤 다시 조립해요.",
+    "frequency": "필터 알림 또는 오염 발견 시",
+    "recurrenceDays": 0,
+    "estimatedMinutes": 20,
+    "productMethod": "필터 분리 세척과 외관 관리",
+    "guideStatus": "공식 설명서를 확인했어요.",
+    "guideBasis": "삼성전자 공식 제품 페이지와 해당 모델의 공식 사용설명서를 확인했어요.",
+    "guideSourceType": "official",
+    "matchLevelLabel": "공식 설명서 확인 모델",
+    "sourceTitle": "삼성전자 AI Q9000 청정 62.6/18.7㎡ (리모컨 포함) 공식 제품 페이지",
+    "sourceUrl":
+        "https://www.samsung.com/sec/air-conditioners/package-af60f19d12wrt-d2c/AF60F19D12WRT/",
+    "sourceCheckedAt": "2026-06-14",
+    "sources": [
+      {
+        "id": "samsung-af60f19d12wrt-product",
+        "title": "삼성전자 AI Q9000 청정 62.6/18.7㎡ (리모컨 포함) 공식 제품 페이지",
+        "url":
+            "https://www.samsung.com/sec/air-conditioners/package-af60f19d12wrt-d2c/AF60F19D12WRT/",
+        "type": "officialProduct",
+        "publisher": "삼성전자",
+        "checkedAt": "2026-06-14",
+        "supports": ["제품명", "모델명", "출시 연식", "대표 이미지", "주요 구분"],
+        "isOfficial": true,
+        "isActive": true
+      },
+      {
+        "id": "samsung-af60f19d12wrt-manual",
+        "title": "삼성전자 AF60F19D12WRT 공식 사용설명서",
+        "url":
+            "https://downloadcenter.samsung.com/content/UM/202603/20260330142549190/FAC062-02_FAC063-01_IB_25Y_AF9000_MEMORY_KR_KO_260319-D01.pdf",
+        "type": "officialManual",
+        "publisher": "삼성전자",
+        "checkedAt": "2026-06-14",
+        "supports": ["청소 안전사항", "관리 대상", "관리 순서"],
+        "isOfficial": true,
+        "isActive": true
+      }
+    ],
+    "specSourceIds": {
+      "출시 연도": ["samsung-af60f19d12wrt-product"],
+      "모델명": ["samsung-af60f19d12wrt-product"],
+      "주요 구분": ["samsung-af60f19d12wrt-product"],
+      "공식 제품명": ["samsung-af60f19d12wrt-product"]
+    },
+    "stepSourceIds": {
+      "0": ["samsung-af60f19d12wrt-manual"],
+      "1": ["samsung-af60f19d12wrt-manual"],
+      "2": ["samsung-af60f19d12wrt-manual"],
+      "3": ["samsung-af60f19d12wrt-manual"],
+      "4": ["samsung-af60f19d12wrt-manual"]
+    },
+    "reviewHistory": [
+      {
+        "status": "verified",
+        "reviewer": "catalog-editor",
+        "reviewedAt": "2026-06-14",
+        "note": "공식 제품 페이지와 모델별 공식 사용설명서 교차 검수 완료"
+      }
+    ],
+    "productSpecs": [
+      "출시 연도: 2025년",
+      "모델명: AF60F19D12WRT",
+      "주요 구분: 62.6/18.7㎡ / 리모컨 포함",
+      "공식 제품명: AI Q9000 청정 62.6/18.7㎡ (리모컨 포함)"
+    ],
+    "supplies": ["부드러운 천", "부드러운 솔", "진공청소기"],
+    "recommendedSupplies": ["표면이 거칠지 않은 극세사 천", "필터 먼지 제거용 부드러운 브러시"],
+    "recommendedProducts": [],
+    "cautions": [
+      "청소 전에는 전원 플러그를 빼거나 차단기를 내리세요.",
+      "제품에 물을 직접 뿌리지 마세요.",
+      "냉매 배관과 전기 부품을 임의로 분리하지 마세요.",
+      "물세척이 금지된 필터는 물에 담그지 마세요."
+    ],
+    "steps": [
+      "운전을 정지하고 전원 플러그를 빼거나 차단기를 내린 뒤 제품이 멈춘 것을 확인해요.",
+      "공식 설명서에 따라 사용자가 관리할 수 있는 필터만 분리해요.",
+      "필터의 먼지를 제거하고 물세척이 허용된 필터만 흐르는 물로 세척해요.",
+      "필터를 직사광선을 피해 완전히 말리고 흡입구와 외관은 부드러운 천으로 닦아요.",
+      "필터를 원래 위치에 장착하고 실외기 주변의 통풍을 막는 물건이 없는지 확인해요."
+    ],
+    "keywords": [
+      "에어컨",
+      "필터",
+      "흡입구",
+      "실외기",
+      "AF60F19D12WRT",
+      "AI Q9000 청정 62.6/18.7㎡"
+    ],
+    "reviewStatus": "verified",
+    "reviewedBy": "catalog-editor",
+    "reviewNote": "공식 제품 페이지와 모델별 공식 사용설명서 교차 검수 완료",
+    "officialManualUrl":
+        "https://downloadcenter.samsung.com/content/UM/202603/20260330142549190/FAC062-02_FAC063-01_IB_25Y_AF9000_MEMORY_KR_KO_260319-D01.pdf",
+    "supportUrl": "https://www.samsung.com/sec/support/model/AF60F19D12WRT/",
+    "servicePhone": "1588-3366",
+    "releaseYear": 2025,
+    "isDiscontinued": false,
+    "imageUrl":
+        "https://images.samsung.com/kdp/goods/2024/12/30/1750e289-9ab0-4c9d-ac5b-530bdc35c78b.png",
+    "modelFeatures": ["62.6/18.7㎡", "리모컨 포함"],
+    "consumables": [],
+    "consumableDetails": [],
+    "installationType": "스탠드형·벽걸이형 또는 멀티형"
+  },
+  {
+    "id": "samsung-af70f17d24wrt",
+    "name": "Bespoke AI 무풍 클래식 56.9/18.7㎡ (리모컨 포함)",
+    "type": "appliance",
+    "categoryName": "에어컨",
+    "brand": "삼성전자",
+    "manufacturer": "삼성전자",
+    "modelName": "AF70F17D24WRT",
+    "seriesName": "Bespoke AI 무풍 클래식 56.9/18.7㎡",
+    "summary": "필터와 흡입구를 중심으로 관리하고 완전히 건조한 뒤 다시 조립해요.",
+    "frequency": "필터 알림 또는 오염 발견 시",
+    "recurrenceDays": 0,
+    "estimatedMinutes": 20,
+    "productMethod": "필터 분리 세척과 외관 관리",
+    "guideStatus": "공식 설명서를 확인했어요.",
+    "guideBasis": "삼성전자 공식 제품 페이지와 해당 모델의 공식 사용설명서를 확인했어요.",
+    "guideSourceType": "official",
+    "matchLevelLabel": "공식 설명서 확인 모델",
+    "sourceTitle": "삼성전자 Bespoke AI 무풍 클래식 56.9/18.7㎡ (리모컨 포함) 공식 제품 페이지",
+    "sourceUrl":
+        "https://www.samsung.com/sec/air-conditioners/package-af70f17d24wrt-d2c/AF70F17D24WRT/",
+    "sourceCheckedAt": "2026-06-14",
+    "sources": [
+      {
+        "id": "samsung-af70f17d24wrt-product",
+        "title": "삼성전자 Bespoke AI 무풍 클래식 56.9/18.7㎡ (리모컨 포함) 공식 제품 페이지",
+        "url":
+            "https://www.samsung.com/sec/air-conditioners/package-af70f17d24wrt-d2c/AF70F17D24WRT/",
+        "type": "officialProduct",
+        "publisher": "삼성전자",
+        "checkedAt": "2026-06-14",
+        "supports": ["제품명", "모델명", "출시 연식", "대표 이미지", "주요 구분"],
+        "isOfficial": true,
+        "isActive": true
+      },
+      {
+        "id": "samsung-af70f17d24wrt-manual",
+        "title": "삼성전자 AF70F17D24WRT 공식 사용설명서",
+        "url":
+            "https://downloadcenter.samsung.com/content/UM/202603/20260330142315782/FAC058-01_FAC059-00_IB_25Y_AF9500_B2_LCD_KR_KO_260320-D01.pdf",
+        "type": "officialManual",
+        "publisher": "삼성전자",
+        "checkedAt": "2026-06-14",
+        "supports": ["청소 안전사항", "관리 대상", "관리 순서"],
+        "isOfficial": true,
+        "isActive": true
+      }
+    ],
+    "specSourceIds": {
+      "출시 연도": ["samsung-af70f17d24wrt-product"],
+      "모델명": ["samsung-af70f17d24wrt-product"],
+      "주요 구분": ["samsung-af70f17d24wrt-product"],
+      "공식 제품명": ["samsung-af70f17d24wrt-product"]
+    },
+    "stepSourceIds": {
+      "0": ["samsung-af70f17d24wrt-manual"],
+      "1": ["samsung-af70f17d24wrt-manual"],
+      "2": ["samsung-af70f17d24wrt-manual"],
+      "3": ["samsung-af70f17d24wrt-manual"],
+      "4": ["samsung-af70f17d24wrt-manual"]
+    },
+    "reviewHistory": [
+      {
+        "status": "verified",
+        "reviewer": "catalog-editor",
+        "reviewedAt": "2026-06-14",
+        "note": "공식 제품 페이지와 모델별 공식 사용설명서 교차 검수 완료"
+      }
+    ],
+    "productSpecs": [
+      "출시 연도: 2025년",
+      "모델명: AF70F17D24WRT",
+      "주요 구분: 56.9/18.7㎡ / 리모컨 포함",
+      "공식 제품명: Bespoke AI 무풍 클래식 56.9/18.7㎡ (리모컨 포함)"
+    ],
+    "supplies": ["부드러운 천", "부드러운 솔", "진공청소기"],
+    "recommendedSupplies": ["표면이 거칠지 않은 극세사 천", "필터 먼지 제거용 부드러운 브러시"],
+    "recommendedProducts": [],
+    "cautions": [
+      "청소 전에는 전원 플러그를 빼거나 차단기를 내리세요.",
+      "제품에 물을 직접 뿌리지 마세요.",
+      "냉매 배관과 전기 부품을 임의로 분리하지 마세요.",
+      "물세척이 금지된 필터는 물에 담그지 마세요."
+    ],
+    "steps": [
+      "운전을 정지하고 전원 플러그를 빼거나 차단기를 내린 뒤 제품이 멈춘 것을 확인해요.",
+      "공식 설명서에 따라 사용자가 관리할 수 있는 필터만 분리해요.",
+      "필터의 먼지를 제거하고 물세척이 허용된 필터만 흐르는 물로 세척해요.",
+      "필터를 직사광선을 피해 완전히 말리고 흡입구와 외관은 부드러운 천으로 닦아요.",
+      "필터를 원래 위치에 장착하고 실외기 주변의 통풍을 막는 물건이 없는지 확인해요."
+    ],
+    "keywords": [
+      "에어컨",
+      "필터",
+      "흡입구",
+      "실외기",
+      "AF70F17D24WRT",
+      "Bespoke AI 무풍 클래식 56.9/18.7㎡"
+    ],
+    "reviewStatus": "verified",
+    "reviewedBy": "catalog-editor",
+    "reviewNote": "공식 제품 페이지와 모델별 공식 사용설명서 교차 검수 완료",
+    "officialManualUrl":
+        "https://downloadcenter.samsung.com/content/UM/202603/20260330142315782/FAC058-01_FAC059-00_IB_25Y_AF9500_B2_LCD_KR_KO_260320-D01.pdf",
+    "supportUrl": "https://www.samsung.com/sec/support/model/AF70F17D24WRT/",
+    "servicePhone": "1588-3366",
+    "releaseYear": 2025,
+    "isDiscontinued": false,
+    "imageUrl":
+        "https://images.samsung.com/kdp/goods/2024/12/30/6c0879b9-d041-44b2-b2e3-031bfea11d9d.png",
+    "modelFeatures": ["56.9/18.7㎡", "리모컨 포함"],
+    "consumables": [],
+    "consumableDetails": [],
+    "installationType": "스탠드형·벽걸이형 또는 멀티형"
+  },
+  {
+    "id": "samsung-af80f18d25wrt",
+    "name": "Bespoke AI 무풍콤보 갤러리 청정 58.5/18.7㎡ (리모컨 포함)",
+    "type": "appliance",
+    "categoryName": "에어컨",
+    "brand": "삼성전자",
+    "manufacturer": "삼성전자",
+    "modelName": "AF80F18D25WRT",
+    "seriesName": "Bespoke AI 무풍콤보 갤러리 청정 58.5/18.7㎡",
+    "summary": "필터와 흡입구를 중심으로 관리하고 완전히 건조한 뒤 다시 조립해요.",
+    "frequency": "필터 알림 또는 오염 발견 시",
+    "recurrenceDays": 0,
+    "estimatedMinutes": 20,
+    "productMethod": "필터 분리 세척과 외관 관리",
+    "guideStatus": "공식 설명서를 확인했어요.",
+    "guideBasis": "삼성전자 공식 제품 페이지와 해당 모델의 공식 사용설명서를 확인했어요.",
+    "guideSourceType": "official",
+    "matchLevelLabel": "공식 설명서 확인 모델",
+    "sourceTitle": "삼성전자 Bespoke AI 무풍콤보 갤러리 청정 58.5/18.7㎡ (리모컨 포함) 공식 제품 페이지",
+    "sourceUrl":
+        "https://www.samsung.com/sec/air-conditioners/package-af80f18d25wrt-d2c/AF80F18D25WRT/",
+    "sourceCheckedAt": "2026-06-14",
+    "sources": [
+      {
+        "id": "samsung-af80f18d25wrt-product",
+        "title": "삼성전자 Bespoke AI 무풍콤보 갤러리 청정 58.5/18.7㎡ (리모컨 포함) 공식 제품 페이지",
+        "url":
+            "https://www.samsung.com/sec/air-conditioners/package-af80f18d25wrt-d2c/AF80F18D25WRT/",
+        "type": "officialProduct",
+        "publisher": "삼성전자",
+        "checkedAt": "2026-06-14",
+        "supports": ["제품명", "모델명", "출시 연식", "대표 이미지", "주요 구분"],
+        "isOfficial": true,
+        "isActive": true
+      },
+      {
+        "id": "samsung-af80f18d25wrt-manual",
+        "title": "삼성전자 AF80F18D25WRT 공식 사용설명서",
+        "url":
+            "https://downloadcenter.samsung.com/content/UM/202603/20260330142142289/FAC056-01_FAC057-01__IB_25Y_AF9900_COOLING_KR_KO_260320-D01.pdf",
+        "type": "officialManual",
+        "publisher": "삼성전자",
+        "checkedAt": "2026-06-14",
+        "supports": ["청소 안전사항", "관리 대상", "관리 순서"],
+        "isOfficial": true,
+        "isActive": true
+      }
+    ],
+    "specSourceIds": {
+      "출시 연도": ["samsung-af80f18d25wrt-product"],
+      "모델명": ["samsung-af80f18d25wrt-product"],
+      "주요 구분": ["samsung-af80f18d25wrt-product"],
+      "공식 제품명": ["samsung-af80f18d25wrt-product"]
+    },
+    "stepSourceIds": {
+      "0": ["samsung-af80f18d25wrt-manual"],
+      "1": ["samsung-af80f18d25wrt-manual"],
+      "2": ["samsung-af80f18d25wrt-manual"],
+      "3": ["samsung-af80f18d25wrt-manual"],
+      "4": ["samsung-af80f18d25wrt-manual"]
+    },
+    "reviewHistory": [
+      {
+        "status": "verified",
+        "reviewer": "catalog-editor",
+        "reviewedAt": "2026-06-14",
+        "note": "공식 제품 페이지와 모델별 공식 사용설명서 교차 검수 완료"
+      }
+    ],
+    "productSpecs": [
+      "출시 연도: 2025년",
+      "모델명: AF80F18D25WRT",
+      "주요 구분: 58.5/18.7㎡ / 리모컨 포함",
+      "공식 제품명: Bespoke AI 무풍콤보 갤러리 청정 58.5/18.7㎡ (리모컨 포함)"
+    ],
+    "supplies": ["부드러운 천", "부드러운 솔", "진공청소기"],
+    "recommendedSupplies": ["표면이 거칠지 않은 극세사 천", "필터 먼지 제거용 부드러운 브러시"],
+    "recommendedProducts": [],
+    "cautions": [
+      "청소 전에는 전원 플러그를 빼거나 차단기를 내리세요.",
+      "제품에 물을 직접 뿌리지 마세요.",
+      "냉매 배관과 전기 부품을 임의로 분리하지 마세요.",
+      "물세척이 금지된 필터는 물에 담그지 마세요."
+    ],
+    "steps": [
+      "운전을 정지하고 전원 플러그를 빼거나 차단기를 내린 뒤 제품이 멈춘 것을 확인해요.",
+      "공식 설명서에 따라 사용자가 관리할 수 있는 필터만 분리해요.",
+      "필터의 먼지를 제거하고 물세척이 허용된 필터만 흐르는 물로 세척해요.",
+      "필터를 직사광선을 피해 완전히 말리고 흡입구와 외관은 부드러운 천으로 닦아요.",
+      "필터를 원래 위치에 장착하고 실외기 주변의 통풍을 막는 물건이 없는지 확인해요."
+    ],
+    "keywords": [
+      "에어컨",
+      "필터",
+      "흡입구",
+      "실외기",
+      "AF80F18D25WRT",
+      "Bespoke AI 무풍콤보 갤러리 청정 58.5/18.7㎡"
+    ],
+    "reviewStatus": "verified",
+    "reviewedBy": "catalog-editor",
+    "reviewNote": "공식 제품 페이지와 모델별 공식 사용설명서 교차 검수 완료",
+    "officialManualUrl":
+        "https://downloadcenter.samsung.com/content/UM/202603/20260330142142289/FAC056-01_FAC057-01__IB_25Y_AF9900_COOLING_KR_KO_260320-D01.pdf",
+    "supportUrl": "https://www.samsung.com/sec/support/model/AF80F18D25WRT/",
+    "servicePhone": "1588-3366",
+    "releaseYear": 2025,
+    "isDiscontinued": false,
+    "imageUrl":
+        "https://images.samsung.com/kdp/goods/2024/12/27/1788de1a-d6bd-42f7-ae01-9b91fe6d89dc.png",
+    "modelFeatures": ["58.5/18.7㎡", "리모컨 포함"],
+    "consumables": [],
+    "consumableDetails": [],
+    "installationType": "스탠드형·벽걸이형 또는 멀티형"
+  },
+  {
+    "id": "samsung-af90h25d36wrt",
+    "name": "Bespoke AI 무풍콤보 갤러리 프로 청정 81.8/18.7㎡",
+    "type": "appliance",
+    "categoryName": "에어컨",
+    "brand": "삼성전자",
+    "manufacturer": "삼성전자",
+    "modelName": "AF90H25D36WRT",
+    "seriesName": "Bespoke AI 무풍콤보 갤러리 프로 청정 81.8/18.7㎡",
+    "summary": "필터와 흡입구를 중심으로 관리하고 완전히 건조한 뒤 다시 조립해요.",
+    "frequency": "필터 알림 또는 오염 발견 시",
+    "recurrenceDays": 0,
+    "estimatedMinutes": 20,
+    "productMethod": "필터 분리 세척과 외관 관리",
+    "guideStatus": "공식 설명서를 확인했어요.",
+    "guideBasis": "삼성전자 공식 제품 페이지와 해당 모델의 공식 사용설명서를 확인했어요.",
+    "guideSourceType": "official",
+    "matchLevelLabel": "공식 설명서 확인 모델",
+    "sourceTitle": "삼성전자 Bespoke AI 무풍콤보 갤러리 프로 청정 81.8/18.7㎡ 공식 제품 페이지",
+    "sourceUrl":
+        "https://www.samsung.com/sec/air-conditioners/package-af90h25d36wrt-d2c/AF90H25D36WRT/",
+    "sourceCheckedAt": "2026-06-14",
+    "sources": [
+      {
+        "id": "samsung-af90h25d36wrt-product",
+        "title": "삼성전자 Bespoke AI 무풍콤보 갤러리 프로 청정 81.8/18.7㎡ 공식 제품 페이지",
+        "url":
+            "https://www.samsung.com/sec/air-conditioners/package-af90h25d36wrt-d2c/AF90H25D36WRT/",
+        "type": "officialProduct",
+        "publisher": "삼성전자",
+        "checkedAt": "2026-06-14",
+        "supports": ["제품명", "모델명", "출시 연식", "대표 이미지", "주요 구분"],
+        "isOfficial": true,
+        "isActive": true
+      },
+      {
+        "id": "samsung-af90h25d36wrt-manual",
+        "title": "삼성전자 AF90H25D36WRT 공식 사용설명서",
+        "url":
+            "https://downloadcenter.samsung.com/content/UM/202603/20260330142737520/FAC064-01_IB_26Y_AF90H_PM1.0_KR_KO_260320-D01.pdf",
+        "type": "officialManual",
+        "publisher": "삼성전자",
+        "checkedAt": "2026-06-14",
+        "supports": ["청소 안전사항", "관리 대상", "관리 순서"],
+        "isOfficial": true,
+        "isActive": true
+      }
+    ],
+    "specSourceIds": {
+      "출시 연도": ["samsung-af90h25d36wrt-product"],
+      "모델명": ["samsung-af90h25d36wrt-product"],
+      "주요 구분": ["samsung-af90h25d36wrt-product"],
+      "공식 제품명": ["samsung-af90h25d36wrt-product"]
+    },
+    "stepSourceIds": {
+      "0": ["samsung-af90h25d36wrt-manual"],
+      "1": ["samsung-af90h25d36wrt-manual"],
+      "2": ["samsung-af90h25d36wrt-manual"],
+      "3": ["samsung-af90h25d36wrt-manual"],
+      "4": ["samsung-af90h25d36wrt-manual"]
+    },
+    "reviewHistory": [
+      {
+        "status": "verified",
+        "reviewer": "catalog-editor",
+        "reviewedAt": "2026-06-14",
+        "note": "공식 제품 페이지와 모델별 공식 사용설명서 교차 검수 완료"
+      }
+    ],
+    "productSpecs": [
+      "출시 연도: 2026년",
+      "모델명: AF90H25D36WRT",
+      "주요 구분: 81.8/18.7㎡",
+      "공식 제품명: Bespoke AI 무풍콤보 갤러리 프로 청정 81.8/18.7㎡"
+    ],
+    "supplies": ["부드러운 천", "부드러운 솔", "진공청소기"],
+    "recommendedSupplies": ["표면이 거칠지 않은 극세사 천", "필터 먼지 제거용 부드러운 브러시"],
+    "recommendedProducts": [],
+    "cautions": [
+      "청소 전에는 전원 플러그를 빼거나 차단기를 내리세요.",
+      "제품에 물을 직접 뿌리지 마세요.",
+      "냉매 배관과 전기 부품을 임의로 분리하지 마세요.",
+      "물세척이 금지된 필터는 물에 담그지 마세요."
+    ],
+    "steps": [
+      "운전을 정지하고 전원 플러그를 빼거나 차단기를 내린 뒤 제품이 멈춘 것을 확인해요.",
+      "공식 설명서에 따라 사용자가 관리할 수 있는 필터만 분리해요.",
+      "필터의 먼지를 제거하고 물세척이 허용된 필터만 흐르는 물로 세척해요.",
+      "필터를 직사광선을 피해 완전히 말리고 흡입구와 외관은 부드러운 천으로 닦아요.",
+      "필터를 원래 위치에 장착하고 실외기 주변의 통풍을 막는 물건이 없는지 확인해요."
+    ],
+    "keywords": [
+      "에어컨",
+      "필터",
+      "흡입구",
+      "실외기",
+      "AF90H25D36WRT",
+      "Bespoke AI 무풍콤보 갤러리 프로 청정 81.8/18.7㎡"
+    ],
+    "reviewStatus": "verified",
+    "reviewedBy": "catalog-editor",
+    "reviewNote": "공식 제품 페이지와 모델별 공식 사용설명서 교차 검수 완료",
+    "officialManualUrl":
+        "https://downloadcenter.samsung.com/content/UM/202603/20260330142737520/FAC064-01_IB_26Y_AF90H_PM1.0_KR_KO_260320-D01.pdf",
+    "supportUrl": "https://www.samsung.com/sec/support/model/AF90H25D36WRT/",
+    "servicePhone": "1588-3366",
+    "releaseYear": 2026,
+    "isDiscontinued": false,
+    "imageUrl":
+        "https://images.samsung.com/kdp/goods/2026/02/09/0e0a7cc9-f0cf-4a66-8350-360d16109d8e.png",
+    "modelFeatures": ["81.8/18.7㎡"],
+    "consumables": [],
+    "consumableDetails": [],
+    "installationType": "스탠드형·벽걸이형 또는 멀티형"
+  },
+  {
+    "id": "samsung-ar60f11d11wt",
+    "name": "AI 무풍콤보 벽걸이 34.1㎡ (리모컨 포함)",
+    "type": "appliance",
+    "categoryName": "에어컨",
+    "brand": "삼성전자",
+    "manufacturer": "삼성전자",
+    "modelName": "AR60F11D11WT",
+    "seriesName": "AI 무풍콤보 벽걸이 34.1㎡",
+    "summary": "필터와 흡입구를 중심으로 관리하고 완전히 건조한 뒤 다시 조립해요.",
+    "frequency": "필터 알림 또는 오염 발견 시",
+    "recurrenceDays": 0,
+    "estimatedMinutes": 20,
+    "productMethod": "필터 분리 세척과 외관 관리",
+    "guideStatus": "공식 설명서를 확인했어요.",
+    "guideBasis": "삼성전자 공식 제품 페이지와 해당 모델의 공식 사용설명서를 확인했어요.",
+    "guideSourceType": "official",
+    "matchLevelLabel": "공식 설명서 확인 모델",
+    "sourceTitle": "삼성전자 AI 무풍콤보 벽걸이 34.1㎡ (리모컨 포함) 공식 제품 페이지",
+    "sourceUrl":
+        "https://www.samsung.com/sec/air-conditioners/package-ar60f11d11wt-d2c/AR60F11D11WT/",
+    "sourceCheckedAt": "2026-06-14",
+    "sources": [
+      {
+        "id": "samsung-ar60f11d11wt-product",
+        "title": "삼성전자 AI 무풍콤보 벽걸이 34.1㎡ (리모컨 포함) 공식 제품 페이지",
+        "url":
+            "https://www.samsung.com/sec/air-conditioners/package-ar60f11d11wt-d2c/AR60F11D11WT/",
+        "type": "officialProduct",
+        "publisher": "삼성전자",
+        "checkedAt": "2026-06-14",
+        "supports": ["제품명", "모델명", "출시 연식", "대표 이미지", "주요 구분"],
+        "isOfficial": true,
+        "isActive": true
+      },
+      {
+        "id": "samsung-ar60f11d11wt-manual",
+        "title": "삼성전자 AR60F11D11WT 공식 사용설명서",
+        "url":
+            "https://downloadcenter.samsung.com/content/UM/202603/20260330142821005/RAC149-01_RAC159-00_IB_25Y_AR9500T_WindFree_GEO_CO_HP_KR_KO_260319-D01.pdf",
+        "type": "officialManual",
+        "publisher": "삼성전자",
+        "checkedAt": "2026-06-14",
+        "supports": ["청소 안전사항", "관리 대상", "관리 순서"],
+        "isOfficial": true,
+        "isActive": true
+      }
+    ],
+    "specSourceIds": {
+      "출시 연도": ["samsung-ar60f11d11wt-product"],
+      "모델명": ["samsung-ar60f11d11wt-product"],
+      "주요 구분": ["samsung-ar60f11d11wt-product"],
+      "공식 제품명": ["samsung-ar60f11d11wt-product"]
+    },
+    "stepSourceIds": {
+      "0": ["samsung-ar60f11d11wt-manual"],
+      "1": ["samsung-ar60f11d11wt-manual"],
+      "2": ["samsung-ar60f11d11wt-manual"],
+      "3": ["samsung-ar60f11d11wt-manual"],
+      "4": ["samsung-ar60f11d11wt-manual"]
+    },
+    "reviewHistory": [
+      {
+        "status": "verified",
+        "reviewer": "catalog-editor",
+        "reviewedAt": "2026-06-14",
+        "note": "공식 제품 페이지와 모델별 공식 사용설명서 교차 검수 완료"
+      }
+    ],
+    "productSpecs": [
+      "출시 연도: 2025년",
+      "모델명: AR60F11D11WT",
+      "주요 구분: 34.1㎡ / 리모컨 포함",
+      "공식 제품명: AI 무풍콤보 벽걸이 34.1㎡ (리모컨 포함)"
+    ],
+    "supplies": ["부드러운 천", "부드러운 솔", "진공청소기"],
+    "recommendedSupplies": ["표면이 거칠지 않은 극세사 천", "필터 먼지 제거용 부드러운 브러시"],
+    "recommendedProducts": [],
+    "cautions": [
+      "청소 전에는 전원 플러그를 빼거나 차단기를 내리세요.",
+      "제품에 물을 직접 뿌리지 마세요.",
+      "냉매 배관과 전기 부품을 임의로 분리하지 마세요.",
+      "물세척이 금지된 필터는 물에 담그지 마세요."
+    ],
+    "steps": [
+      "운전을 정지하고 전원 플러그를 빼거나 차단기를 내린 뒤 제품이 멈춘 것을 확인해요.",
+      "공식 설명서에 따라 사용자가 관리할 수 있는 필터만 분리해요.",
+      "필터의 먼지를 제거하고 물세척이 허용된 필터만 흐르는 물로 세척해요.",
+      "필터를 직사광선을 피해 완전히 말리고 흡입구와 외관은 부드러운 천으로 닦아요.",
+      "필터를 원래 위치에 장착하고 실외기 주변의 통풍을 막는 물건이 없는지 확인해요."
+    ],
+    "keywords": [
+      "에어컨",
+      "필터",
+      "흡입구",
+      "실외기",
+      "AR60F11D11WT",
+      "AI 무풍콤보 벽걸이 34.1㎡"
+    ],
+    "reviewStatus": "verified",
+    "reviewedBy": "catalog-editor",
+    "reviewNote": "공식 제품 페이지와 모델별 공식 사용설명서 교차 검수 완료",
+    "officialManualUrl":
+        "https://downloadcenter.samsung.com/content/UM/202603/20260330142821005/RAC149-01_RAC159-00_IB_25Y_AR9500T_WindFree_GEO_CO_HP_KR_KO_260319-D01.pdf",
+    "supportUrl": "https://www.samsung.com/sec/support/model/AR60F11D11WT/",
+    "servicePhone": "1588-3366",
+    "releaseYear": 2025,
+    "isDiscontinued": false,
+    "imageUrl":
+        "https://images.samsung.com/kdp/goods/2025/03/14/fd52dd2c-592e-4a08-bb2c-7018d6408d58.png",
+    "modelFeatures": ["34.1㎡", "리모컨 포함"],
+    "consumables": [],
+    "consumableDetails": [],
+    "installationType": "스탠드형·벽걸이형 또는 멀티형"
+  },
+  {
+    "id": "samsung-dw99f79e1b00s",
+    "name": "Infinite AI 식기세척기 트루빌트인 14인용 (필터 내장형, 컵 맞춤 세척)",
+    "type": "appliance",
+    "categoryName": "식기세척기",
+    "brand": "삼성전자",
+    "manufacturer": "삼성전자",
+    "modelName": "DW99F79E1B00S",
+    "seriesName": "Infinite AI 식기세척기 트루빌트인 14인용",
+    "summary": "필터와 분사 노즐의 이물질을 제거하고 도어 주변을 닦아 세척 성능을 유지해요.",
+    "frequency": "필터 오염 또는 냄새가 느껴질 때",
+    "recurrenceDays": 0,
+    "estimatedMinutes": 20,
+    "productMethod": "필터·분사 노즐·도어 패킹 관리",
+    "guideStatus": "공식 설명서를 확인했어요.",
+    "guideBasis": "삼성전자 공식 제품 페이지와 해당 모델의 공식 사용설명서를 확인했어요.",
+    "guideSourceType": "official",
+    "matchLevelLabel": "공식 설명서 확인 모델",
+    "sourceTitle":
+        "삼성전자 Infinite AI 식기세척기 트루빌트인 14인용 (필터 내장형, 컵 맞춤 세척) 공식 제품 페이지",
+    "sourceUrl":
+        "https://www.samsung.com/sec/dishwashers/true-built-in-dw99f79e1b00s-d2c/DW99F79E1B00S/",
+    "sourceCheckedAt": "2026-06-14",
+    "sources": [
+      {
+        "id": "samsung-dw99f79e1b00s-product",
+        "title":
+            "삼성전자 Infinite AI 식기세척기 트루빌트인 14인용 (필터 내장형, 컵 맞춤 세척) 공식 제품 페이지",
+        "url":
+            "https://www.samsung.com/sec/dishwashers/true-built-in-dw99f79e1b00s-d2c/DW99F79E1B00S/",
+        "type": "officialProduct",
+        "publisher": "삼성전자",
+        "checkedAt": "2026-06-14",
+        "supports": ["제품명", "모델명", "출시 연식", "대표 이미지", "주요 구분"],
+        "isOfficial": true,
+        "isActive": true
+      },
+      {
+        "id": "samsung-dw99f79e1b00s-manual",
+        "title": "삼성전자 DW99F79E1B00S 공식 사용설명서",
+        "url":
+            "https://downloadcenter.samsung.com/content/UM/202601/20260121084333809/OID82124_IB_DW8000F_SimpleUX_KO_260120.pdf",
+        "type": "officialManual",
+        "publisher": "삼성전자",
+        "checkedAt": "2026-06-14",
+        "supports": ["청소 안전사항", "관리 대상", "관리 순서"],
+        "isOfficial": true,
+        "isActive": true
+      }
+    ],
+    "specSourceIds": {
+      "출시 연도": ["samsung-dw99f79e1b00s-product"],
+      "모델명": ["samsung-dw99f79e1b00s-product"],
+      "주요 구분": ["samsung-dw99f79e1b00s-product"],
+      "공식 제품명": ["samsung-dw99f79e1b00s-product"]
+    },
+    "stepSourceIds": {
+      "0": ["samsung-dw99f79e1b00s-manual"],
+      "1": ["samsung-dw99f79e1b00s-manual"],
+      "2": ["samsung-dw99f79e1b00s-manual"],
+      "3": ["samsung-dw99f79e1b00s-manual"],
+      "4": ["samsung-dw99f79e1b00s-manual"],
+      "5": ["samsung-dw99f79e1b00s-manual"]
+    },
+    "reviewHistory": [
+      {
+        "status": "verified",
+        "reviewer": "catalog-editor",
+        "reviewedAt": "2026-06-14",
+        "note": "공식 제품 페이지와 모델별 공식 사용설명서 교차 검수 완료"
+      }
+    ],
+    "productSpecs": [
+      "출시 연도: 2025년",
+      "모델명: DW99F79E1B00S",
+      "주요 구분: 14인용 / 트루빌트인",
+      "공식 제품명: Infinite AI 식기세척기 트루빌트인 14인용 (필터 내장형, 컵 맞춤 세척)"
+    ],
+    "supplies": ["부드러운 천", "부드러운 솔"],
+    "recommendedSupplies": ["식기세척기 전용 클리너", "필터 틈새용 부드러운 브러시"],
+    "recommendedProducts": [],
+    "cautions": [
+      "청소 전에는 전원을 끄고 뜨거운 물과 내부 부품이 식을 때까지 기다리세요.",
+      "제품에 물을 직접 뿌리지 마세요.",
+      "펌프와 배수 부품을 임의로 분리하지 마세요.",
+      "일반 주방세제처럼 거품이 많이 나는 세제는 사용하지 마세요."
+    ],
+    "steps": [
+      "작동을 멈추고 전원을 끈 뒤 내부가 충분히 식었는지 확인해요.",
+      "하단 필터를 공식 설명서의 방향대로 분리하고 음식물과 이물질을 제거해요.",
+      "세척이 허용된 필터를 흐르는 물과 부드러운 솔로 닦고 원래 위치에 단단히 장착해요.",
+      "분사 노즐의 구멍이 막히지 않았는지 확인하고 사용자가 분리할 수 있는 노즐만 관리해요.",
+      "도어 가장자리와 패킹을 부드러운 천으로 닦고 내부 물기를 말려요.",
+      "제품이 안내하는 전용 관리 코스와 허용된 세정제만 사용해 내부를 관리해요."
+    ],
+    "keywords": [
+      "식기세척기",
+      "필터",
+      "분사노즐",
+      "도어패킹",
+      "DW99F79E1B00S",
+      "Infinite AI 식기세척기 트루빌트인 14인용"
+    ],
+    "reviewStatus": "verified",
+    "reviewedBy": "catalog-editor",
+    "reviewNote": "공식 제품 페이지와 모델별 공식 사용설명서 교차 검수 완료",
+    "officialManualUrl":
+        "https://downloadcenter.samsung.com/content/UM/202601/20260121084333809/OID82124_IB_DW8000F_SimpleUX_KO_260120.pdf",
+    "supportUrl": "https://www.samsung.com/sec/support/model/DW99F79E1B00S/",
+    "servicePhone": "1588-3366",
+    "releaseYear": 2025,
+    "isDiscontinued": false,
+    "imageUrl":
+        "https://images.samsung.com/kdp/goods/2025/02/18/f180fa94-2289-47a0-8fcd-916b72b0d108.png",
+    "modelFeatures": ["14인용", "트루빌트인"],
+    "consumables": [],
+    "consumableDetails": [],
+    "installationType": "빌트인 또는 트루빌트인"
+  },
+  {
+    "id": "samsung-dw99f79e1uhcs",
+    "name": "Infinite AI 식기세척기 빌트인 14인용 (필터 내장형, 컵 맞춤 세척)",
+    "type": "appliance",
+    "categoryName": "식기세척기",
+    "brand": "삼성전자",
+    "manufacturer": "삼성전자",
+    "modelName": "DW99F79E1UHCS",
+    "seriesName": "Infinite AI 식기세척기 빌트인 14인용",
+    "summary": "필터와 분사 노즐의 이물질을 제거하고 도어 주변을 닦아 세척 성능을 유지해요.",
+    "frequency": "필터 오염 또는 냄새가 느껴질 때",
+    "recurrenceDays": 0,
+    "estimatedMinutes": 20,
+    "productMethod": "필터·분사 노즐·도어 패킹 관리",
+    "guideStatus": "공식 설명서를 확인했어요.",
+    "guideBasis": "삼성전자 공식 제품 페이지와 해당 모델의 공식 사용설명서를 확인했어요.",
+    "guideSourceType": "official",
+    "matchLevelLabel": "공식 설명서 확인 모델",
+    "sourceTitle":
+        "삼성전자 Infinite AI 식기세척기 빌트인 14인용 (필터 내장형, 컵 맞춤 세척) 공식 제품 페이지",
+    "sourceUrl":
+        "https://www.samsung.com/sec/dishwashers/built-in-dw99f79e1uhcs-d2c/DW99F79E1UHCS/",
+    "sourceCheckedAt": "2026-06-14",
+    "sources": [
+      {
+        "id": "samsung-dw99f79e1uhcs-product",
+        "title": "삼성전자 Infinite AI 식기세척기 빌트인 14인용 (필터 내장형, 컵 맞춤 세척) 공식 제품 페이지",
+        "url":
+            "https://www.samsung.com/sec/dishwashers/built-in-dw99f79e1uhcs-d2c/DW99F79E1UHCS/",
+        "type": "officialProduct",
+        "publisher": "삼성전자",
+        "checkedAt": "2026-06-14",
+        "supports": ["제품명", "모델명", "출시 연식", "대표 이미지", "주요 구분"],
+        "isOfficial": true,
+        "isActive": true
+      },
+      {
+        "id": "samsung-dw99f79e1uhcs-manual",
+        "title": "삼성전자 DW99F79E1UHCS 공식 사용설명서",
+        "url":
+            "https://downloadcenter.samsung.com/content/UM/202601/20260121084333809/OID82124_IB_DW8000F_SimpleUX_KO_260120.pdf",
+        "type": "officialManual",
+        "publisher": "삼성전자",
+        "checkedAt": "2026-06-14",
+        "supports": ["청소 안전사항", "관리 대상", "관리 순서"],
+        "isOfficial": true,
+        "isActive": true
+      }
+    ],
+    "specSourceIds": {
+      "출시 연도": ["samsung-dw99f79e1uhcs-product"],
+      "모델명": ["samsung-dw99f79e1uhcs-product"],
+      "주요 구분": ["samsung-dw99f79e1uhcs-product"],
+      "공식 제품명": ["samsung-dw99f79e1uhcs-product"]
+    },
+    "stepSourceIds": {
+      "0": ["samsung-dw99f79e1uhcs-manual"],
+      "1": ["samsung-dw99f79e1uhcs-manual"],
+      "2": ["samsung-dw99f79e1uhcs-manual"],
+      "3": ["samsung-dw99f79e1uhcs-manual"],
+      "4": ["samsung-dw99f79e1uhcs-manual"],
+      "5": ["samsung-dw99f79e1uhcs-manual"]
+    },
+    "reviewHistory": [
+      {
+        "status": "verified",
+        "reviewer": "catalog-editor",
+        "reviewedAt": "2026-06-14",
+        "note": "공식 제품 페이지와 모델별 공식 사용설명서 교차 검수 완료"
+      }
+    ],
+    "productSpecs": [
+      "출시 연도: 2025년",
+      "모델명: DW99F79E1UHCS",
+      "주요 구분: 14인용",
+      "공식 제품명: Infinite AI 식기세척기 빌트인 14인용 (필터 내장형, 컵 맞춤 세척)"
+    ],
+    "supplies": ["부드러운 천", "부드러운 솔"],
+    "recommendedSupplies": ["식기세척기 전용 클리너", "필터 틈새용 부드러운 브러시"],
+    "recommendedProducts": [],
+    "cautions": [
+      "청소 전에는 전원을 끄고 뜨거운 물과 내부 부품이 식을 때까지 기다리세요.",
+      "제품에 물을 직접 뿌리지 마세요.",
+      "펌프와 배수 부품을 임의로 분리하지 마세요.",
+      "일반 주방세제처럼 거품이 많이 나는 세제는 사용하지 마세요."
+    ],
+    "steps": [
+      "작동을 멈추고 전원을 끈 뒤 내부가 충분히 식었는지 확인해요.",
+      "하단 필터를 공식 설명서의 방향대로 분리하고 음식물과 이물질을 제거해요.",
+      "세척이 허용된 필터를 흐르는 물과 부드러운 솔로 닦고 원래 위치에 단단히 장착해요.",
+      "분사 노즐의 구멍이 막히지 않았는지 확인하고 사용자가 분리할 수 있는 노즐만 관리해요.",
+      "도어 가장자리와 패킹을 부드러운 천으로 닦고 내부 물기를 말려요.",
+      "제품이 안내하는 전용 관리 코스와 허용된 세정제만 사용해 내부를 관리해요."
+    ],
+    "keywords": [
+      "식기세척기",
+      "필터",
+      "분사노즐",
+      "도어패킹",
+      "DW99F79E1UHCS",
+      "Infinite AI 식기세척기 빌트인 14인용"
+    ],
+    "reviewStatus": "verified",
+    "reviewedBy": "catalog-editor",
+    "reviewNote": "공식 제품 페이지와 모델별 공식 사용설명서 교차 검수 완료",
+    "officialManualUrl":
+        "https://downloadcenter.samsung.com/content/UM/202601/20260121084333809/OID82124_IB_DW8000F_SimpleUX_KO_260120.pdf",
+    "supportUrl": "https://www.samsung.com/sec/support/model/DW99F79E1UHCS/",
+    "servicePhone": "1588-3366",
+    "releaseYear": 2025,
+    "isDiscontinued": false,
+    "imageUrl":
+        "https://images.samsung.com/kdp/goods/2025/02/18/ff9a4a17-389c-493d-831b-eff167978914.png",
+    "modelFeatures": ["14인용"],
+    "consumables": [],
+    "consumableDetails": [],
+    "installationType": "빌트인 또는 트루빌트인"
+  },
+  {
+    "id": "samsung-cc80h63g1hs",
+    "name": "Bespoke AI 인덕션 (플렉스존)",
+    "type": "appliance",
+    "categoryName": "인덕션",
+    "brand": "삼성전자",
+    "manufacturer": "삼성전자",
+    "modelName": "CC80H63G1HS",
+    "seriesName": "Bespoke AI 인덕션",
+    "summary": "상판이 완전히 식은 뒤 음식물 자국을 닦고 조작부와 흡기구를 건조하게 관리해요.",
+    "frequency": "사용 후 상판이 식었을 때",
+    "recurrenceDays": 0,
+    "estimatedMinutes": 10,
+    "productMethod": "상판·조작부·흡기구 관리",
+    "guideStatus": "공식 설명서를 확인했어요.",
+    "guideBasis": "삼성전자 공식 제품 페이지와 해당 모델의 공식 사용설명서를 확인했어요.",
+    "guideSourceType": "official",
+    "matchLevelLabel": "공식 설명서 확인 모델",
+    "sourceTitle": "삼성전자 Bespoke AI 인덕션 (플렉스존) 공식 제품 페이지",
+    "sourceUrl":
+        "https://www.samsung.com/sec/electric-range/cooktop-cc80h63g1hs-d2c/CC80H63G1HS/",
+    "sourceCheckedAt": "2026-06-14",
+    "sources": [
+      {
+        "id": "samsung-cc80h63g1hs-product",
+        "title": "삼성전자 Bespoke AI 인덕션 (플렉스존) 공식 제품 페이지",
+        "url":
+            "https://www.samsung.com/sec/electric-range/cooktop-cc80h63g1hs-d2c/CC80H63G1HS/",
+        "type": "officialProduct",
+        "publisher": "삼성전자",
+        "checkedAt": "2026-06-14",
+        "supports": ["제품명", "모델명", "출시 연식", "대표 이미지", "주요 구분"],
+        "isOfficial": true,
+        "isActive": true
+      },
+      {
+        "id": "samsung-cc80h63g1hs-manual",
+        "title": "삼성전자 CC80H63G1HS 공식 사용설명서",
+        "url":
+            "https://downloadcenter.samsung.com/content/UM/202605/20260519112701605/O_IB_FULL_NZ9000D_NZ63DB857_657_607_CC99F63_CC80F63_KO_260403.pdf",
+        "type": "officialManual",
+        "publisher": "삼성전자",
+        "checkedAt": "2026-06-14",
+        "supports": ["청소 안전사항", "관리 대상", "관리 순서"],
+        "isOfficial": true,
+        "isActive": true
+      }
+    ],
+    "specSourceIds": {
+      "출시 연도": ["samsung-cc80h63g1hs-product"],
+      "모델명": ["samsung-cc80h63g1hs-product"],
+      "주요 구분": ["samsung-cc80h63g1hs-product"],
+      "공식 제품명": ["samsung-cc80h63g1hs-product"]
+    },
+    "stepSourceIds": {
+      "0": ["samsung-cc80h63g1hs-manual"],
+      "1": ["samsung-cc80h63g1hs-manual"],
+      "2": ["samsung-cc80h63g1hs-manual"],
+      "3": ["samsung-cc80h63g1hs-manual"],
+      "4": ["samsung-cc80h63g1hs-manual"]
+    },
+    "reviewHistory": [
+      {
+        "status": "verified",
+        "reviewer": "catalog-editor",
+        "reviewedAt": "2026-06-14",
+        "note": "공식 제품 페이지와 모델별 공식 사용설명서 교차 검수 완료"
+      }
+    ],
+    "productSpecs": [
+      "출시 연도: 2026년",
+      "모델명: CC80H63G1HS",
+      "주요 구분: 플렉스존",
+      "공식 제품명: Bespoke AI 인덕션 (플렉스존)"
+    ],
+    "supplies": ["부드러운 천", "인덕션 전용 세정제"],
+    "recommendedSupplies": ["유리 상판용 인덕션 클리너", "제조사가 허용한 상판 스크래퍼"],
+    "recommendedProducts": [],
+    "cautions": [
+      "청소 전에는 전원을 끄고 잔열 표시가 사라질 때까지 기다리세요.",
+      "제품과 조작부에 물을 직접 뿌리지 마세요.",
+      "상판과 전기 부품을 임의로 분리하지 마세요.",
+      "철수세미와 거친 연마제를 사용하지 마세요."
+    ],
+    "steps": [
+      "전원을 끄고 잔열 표시가 사라져 상판이 완전히 식었는지 확인해요.",
+      "마른 부드러운 천으로 부스러기와 가벼운 오염을 먼저 제거해요.",
+      "제품이 허용한 전용 세정제를 부드러운 천에 소량 묻혀 상판을 닦아요.",
+      "눌어붙은 오염은 설명서에서 허용한 스크래퍼를 낮은 각도로 사용해 제거해요.",
+      "깨끗한 천으로 세정제와 물기를 닦고 흡기구 주변이 막히지 않았는지 확인해요."
+    ],
+    "keywords": ["인덕션", "상판", "잔열", "흡기구", "CC80H63G1HS", "Bespoke AI 인덕션"],
+    "reviewStatus": "verified",
+    "reviewedBy": "catalog-editor",
+    "reviewNote": "공식 제품 페이지와 모델별 공식 사용설명서 교차 검수 완료",
+    "officialManualUrl":
+        "https://downloadcenter.samsung.com/content/UM/202605/20260519112701605/O_IB_FULL_NZ9000D_NZ63DB857_657_607_CC99F63_CC80F63_KO_260403.pdf",
+    "supportUrl": "https://www.samsung.com/sec/support/model/CC80H63G1HS/",
+    "servicePhone": "1588-3366",
+    "releaseYear": 2026,
+    "isDiscontinued": false,
+    "imageUrl":
+        "https://images.samsung.com/kdp/goods/2026/03/19/d199314e-c736-4acc-a9b3-7fb510c62af3.png",
+    "modelFeatures": ["플렉스존"],
+    "consumables": [],
+    "consumableDetails": [],
+    "installationType": "빌트인 또는 이동형"
+  },
+  {
+    "id": "samsung-cc99h84jad",
+    "name": "Infinite Line 후드일체형 인덕션",
+    "type": "appliance",
+    "categoryName": "인덕션",
+    "brand": "삼성전자",
+    "manufacturer": "삼성전자",
+    "modelName": "CC99H84JAD",
+    "seriesName": "Infinite Line 후드일체형 인덕션",
+    "summary": "상판이 완전히 식은 뒤 음식물 자국을 닦고 조작부와 흡기구를 건조하게 관리해요.",
+    "frequency": "사용 후 상판이 식었을 때",
+    "recurrenceDays": 0,
+    "estimatedMinutes": 10,
+    "productMethod": "상판·조작부·흡기구 관리",
+    "guideStatus": "공식 설명서를 확인했어요.",
+    "guideBasis": "삼성전자 공식 제품 페이지와 해당 모델의 공식 사용설명서를 확인했어요.",
+    "guideSourceType": "official",
+    "matchLevelLabel": "공식 설명서 확인 모델",
+    "sourceTitle": "삼성전자 Infinite Line 후드일체형 인덕션 공식 제품 페이지",
+    "sourceUrl":
+        "https://www.samsung.com/sec/electric-range/cooktop-cc99h84jad-d2c/CC99H84JAD/",
+    "sourceCheckedAt": "2026-06-14",
+    "sources": [
+      {
+        "id": "samsung-cc99h84jad-product",
+        "title": "삼성전자 Infinite Line 후드일체형 인덕션 공식 제품 페이지",
+        "url":
+            "https://www.samsung.com/sec/electric-range/cooktop-cc99h84jad-d2c/CC99H84JAD/",
+        "type": "officialProduct",
+        "publisher": "삼성전자",
+        "checkedAt": "2026-06-14",
+        "supports": ["제품명", "모델명", "출시 연식", "대표 이미지", "주요 구분"],
+        "isOfficial": true,
+        "isActive": true
+      },
+      {
+        "id": "samsung-cc99h84jad-manual",
+        "title": "삼성전자 CC99H84JAD 공식 사용설명서",
+        "url":
+            "https://downloadcenter.samsung.com/content/UM/202604/20260409190209734/O_IB_FULL_CC99H84JAD_A-HOB_KO_260303.pdf",
+        "type": "officialManual",
+        "publisher": "삼성전자",
+        "checkedAt": "2026-06-14",
+        "supports": ["청소 안전사항", "관리 대상", "관리 순서"],
+        "isOfficial": true,
+        "isActive": true
+      }
+    ],
+    "specSourceIds": {
+      "출시 연도": ["samsung-cc99h84jad-product"],
+      "모델명": ["samsung-cc99h84jad-product"],
+      "주요 구분": ["samsung-cc99h84jad-product"],
+      "공식 제품명": ["samsung-cc99h84jad-product"]
+    },
+    "stepSourceIds": {
+      "0": ["samsung-cc99h84jad-manual"],
+      "1": ["samsung-cc99h84jad-manual"],
+      "2": ["samsung-cc99h84jad-manual"],
+      "3": ["samsung-cc99h84jad-manual"],
+      "4": ["samsung-cc99h84jad-manual"]
+    },
+    "reviewHistory": [
+      {
+        "status": "verified",
+        "reviewer": "catalog-editor",
+        "reviewedAt": "2026-06-14",
+        "note": "공식 제품 페이지와 모델별 공식 사용설명서 교차 검수 완료"
+      }
+    ],
+    "productSpecs": [
+      "출시 연도: 2026년",
+      "모델명: CC99H84JAD",
+      "주요 구분: 후드일체형",
+      "공식 제품명: Infinite Line 후드일체형 인덕션"
+    ],
+    "supplies": ["부드러운 천", "인덕션 전용 세정제"],
+    "recommendedSupplies": ["유리 상판용 인덕션 클리너", "제조사가 허용한 상판 스크래퍼"],
+    "recommendedProducts": [],
+    "cautions": [
+      "청소 전에는 전원을 끄고 잔열 표시가 사라질 때까지 기다리세요.",
+      "제품과 조작부에 물을 직접 뿌리지 마세요.",
+      "상판과 전기 부품을 임의로 분리하지 마세요.",
+      "철수세미와 거친 연마제를 사용하지 마세요."
+    ],
+    "steps": [
+      "전원을 끄고 잔열 표시가 사라져 상판이 완전히 식었는지 확인해요.",
+      "마른 부드러운 천으로 부스러기와 가벼운 오염을 먼저 제거해요.",
+      "제품이 허용한 전용 세정제를 부드러운 천에 소량 묻혀 상판을 닦아요.",
+      "눌어붙은 오염은 설명서에서 허용한 스크래퍼를 낮은 각도로 사용해 제거해요.",
+      "깨끗한 천으로 세정제와 물기를 닦고 흡기구 주변이 막히지 않았는지 확인해요."
+    ],
+    "keywords": [
+      "인덕션",
+      "상판",
+      "잔열",
+      "흡기구",
+      "CC99H84JAD",
+      "Infinite Line 후드일체형 인덕션"
+    ],
+    "reviewStatus": "verified",
+    "reviewedBy": "catalog-editor",
+    "reviewNote": "공식 제품 페이지와 모델별 공식 사용설명서 교차 검수 완료",
+    "officialManualUrl":
+        "https://downloadcenter.samsung.com/content/UM/202604/20260409190209734/O_IB_FULL_CC99H84JAD_A-HOB_KO_260303.pdf",
+    "supportUrl": "https://www.samsung.com/sec/support/model/CC99H84JAD/",
+    "servicePhone": "1588-3366",
+    "releaseYear": 2026,
+    "isDiscontinued": false,
+    "imageUrl":
+        "https://images.samsung.com/kdp/goods/2026/04/03/3f67fbe2-5579-4061-a23d-c3faad21042c.png",
+    "modelFeatures": ["후드일체형"],
+    "consumables": [],
+    "consumableDetails": [],
+    "installationType": "빌트인 또는 이동형"
+  },
+  {
+    "id": "samsung-nz62dg300cfw",
+    "name": "더 플레이트 인덕션 2구",
+    "type": "appliance",
+    "categoryName": "인덕션",
+    "brand": "삼성전자",
+    "manufacturer": "삼성전자",
+    "modelName": "NZ62DG300CFW",
+    "seriesName": "더 플레이트 인덕션 2구",
+    "summary": "상판이 완전히 식은 뒤 음식물 자국을 닦고 조작부와 흡기구를 건조하게 관리해요.",
+    "frequency": "사용 후 상판이 식었을 때",
+    "recurrenceDays": 0,
+    "estimatedMinutes": 10,
+    "productMethod": "상판·조작부·흡기구 관리",
+    "guideStatus": "공식 설명서를 확인했어요.",
+    "guideBasis": "삼성전자 공식 제품 페이지와 해당 모델의 공식 사용설명서를 확인했어요.",
+    "guideSourceType": "official",
+    "matchLevelLabel": "공식 설명서 확인 모델",
+    "sourceTitle": "삼성전자 더 플레이트 인덕션 2구 공식 제품 페이지",
+    "sourceUrl":
+        "https://www.samsung.com/sec/electric-range/cooktop-nz62dg300cf-d2c/NZ62DG300CFW/",
+    "sourceCheckedAt": "2026-06-14",
+    "sources": [
+      {
+        "id": "samsung-nz62dg300cfw-product",
+        "title": "삼성전자 더 플레이트 인덕션 2구 공식 제품 페이지",
+        "url":
+            "https://www.samsung.com/sec/electric-range/cooktop-nz62dg300cf-d2c/NZ62DG300CFW/",
+        "type": "officialProduct",
+        "publisher": "삼성전자",
+        "checkedAt": "2026-06-14",
+        "supports": ["제품명", "모델명", "출시 연식", "대표 이미지", "주요 구분"],
+        "isOfficial": true,
+        "isActive": true
+      },
+      {
+        "id": "samsung-nz62dg300cfw-manual",
+        "title": "삼성전자 NZ62DG300CFW 공식 사용설명서",
+        "url":
+            "https://downloadcenter.samsung.com/content/UM/202504/20250422161154175/Simple_NZ62DG300CFK_NZ62DG300CFW_250422.pdf",
+        "type": "officialManual",
+        "publisher": "삼성전자",
+        "checkedAt": "2026-06-14",
+        "supports": ["청소 안전사항", "관리 대상", "관리 순서"],
+        "isOfficial": true,
+        "isActive": true
+      }
+    ],
+    "specSourceIds": {
+      "출시 연도": ["samsung-nz62dg300cfw-product"],
+      "모델명": ["samsung-nz62dg300cfw-product"],
+      "주요 구분": ["samsung-nz62dg300cfw-product"],
+      "공식 제품명": ["samsung-nz62dg300cfw-product"]
+    },
+    "stepSourceIds": {
+      "0": ["samsung-nz62dg300cfw-manual"],
+      "1": ["samsung-nz62dg300cfw-manual"],
+      "2": ["samsung-nz62dg300cfw-manual"],
+      "3": ["samsung-nz62dg300cfw-manual"],
+      "4": ["samsung-nz62dg300cfw-manual"]
+    },
+    "reviewHistory": [
+      {
+        "status": "verified",
+        "reviewer": "catalog-editor",
+        "reviewedAt": "2026-06-14",
+        "note": "공식 제품 페이지와 모델별 공식 사용설명서 교차 검수 완료"
+      }
+    ],
+    "productSpecs": [
+      "출시 연도: 2024년",
+      "모델명: NZ62DG300CFW",
+      "주요 구분: 2구",
+      "공식 제품명: 더 플레이트 인덕션 2구"
+    ],
+    "supplies": ["부드러운 천", "인덕션 전용 세정제"],
+    "recommendedSupplies": ["유리 상판용 인덕션 클리너", "제조사가 허용한 상판 스크래퍼"],
+    "recommendedProducts": [],
+    "cautions": [
+      "청소 전에는 전원을 끄고 잔열 표시가 사라질 때까지 기다리세요.",
+      "제품과 조작부에 물을 직접 뿌리지 마세요.",
+      "상판과 전기 부품을 임의로 분리하지 마세요.",
+      "철수세미와 거친 연마제를 사용하지 마세요."
+    ],
+    "steps": [
+      "전원을 끄고 잔열 표시가 사라져 상판이 완전히 식었는지 확인해요.",
+      "마른 부드러운 천으로 부스러기와 가벼운 오염을 먼저 제거해요.",
+      "제품이 허용한 전용 세정제를 부드러운 천에 소량 묻혀 상판을 닦아요.",
+      "눌어붙은 오염은 설명서에서 허용한 스크래퍼를 낮은 각도로 사용해 제거해요.",
+      "깨끗한 천으로 세정제와 물기를 닦고 흡기구 주변이 막히지 않았는지 확인해요."
+    ],
+    "keywords": ["인덕션", "상판", "잔열", "흡기구", "NZ62DG300CFW", "더 플레이트 인덕션 2구"],
+    "reviewStatus": "verified",
+    "reviewedBy": "catalog-editor",
+    "reviewNote": "공식 제품 페이지와 모델별 공식 사용설명서 교차 검수 완료",
+    "officialManualUrl":
+        "https://downloadcenter.samsung.com/content/UM/202504/20250422161154175/Simple_NZ62DG300CFK_NZ62DG300CFW_250422.pdf",
+    "supportUrl": "https://www.samsung.com/sec/support/model/NZ62DG300CFW/",
+    "servicePhone": "1588-3366",
+    "releaseYear": 2024,
+    "isDiscontinued": false,
+    "imageUrl":
+        "https://images.samsung.com/kdp/goods/2024/05/14/d0b73b72-828a-4adc-8a04-63c009086f97.png",
+    "modelFeatures": ["2구"],
+    "consumables": [],
+    "consumableDetails": [],
+    "installationType": "빌트인 또는 이동형"
+  },
+  {
+    "id": "samsung-vr90f01sag",
+    "name": "Bespoke AI 스팀 울트라 자동 급배수",
+    "type": "appliance",
+    "categoryName": "청소기",
+    "brand": "삼성전자",
+    "manufacturer": "삼성전자",
+    "modelName": "VR90F01SAG",
+    "seriesName": "Bespoke AI 스팀 울트라 자동 급배수",
+    "summary": "먼지통과 브러시의 이물질을 제거하고 모델에 따라 센서와 세척 가능한 필터를 관리해요.",
+    "frequency": "먼지통이 차거나 흡입력이 떨어질 때",
+    "recurrenceDays": 0,
+    "estimatedMinutes": 15,
+    "productMethod": "먼지통·필터·브러시·센서 관리",
+    "guideStatus": "공식 설명서를 확인했어요.",
+    "guideBasis": "삼성전자 공식 제품 페이지와 해당 모델의 공식 사용설명서를 확인했어요.",
+    "guideSourceType": "official",
+    "matchLevelLabel": "공식 설명서 확인 모델",
+    "sourceTitle": "삼성전자 Bespoke AI 스팀 울트라 자동 급배수 공식 제품 페이지",
+    "sourceUrl":
+        "https://www.samsung.com/sec/vacuum-cleaners/jetbot-vr90f01sag-d2c/VR90F01SAG/",
+    "sourceCheckedAt": "2026-06-14",
+    "sources": [
+      {
+        "id": "samsung-vr90f01sag-product",
+        "title": "삼성전자 Bespoke AI 스팀 울트라 자동 급배수 공식 제품 페이지",
+        "url":
+            "https://www.samsung.com/sec/vacuum-cleaners/jetbot-vr90f01sag-d2c/VR90F01SAG/",
+        "type": "officialProduct",
+        "publisher": "삼성전자",
+        "checkedAt": "2026-06-14",
+        "supports": ["제품명", "모델명", "출시 연식", "대표 이미지", "주요 구분"],
+        "isOfficial": true,
+        "isActive": true
+      },
+      {
+        "id": "samsung-vr90f01sag-manual",
+        "title": "삼성전자 VR90F01SAG 공식 사용설명서",
+        "url":
+            "https://downloadcenter.samsung.com/content/UM/202605/20260526175557714/O_OID96903-04_IB_VR90F01SAG_KR_KO_260526.pdf",
+        "type": "officialManual",
+        "publisher": "삼성전자",
+        "checkedAt": "2026-06-14",
+        "supports": ["청소 안전사항", "관리 대상", "관리 순서"],
+        "isOfficial": true,
+        "isActive": true
+      }
+    ],
+    "specSourceIds": {
+      "출시 연도": ["samsung-vr90f01sag-product"],
+      "모델명": ["samsung-vr90f01sag-product"],
+      "주요 구분": ["samsung-vr90f01sag-product"],
+      "공식 제품명": ["samsung-vr90f01sag-product"]
+    },
+    "stepSourceIds": {
+      "0": ["samsung-vr90f01sag-manual"],
+      "1": ["samsung-vr90f01sag-manual"],
+      "2": ["samsung-vr90f01sag-manual"],
+      "3": ["samsung-vr90f01sag-manual"],
+      "4": ["samsung-vr90f01sag-manual"],
+      "5": ["samsung-vr90f01sag-manual"]
+    },
+    "reviewHistory": [
+      {
+        "status": "verified",
+        "reviewer": "catalog-editor",
+        "reviewedAt": "2026-06-14",
+        "note": "공식 제품 페이지와 모델별 공식 사용설명서 교차 검수 완료"
+      }
+    ],
+    "productSpecs": [
+      "출시 연도: 2025년",
+      "모델명: VR90F01SAG",
+      "주요 구분: 자동 급배수",
+      "공식 제품명: Bespoke AI 스팀 울트라 자동 급배수"
+    ],
+    "supplies": ["부드러운 천", "부드러운 솔"],
+    "recommendedSupplies": ["브러시 이물질 제거용 청소 도구", "표면이 거칠지 않은 극세사 천"],
+    "recommendedProducts": [],
+    "cautions": [
+      "청소 전에는 전원을 끄고 충전기에서 분리하세요.",
+      "제품과 충전기에 물을 직접 뿌리지 마세요.",
+      "모터·배터리·센서 부품을 임의로 분리하지 마세요.",
+      "세척한 필터가 완전히 마르기 전에 장착하지 마세요."
+    ],
+    "steps": [
+      "제품 전원을 끄고 충전기에서 분리한 뒤 분리형 배터리는 제품 안내에 따라 분리해요.",
+      "먼지통을 비우고 먼지가 날리지 않도록 내부 이물질을 제거해요.",
+      "공식 설명서에서 물세척이 허용된 먼지통과 필터만 흐르는 물로 세척해요.",
+      "세척한 부품을 통풍이 잘되는 그늘에서 완전히 말린 뒤 장착해요.",
+      "브러시에 감긴 머리카락과 실을 제거하고 로봇형은 센서와 바퀴를 부드러운 천으로 닦아요.",
+      "청정스테이션의 먼지봉투와 필터는 알림과 공식 교체 안내에 따라 관리해요."
+    ],
+    "keywords": [
+      "청소기",
+      "먼지통",
+      "필터",
+      "브러시",
+      "센서",
+      "VR90F01SAG",
+      "Bespoke AI 스팀 울트라 자동 급배수"
+    ],
+    "reviewStatus": "verified",
+    "reviewedBy": "catalog-editor",
+    "reviewNote": "공식 제품 페이지와 모델별 공식 사용설명서 교차 검수 완료",
+    "officialManualUrl":
+        "https://downloadcenter.samsung.com/content/UM/202605/20260526175557714/O_OID96903-04_IB_VR90F01SAG_KR_KO_260526.pdf",
+    "supportUrl": "https://www.samsung.com/sec/support/model/VR90F01SAG/",
+    "servicePhone": "1588-3366",
+    "releaseYear": 2025,
+    "isDiscontinued": false,
+    "imageUrl":
+        "https://images.samsung.com/kdp/goods/2026/01/30/203de87e-fa45-4d3e-94f1-96836b73f341.png",
+    "modelFeatures": ["자동 급배수"],
+    "consumables": [],
+    "consumableDetails": [],
+    "installationType": "무선 스틱형 또는 로봇형"
+  },
+  {
+    "id": "samsung-vs15a680aew",
+    "name": "Bespoke 슬림 150W",
+    "type": "appliance",
+    "categoryName": "청소기",
+    "brand": "삼성전자",
+    "manufacturer": "삼성전자",
+    "modelName": "VS15A680AEW",
+    "seriesName": "Bespoke 슬림 150W",
+    "summary": "먼지통과 브러시의 이물질을 제거하고 모델에 따라 센서와 세척 가능한 필터를 관리해요.",
+    "frequency": "먼지통이 차거나 흡입력이 떨어질 때",
+    "recurrenceDays": 0,
+    "estimatedMinutes": 15,
+    "productMethod": "먼지통·필터·브러시·센서 관리",
+    "guideStatus": "공식 설명서를 확인했어요.",
+    "guideBasis": "삼성전자 공식 제품 페이지와 해당 모델의 공식 사용설명서를 확인했어요.",
+    "guideSourceType": "official",
+    "matchLevelLabel": "공식 설명서 확인 모델",
+    "sourceTitle": "삼성전자 Bespoke 슬림 150W 공식 제품 페이지",
+    "sourceUrl":
+        "https://www.samsung.com/sec/vacuum-cleaners/vs15a680aew-d2c/VS15A680AEW/",
+    "sourceCheckedAt": "2026-06-14",
+    "sources": [
+      {
+        "id": "samsung-vs15a680aew-product",
+        "title": "삼성전자 Bespoke 슬림 150W 공식 제품 페이지",
+        "url":
+            "https://www.samsung.com/sec/vacuum-cleaners/vs15a680aew-d2c/VS15A680AEW/",
+        "type": "officialProduct",
+        "publisher": "삼성전자",
+        "checkedAt": "2026-06-14",
+        "supports": ["제품명", "모델명", "출시 연식", "대표 이미지", "주요 구분"],
+        "isOfficial": true,
+        "isActive": true
+      },
+      {
+        "id": "samsung-vs15a680aew-manual",
+        "title": "삼성전자 VS15A680AEW 공식 사용설명서",
+        "url":
+            "https://downloadcenter.samsung.com/content/UM/202603/20260330170958853/O_DJ68-00862A-07_IB_VS6800AL_KO_KO_260206.pdf",
+        "type": "officialManual",
+        "publisher": "삼성전자",
+        "checkedAt": "2026-06-14",
+        "supports": ["청소 안전사항", "관리 대상", "관리 순서"],
+        "isOfficial": true,
+        "isActive": true
+      }
+    ],
+    "specSourceIds": {
+      "출시 연도": ["samsung-vs15a680aew-product"],
+      "모델명": ["samsung-vs15a680aew-product"],
+      "주요 구분": ["samsung-vs15a680aew-product"],
+      "공식 제품명": ["samsung-vs15a680aew-product"]
+    },
+    "stepSourceIds": {
+      "0": ["samsung-vs15a680aew-manual"],
+      "1": ["samsung-vs15a680aew-manual"],
+      "2": ["samsung-vs15a680aew-manual"],
+      "3": ["samsung-vs15a680aew-manual"],
+      "4": ["samsung-vs15a680aew-manual"],
+      "5": ["samsung-vs15a680aew-manual"]
+    },
+    "reviewHistory": [
+      {
+        "status": "verified",
+        "reviewer": "catalog-editor",
+        "reviewedAt": "2026-06-14",
+        "note": "공식 제품 페이지와 모델별 공식 사용설명서 교차 검수 완료"
+      }
+    ],
+    "productSpecs": [
+      "출시 연도: 2021년",
+      "모델명: VS15A680AEW",
+      "주요 구분: 150W",
+      "공식 제품명: Bespoke 슬림 150W"
+    ],
+    "supplies": ["부드러운 천", "부드러운 솔"],
+    "recommendedSupplies": ["브러시 이물질 제거용 청소 도구", "표면이 거칠지 않은 극세사 천"],
+    "recommendedProducts": [],
+    "cautions": [
+      "청소 전에는 전원을 끄고 충전기에서 분리하세요.",
+      "제품과 충전기에 물을 직접 뿌리지 마세요.",
+      "모터·배터리·센서 부품을 임의로 분리하지 마세요.",
+      "세척한 필터가 완전히 마르기 전에 장착하지 마세요."
+    ],
+    "steps": [
+      "제품 전원을 끄고 충전기에서 분리한 뒤 분리형 배터리는 제품 안내에 따라 분리해요.",
+      "먼지통을 비우고 먼지가 날리지 않도록 내부 이물질을 제거해요.",
+      "공식 설명서에서 물세척이 허용된 먼지통과 필터만 흐르는 물로 세척해요.",
+      "세척한 부품을 통풍이 잘되는 그늘에서 완전히 말린 뒤 장착해요.",
+      "브러시에 감긴 머리카락과 실을 제거하고 로봇형은 센서와 바퀴를 부드러운 천으로 닦아요.",
+      "청정스테이션의 먼지봉투와 필터는 알림과 공식 교체 안내에 따라 관리해요."
+    ],
+    "keywords": [
+      "청소기",
+      "먼지통",
+      "필터",
+      "브러시",
+      "센서",
+      "VS15A680AEW",
+      "Bespoke 슬림 150W"
+    ],
+    "reviewStatus": "verified",
+    "reviewedBy": "catalog-editor",
+    "reviewNote": "공식 제품 페이지와 모델별 공식 사용설명서 교차 검수 완료",
+    "officialManualUrl":
+        "https://downloadcenter.samsung.com/content/UM/202603/20260330170958853/O_DJ68-00862A-07_IB_VS6800AL_KO_KO_260206.pdf",
+    "supportUrl": "https://www.samsung.com/sec/support/model/VS15A680AEW/",
+    "servicePhone": "1588-3366",
+    "releaseYear": 2021,
+    "isDiscontinued": false,
+    "imageUrl":
+        "https://images.samsung.com/kdp/goods/2021/06/17/f065accc-a69a-44c9-b22a-4753e7cf3b61.png",
+    "modelFeatures": ["150W"],
+    "consumables": [],
+    "consumableDetails": [],
+    "installationType": "무선 스틱형 또는 로봇형"
+  },
+  {
+    "id": "samsung-vs90f40csg",
+    "name": "Bespoke AI 제트 400W",
+    "type": "appliance",
+    "categoryName": "청소기",
+    "brand": "삼성전자",
+    "manufacturer": "삼성전자",
+    "modelName": "VS90F40CSG",
+    "seriesName": "Bespoke AI 제트 400W",
+    "summary": "먼지통과 브러시의 이물질을 제거하고 모델에 따라 센서와 세척 가능한 필터를 관리해요.",
+    "frequency": "먼지통이 차거나 흡입력이 떨어질 때",
+    "recurrenceDays": 0,
+    "estimatedMinutes": 15,
+    "productMethod": "먼지통·필터·브러시·센서 관리",
+    "guideStatus": "공식 설명서를 확인했어요.",
+    "guideBasis": "삼성전자 공식 제품 페이지와 해당 모델의 공식 사용설명서를 확인했어요.",
+    "guideSourceType": "official",
+    "matchLevelLabel": "공식 설명서 확인 모델",
+    "sourceTitle": "삼성전자 Bespoke AI 제트 400W 공식 제품 페이지",
+    "sourceUrl":
+        "https://www.samsung.com/sec/vacuum-cleaners/bespoke-jet-vs90f40cs-d2c/VS90F40CSG/",
+    "sourceCheckedAt": "2026-06-14",
+    "sources": [
+      {
+        "id": "samsung-vs90f40csg-product",
+        "title": "삼성전자 Bespoke AI 제트 400W 공식 제품 페이지",
+        "url":
+            "https://www.samsung.com/sec/vacuum-cleaners/bespoke-jet-vs90f40cs-d2c/VS90F40CSG/",
+        "type": "officialProduct",
+        "publisher": "삼성전자",
+        "checkedAt": "2026-06-14",
+        "supports": ["제품명", "모델명", "출시 연식", "대표 이미지", "주요 구분"],
+        "isOfficial": true,
+        "isActive": true
+      },
+      {
+        "id": "samsung-vs90f40csg-manual",
+        "title": "삼성전자 VS90F40CSG 공식 사용설명서",
+        "url":
+            "https://downloadcenter.samsung.com/content/UM/202605/20260506112032655/O_DJ68-00914C-15_IB_VS9700D_KR_KO_260429.pdf",
+        "type": "officialManual",
+        "publisher": "삼성전자",
+        "checkedAt": "2026-06-14",
+        "supports": ["청소 안전사항", "관리 대상", "관리 순서"],
+        "isOfficial": true,
+        "isActive": true
+      }
+    ],
+    "specSourceIds": {
+      "출시 연도": ["samsung-vs90f40csg-product"],
+      "모델명": ["samsung-vs90f40csg-product"],
+      "주요 구분": ["samsung-vs90f40csg-product"],
+      "공식 제품명": ["samsung-vs90f40csg-product"]
+    },
+    "stepSourceIds": {
+      "0": ["samsung-vs90f40csg-manual"],
+      "1": ["samsung-vs90f40csg-manual"],
+      "2": ["samsung-vs90f40csg-manual"],
+      "3": ["samsung-vs90f40csg-manual"],
+      "4": ["samsung-vs90f40csg-manual"],
+      "5": ["samsung-vs90f40csg-manual"]
+    },
+    "reviewHistory": [
+      {
+        "status": "verified",
+        "reviewer": "catalog-editor",
+        "reviewedAt": "2026-06-14",
+        "note": "공식 제품 페이지와 모델별 공식 사용설명서 교차 검수 완료"
+      }
+    ],
+    "productSpecs": [
+      "출시 연도: 2025년",
+      "모델명: VS90F40CSG",
+      "주요 구분: 400W",
+      "공식 제품명: Bespoke AI 제트 400W"
+    ],
+    "supplies": ["부드러운 천", "부드러운 솔"],
+    "recommendedSupplies": ["브러시 이물질 제거용 청소 도구", "표면이 거칠지 않은 극세사 천"],
+    "recommendedProducts": [],
+    "cautions": [
+      "청소 전에는 전원을 끄고 충전기에서 분리하세요.",
+      "제품과 충전기에 물을 직접 뿌리지 마세요.",
+      "모터·배터리·센서 부품을 임의로 분리하지 마세요.",
+      "세척한 필터가 완전히 마르기 전에 장착하지 마세요."
+    ],
+    "steps": [
+      "제품 전원을 끄고 충전기에서 분리한 뒤 분리형 배터리는 제품 안내에 따라 분리해요.",
+      "먼지통을 비우고 먼지가 날리지 않도록 내부 이물질을 제거해요.",
+      "공식 설명서에서 물세척이 허용된 먼지통과 필터만 흐르는 물로 세척해요.",
+      "세척한 부품을 통풍이 잘되는 그늘에서 완전히 말린 뒤 장착해요.",
+      "브러시에 감긴 머리카락과 실을 제거하고 로봇형은 센서와 바퀴를 부드러운 천으로 닦아요.",
+      "청정스테이션의 먼지봉투와 필터는 알림과 공식 교체 안내에 따라 관리해요."
+    ],
+    "keywords": [
+      "청소기",
+      "먼지통",
+      "필터",
+      "브러시",
+      "센서",
+      "VS90F40CSG",
+      "Bespoke AI 제트 400W"
+    ],
+    "reviewStatus": "verified",
+    "reviewedBy": "catalog-editor",
+    "reviewNote": "공식 제품 페이지와 모델별 공식 사용설명서 교차 검수 완료",
+    "officialManualUrl":
+        "https://downloadcenter.samsung.com/content/UM/202605/20260506112032655/O_DJ68-00914C-15_IB_VS9700D_KR_KO_260429.pdf",
+    "supportUrl": "https://www.samsung.com/sec/support/model/VS90F40CSG/",
+    "servicePhone": "1588-3366",
+    "releaseYear": 2025,
+    "isDiscontinued": false,
+    "imageUrl":
+        "https://images.samsung.com/kdp/goods/2026/05/19/f8e22d7a-6074-46ba-85f5-7b0962910861.png",
+    "modelFeatures": ["400W"],
+    "consumables": [],
+    "consumableDetails": [],
+    "installationType": "무선 스틱형 또는 로봇형"
+  },
+  {
+    "id": "samsung-dv90f22cdt",
+    "name": "Bespoke AI 건조기 22kg (177.8mm LCD)",
+    "type": "appliance",
+    "categoryName": "건조기",
+    "brand": "삼성전자",
+    "manufacturer": "삼성전자",
+    "modelName": "DV90F22CDT",
+    "seriesName": "Bespoke AI 건조기 22kg",
+    "summary": "보풀 필터를 비우고 센서와 열교환기 주변을 모델 안내에 맞게 관리해요.",
+    "frequency": "필터 알림 또는 건조 성능이 떨어질 때",
+    "recurrenceDays": 0,
+    "estimatedMinutes": 15,
+    "productMethod": "보풀 필터와 센서 관리",
+    "guideStatus": "공식 설명서를 확인했어요.",
+    "guideBasis": "삼성전자 공식 제품 페이지와 해당 모델의 공식 사용설명서를 확인했어요.",
+    "guideSourceType": "official",
+    "matchLevelLabel": "공식 설명서 확인 모델",
+    "sourceTitle": "삼성전자 Bespoke AI 건조기 22kg (177.8mm LCD) 공식 제품 페이지",
+    "sourceUrl":
+        "https://www.samsung.com/sec/dryers/dryer-dv90f22cdt-d2c/DV90F22CDT/",
+    "sourceCheckedAt": "2026-06-14",
+    "sources": [
+      {
+        "id": "samsung-dv90f22cdt-product",
+        "title": "삼성전자 Bespoke AI 건조기 22kg (177.8mm LCD) 공식 제품 페이지",
+        "url":
+            "https://www.samsung.com/sec/dryers/dryer-dv90f22cdt-d2c/DV90F22CDT/",
+        "type": "officialProduct",
+        "publisher": "삼성전자",
+        "checkedAt": "2026-06-14",
+        "supports": ["제품명", "모델명", "출시 연식", "대표 이미지", "주요 구분"],
+        "isOfficial": true,
+        "isActive": true
+      },
+      {
+        "id": "samsung-dv90f22cdt-manual",
+        "title": "삼성전자 DV90F22CDT 공식 사용설명서",
+        "url":
+            "https://downloadcenter.samsung.com/content/UM/202603/20260330084033062/OID96721_IB_DV90F_7LCD_KO_260206.pdf",
+        "type": "officialManual",
+        "publisher": "삼성전자",
+        "checkedAt": "2026-06-14",
+        "supports": ["청소 안전사항", "관리 대상", "관리 순서"],
+        "isOfficial": true,
+        "isActive": true
+      }
+    ],
+    "specSourceIds": {
+      "출시 연도": ["samsung-dv90f22cdt-product"],
+      "모델명": ["samsung-dv90f22cdt-product"],
+      "주요 구분": ["samsung-dv90f22cdt-product"],
+      "공식 제품명": ["samsung-dv90f22cdt-product"]
+    },
+    "stepSourceIds": {
+      "0": ["samsung-dv90f22cdt-manual"],
+      "1": ["samsung-dv90f22cdt-manual"],
+      "2": ["samsung-dv90f22cdt-manual"],
+      "3": ["samsung-dv90f22cdt-manual"],
+      "4": ["samsung-dv90f22cdt-manual"],
+      "5": ["samsung-dv90f22cdt-manual"]
+    },
+    "reviewHistory": [
+      {
+        "status": "verified",
+        "reviewer": "catalog-editor",
+        "reviewedAt": "2026-06-14",
+        "note": "공식 제품 페이지와 모델별 공식 사용설명서 교차 검수 완료"
+      }
+    ],
+    "productSpecs": [
+      "출시 연도: 2025년",
+      "모델명: DV90F22CDT",
+      "주요 구분: 22kg",
+      "공식 제품명: Bespoke AI 건조기 22kg (177.8mm LCD)"
+    ],
+    "supplies": ["부드러운 천", "부드러운 솔", "진공청소기"],
+    "recommendedSupplies": ["보풀 제거용 부드러운 브러시", "표면이 거칠지 않은 극세사 천"],
+    "recommendedProducts": [],
+    "cautions": [
+      "청소 전에는 전원 플러그를 빼세요.",
+      "제품에 물을 직접 뿌리지 마세요.",
+      "열교환기 핀과 내부 부품을 임의로 분리하지 마세요.",
+      "젖은 필터를 장착하지 마세요."
+    ],
+    "steps": [
+      "작동을 멈추고 전원 플러그를 뺀 뒤 제품이 충분히 식었는지 확인해요.",
+      "보풀 필터를 분리해 먼지와 보풀을 제거해요.",
+      "물세척이 허용된 필터만 흐르는 물로 씻고 완전히 말린 뒤 다시 장착해요.",
+      "드럼 내부와 습도 센서를 부드러운 마른 천으로 닦아요.",
+      "열교환기 관리 방식은 모델별 공식 설명서를 확인하고 사용자가 접근 가능한 부분만 관리해요.",
+      "필터와 덮개가 정확히 장착됐는지 확인한 뒤 사용해요."
+    ],
+    "keywords": [
+      "건조기",
+      "보풀필터",
+      "열교환기",
+      "습도센서",
+      "DV90F22CDT",
+      "Bespoke AI 건조기 22kg"
+    ],
+    "reviewStatus": "verified",
+    "reviewedBy": "catalog-editor",
+    "reviewNote": "공식 제품 페이지와 모델별 공식 사용설명서 교차 검수 완료",
+    "officialManualUrl":
+        "https://downloadcenter.samsung.com/content/UM/202603/20260330084033062/OID96721_IB_DV90F_7LCD_KO_260206.pdf",
+    "supportUrl": "https://www.samsung.com/sec/support/model/DV90F22CDT/",
+    "servicePhone": "1588-3366",
+    "releaseYear": 2025,
+    "isDiscontinued": false,
+    "imageUrl":
+        "https://images.samsung.com/kdp/goods/2025/04/02/e357f635-ddba-49fa-ae54-ab0d23f1bffb.png",
+    "modelFeatures": ["22kg"],
+    "consumables": [],
+    "consumableDetails": [],
+    "installationType": "독립형 또는 직렬 설치"
   }
 ];
 
@@ -1841,6 +5168,412 @@ const generatedModelCatalogJson = <Map<String, Object?>>[
         "https://www.samsung.com/sec/vacuum-cleaners/bespoke-jet-vs90f40cs-d2c/VS90F40CSK/",
     "features": ["400W", "AI 제트", "무선 스틱"],
     "sourceCheckedAt": "2026-06-13",
+    "reviewStatus": "verified"
+  },
+  {
+    "categoryName": "냉장고",
+    "brand": "삼성전자",
+    "modelName": "RM70F64Q1XJ",
+    "displayName": "Bespoke AI 하이브리드 4도어 키친핏 Max 623L (빅아이스/큐브)",
+    "releaseYear": 2025,
+    "imageUrl":
+        "https://images.samsung.com/kdp/goods/2025/02/24/66a3ed19-7ba2-404f-8d68-a72446136d9f.png",
+    "productUrl":
+        "https://www.samsung.com/sec/refrigerators/french-door-rm70f64q1xj-d2c/RM70F64Q1XJ/",
+    "features": ["623L", "키친핏 Max", "키친핏"],
+    "sourceCheckedAt": "2026-06-14",
+    "reviewStatus": "verified"
+  },
+  {
+    "categoryName": "냉장고",
+    "brand": "삼성전자",
+    "modelName": "RM90F91D1W",
+    "displayName": "Bespoke AI 하이브리드 4도어 864L (AI 홈)",
+    "releaseYear": 2025,
+    "imageUrl":
+        "https://images.samsung.com/kdp/goods/2025/03/04/3fa58408-2189-4998-bb4f-f54446717881.png",
+    "productUrl":
+        "https://www.samsung.com/sec/refrigerators/french-door-rm90f91d1w-d2c/RM90F91D1W/",
+    "features": ["864L", "AI 홈"],
+    "sourceCheckedAt": "2026-06-14",
+    "reviewStatus": "verified"
+  },
+  {
+    "categoryName": "냉장고",
+    "brand": "삼성전자",
+    "modelName": "RM90H64P2W",
+    "displayName": "Bespoke AI 패밀리허브 4도어 키친핏 Max 602L (22.5cm, AI 푸드매니저)",
+    "releaseYear": 2026,
+    "imageUrl":
+        "https://images.samsung.com/kdp/goods/2026/03/11/71ffeb5e-057f-4fc1-b906-e74308ad059c.png",
+    "productUrl":
+        "https://www.samsung.com/sec/refrigerators/french-door-rm90h64p2w-d2c/RM90H64P2W/",
+    "features": ["602L", "22.5cm", "키친핏 Max", "키친핏"],
+    "sourceCheckedAt": "2026-06-14",
+    "reviewStatus": "verified"
+  },
+  {
+    "categoryName": "김치냉장고",
+    "brand": "삼성전자",
+    "modelName": "RK70F49D1A",
+    "displayName": "Bespoke AI 김치플러스 4도어 487L (맞춤숙성실)",
+    "releaseYear": 2025,
+    "imageUrl":
+        "https://images.samsung.com/kdp/goods/2025/08/01/9a07d27d-86c5-4b5b-8d45-52a7a702f3dc.png",
+    "productUrl":
+        "https://www.samsung.com/sec/kimchi-refrigerators/kimchi-stand-rk70f49d1a-d2c/RK70F49D1A/",
+    "features": ["487L", "맞춤숙성실"],
+    "sourceCheckedAt": "2026-06-14",
+    "reviewStatus": "verified"
+  },
+  {
+    "categoryName": "김치냉장고",
+    "brand": "삼성전자",
+    "modelName": "RK80F42C2A",
+    "displayName": "Bespoke AI 김치플러스 4도어 키친핏 Max 418L (맞춤숙성실)",
+    "releaseYear": 2025,
+    "imageUrl":
+        "https://images.samsung.com/kdp/goods/2025/07/30/118dad20-b5f3-46b8-8f59-f0abe70e2f34.png",
+    "productUrl":
+        "https://www.samsung.com/sec/kimchi-refrigerators/kimchi-stand-rk80f42c2a-d2c/RK80F42C2A/",
+    "features": ["418L", "키친핏 Max", "키친핏", "맞춤숙성실"],
+    "sourceCheckedAt": "2026-06-14",
+    "reviewStatus": "verified"
+  },
+  {
+    "categoryName": "김치냉장고",
+    "brand": "삼성전자",
+    "modelName": "RK80F58B1A",
+    "displayName": "Bespoke AI 김치플러스 4도어 583L (냄새케어 메탈쿨링 김치통)",
+    "releaseYear": 2025,
+    "imageUrl":
+        "https://images.samsung.com/kdp/goods/2025/08/01/940282f4-ce11-489b-af4e-16d61ddbb262.png",
+    "productUrl":
+        "https://www.samsung.com/sec/kimchi-refrigerators/kimchi-stand-rk80f58b1a-d2c/RK80F58B1A/",
+    "features": ["583L"],
+    "sourceCheckedAt": "2026-06-14",
+    "reviewStatus": "verified"
+  },
+  {
+    "categoryName": "김치냉장고",
+    "brand": "삼성전자",
+    "modelName": "RQ33DB74E1AP",
+    "displayName": "Bespoke 김치플러스 3도어 키친핏 313L",
+    "releaseYear": 2024,
+    "imageUrl":
+        "https://images.samsung.com/kdp/goods/2025/01/08/2e5afc78-ba7d-454d-a27d-ae13a3cbb72b.png",
+    "productUrl":
+        "https://www.samsung.com/sec/kimchi-refrigerators/kimchi-stand-rq33db74e1ap-d2c/RQ33DB74E1AP/",
+    "features": ["313L", "키친핏"],
+    "sourceCheckedAt": "2026-06-14",
+    "reviewStatus": "verified"
+  },
+  {
+    "categoryName": "김치냉장고",
+    "brand": "삼성전자",
+    "modelName": "RQ34C7915AP",
+    "displayName": "Bespoke AI 김치플러스 1도어 키친핏 348L (좌열림)",
+    "releaseYear": 2023,
+    "imageUrl":
+        "https://images.samsung.com/kdp/goods/2023/05/11/160e8026-c76c-41a5-b8ae-851fffc3d87d.png",
+    "productUrl":
+        "https://www.samsung.com/sec/kimchi-refrigerators/kimchi-stand-rq34c7815ap-d2c/RQ34C7915AP/",
+    "features": ["348L", "키친핏"],
+    "sourceCheckedAt": "2026-06-14",
+    "reviewStatus": "verified"
+  },
+  {
+    "categoryName": "김치냉장고",
+    "brand": "삼성전자",
+    "modelName": "RP20C3111EG",
+    "displayName": "김치플러스 뚜껑형 202L",
+    "releaseYear": 2023,
+    "imageUrl":
+        "https://images.samsung.com/kdp/goods/2023/05/12/a0650725-eb60-4873-9c58-4ce9d1bfaf53.png",
+    "productUrl":
+        "https://www.samsung.com/sec/kimchi-refrigerators/kimchi-top-loadingrp20c3111eg-d2c/RP20C3111EG/",
+    "features": ["202L"],
+    "sourceCheckedAt": "2026-06-14",
+    "reviewStatus": "verified"
+  },
+  {
+    "categoryName": "냉장고",
+    "brand": "삼성전자",
+    "modelName": "RR40C7895AP",
+    "displayName": "Bespoke AI 냉장고 1도어 키친핏 408L (우열림, 냉장전용)",
+    "releaseYear": 2023,
+    "imageUrl":
+        "https://images.samsung.com/kdp/goods/2023/09/19/2f60aad8-b502-418b-80b8-8aa257202e4b.png",
+    "productUrl":
+        "https://www.samsung.com/sec/refrigerators/one-door-rr40c7895ap-d2c/RR40C7895AP/",
+    "features": ["408L", "키친핏"],
+    "sourceCheckedAt": "2026-06-14",
+    "reviewStatus": "verified"
+  },
+  {
+    "categoryName": "세탁기",
+    "brand": "삼성전자",
+    "modelName": "WA30DG2120EE",
+    "displayName": "아가사랑 3kg",
+    "releaseYear": 2024,
+    "imageUrl":
+        "https://images.samsung.com/kdp/goods/2026/01/05/620fef4e-671f-4c42-8c70-5066a134ce92.png",
+    "productUrl":
+        "https://www.samsung.com/sec/washing-machines/wa30dg2120ee-d2c/WA30DG2120EE/",
+    "features": ["3kg"],
+    "sourceCheckedAt": "2026-06-14",
+    "reviewStatus": "verified"
+  },
+  {
+    "categoryName": "세탁기",
+    "brand": "삼성전자",
+    "modelName": "WA80F19SKB",
+    "displayName": "AI 통버블 세탁기 19kg",
+    "releaseYear": 2025,
+    "imageUrl":
+        "https://images.samsung.com/kdp/goods/2025/02/25/98281ad9-f790-45df-8284-8356b4131632.png",
+    "productUrl":
+        "https://www.samsung.com/sec/washing-machines/top-loader-wa80f19skb-d2c/WA80F19SKB/",
+    "features": ["19kg"],
+    "sourceCheckedAt": "2026-06-14",
+    "reviewStatus": "verified"
+  },
+  {
+    "categoryName": "세탁기",
+    "brand": "삼성전자",
+    "modelName": "WD90H25AHS",
+    "displayName": "Bespoke AI 콤보 25/20kg (177.8mm LCD)",
+    "releaseYear": 2026,
+    "imageUrl":
+        "https://images.samsung.com/kdp/goods/2026/02/20/40c0a20c-4ae3-4c8a-b997-444629a2c626.png",
+    "productUrl":
+        "https://www.samsung.com/sec/laundry-combo/combo-wd90h25ahs-d2c/WD90H25AHS/",
+    "features": ["25/20kg"],
+    "sourceCheckedAt": "2026-06-14",
+    "reviewStatus": "verified"
+  },
+  {
+    "categoryName": "세탁기",
+    "brand": "삼성전자",
+    "modelName": "WD99F25AHR",
+    "displayName": "Infinite AI 콤보 25/18kg (177.8mm LCD)",
+    "releaseYear": 2025,
+    "imageUrl":
+        "https://images.samsung.com/kdp/goods/2025/04/01/d42104ba-5b1e-4a62-9c42-c1d27c75b52a.png",
+    "productUrl":
+        "https://www.samsung.com/sec/laundry-combo/combo-wd99f25ahr-d2c/WD99F25AHR/",
+    "features": ["25/18kg"],
+    "sourceCheckedAt": "2026-06-14",
+    "reviewStatus": "verified"
+  },
+  {
+    "categoryName": "세탁기",
+    "brand": "삼성전자",
+    "modelName": "WF90F25ADT",
+    "displayName": "Bespoke AI 세탁기 25kg (177.8mm LCD)",
+    "releaseYear": 2025,
+    "imageUrl":
+        "https://images.samsung.com/kdp/goods/2025/04/01/2f47cd8d-dcc0-4791-9246-b45b7bbb487a.png",
+    "productUrl":
+        "https://www.samsung.com/sec/washing-machines/wf90f25adt-d2c/WF90F25ADT/",
+    "features": ["25kg"],
+    "sourceCheckedAt": "2026-06-14",
+    "reviewStatus": "verified"
+  },
+  {
+    "categoryName": "에어컨",
+    "brand": "삼성전자",
+    "modelName": "AF60F19D12WRT",
+    "displayName": "AI Q9000 청정 62.6/18.7㎡ (리모컨 포함)",
+    "releaseYear": 2025,
+    "imageUrl":
+        "https://images.samsung.com/kdp/goods/2024/12/30/1750e289-9ab0-4c9d-ac5b-530bdc35c78b.png",
+    "productUrl":
+        "https://www.samsung.com/sec/air-conditioners/package-af60f19d12wrt-d2c/AF60F19D12WRT/",
+    "features": ["62.6/18.7㎡", "리모컨 포함"],
+    "sourceCheckedAt": "2026-06-14",
+    "reviewStatus": "verified"
+  },
+  {
+    "categoryName": "에어컨",
+    "brand": "삼성전자",
+    "modelName": "AF70F17D24WRT",
+    "displayName": "Bespoke AI 무풍 클래식 56.9/18.7㎡ (리모컨 포함)",
+    "releaseYear": 2025,
+    "imageUrl":
+        "https://images.samsung.com/kdp/goods/2024/12/30/6c0879b9-d041-44b2-b2e3-031bfea11d9d.png",
+    "productUrl":
+        "https://www.samsung.com/sec/air-conditioners/package-af70f17d24wrt-d2c/AF70F17D24WRT/",
+    "features": ["56.9/18.7㎡", "리모컨 포함"],
+    "sourceCheckedAt": "2026-06-14",
+    "reviewStatus": "verified"
+  },
+  {
+    "categoryName": "에어컨",
+    "brand": "삼성전자",
+    "modelName": "AF80F18D25WRT",
+    "displayName": "Bespoke AI 무풍콤보 갤러리 청정 58.5/18.7㎡ (리모컨 포함)",
+    "releaseYear": 2025,
+    "imageUrl":
+        "https://images.samsung.com/kdp/goods/2024/12/27/1788de1a-d6bd-42f7-ae01-9b91fe6d89dc.png",
+    "productUrl":
+        "https://www.samsung.com/sec/air-conditioners/package-af80f18d25wrt-d2c/AF80F18D25WRT/",
+    "features": ["58.5/18.7㎡", "리모컨 포함"],
+    "sourceCheckedAt": "2026-06-14",
+    "reviewStatus": "verified"
+  },
+  {
+    "categoryName": "에어컨",
+    "brand": "삼성전자",
+    "modelName": "AF90H25D36WRT",
+    "displayName": "Bespoke AI 무풍콤보 갤러리 프로 청정 81.8/18.7㎡",
+    "releaseYear": 2026,
+    "imageUrl":
+        "https://images.samsung.com/kdp/goods/2026/02/09/0e0a7cc9-f0cf-4a66-8350-360d16109d8e.png",
+    "productUrl":
+        "https://www.samsung.com/sec/air-conditioners/package-af90h25d36wrt-d2c/AF90H25D36WRT/",
+    "features": ["81.8/18.7㎡"],
+    "sourceCheckedAt": "2026-06-14",
+    "reviewStatus": "verified"
+  },
+  {
+    "categoryName": "에어컨",
+    "brand": "삼성전자",
+    "modelName": "AR60F11D11WT",
+    "displayName": "AI 무풍콤보 벽걸이 34.1㎡ (리모컨 포함)",
+    "releaseYear": 2025,
+    "imageUrl":
+        "https://images.samsung.com/kdp/goods/2025/03/14/fd52dd2c-592e-4a08-bb2c-7018d6408d58.png",
+    "productUrl":
+        "https://www.samsung.com/sec/air-conditioners/package-ar60f11d11wt-d2c/AR60F11D11WT/",
+    "features": ["34.1㎡", "리모컨 포함"],
+    "sourceCheckedAt": "2026-06-14",
+    "reviewStatus": "verified"
+  },
+  {
+    "categoryName": "식기세척기",
+    "brand": "삼성전자",
+    "modelName": "DW99F79E1B00S",
+    "displayName": "Infinite AI 식기세척기 트루빌트인 14인용 (필터 내장형, 컵 맞춤 세척)",
+    "releaseYear": 2025,
+    "imageUrl":
+        "https://images.samsung.com/kdp/goods/2025/02/18/f180fa94-2289-47a0-8fcd-916b72b0d108.png",
+    "productUrl":
+        "https://www.samsung.com/sec/dishwashers/true-built-in-dw99f79e1b00s-d2c/DW99F79E1B00S/",
+    "features": ["14인용", "트루빌트인"],
+    "sourceCheckedAt": "2026-06-14",
+    "reviewStatus": "verified"
+  },
+  {
+    "categoryName": "식기세척기",
+    "brand": "삼성전자",
+    "modelName": "DW99F79E1UHCS",
+    "displayName": "Infinite AI 식기세척기 빌트인 14인용 (필터 내장형, 컵 맞춤 세척)",
+    "releaseYear": 2025,
+    "imageUrl":
+        "https://images.samsung.com/kdp/goods/2025/02/18/ff9a4a17-389c-493d-831b-eff167978914.png",
+    "productUrl":
+        "https://www.samsung.com/sec/dishwashers/built-in-dw99f79e1uhcs-d2c/DW99F79E1UHCS/",
+    "features": ["14인용"],
+    "sourceCheckedAt": "2026-06-14",
+    "reviewStatus": "verified"
+  },
+  {
+    "categoryName": "인덕션",
+    "brand": "삼성전자",
+    "modelName": "CC80H63G1HS",
+    "displayName": "Bespoke AI 인덕션 (플렉스존)",
+    "releaseYear": 2026,
+    "imageUrl":
+        "https://images.samsung.com/kdp/goods/2026/03/19/d199314e-c736-4acc-a9b3-7fb510c62af3.png",
+    "productUrl":
+        "https://www.samsung.com/sec/electric-range/cooktop-cc80h63g1hs-d2c/CC80H63G1HS/",
+    "features": ["플렉스존"],
+    "sourceCheckedAt": "2026-06-14",
+    "reviewStatus": "verified"
+  },
+  {
+    "categoryName": "인덕션",
+    "brand": "삼성전자",
+    "modelName": "CC99H84JAD",
+    "displayName": "Infinite Line 후드일체형 인덕션",
+    "releaseYear": 2026,
+    "imageUrl":
+        "https://images.samsung.com/kdp/goods/2026/04/03/3f67fbe2-5579-4061-a23d-c3faad21042c.png",
+    "productUrl":
+        "https://www.samsung.com/sec/electric-range/cooktop-cc99h84jad-d2c/CC99H84JAD/",
+    "features": ["후드일체형"],
+    "sourceCheckedAt": "2026-06-14",
+    "reviewStatus": "verified"
+  },
+  {
+    "categoryName": "인덕션",
+    "brand": "삼성전자",
+    "modelName": "NZ62DG300CFW",
+    "displayName": "더 플레이트 인덕션 2구",
+    "releaseYear": 2024,
+    "imageUrl":
+        "https://images.samsung.com/kdp/goods/2024/05/14/d0b73b72-828a-4adc-8a04-63c009086f97.png",
+    "productUrl":
+        "https://www.samsung.com/sec/electric-range/cooktop-nz62dg300cf-d2c/NZ62DG300CFW/",
+    "features": ["2구"],
+    "sourceCheckedAt": "2026-06-14",
+    "reviewStatus": "verified"
+  },
+  {
+    "categoryName": "청소기",
+    "brand": "삼성전자",
+    "modelName": "VR90F01SAG",
+    "displayName": "Bespoke AI 스팀 울트라 자동 급배수",
+    "releaseYear": 2025,
+    "imageUrl":
+        "https://images.samsung.com/kdp/goods/2026/01/30/203de87e-fa45-4d3e-94f1-96836b73f341.png",
+    "productUrl":
+        "https://www.samsung.com/sec/vacuum-cleaners/jetbot-vr90f01sag-d2c/VR90F01SAG/",
+    "features": ["자동 급배수"],
+    "sourceCheckedAt": "2026-06-14",
+    "reviewStatus": "verified"
+  },
+  {
+    "categoryName": "청소기",
+    "brand": "삼성전자",
+    "modelName": "VS15A680AEW",
+    "displayName": "Bespoke 슬림 150W",
+    "releaseYear": 2021,
+    "imageUrl":
+        "https://images.samsung.com/kdp/goods/2021/06/17/f065accc-a69a-44c9-b22a-4753e7cf3b61.png",
+    "productUrl":
+        "https://www.samsung.com/sec/vacuum-cleaners/vs15a680aew-d2c/VS15A680AEW/",
+    "features": ["150W"],
+    "sourceCheckedAt": "2026-06-14",
+    "reviewStatus": "verified"
+  },
+  {
+    "categoryName": "청소기",
+    "brand": "삼성전자",
+    "modelName": "VS90F40CSG",
+    "displayName": "Bespoke AI 제트 400W",
+    "releaseYear": 2025,
+    "imageUrl":
+        "https://images.samsung.com/kdp/goods/2026/05/19/f8e22d7a-6074-46ba-85f5-7b0962910861.png",
+    "productUrl":
+        "https://www.samsung.com/sec/vacuum-cleaners/bespoke-jet-vs90f40cs-d2c/VS90F40CSG/",
+    "features": ["400W"],
+    "sourceCheckedAt": "2026-06-14",
+    "reviewStatus": "verified"
+  },
+  {
+    "categoryName": "건조기",
+    "brand": "삼성전자",
+    "modelName": "DV90F22CDT",
+    "displayName": "Bespoke AI 건조기 22kg (177.8mm LCD)",
+    "releaseYear": 2025,
+    "imageUrl":
+        "https://images.samsung.com/kdp/goods/2025/04/02/e357f635-ddba-49fa-ae54-ab0d23f1bffb.png",
+    "productUrl":
+        "https://www.samsung.com/sec/dryers/dryer-dv90f22cdt-d2c/DV90F22CDT/",
+    "features": ["22kg"],
+    "sourceCheckedAt": "2026-06-14",
     "reviewStatus": "verified"
   }
 ];

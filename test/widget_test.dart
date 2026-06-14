@@ -200,6 +200,114 @@ void main() {
     }
   });
 
+  test('삼성 확장 배치 29개 모델은 공식 자료와 제품군별 관리법이 연결된다', () {
+    const groups = {
+      '냉장고': (
+        ['RM70F64Q1XJ', 'RM90F91D1W', 'RM90H64P2W', 'RR40C7895AP'],
+        ['선반', '도어 패킹'],
+      ),
+      '김치냉장고': (
+        [
+          'RK70F49D1A',
+          'RK80F42C2A',
+          'RK80F58B1A',
+          'RQ33DB74E1AP',
+          'RQ34C7915AP',
+          'RP20C3111EG',
+        ],
+        ['김치통', '저장실'],
+      ),
+      '세탁기': (
+        [
+          'WA30DG2120EE',
+          'WA80F19SKB',
+          'WD90H25AHS',
+          'WD99F25AHR',
+          'WF90F25ADT',
+        ],
+        ['세제함', '통세척'],
+      ),
+      '에어컨': (
+        [
+          'AF60F19D12WRT',
+          'AF70F17D24WRT',
+          'AF80F18D25WRT',
+          'AF90H25D36WRT',
+          'AR60F11D11WT',
+        ],
+        ['필터', '실외기'],
+      ),
+      '식기세척기': (
+        ['DW99F79E1B00S', 'DW99F79E1UHCS'],
+        ['필터', '분사 노즐'],
+      ),
+      '인덕션': (
+        ['CC80H63G1HS', 'CC99H84JAD', 'NZ62DG300CFW'],
+        ['잔열', '상판'],
+      ),
+      '청소기': (
+        ['VR90F01SAG', 'VS15A680AEW', 'VS90F40CSG'],
+        ['먼지통', '센서'],
+      ),
+      '건조기': (
+        ['DV90F22CDT'],
+        ['보풀 필터', '열교환기'],
+      ),
+    };
+
+    for (final MapEntry(key: categoryName, value: group) in groups.entries) {
+      final (models, careTerms) = group;
+      for (final modelName in models) {
+        final product = findCatalogEntry(
+          categoryName: categoryName,
+          brand: '삼성전자',
+          modelName: modelName,
+        );
+
+        expect(product, isNotNull, reason: '$categoryName $modelName');
+        expect(product!.reviewStatus, 'verified');
+        expect(product.matchLevelLabel, '공식 설명서 확인 모델');
+        expect(
+            product.officialManualUrl, contains('downloadcenter.samsung.com'));
+        expect(product.imageUrl, contains('images.samsung.com'));
+        expect(product.releaseYear, isNotNull);
+        expect(product.sources, hasLength(2));
+        expect(product.steps.length, greaterThanOrEqualTo(5));
+        for (final term in careTerms) {
+          expect(product.steps.join(' '), contains(term), reason: modelName);
+        }
+      }
+    }
+  });
+
+  test('첫 출시 기준인 공식 확인 정확 모델 50개를 확보했다', () {
+    final verifiedModels = productCatalog
+        .where(
+          (product) =>
+              product.reviewStatus == 'verified' &&
+              product.modelName.trim().isNotEmpty,
+        )
+        .toList();
+
+    expect(verifiedModels.length, greaterThanOrEqualTo(50));
+    expect(
+      verifiedModels.map((product) => product.modelName).toSet().length,
+      verifiedModels.length,
+    );
+    expect(
+      verifiedModels.every(
+        (product) =>
+            product.sources.any(
+              (source) => source.type == ProductSourceType.officialManual,
+            ) &&
+            product.sources.any(
+              (source) => source.type == ProductSourceType.officialProduct,
+            ),
+      ),
+      isTrue,
+    );
+  });
+
   test('RM80F91H1W만 확인된 UV 청정탈취 필터를 제공한다', () {
     final hybrid = findCatalogEntry(
       categoryName: '냉장고',
@@ -331,7 +439,13 @@ void main() {
         models.map((item) => item.modelName),
         containsAll(['RM70F63R2A', 'RM80F91H1W', 'RM70F90M1ZD']),
       );
-      for (final model in models) {
+      for (final model in models.where(
+        (item) => const {
+          'RM70F63R2A',
+          'RM80F91H1W',
+          'RM70F90M1ZD',
+        }.contains(item.modelName),
+      )) {
         expect(model.releaseYear, 2025);
         expect(model.imageUrl, isNotEmpty);
         expect(model.features, isNotEmpty);
@@ -814,18 +928,9 @@ void main() {
     await tester.tap(finderButton);
     await tester.pumpAndSettle();
 
-    final targetModelCard = find
-        .ancestor(
-          of: find.text('RM70F63R2A').first,
-          matching: find.byType(Card),
-        )
-        .first;
-    await tester.tap(
-      find.descendant(
-        of: targetModelCard,
-        matching: find.text('정확해요'),
-      ),
-    );
+    await tester.enterText(find.byType(TextField).first, 'RM70F63R2A');
+    await tester.pumpAndSettle();
+    await tester.tap(find.widgetWithText(FilledButton, '정확해요').first);
     await tester.pumpAndSettle();
 
     expect(find.text('정확한 모델 바꾸기'), findsOneWidget);
@@ -1116,20 +1221,11 @@ void main() {
     await tester.tap(productFinderButton);
     await tester.pumpAndSettle();
 
+    await tester.enterText(find.byType(TextField).first, 'RM70F63R2A');
+    await tester.pumpAndSettle();
     expect(find.text('RM70F63R2A'), findsWidgets);
     expect(find.text('공식 관리법 준비됨'), findsWidgets);
-    final targetModelCard = find
-        .ancestor(
-          of: find.text('RM70F63R2A').first,
-          matching: find.byType(Card),
-        )
-        .first;
-    await tester.tap(
-      find.descendant(
-        of: targetModelCard,
-        matching: find.text('정확해요'),
-      ),
-    );
+    await tester.tap(find.widgetWithText(FilledButton, '정확해요').first);
     await tester.pumpAndSettle();
 
     expect(find.text('선택한 모델: RM70F63R2A'), findsOneWidget);
@@ -1167,18 +1263,9 @@ void main() {
     await tester.pumpAndSettle();
     await tester.tap(productFinderButton);
     await tester.pumpAndSettle();
-    final targetModelCard = find
-        .ancestor(
-          of: find.text('RM70F63R2A').first,
-          matching: find.byType(Card),
-        )
-        .first;
-    await tester.tap(
-      find.descendant(
-        of: targetModelCard,
-        matching: find.text('정확해요'),
-      ),
-    );
+    await tester.enterText(find.byType(TextField).first, 'RM70F63R2A');
+    await tester.pumpAndSettle();
+    await tester.tap(find.widgetWithText(FilledButton, '정확해요').first);
     await tester.pumpAndSettle();
 
     expect(tester.takeException(), isNull);

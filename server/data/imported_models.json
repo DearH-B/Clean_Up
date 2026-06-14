@@ -239,5 +239,429 @@
     ],
     "sourceCheckedAt": "2026-06-13",
     "reviewStatus": "verified"
+  },
+  {
+    "categoryName": "냉장고",
+    "brand": "삼성전자",
+    "modelName": "RM70F64Q1XJ",
+    "displayName": "Bespoke AI 하이브리드 4도어 키친핏 Max 623L (빅아이스/큐브)",
+    "releaseYear": 2025,
+    "imageUrl": "https://images.samsung.com/kdp/goods/2025/02/24/66a3ed19-7ba2-404f-8d68-a72446136d9f.png",
+    "productUrl": "https://www.samsung.com/sec/refrigerators/french-door-rm70f64q1xj-d2c/RM70F64Q1XJ/",
+    "features": [
+      "623L",
+      "키친핏 Max",
+      "키친핏"
+    ],
+    "sourceCheckedAt": "2026-06-14",
+    "reviewStatus": "verified"
+  },
+  {
+    "categoryName": "냉장고",
+    "brand": "삼성전자",
+    "modelName": "RM90F91D1W",
+    "displayName": "Bespoke AI 하이브리드 4도어 864L (AI 홈)",
+    "releaseYear": 2025,
+    "imageUrl": "https://images.samsung.com/kdp/goods/2025/03/04/3fa58408-2189-4998-bb4f-f54446717881.png",
+    "productUrl": "https://www.samsung.com/sec/refrigerators/french-door-rm90f91d1w-d2c/RM90F91D1W/",
+    "features": [
+      "864L",
+      "AI 홈"
+    ],
+    "sourceCheckedAt": "2026-06-14",
+    "reviewStatus": "verified"
+  },
+  {
+    "categoryName": "냉장고",
+    "brand": "삼성전자",
+    "modelName": "RM90H64P2W",
+    "displayName": "Bespoke AI 패밀리허브 4도어 키친핏 Max 602L (22.5cm, AI 푸드매니저)",
+    "releaseYear": 2026,
+    "imageUrl": "https://images.samsung.com/kdp/goods/2026/03/11/71ffeb5e-057f-4fc1-b906-e74308ad059c.png",
+    "productUrl": "https://www.samsung.com/sec/refrigerators/french-door-rm90h64p2w-d2c/RM90H64P2W/",
+    "features": [
+      "602L",
+      "22.5cm",
+      "키친핏 Max",
+      "키친핏"
+    ],
+    "sourceCheckedAt": "2026-06-14",
+    "reviewStatus": "verified"
+  },
+  {
+    "categoryName": "김치냉장고",
+    "brand": "삼성전자",
+    "modelName": "RK70F49D1A",
+    "displayName": "Bespoke AI 김치플러스 4도어 487L (맞춤숙성실)",
+    "releaseYear": 2025,
+    "imageUrl": "https://images.samsung.com/kdp/goods/2025/08/01/9a07d27d-86c5-4b5b-8d45-52a7a702f3dc.png",
+    "productUrl": "https://www.samsung.com/sec/kimchi-refrigerators/kimchi-stand-rk70f49d1a-d2c/RK70F49D1A/",
+    "features": [
+      "487L",
+      "맞춤숙성실"
+    ],
+    "sourceCheckedAt": "2026-06-14",
+    "reviewStatus": "verified"
+  },
+  {
+    "categoryName": "김치냉장고",
+    "brand": "삼성전자",
+    "modelName": "RK80F42C2A",
+    "displayName": "Bespoke AI 김치플러스 4도어 키친핏 Max 418L (맞춤숙성실)",
+    "releaseYear": 2025,
+    "imageUrl": "https://images.samsung.com/kdp/goods/2025/07/30/118dad20-b5f3-46b8-8f59-f0abe70e2f34.png",
+    "productUrl": "https://www.samsung.com/sec/kimchi-refrigerators/kimchi-stand-rk80f42c2a-d2c/RK80F42C2A/",
+    "features": [
+      "418L",
+      "키친핏 Max",
+      "키친핏",
+      "맞춤숙성실"
+    ],
+    "sourceCheckedAt": "2026-06-14",
+    "reviewStatus": "verified"
+  },
+  {
+    "categoryName": "김치냉장고",
+    "brand": "삼성전자",
+    "modelName": "RK80F58B1A",
+    "displayName": "Bespoke AI 김치플러스 4도어 583L (냄새케어 메탈쿨링 김치통)",
+    "releaseYear": 2025,
+    "imageUrl": "https://images.samsung.com/kdp/goods/2025/08/01/940282f4-ce11-489b-af4e-16d61ddbb262.png",
+    "productUrl": "https://www.samsung.com/sec/kimchi-refrigerators/kimchi-stand-rk80f58b1a-d2c/RK80F58B1A/",
+    "features": [
+      "583L"
+    ],
+    "sourceCheckedAt": "2026-06-14",
+    "reviewStatus": "verified"
+  },
+  {
+    "categoryName": "김치냉장고",
+    "brand": "삼성전자",
+    "modelName": "RQ33DB74E1AP",
+    "displayName": "Bespoke 김치플러스 3도어 키친핏 313L",
+    "releaseYear": 2024,
+    "imageUrl": "https://images.samsung.com/kdp/goods/2025/01/08/2e5afc78-ba7d-454d-a27d-ae13a3cbb72b.png",
+    "productUrl": "https://www.samsung.com/sec/kimchi-refrigerators/kimchi-stand-rq33db74e1ap-d2c/RQ33DB74E1AP/",
+    "features": [
+      "313L",
+      "키친핏"
+    ],
+    "sourceCheckedAt": "2026-06-14",
+    "reviewStatus": "verified"
+  },
+  {
+    "categoryName": "김치냉장고",
+    "brand": "삼성전자",
+    "modelName": "RQ34C7915AP",
+    "displayName": "Bespoke AI 김치플러스 1도어 키친핏 348L (좌열림)",
+    "releaseYear": 2023,
+    "imageUrl": "https://images.samsung.com/kdp/goods/2023/05/11/160e8026-c76c-41a5-b8ae-851fffc3d87d.png",
+    "productUrl": "https://www.samsung.com/sec/kimchi-refrigerators/kimchi-stand-rq34c7815ap-d2c/RQ34C7915AP/",
+    "features": [
+      "348L",
+      "키친핏"
+    ],
+    "sourceCheckedAt": "2026-06-14",
+    "reviewStatus": "verified"
+  },
+  {
+    "categoryName": "김치냉장고",
+    "brand": "삼성전자",
+    "modelName": "RP20C3111EG",
+    "displayName": "김치플러스 뚜껑형 202L",
+    "releaseYear": 2023,
+    "imageUrl": "https://images.samsung.com/kdp/goods/2023/05/12/a0650725-eb60-4873-9c58-4ce9d1bfaf53.png",
+    "productUrl": "https://www.samsung.com/sec/kimchi-refrigerators/kimchi-top-loadingrp20c3111eg-d2c/RP20C3111EG/",
+    "features": [
+      "202L"
+    ],
+    "sourceCheckedAt": "2026-06-14",
+    "reviewStatus": "verified"
+  },
+  {
+    "categoryName": "냉장고",
+    "brand": "삼성전자",
+    "modelName": "RR40C7895AP",
+    "displayName": "Bespoke AI 냉장고 1도어 키친핏 408L (우열림, 냉장전용)",
+    "releaseYear": 2023,
+    "imageUrl": "https://images.samsung.com/kdp/goods/2023/09/19/2f60aad8-b502-418b-80b8-8aa257202e4b.png",
+    "productUrl": "https://www.samsung.com/sec/refrigerators/one-door-rr40c7895ap-d2c/RR40C7895AP/",
+    "features": [
+      "408L",
+      "키친핏"
+    ],
+    "sourceCheckedAt": "2026-06-14",
+    "reviewStatus": "verified"
+  },
+  {
+    "categoryName": "세탁기",
+    "brand": "삼성전자",
+    "modelName": "WA30DG2120EE",
+    "displayName": "아가사랑 3kg",
+    "releaseYear": 2024,
+    "imageUrl": "https://images.samsung.com/kdp/goods/2026/01/05/620fef4e-671f-4c42-8c70-5066a134ce92.png",
+    "productUrl": "https://www.samsung.com/sec/washing-machines/wa30dg2120ee-d2c/WA30DG2120EE/",
+    "features": [
+      "3kg"
+    ],
+    "sourceCheckedAt": "2026-06-14",
+    "reviewStatus": "verified"
+  },
+  {
+    "categoryName": "세탁기",
+    "brand": "삼성전자",
+    "modelName": "WA80F19SKB",
+    "displayName": "AI 통버블 세탁기 19kg",
+    "releaseYear": 2025,
+    "imageUrl": "https://images.samsung.com/kdp/goods/2025/02/25/98281ad9-f790-45df-8284-8356b4131632.png",
+    "productUrl": "https://www.samsung.com/sec/washing-machines/top-loader-wa80f19skb-d2c/WA80F19SKB/",
+    "features": [
+      "19kg"
+    ],
+    "sourceCheckedAt": "2026-06-14",
+    "reviewStatus": "verified"
+  },
+  {
+    "categoryName": "세탁기",
+    "brand": "삼성전자",
+    "modelName": "WD90H25AHS",
+    "displayName": "Bespoke AI 콤보 25/20kg (177.8mm LCD)",
+    "releaseYear": 2026,
+    "imageUrl": "https://images.samsung.com/kdp/goods/2026/02/20/40c0a20c-4ae3-4c8a-b997-444629a2c626.png",
+    "productUrl": "https://www.samsung.com/sec/laundry-combo/combo-wd90h25ahs-d2c/WD90H25AHS/",
+    "features": [
+      "25/20kg"
+    ],
+    "sourceCheckedAt": "2026-06-14",
+    "reviewStatus": "verified"
+  },
+  {
+    "categoryName": "세탁기",
+    "brand": "삼성전자",
+    "modelName": "WD99F25AHR",
+    "displayName": "Infinite AI 콤보 25/18kg (177.8mm LCD)",
+    "releaseYear": 2025,
+    "imageUrl": "https://images.samsung.com/kdp/goods/2025/04/01/d42104ba-5b1e-4a62-9c42-c1d27c75b52a.png",
+    "productUrl": "https://www.samsung.com/sec/laundry-combo/combo-wd99f25ahr-d2c/WD99F25AHR/",
+    "features": [
+      "25/18kg"
+    ],
+    "sourceCheckedAt": "2026-06-14",
+    "reviewStatus": "verified"
+  },
+  {
+    "categoryName": "세탁기",
+    "brand": "삼성전자",
+    "modelName": "WF90F25ADT",
+    "displayName": "Bespoke AI 세탁기 25kg (177.8mm LCD)",
+    "releaseYear": 2025,
+    "imageUrl": "https://images.samsung.com/kdp/goods/2025/04/01/2f47cd8d-dcc0-4791-9246-b45b7bbb487a.png",
+    "productUrl": "https://www.samsung.com/sec/washing-machines/wf90f25adt-d2c/WF90F25ADT/",
+    "features": [
+      "25kg"
+    ],
+    "sourceCheckedAt": "2026-06-14",
+    "reviewStatus": "verified"
+  },
+  {
+    "categoryName": "에어컨",
+    "brand": "삼성전자",
+    "modelName": "AF60F19D12WRT",
+    "displayName": "AI Q9000 청정 62.6/18.7㎡ (리모컨 포함)",
+    "releaseYear": 2025,
+    "imageUrl": "https://images.samsung.com/kdp/goods/2024/12/30/1750e289-9ab0-4c9d-ac5b-530bdc35c78b.png",
+    "productUrl": "https://www.samsung.com/sec/air-conditioners/package-af60f19d12wrt-d2c/AF60F19D12WRT/",
+    "features": [
+      "62.6/18.7㎡",
+      "리모컨 포함"
+    ],
+    "sourceCheckedAt": "2026-06-14",
+    "reviewStatus": "verified"
+  },
+  {
+    "categoryName": "에어컨",
+    "brand": "삼성전자",
+    "modelName": "AF70F17D24WRT",
+    "displayName": "Bespoke AI 무풍 클래식 56.9/18.7㎡ (리모컨 포함)",
+    "releaseYear": 2025,
+    "imageUrl": "https://images.samsung.com/kdp/goods/2024/12/30/6c0879b9-d041-44b2-b2e3-031bfea11d9d.png",
+    "productUrl": "https://www.samsung.com/sec/air-conditioners/package-af70f17d24wrt-d2c/AF70F17D24WRT/",
+    "features": [
+      "56.9/18.7㎡",
+      "리모컨 포함"
+    ],
+    "sourceCheckedAt": "2026-06-14",
+    "reviewStatus": "verified"
+  },
+  {
+    "categoryName": "에어컨",
+    "brand": "삼성전자",
+    "modelName": "AF80F18D25WRT",
+    "displayName": "Bespoke AI 무풍콤보 갤러리 청정 58.5/18.7㎡ (리모컨 포함)",
+    "releaseYear": 2025,
+    "imageUrl": "https://images.samsung.com/kdp/goods/2024/12/27/1788de1a-d6bd-42f7-ae01-9b91fe6d89dc.png",
+    "productUrl": "https://www.samsung.com/sec/air-conditioners/package-af80f18d25wrt-d2c/AF80F18D25WRT/",
+    "features": [
+      "58.5/18.7㎡",
+      "리모컨 포함"
+    ],
+    "sourceCheckedAt": "2026-06-14",
+    "reviewStatus": "verified"
+  },
+  {
+    "categoryName": "에어컨",
+    "brand": "삼성전자",
+    "modelName": "AF90H25D36WRT",
+    "displayName": "Bespoke AI 무풍콤보 갤러리 프로 청정 81.8/18.7㎡",
+    "releaseYear": 2026,
+    "imageUrl": "https://images.samsung.com/kdp/goods/2026/02/09/0e0a7cc9-f0cf-4a66-8350-360d16109d8e.png",
+    "productUrl": "https://www.samsung.com/sec/air-conditioners/package-af90h25d36wrt-d2c/AF90H25D36WRT/",
+    "features": [
+      "81.8/18.7㎡"
+    ],
+    "sourceCheckedAt": "2026-06-14",
+    "reviewStatus": "verified"
+  },
+  {
+    "categoryName": "에어컨",
+    "brand": "삼성전자",
+    "modelName": "AR60F11D11WT",
+    "displayName": "AI 무풍콤보 벽걸이 34.1㎡ (리모컨 포함)",
+    "releaseYear": 2025,
+    "imageUrl": "https://images.samsung.com/kdp/goods/2025/03/14/fd52dd2c-592e-4a08-bb2c-7018d6408d58.png",
+    "productUrl": "https://www.samsung.com/sec/air-conditioners/package-ar60f11d11wt-d2c/AR60F11D11WT/",
+    "features": [
+      "34.1㎡",
+      "리모컨 포함"
+    ],
+    "sourceCheckedAt": "2026-06-14",
+    "reviewStatus": "verified"
+  },
+  {
+    "categoryName": "식기세척기",
+    "brand": "삼성전자",
+    "modelName": "DW99F79E1B00S",
+    "displayName": "Infinite AI 식기세척기 트루빌트인 14인용 (필터 내장형, 컵 맞춤 세척)",
+    "releaseYear": 2025,
+    "imageUrl": "https://images.samsung.com/kdp/goods/2025/02/18/f180fa94-2289-47a0-8fcd-916b72b0d108.png",
+    "productUrl": "https://www.samsung.com/sec/dishwashers/true-built-in-dw99f79e1b00s-d2c/DW99F79E1B00S/",
+    "features": [
+      "14인용",
+      "트루빌트인"
+    ],
+    "sourceCheckedAt": "2026-06-14",
+    "reviewStatus": "verified"
+  },
+  {
+    "categoryName": "식기세척기",
+    "brand": "삼성전자",
+    "modelName": "DW99F79E1UHCS",
+    "displayName": "Infinite AI 식기세척기 빌트인 14인용 (필터 내장형, 컵 맞춤 세척)",
+    "releaseYear": 2025,
+    "imageUrl": "https://images.samsung.com/kdp/goods/2025/02/18/ff9a4a17-389c-493d-831b-eff167978914.png",
+    "productUrl": "https://www.samsung.com/sec/dishwashers/built-in-dw99f79e1uhcs-d2c/DW99F79E1UHCS/",
+    "features": [
+      "14인용"
+    ],
+    "sourceCheckedAt": "2026-06-14",
+    "reviewStatus": "verified"
+  },
+  {
+    "categoryName": "인덕션",
+    "brand": "삼성전자",
+    "modelName": "CC80H63G1HS",
+    "displayName": "Bespoke AI 인덕션 (플렉스존)",
+    "releaseYear": 2026,
+    "imageUrl": "https://images.samsung.com/kdp/goods/2026/03/19/d199314e-c736-4acc-a9b3-7fb510c62af3.png",
+    "productUrl": "https://www.samsung.com/sec/electric-range/cooktop-cc80h63g1hs-d2c/CC80H63G1HS/",
+    "features": [
+      "플렉스존"
+    ],
+    "sourceCheckedAt": "2026-06-14",
+    "reviewStatus": "verified"
+  },
+  {
+    "categoryName": "인덕션",
+    "brand": "삼성전자",
+    "modelName": "CC99H84JAD",
+    "displayName": "Infinite Line 후드일체형 인덕션",
+    "releaseYear": 2026,
+    "imageUrl": "https://images.samsung.com/kdp/goods/2026/04/03/3f67fbe2-5579-4061-a23d-c3faad21042c.png",
+    "productUrl": "https://www.samsung.com/sec/electric-range/cooktop-cc99h84jad-d2c/CC99H84JAD/",
+    "features": [
+      "후드일체형"
+    ],
+    "sourceCheckedAt": "2026-06-14",
+    "reviewStatus": "verified"
+  },
+  {
+    "categoryName": "인덕션",
+    "brand": "삼성전자",
+    "modelName": "NZ62DG300CFW",
+    "displayName": "더 플레이트 인덕션 2구",
+    "releaseYear": 2024,
+    "imageUrl": "https://images.samsung.com/kdp/goods/2024/05/14/d0b73b72-828a-4adc-8a04-63c009086f97.png",
+    "productUrl": "https://www.samsung.com/sec/electric-range/cooktop-nz62dg300cf-d2c/NZ62DG300CFW/",
+    "features": [
+      "2구"
+    ],
+    "sourceCheckedAt": "2026-06-14",
+    "reviewStatus": "verified"
+  },
+  {
+    "categoryName": "청소기",
+    "brand": "삼성전자",
+    "modelName": "VR90F01SAG",
+    "displayName": "Bespoke AI 스팀 울트라 자동 급배수",
+    "releaseYear": 2025,
+    "imageUrl": "https://images.samsung.com/kdp/goods/2026/01/30/203de87e-fa45-4d3e-94f1-96836b73f341.png",
+    "productUrl": "https://www.samsung.com/sec/vacuum-cleaners/jetbot-vr90f01sag-d2c/VR90F01SAG/",
+    "features": [
+      "자동 급배수"
+    ],
+    "sourceCheckedAt": "2026-06-14",
+    "reviewStatus": "verified"
+  },
+  {
+    "categoryName": "청소기",
+    "brand": "삼성전자",
+    "modelName": "VS15A680AEW",
+    "displayName": "Bespoke 슬림 150W",
+    "releaseYear": 2021,
+    "imageUrl": "https://images.samsung.com/kdp/goods/2021/06/17/f065accc-a69a-44c9-b22a-4753e7cf3b61.png",
+    "productUrl": "https://www.samsung.com/sec/vacuum-cleaners/vs15a680aew-d2c/VS15A680AEW/",
+    "features": [
+      "150W"
+    ],
+    "sourceCheckedAt": "2026-06-14",
+    "reviewStatus": "verified"
+  },
+  {
+    "categoryName": "청소기",
+    "brand": "삼성전자",
+    "modelName": "VS90F40CSG",
+    "displayName": "Bespoke AI 제트 400W",
+    "releaseYear": 2025,
+    "imageUrl": "https://images.samsung.com/kdp/goods/2026/05/19/f8e22d7a-6074-46ba-85f5-7b0962910861.png",
+    "productUrl": "https://www.samsung.com/sec/vacuum-cleaners/bespoke-jet-vs90f40cs-d2c/VS90F40CSG/",
+    "features": [
+      "400W"
+    ],
+    "sourceCheckedAt": "2026-06-14",
+    "reviewStatus": "verified"
+  },
+  {
+    "categoryName": "건조기",
+    "brand": "삼성전자",
+    "modelName": "DV90F22CDT",
+    "displayName": "Bespoke AI 건조기 22kg (177.8mm LCD)",
+    "releaseYear": 2025,
+    "imageUrl": "https://images.samsung.com/kdp/goods/2025/04/02/e357f635-ddba-49fa-ae54-ab0d23f1bffb.png",
+    "productUrl": "https://www.samsung.com/sec/dryers/dryer-dv90f22cdt-d2c/DV90F22CDT/",
+    "features": [
+      "22kg"
+    ],
+    "sourceCheckedAt": "2026-06-14",
+    "reviewStatus": "verified"
   }
 ]
