@@ -84,7 +84,7 @@ E:\AIP\flutter-sdk\bin\flutter.bat build appbundle --release `
 ## 다음에 결정할 값
 
 - 스테이징 API URL:
-- 운영 API URL:
+- 운영 API URL: https://carelog-api.onrender.com
 - 관리자 웹 URL:
 - 외부 모니터링 URL:
 - 운영 서버 호스팅 서비스:

@@ -2,6 +2,7 @@
 
 - 생성일: 2026-06-16
 - 대상 서비스: `carelog-api`
+- 운영 테스트 URL: `https://carelog-api.onrender.com`
 - 설정 파일: `render.yaml`
 
 ## 준비된 것

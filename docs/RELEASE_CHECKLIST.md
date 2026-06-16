@@ -30,8 +30,9 @@
 ## 정책과 운영
 
 - [ ] 운영 주체, 도메인과 문의 이메일 확정
-- [ ] Render에 `carelog-api` 배포 (`render.yaml`, `docs/RENDER_DEPLOYMENT_GUIDE.md` 기준)
-- [ ] 운영 API URL 확정 및 출시 빌드에 `CATALOG_API_BASE_URL` 주입 (`docs/API_ENVIRONMENT_GUIDE.md` 기준)
+- [x] Render에 `carelog-api` 배포 (`render.yaml`, `docs/RENDER_DEPLOYMENT_GUIDE.md` 기준)
+- [x] 운영 API URL 확정: `https://carelog-api.onrender.com`
+- [ ] 출시 빌드에 `CATALOG_API_BASE_URL` 주입 (`docs/API_ENVIRONMENT_GUIDE.md` 기준)
 - [ ] 개인정보처리방침과 이용약관 법률 검토 (`docs/POLICY_FINALIZATION_CHECKLIST.md` 기준)
 - [ ] 제품 정보 책임 범위 최종 검토
 - [ ] 광고·제휴 표시 문구 확정
