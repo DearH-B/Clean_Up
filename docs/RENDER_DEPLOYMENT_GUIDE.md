@@ -9,7 +9,9 @@
 - Render Blueprint 파일을 저장소 루트에 추가했다.
 - 서버 Dockerfile은 Render의 `PORT` 환경 변수를 사용하도록 변경했다.
 - 런타임 데이터는 `/app/runtime`에 저장한다.
-- 카탈로그 운영 DB와 사용자 제보 파일은 Render Persistent Disk에 저장한다.
+- 현재 배포 테스트 설정은 비용을 줄이기 위해 Persistent Disk를 붙이지 않는다.
+- 카탈로그 운영 DB와 사용자 제보 파일은 서버 재시작 시 사라질 수 있다.
+- 출시 전에는 Render Persistent Disk, PostgreSQL 또는 별도 저장소를 반드시 연결한다.
 - 관리자 API 키는 `render.yaml`에 직접 쓰지 않고 Render가 생성한다.
 
 ## Render에서 해야 할 일
@@ -45,12 +47,13 @@ E:\AIP\flutter-sdk\bin\flutter.bat build appbundle --release `
 - [ ] 사용자 제보 접수가 정상이다.
 - [ ] 관리자 API 키 없이 관리자 API가 거절된다.
 - [ ] Render Dashboard에서 `CATALOG_ADMIN_API_KEY` 값을 안전하게 보관했다.
-- [ ] Render Disk가 `/app/runtime`에 붙어 있다.
-- [ ] 배포 후 재시작해도 제보 데이터가 유지된다.
+- [ ] 배포 테스트 단계에서는 Persistent Disk 없이 서버가 뜬다.
+- [ ] 출시 전 Render Disk 또는 운영 DB가 `/app/runtime` 대체 저장소로 연결된다.
+- [ ] 출시 전 재시작해도 제보 데이터가 유지된다.
 
 ## 비용 메모
 
-이 설정은 Persistent Disk를 사용한다. 제보와 운영 카탈로그 DB를 유지하려면 무료 인스턴스만으로는 부족할 수 있으므로, Render Dashboard에서 실제 월 비용을 배포 전에 확인해야 한다.
+현재 설정은 배포 테스트 비용을 줄이기 위해 Persistent Disk를 사용하지 않는다. 제보와 운영 카탈로그 DB를 유지하려면 출시 전 Render Persistent Disk 또는 외부 DB를 추가해야 하며, Render Dashboard에서 실제 월 비용을 확인해야 한다.
 
 ## 참고한 Render 공식 문서
 

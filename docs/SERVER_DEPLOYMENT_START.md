@@ -54,6 +54,7 @@ CATALOG_ADMIN_API_KEY=<긴 랜덤 비밀키>
 - 실제 배포 위치 결정: Render로 진행
 - Render 배포 절차: `docs/RENDER_DEPLOYMENT_GUIDE.md`
 - 운영 DB 백업 위치 결정
+- 출시 전 영속 저장소 연결: Render 테스트 단계에서는 Persistent Disk 없음
 - 외부 모니터링 연결: `/ready`를 1분 또는 5분 주기로 확인
 - 관리자 웹 화면 또는 최소 운영 CLI 결정
 - 앱의 운영 API URL 확정

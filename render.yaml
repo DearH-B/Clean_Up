@@ -19,7 +19,3 @@ services:
         value: ""
       - key: CATALOG_ADMIN_API_KEY
         generateValue: true
-    disk:
-      name: carelog-runtime
-      mountPath: /app/runtime
-      sizeGB: 1
