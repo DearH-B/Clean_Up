@@ -5,8 +5,9 @@ from pathlib import Path
 
 from app.catalog import ProductCatalog
 from app.catalog_import import CatalogImportError, import_catalog, write_outputs
+from app.catalog_store import CatalogStore, CatalogWorkflowError
 from app.release_validation import ReleaseValidator, render_markdown
-from app.schemas import SubmissionStatus
+from app.schemas import CatalogProduct, ReviewStatus, SubmissionStatus
 from app.submissions import SubmissionStore
 
 
@@ -14,6 +15,7 @@ BASE_DIR = Path(__file__).resolve().parent
 CATALOG_PATH = BASE_DIR / "data" / "products.json"
 SUBMISSIONS_PATH = BASE_DIR / "data" / "submissions.json"
 RELEASE_READINESS_PATH = BASE_DIR / "data" / "release_readiness.json"
+CATALOG_DATABASE_PATH = BASE_DIR / "data" / "catalog_admin.db"
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -85,6 +87,49 @@ def build_parser() -> argparse.ArgumentParser:
     )
     update_command.add_argument("--operator", required=True)
     update_command.add_argument("--note", required=True)
+
+    managed = commands.add_parser("managed-catalog", help="운영 카탈로그 관리")
+    managed_commands = managed.add_subparsers(
+        dest="managed_command",
+        required=True,
+    )
+    managed_list = managed_commands.add_parser("list", help="운영 제품 목록")
+    managed_list.add_argument(
+        "--status",
+        choices=[status.value for status in ReviewStatus],
+    )
+    managed_import = managed_commands.add_parser(
+        "import",
+        help="JSON 제품을 초안으로 등록 또는 수정",
+    )
+    managed_import.add_argument("source", type=Path)
+    managed_import.add_argument("--operator", required=True)
+    managed_import.add_argument("--note", required=True)
+    managed_transition = managed_commands.add_parser(
+        "transition",
+        help="제품 검수 상태 변경",
+    )
+    managed_transition.add_argument("product_id")
+    managed_transition.add_argument(
+        "status",
+        choices=[status.value for status in ReviewStatus],
+    )
+    managed_transition.add_argument("--operator", required=True)
+    managed_transition.add_argument("--note", required=True)
+    managed_audit = managed_commands.add_parser("audit", help="변경 이력")
+    managed_audit.add_argument("--product")
+    managed_audit.add_argument("--limit", type=int, default=100)
+    managed_backup = managed_commands.add_parser(
+        "backup",
+        help="운영 카탈로그 SQLite 안전 백업",
+    )
+    managed_backup.add_argument("destination", type=Path)
+    managed_restore = managed_commands.add_parser(
+        "restore-drill",
+        help="백업을 별도 위치에 복원하고 무결성과 데이터 수를 검증",
+    )
+    managed_restore.add_argument("backup", type=Path)
+    managed_restore.add_argument("destination", type=Path)
     return parser
 
 
@@ -203,6 +248,70 @@ def import_catalog_data(source: Path, check_only: bool) -> int:
     return 0
 
 
+def manage_catalog(args: argparse.Namespace) -> int:
+    store = CatalogStore(CATALOG_DATABASE_PATH)
+    if args.managed_command == "list":
+        status = ReviewStatus(args.status) if args.status else None
+        items = store.list(status)
+        for product in items:
+            print(
+                f"{product.id} | {product.reviewStatus.value} | "
+                f"{product.brand} {product.modelName or product.seriesName}"
+            )
+        if not items:
+            print("조건에 맞는 운영 제품이 없습니다.")
+        return 0
+    if args.managed_command == "audit":
+        for event in store.audit_log(args.product, limit=args.limit):
+            print(
+                f"{event.auditId} | {event.changedAt.isoformat()} | "
+                f"{event.productId} | {event.action} | "
+                f"{event.reviewStatus.value} | {event.operator} | {event.note}"
+            )
+        return 0
+    if args.managed_command == "backup":
+        destination = args.destination.resolve()
+        store.backup_to(destination)
+        print(f"운영 카탈로그 백업: {destination}")
+        return 0
+    if args.managed_command == "restore-drill":
+        backup = args.backup.resolve()
+        destination = args.destination.resolve()
+        try:
+            report = store.restore_drill(backup, destination)
+        except (CatalogWorkflowError, OSError) as error:
+            print(f"운영 카탈로그 복구 훈련 오류: {error}")
+            return 1
+        print(f"복구 훈련 완료: {destination}")
+        print(
+            f"  integrity={report['integrity']} | "
+            f"products={report['products']} | "
+            f"auditEvents={report['auditEvents']}"
+        )
+        return 0
+    try:
+        if args.managed_command == "import":
+            payload = args.source.resolve().read_text(encoding="utf-8")
+            product = CatalogProduct.model_validate_json(payload)
+            updated = store.upsert(
+                product,
+                operator=args.operator,
+                note=args.note,
+            )
+        else:
+            updated = store.transition(
+                args.product_id,
+                target=ReviewStatus(args.status),
+                operator=args.operator,
+                note=args.note,
+            )
+    except (CatalogWorkflowError, ValueError, OSError) as error:
+        print(f"운영 카탈로그 오류: {error}")
+        return 1
+    print(f"{updated.id} -> {updated.reviewStatus.value}")
+    return 0
+
+
 def main() -> int:
     args = build_parser().parse_args()
     if args.command == "catalog":
@@ -215,6 +324,8 @@ def main() -> int:
         )
     if args.command == "import-catalog":
         return import_catalog_data(args.source, args.check)
+    if args.command == "managed-catalog":
+        return manage_catalog(args)
     if args.submission_command == "list":
         return list_submissions(args.status)
     return update_submission(

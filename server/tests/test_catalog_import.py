@@ -12,10 +12,20 @@ class CatalogImportTest(unittest.TestCase):
         cls.template_dir = Path(__file__).resolve().parents[2] / "catalog_input"
 
     def test_unpublished_template_does_not_create_public_products(self) -> None:
-        result = import_catalog(self.template_dir)
+        with TemporaryDirectory() as directory:
+            source = Path(directory) / "input"
+            shutil.copytree(self.template_dir, source)
+            for filename in ("products.csv", "models.csv"):
+                path = source / filename
+                content = path.read_text(encoding="utf-8")
+                path.write_text(
+                    content.replace("\ntrue,", "\nfalse,"),
+                    encoding="utf-8",
+                )
+            result = import_catalog(source)
 
-        self.assertEqual(result.products, [])
-        self.assertEqual(result.models, [])
+            self.assertEqual(result.products, [])
+            self.assertEqual(result.models, [])
 
     def test_published_rows_generate_server_and_dart_outputs(self) -> None:
         with TemporaryDirectory() as directory:

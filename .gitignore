@@ -37,6 +37,8 @@ migrate_working_dir/
 server/.venv/
 server/**/__pycache__/
 server/.pytest_cache/
+server/data/catalog_admin.db
+server/data/submissions.json
 .env
 
 # Symbolication related
@@ -49,3 +51,6 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+/android/key.properties
+*.jks
+*.keystore

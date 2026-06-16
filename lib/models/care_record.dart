@@ -1,5 +1,5 @@
 enum CareRecordType {
-  cleaning('청소'),
+  cleaning('관리'),
   inspection('점검'),
   filterReplacement('필터 교체'),
   consumableReplacement('소모품 교체'),

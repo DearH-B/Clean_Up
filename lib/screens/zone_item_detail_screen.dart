@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 import '../data/product_catalog.dart';
 import '../data/product_consumable_defaults.dart';
@@ -11,24 +10,30 @@ import '../models/catalog_model_option.dart';
 import '../models/care_record.dart';
 import '../models/product_consumable.dart';
 import '../models/product_finder_result.dart';
+import '../models/product_space.dart';
 import '../models/product_submission.dart';
 import '../models/visual_product_candidate.dart';
 import '../models/zone_item.dart';
 import '../repositories/product_data_repository.dart';
 import '../repositories/product_catalog_repository.dart';
+import '../repositories/product_diagnostic_repository.dart';
 import '../theme/app_theme.dart';
+import '../utils/external_link_launcher.dart';
 import 'care_record_editor_screen.dart';
 import 'consumable_editor_screen.dart';
 import 'model_selection_screen.dart';
 import 'product_submission_form_screen.dart';
+import 'product_diagnostic_screen.dart';
 
 class ZoneItemDetailScreen extends StatefulWidget {
   const ZoneItemDetailScreen({
     required this.item,
     required this.spaceId,
     required this.spaceName,
+    required this.spaces,
     required this.dataRepository,
     required this.catalogRepository,
+    this.linkLauncher = launchExternalLink,
     this.onItemUpdated,
     this.onItemDeleted,
     super.key,
@@ -37,8 +42,10 @@ class ZoneItemDetailScreen extends StatefulWidget {
   final ZoneItem item;
   final String spaceId;
   final String spaceName;
+  final List<ProductSpace> spaces;
   final ProductDataRepository dataRepository;
   final ProductCatalogRepository catalogRepository;
+  final ExternalLinkLauncher linkLauncher;
   final Future<void> Function(ZoneItem item)? onItemUpdated;
   final Future<void> Function(String itemId)? onItemDeleted;
 
@@ -48,11 +55,17 @@ class ZoneItemDetailScreen extends StatefulWidget {
 
 class _ZoneItemDetailScreenState extends State<ZoneItemDetailScreen> {
   late ZoneItem _item;
+  late String _spaceId;
+  late String _spaceName;
   List<CareRecord> _productRecords = [];
+  Timer? _careSnackBarTimer;
 
   @override
   void initState() {
     super.initState();
+    _spaceId = widget.spaceId;
+    _spaceName = widget.spaceName;
+    unawaited(widget.dataRepository.markProductViewed(widget.item.id));
     final catalogEntry =
         findCatalogEntryById(widget.item.catalogProductId ?? '');
     final hasExactCatalogModel =
@@ -72,13 +85,32 @@ class _ZoneItemDetailScreenState extends State<ZoneItemDetailScreen> {
   }
 
   @override
+  void dispose() {
+    _careSnackBarTimer?.cancel();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length: 5,
+      length: 3,
       child: Scaffold(
         appBar: AppBar(
-          title: Text(_item.displayName),
+          toolbarHeight: 72,
+          title: Text(
+            _item.displayName,
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
+            style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                  fontWeight: FontWeight.w800,
+                ),
+          ),
           actions: [
+            IconButton(
+              tooltip: '제품 정보와 공식 자료',
+              onPressed: _showProductDetails,
+              icon: const Icon(Icons.info_outline),
+            ),
             IconButton(
               tooltip: '제품 정보 수정',
               onPressed: _showProductInfoSheet,
@@ -88,11 +120,23 @@ class _ZoneItemDetailScreenState extends State<ZoneItemDetailScreen> {
               tooltip: '제품 관리',
               onSelected: (action) {
                 switch (action) {
+                  case _ProductAction.move:
+                    _showMoveSpaceSheet();
+                    break;
                   case _ProductAction.delete:
                     _confirmDeleteProduct();
+                    break;
                 }
               },
               itemBuilder: (context) => const [
+                PopupMenuItem(
+                  value: _ProductAction.move,
+                  child: ListTile(
+                    leading: Icon(Icons.drive_file_move_outline),
+                    title: Text('공간 이동'),
+                    contentPadding: EdgeInsets.zero,
+                  ),
+                ),
                 PopupMenuItem(
                   value: _ProductAction.delete,
                   child: ListTile(
@@ -116,20 +160,16 @@ class _ZoneItemDetailScreenState extends State<ZoneItemDetailScreen> {
               tabAlignment: TabAlignment.start,
               tabs: [
                 Tab(text: '관리법'),
-                Tab(text: '문제 해결'),
-                Tab(text: '소모품'),
+                Tab(text: '문제·소모품'),
                 Tab(text: '기록'),
-                Tab(text: '제품 정보'),
               ],
             ),
             Expanded(
               child: TabBarView(
                 children: [
                   _buildCareTab(),
-                  _buildTroubleshootingTab(),
-                  _buildSuppliesTab(),
+                  _buildSupportTab(),
                   _buildRecordsTab(),
-                  _buildProductInfoTab(),
                 ],
               ),
             ),
@@ -196,32 +236,37 @@ class _ZoneItemDetailScreenState extends State<ZoneItemDetailScreen> {
     );
   }
 
-  Widget _buildTroubleshootingTab() {
-    final advice = _troubleshootingFor(_item.name);
+  Widget _buildSupportTab() {
     return ListView(
       padding: const EdgeInsets.fromLTRB(16, 18, 16, 32),
       children: [
         Text(
-          '증상에 맞는 항목을 확인하세요',
+          '문제 해결',
           style: Theme.of(context).textTheme.titleLarge,
         ),
         const SizedBox(height: 6),
-        const Text('분해가 필요하거나 누수·전기 문제가 의심되면 사용을 멈추고 전문가에게 문의하세요.'),
-        const SizedBox(height: 18),
-        for (final item in advice) _TroubleTile(item: item),
-      ],
-    );
-  }
-
-  Widget _buildSuppliesTab() {
-    return ListView(
-      padding: const EdgeInsets.fromLTRB(16, 18, 16, 32),
-      children: [
+        const Text('지금 겪는 증상을 고르면 안전한 대처 순서와 필요한 도구를 안내해요.'),
+        const SizedBox(height: 14),
+        FilledButton.icon(
+          onPressed: () => Navigator.of(context).push(
+            MaterialPageRoute<void>(
+              builder: (_) => ProductDiagnosticScreen(
+                item: _item,
+                linkLauncher: widget.linkLauncher,
+                diagnosticRepository:
+                    const RemoteFirstProductDiagnosticRepository(),
+              ),
+            ),
+          ),
+          icon: const Icon(Icons.health_and_safety_outlined),
+          label: const Text('문제 해결 시작'),
+        ),
+        const SizedBox(height: 26),
         Row(
           children: [
             Expanded(
               child: Text(
-                '교체·보충 관리',
+                '소모품 관리',
                 style: Theme.of(context).textTheme.titleLarge,
               ),
             ),
@@ -250,22 +295,16 @@ class _ZoneItemDetailScreenState extends State<ZoneItemDetailScreen> {
             ),
         const SizedBox(height: 22),
         _Section(
-          title: '청소에 필요한 용품',
+          title: '관리에 필요한 용품',
           icon: Icons.inventory_2_outlined,
           children: [
-            for (final supply in _item.supplies)
-              _RecommendationTile(text: supply),
+            if (_item.supplies.isEmpty)
+              const Text('등록된 준비물이 없어요.')
+            else
+              for (final supply in _item.supplies)
+                _RecommendationTile(text: supply),
           ],
         ),
-        if (_item.recommendedSupplies.isNotEmpty)
-          _Section(
-            title: '선택할 때 볼 점',
-            icon: Icons.checklist_outlined,
-            children: [
-              for (final supply in _item.recommendedSupplies)
-                _RecommendationTile(text: supply),
-            ],
-          ),
         if (_item.recommendedProducts.isNotEmpty)
           _Section(
             title: '추천 제품',
@@ -376,7 +415,7 @@ class _ZoneItemDetailScreenState extends State<ZoneItemDetailScreen> {
         OutlinedButton.icon(
           onPressed: _openSubmissionForm,
           icon: const Icon(Icons.flag_outlined),
-          label: const Text('제품 정보 오류 제보'),
+          label: const Text('정보 오류·불편 신고'),
         ),
         const SizedBox(height: 12),
         FilledButton.tonalIcon(
@@ -397,12 +436,49 @@ class _ZoneItemDetailScreenState extends State<ZoneItemDetailScreen> {
     );
   }
 
+  Future<void> _showProductDetails() async {
+    await showModalBottomSheet<void>(
+      context: context,
+      isScrollControlled: true,
+      showDragHandle: true,
+      builder: (context) => SafeArea(
+        child: SizedBox(
+          height: MediaQuery.sizeOf(context).height * 0.88,
+          child: Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.fromLTRB(16, 0, 8, 8),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: Text(
+                        '제품 정보와 공식 자료',
+                        style: Theme.of(context).textTheme.titleLarge,
+                      ),
+                    ),
+                    IconButton(
+                      tooltip: '닫기',
+                      onPressed: () => Navigator.of(context).pop(),
+                      icon: const Icon(Icons.close),
+                    ),
+                  ],
+                ),
+              ),
+              Expanded(child: _buildProductInfoTab()),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
   Future<void> _openSubmissionForm() async {
     final submission = await Navigator.of(context).push<ProductSubmission>(
       MaterialPageRoute(
         builder: (context) => ProductSubmissionFormScreen(
           dataRepository: widget.dataRepository,
           product: _item,
+          screenContext: '제품 상세 · ${widget.spaceName}',
         ),
       ),
     );
@@ -432,6 +508,76 @@ class _ZoneItemDetailScreenState extends State<ZoneItemDetailScreen> {
       _item = updatedItem;
     });
     await widget.onItemUpdated?.call(updatedItem);
+  }
+
+  Future<void> _showMoveSpaceSheet() async {
+    final selectedSpaceId = await showModalBottomSheet<String>(
+      context: context,
+      isScrollControlled: true,
+      showDragHandle: true,
+      builder: (context) => SafeArea(
+        child: SizedBox(
+          height: MediaQuery.sizeOf(context).height * 0.72,
+          child: ListView(
+            children: [
+              ListTile(
+                title: const Text(
+                  '제품을 어디에 둘까요?',
+                  style: TextStyle(fontWeight: FontWeight.w800),
+                ),
+                subtitle: const Text('제품 정보와 이전 관리 기록은 그대로 유지돼요.'),
+                trailing: IconButton(
+                  tooltip: '닫기',
+                  onPressed: () => Navigator.of(context).pop(),
+                  icon: const Icon(Icons.close),
+                ),
+              ),
+              ListTile(
+                leading: Icon(
+                  _spaceId.isEmpty
+                      ? Icons.radio_button_checked
+                      : Icons.radio_button_off,
+                ),
+                title: const Text('공간 미지정'),
+                onTap: () => Navigator.of(context).pop(''),
+              ),
+              for (final space in widget.spaces)
+                ListTile(
+                  leading: Icon(
+                    _spaceId == space.id
+                        ? Icons.radio_button_checked
+                        : Icons.radio_button_off,
+                  ),
+                  title: Text(space.name),
+                  onTap: () => Navigator.of(context).pop(space.id),
+                ),
+            ],
+          ),
+        ),
+      ),
+    );
+    if (selectedSpaceId == null || selectedSpaceId == _spaceId || !mounted) {
+      return;
+    }
+
+    final selectedSpace = widget.spaces.where(
+      (space) => space.id == selectedSpaceId,
+    );
+    final updatedItem = _item.copyWith(zoneId: selectedSpaceId);
+    final newSpaceName =
+        selectedSpace.isEmpty ? '공간 미지정' : selectedSpace.first.name;
+    await widget.onItemUpdated?.call(updatedItem);
+    if (!mounted) {
+      return;
+    }
+    setState(() {
+      _item = updatedItem;
+      _spaceId = selectedSpaceId;
+      _spaceName = newSpaceName;
+    });
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text('$newSpaceName 공간으로 이동했어요.')),
+    );
   }
 
   Future<void> _confirmDeleteProduct() async {
@@ -470,6 +616,7 @@ class _ZoneItemDetailScreenState extends State<ZoneItemDetailScreen> {
           if (product.id != _item.id) product,
       ]);
     }
+    await widget.dataRepository.removeRecentProduct(_item.id);
     if (!mounted) {
       return;
     }
@@ -495,12 +642,9 @@ class _ZoneItemDetailScreenState extends State<ZoneItemDetailScreen> {
     try {
       final uri = Uri.tryParse(url);
       if (uri != null && uri.hasScheme) {
-        opened = await launchUrl(
-          uri,
-          mode: LaunchMode.externalApplication,
-        );
+        opened = await widget.linkLauncher(uri);
       }
-    } on PlatformException {
+    } on Object {
       opened = false;
     }
     if (!opened && mounted) {
@@ -531,6 +675,7 @@ class _ZoneItemDetailScreenState extends State<ZoneItemDetailScreen> {
 
   Future<void> _completeCare() async {
     final now = DateTime.now();
+    final previousItem = _item;
     final updatedItem = _item.copyWith(
       lastCleanedAt: now,
       nextDueAt: _item.recurrenceDays > 0
@@ -539,20 +684,21 @@ class _ZoneItemDetailScreenState extends State<ZoneItemDetailScreen> {
       clearNextDueAt: _item.recurrenceDays <= 0,
     );
     final savedRecords = await widget.dataRepository.loadCareRecords();
+    final record = CareRecord(
+      id: 'record-${now.microsecondsSinceEpoch}',
+      title: '${_item.name} 관리 완료',
+      spaceName: _spaceName,
+      completedAt: now,
+      minutes: 0,
+      type: CareRecordType.cleaning,
+      productId: _item.id,
+      productName: _item.displayName,
+      spaceId: _spaceId,
+      guideTitle: _item.name,
+      nextCheckAt: updatedItem.nextDueAt,
+    );
     final records = [
-      CareRecord(
-        id: 'record-${now.microsecondsSinceEpoch}',
-        title: '${_item.name} 관리 완료',
-        spaceName: widget.spaceName,
-        completedAt: now,
-        minutes: _item.estimatedMinutes,
-        type: CareRecordType.cleaning,
-        productId: _item.id,
-        productName: _item.displayName,
-        spaceId: widget.spaceId,
-        guideTitle: _item.name,
-        nextCheckAt: updatedItem.nextDueAt,
-      ),
+      record,
       ...(savedRecords ?? const <CareRecord>[]),
     ];
 
@@ -563,15 +709,55 @@ class _ZoneItemDetailScreenState extends State<ZoneItemDetailScreen> {
 
     setState(() {
       _item = updatedItem;
-      _productRecords = [records.first, ..._productRecords];
+      _productRecords = [record, ..._productRecords];
     });
     await widget.onItemUpdated?.call(updatedItem);
     if (!mounted) {
       return;
     }
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('오늘 청소한 날짜를 기록했어요.')),
+    final messenger = ScaffoldMessenger.of(context);
+    messenger.hideCurrentSnackBar();
+    messenger.showSnackBar(
+      SnackBar(
+        content: const Text('관리한 날짜를 기록했어요.'),
+        duration: const Duration(seconds: 3),
+        action: SnackBarAction(
+          label: '실행 취소',
+          onPressed: () => unawaited(
+            _undoCompletedCare(
+              record: record,
+              previousItem: previousItem,
+            ),
+          ),
+        ),
+      ),
     );
+    _careSnackBarTimer?.cancel();
+    _careSnackBarTimer = Timer(const Duration(seconds: 3), () {
+      if (mounted) {
+        messenger.hideCurrentSnackBar(reason: SnackBarClosedReason.timeout);
+      }
+    });
+  }
+
+  Future<void> _undoCompletedCare({
+    required CareRecord record,
+    required ZoneItem previousItem,
+  }) async {
+    final savedRecords = await widget.dataRepository.loadCareRecords() ?? [];
+    final remaining = [
+      for (final item in savedRecords)
+        if (item.id != record.id) item,
+    ];
+    await widget.dataRepository.saveCareRecords(remaining);
+    await widget.onItemUpdated?.call(previousItem);
+    if (!mounted) {
+      return;
+    }
+    setState(() {
+      _item = previousItem;
+      _productRecords.removeWhere((item) => item.id == record.id);
+    });
   }
 
   Future<void> _openConsumableEditor({
@@ -617,7 +803,7 @@ class _ZoneItemDetailScreenState extends State<ZoneItemDetailScreen> {
     final record = CareRecord(
       id: 'record-${now.microsecondsSinceEpoch}',
       title: '${_item.displayName} ${consumable.name} 교체',
-      spaceName: widget.spaceName,
+      spaceName: _spaceName,
       completedAt: now,
       minutes: 0,
       type: consumable.type == ConsumableType.filter
@@ -626,7 +812,7 @@ class _ZoneItemDetailScreenState extends State<ZoneItemDetailScreen> {
       productId: _item.id,
       productName: _item.displayName,
       consumableId: consumable.id,
-      spaceId: widget.spaceId,
+      spaceId: _spaceId,
       usedSupplies: [consumable.name],
       nextCheckAt: replaced.nextReplacementAt,
     );
@@ -688,8 +874,8 @@ class _ZoneItemDetailScreenState extends State<ZoneItemDetailScreen> {
       MaterialPageRoute(
         builder: (context) => CareRecordEditorScreen(
           product: _item,
-          spaceId: widget.spaceId,
-          spaceName: widget.spaceName,
+          spaceId: _spaceId,
+          spaceName: _spaceName,
           record: record,
         ),
       ),
@@ -789,7 +975,7 @@ class _ZoneItemDetailScreenState extends State<ZoneItemDetailScreen> {
   }
 }
 
-enum _ProductAction { delete }
+enum _ProductAction { move, delete }
 
 class _ProductHeader extends StatelessWidget {
   const _ProductHeader({
@@ -868,129 +1054,6 @@ IconData _productIcon(ZoneItemType type) {
     ZoneItemType.fixture => Icons.countertops_outlined,
     ZoneItemType.other => Icons.inventory_2_outlined,
   };
-}
-
-class _TroubleAdvice {
-  const _TroubleAdvice({
-    required this.title,
-    required this.action,
-    this.stopAndAsk = false,
-  });
-
-  final String title;
-  final String action;
-  final bool stopAndAsk;
-}
-
-List<_TroubleAdvice> _troubleshootingFor(String productName) {
-  final name = productName.replaceAll(' ', '');
-  if (name.contains('식기세척기')) {
-    return const [
-      _TroubleAdvice(
-        title: '냄새가 나요',
-        action: '필터와 배수구 주변의 음식물 찌꺼기를 확인하고 문 패킹의 물기를 닦으세요.',
-      ),
-      _TroubleAdvice(
-        title: '세척이 잘 안 돼요',
-        action: '분사 노즐 구멍 막힘, 필터 조립 상태와 전용 세제 사용량을 확인하세요.',
-      ),
-      _TroubleAdvice(
-        title: '물이 빠지지 않아요',
-        action: '사용을 멈추고 필터가 정확히 조립됐는지 확인하세요. 배수 호스나 펌프 분해는 서비스센터에 문의하세요.',
-        stopAndAsk: true,
-      ),
-      _TroubleAdvice(
-        title: '물이 새요',
-        action: '전원과 급수를 차단하고 사용을 중단한 뒤 설치 상태와 서비스센터를 확인하세요.',
-        stopAndAsk: true,
-      ),
-    ];
-  }
-  if (name.contains('냉장고')) {
-    return const [
-      _TroubleAdvice(
-        title: '냄새가 나요',
-        action: '상한 식품을 확인하고 선반, 서랍과 문 고무패킹의 음식물 흔적을 닦으세요.',
-      ),
-      _TroubleAdvice(
-        title: '문이 잘 닫히지 않아요',
-        action: '고무패킹의 이물질과 수납물이 문을 막는지 확인하세요.',
-      ),
-      _TroubleAdvice(
-        title: '성에나 물방울이 많아요',
-        action: '문이 오래 열려 있었는지 확인하고 통풍구를 막은 식품을 정리하세요.',
-      ),
-      _TroubleAdvice(
-        title: '냉각이 약하거나 이상 소음이 나요',
-        action: '전원과 온도 설정을 확인한 뒤 지속되면 내부 부품을 만지지 말고 서비스센터에 문의하세요.',
-        stopAndAsk: true,
-      ),
-    ];
-  }
-  if (name.contains('음식물처리기')) {
-    return const [
-      _TroubleAdvice(
-        title: '냄새가 나요',
-        action: '투입구와 외부 접합부를 닦고 처리 방식에 맞는 미생물 또는 건조통 관리법을 확인하세요.',
-      ),
-      _TroubleAdvice(
-        title: '평소와 다른 소음이 나요',
-        action: '즉시 사용을 멈추고 투입 금지 물질 여부를 확인한 뒤 제조사에 문의하세요.',
-        stopAndAsk: true,
-      ),
-      _TroubleAdvice(
-        title: '누수 흔적이 있어요',
-        action: '전원과 급수를 차단하고 배관이나 본체를 분해하지 말고 설치업체에 문의하세요.',
-        stopAndAsk: true,
-      ),
-    ];
-  }
-  return const [
-    _TroubleAdvice(
-      title: '오염이나 냄새가 생겼어요',
-      action: '제품 표면과 사용자가 분리할 수 있는 부품을 확인하고 설명서의 관리 항목을 먼저 찾으세요.',
-    ),
-    _TroubleAdvice(
-      title: '소음, 누수 또는 작동 문제가 있어요',
-      action: '사용을 멈추고 전원을 분리한 뒤 임의로 분해하지 말고 제조사나 전문가에게 문의하세요.',
-      stopAndAsk: true,
-    ),
-  ];
-}
-
-class _TroubleTile extends StatelessWidget {
-  const _TroubleTile({required this.item});
-
-  final _TroubleAdvice item;
-
-  @override
-  Widget build(BuildContext context) {
-    return Card(
-      margin: const EdgeInsets.only(bottom: 10),
-      child: ExpansionTile(
-        leading: Icon(
-          item.stopAndAsk ? Icons.report_outlined : Icons.build_outlined,
-          color: item.stopAndAsk ? Theme.of(context).colorScheme.error : null,
-        ),
-        title: Text(item.title),
-        childrenPadding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
-        expandedCrossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(item.action),
-          if (item.stopAndAsk) ...[
-            const SizedBox(height: 8),
-            Text(
-              '사용 중단 및 전문가 확인 권장',
-              style: TextStyle(
-                color: Theme.of(context).colorScheme.error,
-                fontWeight: FontWeight.w800,
-              ),
-            ),
-          ],
-        ],
-      ),
-    );
-  }
 }
 
 class _EmptyProductRecords extends StatelessWidget {
@@ -1250,6 +1313,28 @@ class _ScheduleCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final useVerticalLayout = MediaQuery.textScalerOf(context).scale(16) >= 24;
+    final status = Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          item.lastCleanedAt == null
+              ? '아직 관리 기록이 없어요'
+              : '마지막 관리 ${_formatDate(item.lastCleanedAt!)}',
+          style: const TextStyle(fontWeight: FontWeight.w800),
+        ),
+        Text(
+          item.nextDueAt == null
+              ? '관리한 날만 가볍게 남겨두세요'
+              : '다음 확인 ${_formatDate(item.nextDueAt!)}',
+        ),
+      ],
+    );
+    final action = FilledButton(
+      onPressed: onComplete,
+      child: const Text('관리 기록'),
+    );
+
     return Container(
       padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
@@ -1257,34 +1342,31 @@ class _ScheduleCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(3),
         border: Border.all(color: AppColors.rule),
       ),
-      child: Row(
-        children: [
-          Container(width: 7, height: 54, color: AppColors.coral),
-          const SizedBox(width: 12),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+      child: useVerticalLayout
+          ? Container(
+              padding: const EdgeInsets.only(left: 12),
+              decoration: const BoxDecoration(
+                border: Border(
+                  left: BorderSide(color: AppColors.coral, width: 7),
+                ),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  status,
+                  const SizedBox(height: 12),
+                  action,
+                ],
+              ),
+            )
+          : Row(
               children: [
-                Text(
-                  item.lastCleanedAt == null
-                      ? '아직 청소 기록이 없어요'
-                      : '마지막 청소 ${_formatDate(item.lastCleanedAt!)}',
-                  style: const TextStyle(fontWeight: FontWeight.w800),
-                ),
-                Text(
-                  item.nextDueAt == null
-                      ? '청소한 날만 가볍게 남겨두세요'
-                      : '다음 확인 ${_formatDate(item.nextDueAt!)}',
-                ),
+                Container(width: 7, height: 54, color: AppColors.coral),
+                const SizedBox(width: 12),
+                Expanded(child: status),
+                action,
               ],
             ),
-          ),
-          FilledButton(
-            onPressed: onComplete,
-            child: const Text('오늘 청소'),
-          ),
-        ],
-      ),
     );
   }
 

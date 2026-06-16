@@ -89,3 +89,15 @@ samsung-vs90f40csg,samsung-vs90f40csg-product,삼성전자 Bespoke AI 제트 400
 samsung-vs90f40csg,samsung-vs90f40csg-manual,삼성전자 VS90F40CSG 공식 사용설명서,https://downloadcenter.samsung.com/content/UM/202605/20260506112032655/O_DJ68-00914C-15_IB_VS9700D_KR_KO_260429.pdf,officialManual,삼성전자,2026-06-14,청소 안전사항|관리 대상|관리 순서,true,true
 samsung-dv90f22cdt,samsung-dv90f22cdt-product,삼성전자 Bespoke AI 건조기 22kg (177.8mm LCD) 공식 제품 페이지,https://www.samsung.com/sec/dryers/dryer-dv90f22cdt-d2c/DV90F22CDT/,officialProduct,삼성전자,2026-06-14,제품명|모델명|출시 연식|대표 이미지|주요 구분,true,true
 samsung-dv90f22cdt,samsung-dv90f22cdt-manual,삼성전자 DV90F22CDT 공식 사용설명서,https://downloadcenter.samsung.com/content/UM/202603/20260330084033062/OID96721_IB_DV90F_7LCD_KO_260206.pdf,officialManual,삼성전자,2026-06-14,청소 안전사항|관리 대상|관리 순서,true,true
+lg-m875gbb231,lg-m875gbb231-product,LG전자 M875GBB231 공식 제품 페이지,https://www.lge.co.kr/refrigerators/m875gbb231,officialProduct,LG전자,2026-06-14,제품명|모델명|용량|형태|대표 이미지,true,true
+lg-m875gbb231,lg-m875gbb231-manual,LG전자 M875GBB231 공식 사용설명서,https://gscs-manual.lge.com/CNZ/MFL71667715/ko-kr/main.html,officialManual,LG전자,2026-06-15,청소 안전사항|내부 청소|문 패킹 관리,true,true
+lg-rg19gn,lg-rg19gn-product,LG전자 RG19GN 공식 제품 페이지,https://www.lge.co.kr/dryers/rg19gn,officialProduct,LG전자,2026-06-14,제품명|모델명|대표 이미지,true,true
+lg-rg19gn,lg-rg19gn-manual,LG전자 RG19GN 공식 사용설명서,https://gscs-manual.lge.com/DFZ/MFL71831427/ko-kr/main.html,officialManual,LG전자,2026-06-15,청소 안전사항|필터 청소|문 주변 청소|습도 센서 관리,true,true
+lg-as355nsna,lg-as355nsna-product,LG전자 AS355NSNA 공식 제품 페이지,https://www.lge.co.kr/air-purifier/as355nsna,officialProduct,LG전자,2026-06-14,제품명|모델명|대표 이미지,true,true
+lg-as355nsna,lg-as355nsna-manual,LG전자 AS355NSNA 공식 사용설명서,https://gscs-manual.lge.com/DLZ/MFL72146409/ko-kr/main.html,officialManual,LG전자,2026-06-15,청소 안전사항|극세 필터 청소|외관 청소,true,true
+lg-fx25efe,lg-fx25efe-product,LG전자 FX25EFE 공식 제품 페이지,https://www.lge.co.kr/washing-machines/fx25efe,officialProduct,LG전자,2026-06-14,제품명|모델명|용량|대표 이미지,true,true
+lg-fx25efe,lg-fx25efe-manual,LG전자 FX25EFE 공식 사용설명서,https://gscs-manual.lge.com/DFZ/MFL71792833/ko-kr/main.html,officialManual,LG전자,2026-06-15,청소 안전사항|고무 패킹|물 분사 노즐|배수 펌프 거름망,true,true
+lg-due4bgl1e,lg-due4bgl1e-product,LG전자 DUE4BGL1E 공식 제품 페이지,https://www.lge.co.kr/dishwashers/due4bgl1e,officialProduct,LG전자,2026-06-14,제품명|모델명|출시 연도|대표 이미지,true,true
+lg-due4bgl1e,lg-due4bgl1e-manual,LG전자 DUE4BGL1E 공식 사용설명서,https://gscs-manual.lge.com/CDZ/MFL71959121/ko-kr/main.html,officialManual,LG전자,2026-06-15,청소 안전사항|음식물 거름 필터|노즐|세척조,true,true
+lg-fq18gv6ee1,lg-fq18gv6ee1-product,LG전자 FQ18GV6EE1 공식 제품 페이지,https://www.lge.co.kr/air-conditioners/fq18gv6ee1,officialProduct,LG전자,2026-06-14,제품명|모델명|출시 연도|냉방면적|구성품|대표 이미지,true,true
+lg-fq18gv6ee1,lg-air-conditioner-general,에어컨 제품군 보수적 관리 가이드,,generalGuidance,앱 편집 가이드,2026-06-14,안전사항|일반 관리 순서,false,true

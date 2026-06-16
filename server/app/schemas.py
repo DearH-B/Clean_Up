@@ -197,6 +197,26 @@ class ModelListResponse(BaseModel):
     total: int
 
 
+class CatalogTransitionRequest(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    targetStatus: ReviewStatus
+    operator: str = Field(min_length=1, max_length=120)
+    note: str = Field(min_length=1, max_length=1000)
+
+
+class CatalogAuditEvent(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    auditId: int
+    productId: str
+    action: str
+    reviewStatus: ReviewStatus
+    operator: str
+    note: str
+    changedAt: datetime
+
+
 class SubmissionType(StrEnum):
     missingProduct = "missingProduct"
     incorrectInfo = "incorrectInfo"
@@ -204,6 +224,8 @@ class SubmissionType(StrEnum):
     incorrectGuide = "incorrectGuide"
     unsafeGuide = "unsafeGuide"
     officialSource = "officialSource"
+    appIssue = "appIssue"
+    usabilityFeedback = "usabilityFeedback"
 
 
 class SubmissionStatus(StrEnum):
@@ -212,6 +234,96 @@ class SubmissionStatus(StrEnum):
     confirmed = "confirmed"
     completed = "completed"
     rejected = "rejected"
+
+
+class SubmissionStatusUpdateRequest(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    status: SubmissionStatus
+    operator: str = Field(min_length=1, max_length=120)
+    note: str = Field(min_length=1, max_length=1000)
+
+
+class DiagnosticOutcome(StrEnum):
+    selfCare = "selfCare"
+    checkManual = "checkManual"
+    replaceConsumable = "replaceConsumable"
+    stopUsing = "stopUsing"
+    professionalSupport = "professionalSupport"
+
+
+class DiagnosticBasisType(StrEnum):
+    generalSafety = "generalSafety"
+    manufacturerGuide = "manufacturerGuide"
+    publicSafetyGuide = "publicSafetyGuide"
+    expertReview = "expertReview"
+
+
+class DiagnosticProductRecommendation(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    brand: str
+    name: str
+    reason: str
+    url: str
+    isSearchLink: bool = True
+    isSponsored: bool = False
+    suitableMaterials: list[str] = Field(default_factory=list)
+
+
+class DiagnosticSource(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    id: str
+    title: str
+    url: str
+    publisher: str
+    type: SourceType
+    checkedAt: date
+    supports: list[str] = Field(default_factory=list)
+    isOfficial: bool = False
+
+
+class ProductDiagnostic(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    id: str
+    productTypes: list[str] = Field(min_length=1)
+    symptom: str
+    question: str
+    safeAction: str
+    outcome: DiagnosticOutcome
+    warningSigns: list[str] = Field(default_factory=list)
+    steps: list[str] = Field(default_factory=list)
+    tools: list[str] = Field(default_factory=list)
+    recommendedProducts: list[DiagnosticProductRecommendation] = Field(
+        default_factory=list
+    )
+    caution: str | None = None
+    reviewStatus: ReviewStatus = ReviewStatus.draft
+    basisType: DiagnosticBasisType = DiagnosticBasisType.generalSafety
+    sourceTitle: str = "앱 생활 관리 안전 기준"
+    sourceUrl: str | None = None
+    reviewedAt: date
+    applicableMaterials: list[str] = Field(default_factory=list)
+    sources: list[DiagnosticSource] = Field(default_factory=list)
+    evidenceSourceIds: list[str] = Field(default_factory=list)
+    stepSourceIds: dict[str, list[str]] = Field(default_factory=dict)
+    reviewHistory: list[ReviewRecord] = Field(default_factory=list)
+
+    @property
+    def requires_stop(self) -> bool:
+        return self.outcome in {
+            DiagnosticOutcome.stopUsing,
+            DiagnosticOutcome.professionalSupport,
+        }
+
+
+class DiagnosticListResponse(BaseModel):
+    items: list[ProductDiagnostic]
+    total: int
+    productType: str
+    version: str
 
 
 class SubmissionReviewEvent(BaseModel):
@@ -236,6 +348,7 @@ class SubmissionCreate(BaseModel):
     brand: str | None = Field(default=None, max_length=120)
     modelName: str | None = Field(default=None, max_length=160)
     sourceUrl: HttpUrl | None = None
+    screenContext: str | None = Field(default=None, max_length=240)
     createdAt: datetime
 
 

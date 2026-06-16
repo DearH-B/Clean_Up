@@ -1570,9 +1570,46 @@ ProductCatalogEntry _representativeAppliance({
 }
 
 List<ProductCatalogEntry> searchProductCatalog(String query) {
-  final matches =
+  final directMatches =
       productCatalog.where((entry) => entry.matches(query)).toList();
+  final matches = directMatches.isNotEmpty
+      ? directMatches
+      : productCatalog
+          .where((entry) => _fuzzyModelMatch(entry, query))
+          .toList();
   return sortProductCatalogResults(matches, query);
+}
+
+bool _fuzzyModelMatch(ProductCatalogEntry entry, String query) {
+  final normalizedQuery = _normalize(query);
+  final model = _normalize(entry.modelName);
+  if (normalizedQuery.length < 5 || model.length < 5) {
+    return false;
+  }
+  if ((normalizedQuery.length - model.length).abs() > 2) {
+    return false;
+  }
+  return _editDistance(normalizedQuery, model) <= 2;
+}
+
+int _editDistance(String left, String right) {
+  var previous = List<int>.generate(right.length + 1, (index) => index);
+  for (var leftIndex = 0; leftIndex < left.length; leftIndex++) {
+    final current = <int>[leftIndex + 1];
+    for (var rightIndex = 0; rightIndex < right.length; rightIndex++) {
+      final substitution = previous[rightIndex] +
+          (left.codeUnitAt(leftIndex) == right.codeUnitAt(rightIndex) ? 0 : 1);
+      current.add(
+        [
+          current[rightIndex] + 1,
+          previous[rightIndex + 1] + 1,
+          substitution,
+        ].reduce((a, b) => a < b ? a : b),
+      );
+    }
+    previous = current;
+  }
+  return previous.last;
 }
 
 List<ProductCatalogEntry> sortProductCatalogResults(

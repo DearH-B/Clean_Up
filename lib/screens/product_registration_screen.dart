@@ -14,6 +14,7 @@ import '../models/zone_item.dart';
 import '../repositories/product_catalog_repository.dart';
 import '../repositories/product_data_repository.dart';
 import 'product_code_scanner_screen.dart';
+import 'product_label_scanner_screen.dart';
 import 'model_selection_screen.dart';
 
 class ProductRegistrationResult {
@@ -62,8 +63,6 @@ class _ProductRegistrationScreenState extends State<ProductRegistrationScreen> {
   final _categoryController = TextEditingController();
   final _brandController = TextEditingController();
   final _modelController = TextEditingController();
-  final _nicknameController = TextEditingController();
-  final _noteController = TextEditingController();
   Timer? _searchDebounce;
 
   int _step = 0;
@@ -77,8 +76,6 @@ class _ProductRegistrationScreenState extends State<ProductRegistrationScreen> {
   List<ProductCatalogEntry> _searchResults = [];
   ProductCatalogEntry? _selectedEntry;
   ZoneItemType _selectedType = ZoneItemType.appliance;
-  DateTime? _purchaseDate;
-  DateTime? _installedDate;
   ZoneItem? _draftProduct;
   String? _scannedCode;
   String? _scannedCodeFormat;
@@ -101,8 +98,6 @@ class _ProductRegistrationScreenState extends State<ProductRegistrationScreen> {
     _categoryController.dispose();
     _brandController.dispose();
     _modelController.dispose();
-    _nicknameController.dispose();
-    _noteController.dispose();
     super.dispose();
   }
 
@@ -133,7 +128,6 @@ class _ProductRegistrationScreenState extends State<ProductRegistrationScreen> {
                 children: [
                   _buildFindStep(),
                   _buildConfirmStep(),
-                  _buildMyProductStep(),
                   _buildCompleteStep(),
                 ],
               ),
@@ -162,30 +156,36 @@ class _ProductRegistrationScreenState extends State<ProductRegistrationScreen> {
     return ListView(
       padding: const EdgeInsets.fromLTRB(20, 12, 20, 32),
       children: [
-        Text('어떤 제품인가요?', style: Theme.of(context).textTheme.titleLarge),
-        const SizedBox(height: 6),
-        const Text('제품 라벨의 모델명이나 브랜드를 검색하면 가장 정확해요.'),
-        const SizedBox(height: 18),
-        FilledButton.tonalIcon(
-          onPressed: _openCodeScanner,
-          icon: const Icon(Icons.qr_code_scanner),
-          label: const Text('QR·바코드로 제품 찾기'),
+        Text(
+          '제품 종류만 골라도 등록할 수 있어요',
+          style: Theme.of(context).textTheme.titleLarge,
         ),
-        if (_scannedCode != null) ...[
-          const SizedBox(height: 10),
-          _ScannedCodeSummary(
-            code: _scannedCode!,
-            format: _scannedCodeFormat,
-          ),
-        ],
-        const SizedBox(height: 14),
+        const SizedBox(height: 6),
+        const Text('정확한 모델과 사진은 등록한 뒤에 천천히 추가해도 괜찮아요.'),
+        const SizedBox(height: 18),
+        _SectionLabel(label: '${widget.space.name} 추천 종류'),
+        Wrap(
+          spacing: 8,
+          runSpacing: 8,
+          children: [
+            for (final preset in recommendedProducts)
+              ActionChip(
+                avatar: Icon(preset.icon, size: 18),
+                label: Text(preset.name),
+                onPressed: () => _startManualRegistration(preset: preset),
+              ),
+          ],
+        ),
+        const SizedBox(height: 22),
+        const _SectionLabel(label: '브랜드·모델 검색 (선택)'),
+        const SizedBox(height: 8),
         TextField(
           controller: _searchController,
           autofocus: false,
           textInputAction: TextInputAction.search,
           decoration: InputDecoration(
             labelText: '제품 검색',
-            hintText: '예: DCS-HM4AG-W, 에코업 음식물처리기',
+            hintText: '브랜드, 제품명 또는 모델명',
             prefixIcon: const Icon(Icons.search),
             suffixIcon: _searchQuery.isEmpty
                 ? null
@@ -198,6 +198,41 @@ class _ProductRegistrationScreenState extends State<ProductRegistrationScreen> {
           onChanged: _searchCatalog,
           onSubmitted: _searchCatalog,
         ),
+        ExpansionTile(
+          tilePadding: EdgeInsets.zero,
+          childrenPadding: const EdgeInsets.only(bottom: 8),
+          leading: const Icon(Icons.center_focus_weak_outlined),
+          title: const Text('라벨이나 코드로 찾기'),
+          subtitle: const Text('필요할 때만 사용하세요'),
+          children: [
+            Row(
+              children: [
+                Expanded(
+                  child: FilledButton.tonalIcon(
+                    onPressed: _openLabelScanner,
+                    icon: const Icon(Icons.document_scanner_outlined),
+                    label: const Text('라벨 촬영'),
+                  ),
+                ),
+                const SizedBox(width: 10),
+                Expanded(
+                  child: OutlinedButton.icon(
+                    onPressed: _openCodeScanner,
+                    icon: const Icon(Icons.qr_code_scanner),
+                    label: const Text('QR·바코드'),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+        if (_scannedCode != null) ...[
+          const SizedBox(height: 10),
+          _ScannedCodeSummary(
+            code: _scannedCode!,
+            format: _scannedCodeFormat,
+          ),
+        ],
         const SizedBox(height: 14),
         if (_isSearching)
           const Padding(
@@ -207,7 +242,7 @@ class _ProductRegistrationScreenState extends State<ProductRegistrationScreen> {
         else if (_searchQuery.isNotEmpty && _searchResults.isEmpty)
           _NoSearchResult(
             query: _searchQuery,
-            onManual: () => _startManualRegistration(
+            onManual: () => _openProductTypePicker(
               fromSearchFailure: true,
             ),
             onRequest: _requestProductInformation,
@@ -237,25 +272,12 @@ class _ProductRegistrationScreenState extends State<ProductRegistrationScreen> {
             ),
             const SizedBox(height: 22),
           ],
-          _SectionLabel(label: '${widget.space.name}에서 자주 등록하는 제품'),
-          Wrap(
-            spacing: 8,
-            runSpacing: 8,
-            children: [
-              for (final preset in recommendedProducts)
-                ActionChip(
-                  avatar: Icon(preset.icon, size: 18),
-                  label: Text(preset.name),
-                  onPressed: () => _startManualRegistration(preset: preset),
-                ),
-            ],
-          ),
         ],
         const SizedBox(height: 24),
         OutlinedButton.icon(
-          onPressed: _startManualRegistration,
-          icon: const Icon(Icons.help_outline),
-          label: const Text('모델명을 몰라요'),
+          onPressed: _openProductTypePicker,
+          icon: const Icon(Icons.category_outlined),
+          label: const Text('전체 제품 종류에서 찾기'),
         ),
       ],
     );
@@ -272,7 +294,7 @@ class _ProductRegistrationScreenState extends State<ProductRegistrationScreen> {
         const SizedBox(height: 6),
         Text(
           _manualMode
-              ? '모델명을 몰라도 제품 종류만으로 등록할 수 있어요.'
+              ? '브랜드도 모델명도 나중에 추가할 수 있어요.'
               : '제품명과 모델명, 정보 출처를 확인해 주세요.',
         ),
         const SizedBox(height: 18),
@@ -285,36 +307,15 @@ class _ProductRegistrationScreenState extends State<ProductRegistrationScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        TextField(
-          controller: _categoryController,
-          textInputAction: TextInputAction.next,
-          decoration: const InputDecoration(
-            labelText: '제품 종류',
-            hintText: '예: 냉장고, 음식물처리기',
+        ListTile(
+          contentPadding: const EdgeInsets.symmetric(horizontal: 4),
+          leading: Icon(_iconFor(_selectedType)),
+          title: const Text('제품 종류'),
+          subtitle: Text(_categoryController.text),
+          trailing: TextButton(
+            onPressed: _openProductTypePicker,
+            child: const Text('변경'),
           ),
-          onChanged: (_) {
-            setState(() {
-              _visualCandidate = null;
-              _exactModel = null;
-              _brandOptions = [];
-            });
-            _loadBrandOptions();
-          },
-        ),
-        const SizedBox(height: 14),
-        DropdownMenu<ZoneItemType>(
-          width: double.infinity,
-          initialSelection: _selectedType,
-          label: const Text('분류'),
-          dropdownMenuEntries: [
-            for (final type in ZoneItemType.values)
-              DropdownMenuEntry(value: type, label: type.label),
-          ],
-          onSelected: (type) {
-            if (type != null) {
-              setState(() => _selectedType = type);
-            }
-          },
         ),
         const SizedBox(height: 14),
         if (_isLoadingBrands)
@@ -360,7 +361,7 @@ class _ProductRegistrationScreenState extends State<ProductRegistrationScreen> {
           }),
         ),
         const SizedBox(height: 14),
-        FilledButton.tonalIcon(
+        OutlinedButton.icon(
           onPressed:
               _brandController.text.trim().isEmpty ? null : _openProductFinder,
           icon: const Icon(Icons.image_search_outlined),
@@ -369,7 +370,7 @@ class _ProductRegistrationScreenState extends State<ProductRegistrationScreen> {
                 ? _modelController.text.trim()
                 : _visualCandidate != null
                     ? '선택한 제품 바꾸기'
-                    : '내 제품 찾기',
+                    : '정확한 모델 추가 (선택)',
           ),
         ),
         if (_brandController.text.trim().isEmpty) ...[
@@ -401,8 +402,32 @@ class _ProductRegistrationScreenState extends State<ProductRegistrationScreen> {
         ],
         const SizedBox(height: 12),
         Text(
-          '모델 정보가 없으면 제품군의 일반 관리법을 먼저 보여드려요.',
+          '지금 등록하고 제품 화면에서 모델 정보를 보완할 수 있어요.',
           style: Theme.of(context).textTheme.bodySmall,
+        ),
+        const SizedBox(height: 8),
+        ExpansionTile(
+          tilePadding: EdgeInsets.zero,
+          childrenPadding: EdgeInsets.zero,
+          leading: const Icon(Icons.tune),
+          title: const Text('제품 분류 변경'),
+          subtitle: Text(_selectedType.label),
+          children: [
+            DropdownMenu<ZoneItemType>(
+              width: double.infinity,
+              initialSelection: _selectedType,
+              label: const Text('분류'),
+              dropdownMenuEntries: [
+                for (final type in ZoneItemType.values)
+                  DropdownMenuEntry(value: type, label: type.label),
+              ],
+              onSelected: (type) {
+                if (type != null) {
+                  setState(() => _selectedType = type);
+                }
+              },
+            ),
+          ],
         ),
       ],
     );
@@ -473,74 +498,6 @@ class _ProductRegistrationScreenState extends State<ProductRegistrationScreen> {
     );
   }
 
-  Widget _buildMyProductStep() {
-    return ListView(
-      padding: const EdgeInsets.fromLTRB(20, 12, 20, 140),
-      children: [
-        Text('내 제품 정보', style: Theme.of(context).textTheme.titleLarge),
-        const SizedBox(height: 6),
-        const Text('나중에 같은 모델을 구분할 때 도움이 되는 정보예요.'),
-        const SizedBox(height: 18),
-        _ReadOnlyField(
-          label: '공간',
-          value: _selectedSpace.name,
-          icon: Icons.home_work_outlined,
-        ),
-        if (widget.spaces.length > 1) ...[
-          const SizedBox(height: 10),
-          DropdownMenu<String>(
-            width: double.infinity,
-            initialSelection: _selectedSpaceId,
-            label: const Text('공간 변경'),
-            dropdownMenuEntries: [
-              for (final space in widget.spaces)
-                DropdownMenuEntry(value: space.id, label: space.name),
-            ],
-            onSelected: (spaceId) {
-              if (spaceId != null) {
-                setState(() => _selectedSpaceId = spaceId);
-              }
-            },
-          ),
-        ],
-        const SizedBox(height: 14),
-        TextField(
-          controller: _nicknameController,
-          textInputAction: TextInputAction.next,
-          decoration: const InputDecoration(
-            labelText: '별칭 (선택)',
-            hintText: '예: 주방 큰 냉장고',
-            prefixIcon: Icon(Icons.label_outline),
-          ),
-        ),
-        const SizedBox(height: 14),
-        _DateField(
-          label: '구매일 (선택)',
-          value: _purchaseDate,
-          onTap: () => _pickDate(isPurchaseDate: true),
-        ),
-        const SizedBox(height: 14),
-        _DateField(
-          label: '설치일 (선택)',
-          value: _installedDate,
-          onTap: () => _pickDate(isPurchaseDate: false),
-        ),
-        const SizedBox(height: 14),
-        TextField(
-          controller: _noteController,
-          minLines: 3,
-          maxLines: 5,
-          textInputAction: TextInputAction.done,
-          decoration: const InputDecoration(
-            labelText: '메모 (선택)',
-            hintText: '설치 위치, 특이사항 등을 적어두세요',
-            alignLabelWithHint: true,
-          ),
-        ),
-      ],
-    );
-  }
-
   Widget _buildCompleteStep() {
     final product = _draftProduct;
     if (product == null) {
@@ -596,7 +553,7 @@ class _ProductRegistrationScreenState extends State<ProductRegistrationScreen> {
   }
 
   Widget _buildBottomAction() {
-    if (_step == 3) {
+    if (_step == 2) {
       return Row(
         children: [
           Expanded(
@@ -615,9 +572,10 @@ class _ProductRegistrationScreenState extends State<ProductRegistrationScreen> {
         ],
       );
     }
-    return FilledButton(
+    return FilledButton.icon(
       onPressed: _continue,
-      child: Text(_step == 1 ? '이 정보로 계속' : '등록 내용 확인'),
+      icon: const Icon(Icons.check),
+      label: const Text('등록하기'),
     );
   }
 
@@ -627,11 +585,6 @@ class _ProductRegistrationScreenState extends State<ProductRegistrationScreen> {
         _showMessage('제품 종류를 입력해 주세요.');
         return;
       }
-      setState(() => _step = 2);
-      return;
-    }
-
-    if (_step == 2) {
       final product = _buildProduct();
       final duplicate = _findDuplicate(product);
       if (duplicate != null) {
@@ -648,25 +601,19 @@ class _ProductRegistrationScreenState extends State<ProductRegistrationScreen> {
       }
       setState(() {
         _draftProduct = product;
-        _step = 3;
+        _step = 2;
       });
     }
   }
 
   ZoneItem _buildProduct() {
     final id = 'product-${DateTime.now().microsecondsSinceEpoch}';
-    final nickname = _nicknameController.text.trim();
-    final note = _noteController.text.trim();
     final entry = _selectedEntry;
     if (!_manualMode && entry != null) {
       return entry.toZoneItem(id: id, zoneId: _selectedSpaceId).copyWith(
             scannedCode: _scannedCode,
             scannedCodeFormat: _scannedCodeFormat,
             scannedSourceUrl: _scannedSourceUrl,
-            nickname: nickname.isEmpty ? null : nickname,
-            purchaseDate: _purchaseDate,
-            installedDate: _installedDate,
-            note: note.isEmpty ? null : note,
           );
     }
 
@@ -684,10 +631,6 @@ class _ProductRegistrationScreenState extends State<ProductRegistrationScreen> {
               scannedCode: _scannedCode,
               scannedCodeFormat: _scannedCodeFormat,
               scannedSourceUrl: _scannedSourceUrl,
-              nickname: nickname.isEmpty ? null : nickname,
-              purchaseDate: _purchaseDate,
-              installedDate: _installedDate,
-              note: note.isEmpty ? null : note,
             );
       }
     }
@@ -697,10 +640,6 @@ class _ProductRegistrationScreenState extends State<ProductRegistrationScreen> {
           .createProduct(
             id: id,
             zoneId: _selectedSpaceId,
-            nickname: nickname.isEmpty ? null : nickname,
-            purchaseDate: _purchaseDate,
-            installedDate: _installedDate,
-            note: note.isEmpty ? null : note,
             manufacturer: brand.isEmpty ? null : brand,
             modelName: model.isEmpty ? null : model,
             scannedCode: _scannedCode,
@@ -730,10 +669,6 @@ class _ProductRegistrationScreenState extends State<ProductRegistrationScreen> {
       visualCandidateId: _visualCandidate?.id,
       releasePeriod: _visualCandidate?.releasePeriod,
       name: category,
-      nickname: nickname.isEmpty ? null : nickname,
-      purchaseDate: _purchaseDate,
-      installedDate: _installedDate,
-      note: note.isEmpty ? null : note,
       type: _selectedType,
       summary: '$category 제품의 세부 관리법은 아직 준비 중이에요.',
       frequency: '제품 설명서의 권장 주기 확인',
@@ -755,7 +690,7 @@ class _ProductRegistrationScreenState extends State<ProductRegistrationScreen> {
       modelFeatures: _exactModel?.features ?? const [],
       productMethod: _visualCandidate?.formFactor,
       guideStatus: '이 제품군의 검수된 세부 관리법을 준비하고 있어요.',
-      guideBasis: '잘못된 공통 청소법을 제공하지 않고 제조사 설명서를 우선하도록 안내해요.',
+      guideBasis: '잘못된 공통 관리법을 제공하지 않고 제조사 설명서를 우선하도록 안내해요.',
       guideSourceType: GuideSourceType.general,
       matchLevelLabel: _exactModel != null
           ? '공식 확인 모델'
@@ -860,6 +795,29 @@ class _ProductRegistrationScreenState extends State<ProductRegistrationScreen> {
   }
 
   Future<void> _openCodeScanner() async {
+    final shouldOpen = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('QR·바코드로 찾기'),
+        content: const Text(
+          '카메라는 제품 라벨이나 설명서의 코드를 읽어 제품을 찾는 데만 사용해요. '
+          '스캔한 코드 값은 제품 등록 정보로만 저장됩니다.',
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(false),
+            child: const Text('취소'),
+          ),
+          FilledButton(
+            onPressed: () => Navigator.of(context).pop(true),
+            child: const Text('스캔 시작'),
+          ),
+        ],
+      ),
+    );
+    if (shouldOpen != true || !mounted) {
+      return;
+    }
     final result = await Navigator.of(context).push<ProductCodeScanResult>(
       MaterialPageRoute(
         builder: (context) => const ProductCodeScannerScreen(),
@@ -877,6 +835,22 @@ class _ProductRegistrationScreenState extends State<ProductRegistrationScreen> {
     });
     _searchCatalog(result.searchQuery);
     _showMessage('코드를 읽었어요. 연결된 제품 정보를 찾고 있어요.');
+  }
+
+  Future<void> _openLabelScanner() async {
+    final result = await Navigator.of(context).push<ProductLabelScanResult>(
+      MaterialPageRoute(
+        builder: (context) => const ProductLabelScannerScreen(),
+      ),
+    );
+    if (result == null || !mounted) {
+      return;
+    }
+    setState(() {
+      _searchController.text = result.searchQuery;
+    });
+    _searchCatalog(result.searchQuery);
+    _showMessage('라벨에서 모델명 후보를 읽었어요.');
   }
 
   Future<void> _openProductFinder() async {
@@ -954,19 +928,100 @@ class _ProductRegistrationScreenState extends State<ProductRegistrationScreen> {
     _ProductPreset? preset,
     bool fromSearchFailure = false,
   }) {
+    if (preset == null) {
+      return;
+    }
     setState(() {
       _manualMode = true;
       _startedFromSearchFailure = fromSearchFailure;
       _selectedEntry = null;
-      if (preset != null) {
-        _categoryController.text = preset.name;
-        _selectedType = preset.type;
-      } else if (_searchQuery.isNotEmpty) {
-        _categoryController.text = _searchQuery;
-      }
+      _categoryController.text = preset.name;
+      _selectedType = preset.type;
       _step = 1;
     });
     _loadBrandOptions();
+  }
+
+  Future<void> _openProductTypePicker({
+    bool fromSearchFailure = false,
+  }) async {
+    var query = '';
+    final selected = await showModalBottomSheet<_ProductPreset>(
+      context: context,
+      isScrollControlled: true,
+      builder: (context) => StatefulBuilder(
+        builder: (context, setSheetState) {
+          final normalizedQuery = _normalize(query);
+          final products = _allProductPresets
+              .where(
+                (product) =>
+                    normalizedQuery.isEmpty ||
+                    _normalize(product.name).contains(normalizedQuery),
+              )
+              .toList();
+          return SafeArea(
+            child: SizedBox(
+              height: MediaQuery.sizeOf(context).height * 0.82,
+              child: Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(20, 18, 20, 12),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          '제품 종류 선택',
+                          style: Theme.of(context).textTheme.titleLarge,
+                        ),
+                        const SizedBox(height: 6),
+                        const Text('종류를 먼저 정하면 정확한 관리 정보와 연결하기 쉬워요.'),
+                        const SizedBox(height: 14),
+                        TextField(
+                          autofocus: true,
+                          decoration: const InputDecoration(
+                            labelText: '종류 검색',
+                            hintText: '예: 가습기, 침대, 공기청정기',
+                            prefixIcon: Icon(Icons.search),
+                          ),
+                          onChanged: (value) {
+                            setSheetState(() => query = value);
+                          },
+                        ),
+                      ],
+                    ),
+                  ),
+                  Expanded(
+                    child: products.isEmpty
+                        ? const Center(
+                            child: Text('등록할 제품 종류를 찾지 못했어요.'),
+                          )
+                        : ListView.builder(
+                            itemCount: products.length,
+                            itemBuilder: (context, index) {
+                              final product = products[index];
+                              return ListTile(
+                                leading: Icon(product.icon),
+                                title: Text(product.name),
+                                subtitle: Text(product.type.label),
+                                onTap: () => Navigator.of(context).pop(product),
+                              );
+                            },
+                          ),
+                  ),
+                ],
+              ),
+            ),
+          );
+        },
+      ),
+    );
+    if (selected == null || !mounted) {
+      return;
+    }
+    _startManualRegistration(
+      preset: selected,
+      fromSearchFailure: fromSearchFailure,
+    );
   }
 
   Future<void> _loadBrandOptions() async {
@@ -1006,32 +1061,18 @@ class _ProductRegistrationScreenState extends State<ProductRegistrationScreen> {
     }
   }
 
-  Future<void> _pickDate({required bool isPurchaseDate}) async {
-    final initialDate =
-        (isPurchaseDate ? _purchaseDate : _installedDate) ?? DateTime.now();
-    final date = await showDatePicker(
-      context: context,
-      firstDate: DateTime(1990),
-      lastDate: DateTime.now(),
-      initialDate: initialDate,
-    );
-    if (date == null || !mounted) {
-      return;
-    }
-    setState(() {
-      if (isPurchaseDate) {
-        _purchaseDate = date;
-      } else {
-        _installedDate = date;
-      }
-    });
-  }
-
   Future<void> _finish({required bool openDetails}) async {
     final product = _draftProduct;
     if (product == null) {
       return;
     }
+    await _completeRegistration(product, openDetails: openDetails);
+  }
+
+  Future<void> _completeRegistration(
+    ZoneItem product, {
+    required bool openDetails,
+  }) async {
     if (_startedFromSearchFailure) {
       final now = DateTime.now();
       final existing =
@@ -1129,6 +1170,15 @@ class _ProductRegistrationScreenState extends State<ProductRegistrationScreen> {
   }
 
   ProductSpace get _selectedSpace {
+    if (_selectedSpaceId.isEmpty) {
+      return const ProductSpace(
+        id: '',
+        name: '공간 미지정',
+        description: '나중에 공간을 선택할 수 있어요.',
+        productCount: 0,
+        identifiedProductCount: 0,
+      );
+    }
     return widget.spaces.firstWhere(
       (space) => space.id == _selectedSpaceId,
       orElse: () => widget.space,
@@ -1154,7 +1204,7 @@ class _StepHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const labels = ['찾기', '확인', '내 정보', '완료'];
+    const labels = ['찾기', '확인', '완료'];
     return Padding(
       padding: const EdgeInsets.fromLTRB(20, 4, 20, 10),
       child: Row(
@@ -1254,8 +1304,8 @@ class _NoSearchResult extends StatelessWidget {
             const SizedBox(height: 14),
             FilledButton.tonalIcon(
               onPressed: onManual,
-              icon: const Icon(Icons.edit_outlined),
-              label: const Text('직접 입력해 등록'),
+              icon: const Icon(Icons.category_outlined),
+              label: const Text('제품 종류를 선택해 등록'),
             ),
             TextButton.icon(
               onPressed: onRequest,
@@ -1265,56 +1315,6 @@ class _NoSearchResult extends StatelessWidget {
           ],
         ),
       ),
-    );
-  }
-}
-
-class _DateField extends StatelessWidget {
-  const _DateField({
-    required this.label,
-    required this.value,
-    required this.onTap,
-  });
-
-  final String label;
-  final DateTime? value;
-  final VoidCallback onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    return InkWell(
-      onTap: onTap,
-      borderRadius: BorderRadius.circular(8),
-      child: InputDecorator(
-        decoration: InputDecoration(
-          labelText: label,
-          prefixIcon: const Icon(Icons.calendar_today_outlined),
-        ),
-        child: Text(value == null ? '선택하지 않음' : _formatDate(value!)),
-      ),
-    );
-  }
-}
-
-class _ReadOnlyField extends StatelessWidget {
-  const _ReadOnlyField({
-    required this.label,
-    required this.value,
-    required this.icon,
-  });
-
-  final String label;
-  final String value;
-  final IconData icon;
-
-  @override
-  Widget build(BuildContext context) {
-    return InputDecorator(
-      decoration: InputDecoration(
-        labelText: label,
-        prefixIcon: Icon(icon),
-      ),
-      child: Text(value),
     );
   }
 }
@@ -1511,8 +1511,10 @@ const _livingRoomProducts = [
   _ProductPreset('소파', ZoneItemType.furniture, Icons.weekend_outlined),
   _ProductPreset(
       '테이블', ZoneItemType.furniture, Icons.table_restaurant_outlined),
+  _ProductPreset('가습기', ZoneItemType.appliance, Icons.water_drop_outlined),
   _ProductPreset('공기청정기', ZoneItemType.appliance, Icons.air),
   _ProductPreset('에어컨', ZoneItemType.appliance, Icons.ac_unit_outlined),
+  _ProductPreset('침대', ZoneItemType.furniture, Icons.bed_outlined),
   _ProductPreset('러그', ZoneItemType.furniture, Icons.grid_on_outlined),
 ];
 
@@ -1566,10 +1568,61 @@ const _balconyProducts = [
 const _commonProducts = [
   _ProductPreset('에어컨', ZoneItemType.appliance, Icons.ac_unit_outlined),
   _ProductPreset('공기청정기', ZoneItemType.appliance, Icons.air),
+  _ProductPreset('가습기', ZoneItemType.appliance, Icons.water_drop_outlined),
   _ProductPreset('수납장', ZoneItemType.furniture, Icons.inventory_2_outlined),
   _ProductPreset(
       '테이블', ZoneItemType.furniture, Icons.table_restaurant_outlined),
 ];
+
+const _additionalProductTypes = [
+  _ProductPreset('김치냉장고', ZoneItemType.appliance, Icons.kitchen_outlined),
+  _ProductPreset('인덕션', ZoneItemType.appliance, Icons.electric_bolt_outlined),
+  _ProductPreset('가스레인지', ZoneItemType.appliance, Icons.local_fire_department),
+  _ProductPreset('오븐', ZoneItemType.appliance, Icons.microwave_outlined),
+  _ProductPreset('커피머신', ZoneItemType.appliance, Icons.coffee_outlined),
+  _ProductPreset('전기밥솥', ZoneItemType.appliance, Icons.rice_bowl_outlined),
+  _ProductPreset('믹서기', ZoneItemType.appliance, Icons.blender_outlined),
+  _ProductPreset(
+      '토스터', ZoneItemType.appliance, Icons.breakfast_dining_outlined),
+  _ProductPreset('제습기', ZoneItemType.appliance, Icons.water_damage_outlined),
+  _ProductPreset('선풍기', ZoneItemType.appliance, Icons.cyclone_outlined),
+  _ProductPreset('로봇청소기', ZoneItemType.appliance, Icons.smart_toy_outlined),
+  _ProductPreset(
+      '청소기', ZoneItemType.appliance, Icons.cleaning_services_outlined),
+  _ProductPreset('스피커', ZoneItemType.appliance, Icons.speaker_outlined),
+  _ProductPreset('프로젝터', ZoneItemType.appliance, Icons.videocam_outlined),
+  _ProductPreset('게임기', ZoneItemType.appliance, Icons.sports_esports_outlined),
+  _ProductPreset('공유기', ZoneItemType.appliance, Icons.router_outlined),
+  _ProductPreset('프린터', ZoneItemType.appliance, Icons.print_outlined),
+  _ProductPreset('안마의자', ZoneItemType.appliance, Icons.event_seat_outlined),
+  _ProductPreset('전기장판', ZoneItemType.appliance, Icons.bed_outlined),
+  _ProductPreset('협탁', ZoneItemType.furniture, Icons.table_bar_outlined),
+  _ProductPreset('식탁', ZoneItemType.furniture, Icons.table_restaurant_outlined),
+  _ProductPreset('서랍장', ZoneItemType.furniture, Icons.inventory_2_outlined),
+  _ProductPreset('커튼', ZoneItemType.furniture, Icons.curtains_outlined),
+  _ProductPreset('블라인드', ZoneItemType.furniture, Icons.blinds_outlined),
+  _ProductPreset('거울', ZoneItemType.furniture, Icons.crop_portrait_outlined),
+];
+
+final List<_ProductPreset> _allProductPresets = () {
+  final products = <_ProductPreset>[
+    ..._kitchenProducts,
+    ..._livingRoomProducts,
+    ..._bathroomProducts,
+    ..._bedroomProducts,
+    ..._laundryRoomProducts,
+    ..._officeProducts,
+    ..._entranceProducts,
+    ..._balconyProducts,
+    ..._commonProducts,
+    ..._additionalProductTypes,
+  ];
+  final seen = <String>{};
+  return [
+    for (final product in products)
+      if (seen.add(_normalize(product.name))) product,
+  ]..sort((a, b) => a.name.compareTo(b.name));
+}();
 
 String _normalize(String value) {
   return value.toLowerCase().replaceAll(RegExp(r'[\s\-_]+'), '');

@@ -6,6 +6,7 @@ import '../repositories/product_submission_repository.dart';
 import 'history_screen.dart';
 import 'home_screen.dart';
 import 'zones_screen.dart';
+import 'settings_screen.dart';
 
 class MainShell extends StatefulWidget {
   const MainShell({
@@ -25,37 +26,42 @@ class MainShell extends StatefulWidget {
 
 class _MainShellState extends State<MainShell> {
   int _selectedIndex = 0;
+  int _homeVersion = 0;
   int _historyVersion = 0;
-  late final Widget _homeScreen;
-  late final Widget _productsScreen;
-
-  @override
-  void initState() {
-    super.initState();
-    _homeScreen = HomeScreen(
-      dataRepository: widget.dataRepository,
-      catalogRepository: widget.catalogRepository,
-      submissionRepository: widget.submissionRepository,
-      onOpenProducts: () {
-        setState(() {
-          _selectedIndex = 1;
-        });
-      },
-    );
-    _productsScreen = ZonesScreen(
-      dataRepository: widget.dataRepository,
-      catalogRepository: widget.catalogRepository,
-    );
-  }
+  int _productsVersion = 0;
 
   @override
   Widget build(BuildContext context) {
     final screens = [
-      _homeScreen,
-      _productsScreen,
+      HomeScreen(
+        key: ValueKey(_homeVersion),
+        dataRepository: widget.dataRepository,
+        catalogRepository: widget.catalogRepository,
+        submissionRepository: widget.submissionRepository,
+        onOpenProducts: () {
+          setState(() {
+            _selectedIndex = 1;
+          });
+        },
+      ),
+      ZonesScreen(
+        key: ValueKey(_productsVersion),
+        dataRepository: widget.dataRepository,
+        catalogRepository: widget.catalogRepository,
+      ),
       HistoryScreen(
         key: ValueKey(_historyVersion),
         dataRepository: widget.dataRepository,
+      ),
+      SettingsScreen(
+        dataRepository: widget.dataRepository,
+        onDataChanged: () {
+          setState(() {
+            _homeVersion++;
+            _productsVersion++;
+            _historyVersion++;
+          });
+        },
       ),
     ];
 
@@ -71,6 +77,9 @@ class _MainShellState extends State<MainShell> {
         onDestinationSelected: (index) {
           setState(() {
             _selectedIndex = index;
+            if (index == 0) {
+              _homeVersion++;
+            }
             if (index == 2) {
               _historyVersion++;
             }
@@ -91,6 +100,11 @@ class _MainShellState extends State<MainShell> {
             icon: Icon(Icons.history_outlined),
             selectedIcon: Icon(Icons.history),
             label: '기록',
+          ),
+          NavigationDestination(
+            icon: Icon(Icons.settings_outlined),
+            selectedIcon: Icon(Icons.settings),
+            label: '설정',
           ),
         ],
       ),

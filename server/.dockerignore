@@ -1,0 +1,6 @@
+__pycache__/
+*.pyc
+.venv/
+tests/
+data/catalog_admin.db
+data/submissions.json

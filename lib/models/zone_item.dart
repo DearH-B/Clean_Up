@@ -333,6 +333,7 @@ class ZoneItem {
   }
 
   ZoneItem copyWith({
+    String? zoneId,
     String? catalogProductId,
     List<ProductSource>? productSources,
     String? scannedCode,
@@ -372,7 +373,7 @@ class ZoneItem {
   }) {
     return ZoneItem(
       id: id,
-      zoneId: zoneId,
+      zoneId: zoneId ?? this.zoneId,
       catalogProductId: catalogProductId ?? this.catalogProductId,
       productSources: productSources ?? this.productSources,
       scannedCode: scannedCode ?? this.scannedCode,

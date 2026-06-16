@@ -72,6 +72,7 @@ class _ModelSelectionScreenState extends State<ModelSelectionScreen> {
               ),
         )
         .toList();
+    final hasVisualCandidates = visualCandidates.isNotEmpty;
     final releaseYears = {
       for (final model in _models)
         if (model.releaseYear != null) model.releaseYear!,
@@ -88,40 +89,47 @@ class _ModelSelectionScreenState extends State<ModelSelectionScreen> {
             style: Theme.of(context).textTheme.titleLarge,
           ),
           const SizedBox(height: 6),
-          const Text('이미지와 출시 시기를 비교해 내 제품과 가장 가까운 후보를 골라보세요.'),
+          Text(
+            hasVisualCandidates
+                ? '이미지와 출시 시기를 비교해 내 제품과 가장 가까운 후보를 골라보세요.'
+                : '모델명이나 시리즈를 검색해 내 제품을 골라보세요.',
+          ),
           const SizedBox(height: 16),
           TextField(
-            decoration: const InputDecoration(
+            decoration: InputDecoration(
               labelText: '제품 검색',
-              hintText: '모델명, 시리즈 또는 외형 특징',
-              prefixIcon: Icon(Icons.search),
+              hintText:
+                  hasVisualCandidates ? '모델명, 시리즈 또는 외형 특징' : '모델명 또는 시리즈',
+              prefixIcon: const Icon(Icons.search),
             ),
             onChanged: (value) => setState(() => _query = value),
           ),
-          const SizedBox(height: 14),
-          SegmentedButton<_FinderMode>(
-            segments: const [
-              ButtonSegment(
-                value: _FinderMode.models,
-                icon: Icon(Icons.list_alt_outlined),
-                label: Text('정확한 모델'),
-              ),
-              ButtonSegment(
-                value: _FinderMode.visual,
-                icon: Icon(Icons.image_search_outlined),
-                label: Text('외형으로 찾기'),
-              ),
-            ],
-            selected: {_mode},
-            onSelectionChanged: (selection) {
-              setState(() {
-                _mode = selection.single;
-                if (_mode == _FinderMode.visual) {
-                  _releaseYear = null;
-                }
-              });
-            },
-          ),
+          if (hasVisualCandidates) ...[
+            const SizedBox(height: 14),
+            SegmentedButton<_FinderMode>(
+              segments: const [
+                ButtonSegment(
+                  value: _FinderMode.models,
+                  icon: Icon(Icons.list_alt_outlined),
+                  label: Text('정확한 모델'),
+                ),
+                ButtonSegment(
+                  value: _FinderMode.visual,
+                  icon: Icon(Icons.image_search_outlined),
+                  label: Text('외형으로 찾기'),
+                ),
+              ],
+              selected: {_mode},
+              onSelectionChanged: (selection) {
+                setState(() {
+                  _mode = selection.single;
+                  if (_mode == _FinderMode.visual) {
+                    _releaseYear = null;
+                  }
+                });
+              },
+            ),
+          ],
           if (_mode == _FinderMode.models && releaseYears.isNotEmpty) ...[
             const SizedBox(height: 14),
             Text('출시 시기', style: Theme.of(context).textTheme.titleSmall),
@@ -299,14 +307,14 @@ class _ModelCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      margin: const EdgeInsets.only(bottom: 10),
+      margin: const EdgeInsets.only(bottom: 12),
       child: Padding(
-        padding: const EdgeInsets.all(12),
+        padding: const EdgeInsets.all(14),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             _ModelThumbnail(imageUrl: model.imageUrl),
-            const SizedBox(width: 12),
+            const SizedBox(width: 14),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -325,7 +333,7 @@ class _ModelCard extends StatelessWidget {
                       style: Theme.of(context).textTheme.bodySmall,
                     ),
                   if (model.features.isNotEmpty) ...[
-                    const SizedBox(height: 6),
+                    const SizedBox(height: 8),
                     Wrap(
                       spacing: 6,
                       runSpacing: 6,
@@ -338,13 +346,16 @@ class _ModelCard extends StatelessWidget {
                       ],
                     ),
                   ],
-                  const SizedBox(height: 10),
-                  FilledButton.tonalIcon(
-                    onPressed: onSelected,
-                    icon: Icon(
-                      selected ? Icons.check_circle : Icons.verified_outlined,
+                  const SizedBox(height: 12),
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: FilledButton.tonalIcon(
+                      onPressed: onSelected,
+                      icon: Icon(
+                        selected ? Icons.check_circle : Icons.verified_outlined,
+                      ),
+                      label: Text(selected ? '선택한 모델' : '이 모델 선택'),
                     ),
-                    label: const Text('정확해요'),
                   ),
                 ],
               ),
@@ -399,8 +410,8 @@ class _ModelThumbnail extends StatelessWidget {
     final url = imageUrl;
     if (url == null || url.isEmpty) {
       return Container(
-        width: 88,
-        height: 104,
+        width: 104,
+        height: 124,
         decoration: BoxDecoration(
           color: Theme.of(context).colorScheme.surfaceContainerLow,
           borderRadius: BorderRadius.circular(6),
@@ -412,12 +423,12 @@ class _ModelThumbnail extends StatelessWidget {
       borderRadius: BorderRadius.circular(6),
       child: Image.network(
         url,
-        width: 88,
-        height: 104,
+        width: 104,
+        height: 124,
         fit: BoxFit.contain,
         errorBuilder: (_, __, ___) {
           return const SizedBox.square(
-            dimension: 88,
+            dimension: 104,
             child: Icon(Icons.inventory_2_outlined),
           );
         },

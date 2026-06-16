@@ -6530,5 +6530,802 @@
     "consumables": [],
     "consumableDetails": [],
     "installationType": "독립형 또는 직렬 설치"
+  },
+  {
+    "id": "lg-m875gbb231",
+    "name": "LG 디오스 오브제컬렉션 더블매직스페이스 냉장고 871L",
+    "type": "appliance",
+    "categoryName": "냉장고",
+    "brand": "LG전자",
+    "manufacturer": "LG전자",
+    "modelName": "M875GBB231",
+    "seriesName": "디오스 오브제컬렉션 더블매직스페이스",
+    "summary": "내부 선반과 바구니 및 문 패킹을 부드러운 물수건으로 관리해요.",
+    "frequency": "오염이나 냄새를 발견했을 때",
+    "recurrenceDays": 0,
+    "estimatedMinutes": 20,
+    "productMethod": "상냉장·하냉동 냉장고 공식 관리",
+    "guideStatus": "공식 설명서를 확인했어요.",
+    "guideBasis": "LG전자 공식 제품 페이지와 M875GBB231 모델 검색 결과에 연결된 공식 사용설명서의 청소 및 안전 지침을 확인했어요.",
+    "guideSourceType": "official",
+    "matchLevelLabel": "공식 설명서 확인 모델",
+    "sourceTitle": "LG전자 M875GBB231 공식 제품 페이지",
+    "sourceUrl": "https://www.lge.co.kr/refrigerators/m875gbb231",
+    "sourceCheckedAt": "2026-06-15",
+    "sources": [
+      {
+        "id": "lg-m875gbb231-product",
+        "title": "LG전자 M875GBB231 공식 제품 페이지",
+        "url": "https://www.lge.co.kr/refrigerators/m875gbb231",
+        "type": "officialProduct",
+        "publisher": "LG전자",
+        "checkedAt": "2026-06-14",
+        "supports": [
+          "제품명",
+          "모델명",
+          "용량",
+          "형태",
+          "대표 이미지"
+        ],
+        "isOfficial": true,
+        "isActive": true
+      },
+      {
+        "id": "lg-m875gbb231-manual",
+        "title": "LG전자 M875GBB231 공식 사용설명서",
+        "url": "https://gscs-manual.lge.com/CNZ/MFL71667715/ko-kr/main.html",
+        "type": "officialManual",
+        "publisher": "LG전자",
+        "checkedAt": "2026-06-15",
+        "supports": [
+          "청소 안전사항",
+          "내부 청소",
+          "문 패킹 관리"
+        ],
+        "isOfficial": true,
+        "isActive": true
+      }
+    ],
+    "specSourceIds": {
+      "용량": [
+        "lg-m875gbb231-product"
+      ],
+      "형태": [
+        "lg-m875gbb231-product"
+      ],
+      "에너지 등급": [
+        "lg-m875gbb231-product"
+      ]
+    },
+    "stepSourceIds": {
+      "0": [
+        "lg-m875gbb231-manual"
+      ],
+      "1": [
+        "lg-m875gbb231-manual"
+      ],
+      "2": [
+        "lg-m875gbb231-manual"
+      ],
+      "3": [
+        "lg-m875gbb231-manual"
+      ]
+    },
+    "reviewHistory": [
+      {
+        "status": "verified",
+        "reviewer": "catalog-editor",
+        "reviewedAt": "2026-06-15",
+        "note": "LG전자 모델 검색 결과와 공식 사용설명서의 청소·안전 항목 교차 검수 완료"
+      }
+    ],
+    "productSpecs": [
+      "용량: 871L",
+      "형태: 상냉장·하냉동",
+      "에너지 등급: 1등급"
+    ],
+    "supplies": [
+      "부드러운 천",
+      "중성세제"
+    ],
+    "recommendedSupplies": [],
+    "recommendedProducts": [],
+    "cautions": [
+      "청소 전 전원 플러그를 빼세요.",
+      "제품에 물을 직접 뿌리지 마세요.",
+      "냉각 부품과 기계실을 임의로 분리하지 마세요."
+    ],
+    "steps": [
+      "청소 전에 전원 플러그를 빼고 보관된 식품을 모두 꺼내요.",
+      "선반과 문 바구니는 부드러운 수건에 물을 묻혀 닦아요.",
+      "문의 고무 패킹을 부드러운 물수건으로 닦아요.",
+      "내부의 물기를 완전히 제거하고 바구니를 원래 위치에 조립한 뒤 문이 제대로 닫히는지 확인해요."
+    ],
+    "keywords": [
+      "LG 냉장고",
+      "M875GBB231"
+    ],
+    "reviewStatus": "verified",
+    "reviewedBy": "catalog-editor",
+    "reviewNote": "LG전자 모델 검색 결과와 공식 사용설명서의 청소·안전 항목 교차 검수 완료",
+    "officialManualUrl": "https://gscs-manual.lge.com/CNZ/MFL71667715/ko-kr/main.html",
+    "supportUrl": "https://www.lge.co.kr/support",
+    "servicePhone": "1544-7777",
+    "releaseYear": null,
+    "isDiscontinued": false,
+    "imageUrl": "https://www.lge.co.kr/kr/images/refrigerators/md10364842/gallery/medium01.jpg",
+    "modelFeatures": [
+      "871L",
+      "상냉장·하냉동"
+    ],
+    "consumables": [],
+    "consumableDetails": [],
+    "installationType": "독립형"
+  },
+  {
+    "id": "lg-rg19gn",
+    "name": "LG 트롬 오브제컬렉션 건조기",
+    "type": "appliance",
+    "categoryName": "건조기",
+    "brand": "LG전자",
+    "manufacturer": "LG전자",
+    "modelName": "RG19GN",
+    "seriesName": "트롬 오브제컬렉션 건조기",
+    "summary": "내외부 필터의 보풀을 제거하고 문 주변과 습도 센서를 관리해요.",
+    "frequency": "사용 전후 또는 필터 알림이 표시될 때",
+    "recurrenceDays": 0,
+    "estimatedMinutes": 15,
+    "productMethod": "건조기 필터와 센서 공식 관리",
+    "guideStatus": "공식 설명서를 확인했어요.",
+    "guideBasis": "LG전자 공식 제품 페이지와 RG19GN 모델 검색 결과에 연결된 공식 사용설명서의 필터 및 센서 청소 지침을 확인했어요.",
+    "guideSourceType": "official",
+    "matchLevelLabel": "공식 설명서 확인 모델",
+    "sourceTitle": "LG전자 RG19GN 공식 제품 페이지",
+    "sourceUrl": "https://www.lge.co.kr/dryers/rg19gn",
+    "sourceCheckedAt": "2026-06-15",
+    "sources": [
+      {
+        "id": "lg-rg19gn-product",
+        "title": "LG전자 RG19GN 공식 제품 페이지",
+        "url": "https://www.lge.co.kr/dryers/rg19gn",
+        "type": "officialProduct",
+        "publisher": "LG전자",
+        "checkedAt": "2026-06-14",
+        "supports": [
+          "제품명",
+          "모델명",
+          "대표 이미지"
+        ],
+        "isOfficial": true,
+        "isActive": true
+      },
+      {
+        "id": "lg-rg19gn-manual",
+        "title": "LG전자 RG19GN 공식 사용설명서",
+        "url": "https://gscs-manual.lge.com/DFZ/MFL71831427/ko-kr/main.html",
+        "type": "officialManual",
+        "publisher": "LG전자",
+        "checkedAt": "2026-06-15",
+        "supports": [
+          "청소 안전사항",
+          "필터 청소",
+          "문 주변 청소",
+          "습도 센서 관리"
+        ],
+        "isOfficial": true,
+        "isActive": true
+      }
+    ],
+    "specSourceIds": {
+      "공식 모델명": [
+        "lg-rg19gn-product"
+      ]
+    },
+    "stepSourceIds": {
+      "0": [
+        "lg-rg19gn-manual"
+      ],
+      "1": [
+        "lg-rg19gn-manual"
+      ],
+      "2": [
+        "lg-rg19gn-manual"
+      ],
+      "3": [
+        "lg-rg19gn-manual"
+      ],
+      "4": [
+        "lg-rg19gn-manual"
+      ]
+    },
+    "reviewHistory": [
+      {
+        "status": "verified",
+        "reviewer": "catalog-editor",
+        "reviewedAt": "2026-06-15",
+        "note": "LG전자 모델 검색 결과와 공식 사용설명서의 청소·안전 항목 교차 검수 완료"
+      }
+    ],
+    "productSpecs": [
+      "공식 모델명: RG19GN"
+    ],
+    "supplies": [
+      "부드러운 천",
+      "부드러운 브러시"
+    ],
+    "recommendedSupplies": [],
+    "recommendedProducts": [],
+    "cautions": [
+      "청소 전 전원 플러그를 빼세요.",
+      "제품에 물을 직접 뿌리지 마세요.",
+      "열교환기와 본체 내부를 임의로 분리하지 마세요."
+    ],
+    "steps": [
+      "건조물을 모두 꺼내고 전원 플러그를 뺀 뒤 내부 필터와 외부 필터를 분리해요.",
+      "필터의 보풀을 제거하고 필요하면 진공청소기 또는 흐르는 물로 청소해요.",
+      "물로 청소한 필터는 완전히 말린 뒤 내부·외부 필터를 결합해 제자리에 넣어요.",
+      "문의 유리와 고무 패킹 및 필터 주변의 보풀을 젖은 천이나 부드러운 솔로 제거해요.",
+      "습도 센서 표면에 이물질이 쌓이지 않도록 주기적으로 닦아요."
+    ],
+    "keywords": [
+      "LG 건조기",
+      "RG19GN"
+    ],
+    "reviewStatus": "verified",
+    "reviewedBy": "catalog-editor",
+    "reviewNote": "LG전자 모델 검색 결과와 공식 사용설명서의 청소·안전 항목 교차 검수 완료",
+    "officialManualUrl": "https://gscs-manual.lge.com/DFZ/MFL71831427/ko-kr/main.html",
+    "supportUrl": "https://www.lge.co.kr/support",
+    "servicePhone": "1544-7777",
+    "releaseYear": null,
+    "isDiscontinued": false,
+    "imageUrl": "https://www.lge.co.kr/kr/images/dryers/md09944837/gallery/medium01.jpg",
+    "modelFeatures": [
+      "오브제컬렉션"
+    ],
+    "consumables": [],
+    "consumableDetails": [],
+    "installationType": "독립형 또는 직렬 설치"
+  },
+  {
+    "id": "lg-as355nsna",
+    "name": "LG 퓨리케어 AI 오브제컬렉션 360도 공기청정기",
+    "type": "appliance",
+    "categoryName": "공기청정기",
+    "brand": "LG전자",
+    "manufacturer": "LG전자",
+    "modelName": "AS355NSNA",
+    "seriesName": "퓨리케어 AI 오브제컬렉션 360도",
+    "summary": "극세 필터와 공기 흡입구 및 외관의 먼지를 안전하게 관리해요.",
+    "frequency": "필터 알림 또는 먼지가 쌓였을 때",
+    "recurrenceDays": 0,
+    "estimatedMinutes": 15,
+    "productMethod": "공기청정기 필터와 외관 공식 관리",
+    "guideStatus": "공식 설명서를 확인했어요.",
+    "guideBasis": "LG전자 공식 제품 페이지와 AS355NSNA 모델 검색 결과에 연결된 공식 사용설명서의 필터 및 외관 청소 지침을 확인했어요.",
+    "guideSourceType": "official",
+    "matchLevelLabel": "공식 설명서 확인 모델",
+    "sourceTitle": "LG전자 AS355NSNA 공식 제품 페이지",
+    "sourceUrl": "https://www.lge.co.kr/air-purifier/as355nsna",
+    "sourceCheckedAt": "2026-06-15",
+    "sources": [
+      {
+        "id": "lg-as355nsna-product",
+        "title": "LG전자 AS355NSNA 공식 제품 페이지",
+        "url": "https://www.lge.co.kr/air-purifier/as355nsna",
+        "type": "officialProduct",
+        "publisher": "LG전자",
+        "checkedAt": "2026-06-14",
+        "supports": [
+          "제품명",
+          "모델명",
+          "대표 이미지"
+        ],
+        "isOfficial": true,
+        "isActive": true
+      },
+      {
+        "id": "lg-as355nsna-manual",
+        "title": "LG전자 AS355NSNA 공식 사용설명서",
+        "url": "https://gscs-manual.lge.com/DLZ/MFL72146409/ko-kr/main.html",
+        "type": "officialManual",
+        "publisher": "LG전자",
+        "checkedAt": "2026-06-15",
+        "supports": [
+          "청소 안전사항",
+          "극세 필터 청소",
+          "외관 청소"
+        ],
+        "isOfficial": true,
+        "isActive": true
+      }
+    ],
+    "specSourceIds": {
+      "공식 모델명": [
+        "lg-as355nsna-product"
+      ]
+    },
+    "stepSourceIds": {
+      "0": [
+        "lg-as355nsna-manual"
+      ],
+      "1": [
+        "lg-as355nsna-manual"
+      ],
+      "2": [
+        "lg-as355nsna-manual"
+      ],
+      "3": [
+        "lg-as355nsna-manual"
+      ],
+      "4": [
+        "lg-as355nsna-manual"
+      ]
+    },
+    "reviewHistory": [
+      {
+        "status": "verified",
+        "reviewer": "catalog-editor",
+        "reviewedAt": "2026-06-15",
+        "note": "LG전자 모델 검색 결과와 공식 사용설명서의 청소·안전 항목 교차 검수 완료"
+      }
+    ],
+    "productSpecs": [
+      "공식 모델명: AS355NSNA"
+    ],
+    "supplies": [
+      "부드러운 천",
+      "부드러운 브러시",
+      "면봉"
+    ],
+    "recommendedSupplies": [],
+    "recommendedProducts": [],
+    "cautions": [
+      "청소 전 전원 플러그를 빼세요.",
+      "제품에 물을 직접 뿌리지 마세요.",
+      "필터와 센서 모듈을 임의로 분리하지 마세요."
+    ],
+    "steps": [
+      "제품을 끄고 전원 플러그를 뺀 뒤 앞·뒷면 커버를 분리해요.",
+      "진공청소기나 부드러운 솔로 극세 필터의 먼지를 제거해요.",
+      "필터는 물로 세척하지 않고 손상되지 않도록 조심해서 다뤄요.",
+      "공기 흡입구와 배출구의 먼지를 제거하고 부드러운 천으로 외관을 닦아요.",
+      "커버와 필터를 정확한 위치에 다시 장착해요."
+    ],
+    "keywords": [
+      "LG 공기청정기",
+      "AS355NSNA"
+    ],
+    "reviewStatus": "verified",
+    "reviewedBy": "catalog-editor",
+    "reviewNote": "LG전자 모델 검색 결과와 공식 사용설명서의 청소·안전 항목 교차 검수 완료",
+    "officialManualUrl": "https://gscs-manual.lge.com/DLZ/MFL72146409/ko-kr/main.html",
+    "supportUrl": "https://www.lge.co.kr/support",
+    "servicePhone": "1544-7777",
+    "releaseYear": null,
+    "isDiscontinued": false,
+    "imageUrl": "https://www.lge.co.kr/kr/images/air-purifier/md10525833/gallery/medium01.jpg",
+    "modelFeatures": [
+      "360도",
+      "M 필터"
+    ],
+    "consumables": [],
+    "consumableDetails": [],
+    "installationType": "스탠드형"
+  },
+  {
+    "id": "lg-fx25efe",
+    "name": "LG 트롬 AI 오브제컬렉션 세탁기 25kg",
+    "type": "appliance",
+    "categoryName": "세탁기",
+    "brand": "LG전자",
+    "manufacturer": "LG전자",
+    "modelName": "FX25EFE",
+    "seriesName": "트롬 AI 오브제컬렉션 세탁기",
+    "summary": "고무 패킹과 물 분사 노즐 및 배수 펌프 거름망을 공식 순서로 관리해요.",
+    "frequency": "냄새나 이물질 또는 배수 알림을 발견했을 때",
+    "recurrenceDays": 0,
+    "estimatedMinutes": 20,
+    "productMethod": "드럼세탁기 공식 관리",
+    "guideStatus": "공식 설명서를 확인했어요.",
+    "guideBasis": "LG전자 공식 제품 페이지와 FX25EFE 모델 검색 결과에 연결된 공식 사용설명서의 패킹·노즐·배수 거름망 관리 지침을 확인했어요.",
+    "guideSourceType": "official",
+    "matchLevelLabel": "공식 설명서 확인 모델",
+    "sourceTitle": "LG전자 FX25EFE 공식 제품 페이지",
+    "sourceUrl": "https://www.lge.co.kr/washing-machines/fx25efe",
+    "sourceCheckedAt": "2026-06-15",
+    "sources": [
+      {
+        "id": "lg-fx25efe-product",
+        "title": "LG전자 FX25EFE 공식 제품 페이지",
+        "url": "https://www.lge.co.kr/washing-machines/fx25efe",
+        "type": "officialProduct",
+        "publisher": "LG전자",
+        "checkedAt": "2026-06-14",
+        "supports": [
+          "제품명",
+          "모델명",
+          "용량",
+          "대표 이미지"
+        ],
+        "isOfficial": true,
+        "isActive": true
+      },
+      {
+        "id": "lg-fx25efe-manual",
+        "title": "LG전자 FX25EFE 공식 사용설명서",
+        "url": "https://gscs-manual.lge.com/DFZ/MFL71792833/ko-kr/main.html",
+        "type": "officialManual",
+        "publisher": "LG전자",
+        "checkedAt": "2026-06-15",
+        "supports": [
+          "청소 안전사항",
+          "고무 패킹",
+          "물 분사 노즐",
+          "배수 펌프 거름망"
+        ],
+        "isOfficial": true,
+        "isActive": true
+      }
+    ],
+    "specSourceIds": {
+      "공식 모델명": [
+        "lg-fx25efe-product"
+      ],
+      "세탁 용량": [
+        "lg-fx25efe-product"
+      ],
+      "에너지 등급": [
+        "lg-fx25efe-product"
+      ]
+    },
+    "stepSourceIds": {
+      "0": [
+        "lg-fx25efe-manual"
+      ],
+      "1": [
+        "lg-fx25efe-manual"
+      ],
+      "2": [
+        "lg-fx25efe-manual"
+      ],
+      "3": [
+        "lg-fx25efe-manual"
+      ],
+      "4": [
+        "lg-fx25efe-manual"
+      ]
+    },
+    "reviewHistory": [
+      {
+        "status": "verified",
+        "reviewer": "catalog-editor",
+        "reviewedAt": "2026-06-15",
+        "note": "LG전자 모델 검색 결과와 공식 사용설명서의 청소·안전 항목 교차 검수 완료"
+      }
+    ],
+    "productSpecs": [
+      "공식 모델명: FX25EFE",
+      "세탁 용량: 25kg",
+      "에너지 등급: 1등급"
+    ],
+    "supplies": [
+      "부드러운 천",
+      "부드러운 브러시",
+      "세탁기 전용 세정제"
+    ],
+    "recommendedSupplies": [],
+    "recommendedProducts": [],
+    "cautions": [
+      "청소 전 전원 플러그를 빼세요.",
+      "제품에 물을 직접 뿌리지 마세요.",
+      "배수펌프와 본체 내부를 임의로 분리하지 마세요."
+    ],
+    "steps": [
+      "작동을 멈추고 전원 플러그를 뺀 뒤 수도꼭지를 잠가요.",
+      "물 분사 노즐의 이물질을 제거하고 고무 패킹은 공식 희석 비율을 확인해 닦은 뒤 물기를 완전히 말려요.",
+      "배수 펌프 거름망을 청소할 때는 드럼 안의 물이 뜨겁지 않은지 먼저 확인해요.",
+      "잔수 제거용 호스로 내부 물을 뺀 후 배수 펌프 거름망과 내부 이물질을 부드러운 도구로 제거해요.",
+      "호스 마개와 배수 펌프 마개를 정확히 조립하고 문을 열어 내부를 환기해요."
+    ],
+    "keywords": [
+      "LG 세탁기",
+      "FX25EFE",
+      "트롬 AI 오브제컬렉션"
+    ],
+    "reviewStatus": "verified",
+    "reviewedBy": "catalog-editor",
+    "reviewNote": "LG전자 모델 검색 결과와 공식 사용설명서의 청소·안전 항목 교차 검수 완료",
+    "officialManualUrl": "https://gscs-manual.lge.com/DFZ/MFL71792833/ko-kr/main.html",
+    "supportUrl": "https://www.lge.co.kr/support",
+    "servicePhone": "1544-7777",
+    "releaseYear": null,
+    "isDiscontinued": false,
+    "imageUrl": "https://www.lge.co.kr/kr/images/washing-machines/md10597883/gallery/medium01.jpg",
+    "modelFeatures": [
+      "25kg",
+      "1등급"
+    ],
+    "consumables": [],
+    "consumableDetails": [],
+    "installationType": "독립형 또는 직렬 설치"
+  },
+  {
+    "id": "lg-due4bgl1e",
+    "name": "LG 디오스 오브제컬렉션 식기세척기",
+    "type": "appliance",
+    "categoryName": "식기세척기",
+    "brand": "LG전자",
+    "manufacturer": "LG전자",
+    "modelName": "DUE4BGL1E",
+    "seriesName": "디오스 오브제컬렉션 식기세척기",
+    "summary": "음식물 거름 필터와 노즐 및 세척조를 공식 안내에 따라 관리해요.",
+    "frequency": "냄새나 세척 성능 저하를 느꼈을 때",
+    "recurrenceDays": 0,
+    "estimatedMinutes": 20,
+    "productMethod": "식기세척기 내부 공식 관리",
+    "guideStatus": "공식 설명서를 확인했어요.",
+    "guideBasis": "LG전자 공식 제품 페이지와 DUE4BGL1E 모델 검색 결과에 연결된 공식 사용설명서의 필터·노즐·세척조 관리 지침을 확인했어요.",
+    "guideSourceType": "official",
+    "matchLevelLabel": "공식 설명서 확인 모델",
+    "sourceTitle": "LG전자 DUE4BGL1E 공식 제품 페이지",
+    "sourceUrl": "https://www.lge.co.kr/dishwashers/due4bgl1e",
+    "sourceCheckedAt": "2026-06-15",
+    "sources": [
+      {
+        "id": "lg-due4bgl1e-product",
+        "title": "LG전자 DUE4BGL1E 공식 제품 페이지",
+        "url": "https://www.lge.co.kr/dishwashers/due4bgl1e",
+        "type": "officialProduct",
+        "publisher": "LG전자",
+        "checkedAt": "2026-06-14",
+        "supports": [
+          "제품명",
+          "모델명",
+          "출시 연도",
+          "대표 이미지"
+        ],
+        "isOfficial": true,
+        "isActive": true
+      },
+      {
+        "id": "lg-due4bgl1e-manual",
+        "title": "LG전자 DUE4BGL1E 공식 사용설명서",
+        "url": "https://gscs-manual.lge.com/CDZ/MFL71959121/ko-kr/main.html",
+        "type": "officialManual",
+        "publisher": "LG전자",
+        "checkedAt": "2026-06-15",
+        "supports": [
+          "청소 안전사항",
+          "음식물 거름 필터",
+          "노즐",
+          "세척조"
+        ],
+        "isOfficial": true,
+        "isActive": true
+      }
+    ],
+    "specSourceIds": {
+      "공식 모델명": [
+        "lg-due4bgl1e-product"
+      ],
+      "출시 연도": [
+        "lg-due4bgl1e-product"
+      ],
+      "주요 구분": [
+        "lg-due4bgl1e-product"
+      ]
+    },
+    "stepSourceIds": {
+      "0": [
+        "lg-due4bgl1e-manual"
+      ],
+      "1": [
+        "lg-due4bgl1e-manual"
+      ],
+      "2": [
+        "lg-due4bgl1e-manual"
+      ],
+      "3": [
+        "lg-due4bgl1e-manual"
+      ],
+      "4": [
+        "lg-due4bgl1e-manual"
+      ]
+    },
+    "reviewHistory": [
+      {
+        "status": "verified",
+        "reviewer": "catalog-editor",
+        "reviewedAt": "2026-06-15",
+        "note": "LG전자 모델 검색 결과와 공식 사용설명서의 청소·안전 항목 교차 검수 완료"
+      }
+    ],
+    "productSpecs": [
+      "공식 모델명: DUE4BGL1E",
+      "출시 연도: 2026년",
+      "주요 구분: 스팀·1등급"
+    ],
+    "supplies": [
+      "부드러운 천",
+      "부드러운 브러시",
+      "식기세척기 전용 세정제"
+    ],
+    "recommendedSupplies": [],
+    "recommendedProducts": [],
+    "cautions": [
+      "청소 전 전원 플러그를 빼세요.",
+      "제품에 물을 직접 뿌리지 마세요.",
+      "분사구와 배수 부품을 임의로 분리하지 마세요."
+    ],
+    "steps": [
+      "작동을 멈추고 전원 플러그를 뺀 뒤 제품 내부가 식었는지 확인해요.",
+      "하단 식기 바구니를 꺼내고 음식물 거름 필터를 반시계 방향으로 돌려 분리해요.",
+      "일반 필터와 스테인리스 필터의 음식물을 부드러운 솔과 흐르는 물로 제거한 뒤 정확히 재조립해요.",
+      "노즐 구멍의 음식물을 제거하고 분리한 노즐은 물을 넣어 흔들어 청소한 뒤 부드럽게 회전하는지 확인해요.",
+      "세척조는 제품을 비운 뒤 공식 설명서의 구연산 또는 식초 사용량과 통살균 코스를 따라 관리해요."
+    ],
+    "keywords": [
+      "LG 식기세척기",
+      "DUE4BGL1E",
+      "디오스 오브제컬렉션"
+    ],
+    "reviewStatus": "verified",
+    "reviewedBy": "catalog-editor",
+    "reviewNote": "LG전자 모델 검색 결과와 공식 사용설명서의 청소·안전 항목 교차 검수 완료",
+    "officialManualUrl": "https://gscs-manual.lge.com/CDZ/MFL71959121/ko-kr/main.html",
+    "supportUrl": "https://www.lge.co.kr/support",
+    "servicePhone": "1544-7777",
+    "releaseYear": 2026,
+    "isDiscontinued": false,
+    "imageUrl": "https://www.lge.co.kr/kr/images/dishwashers/md10645836/gallery/medium01.jpg",
+    "modelFeatures": [
+      "2026년",
+      "스팀"
+    ],
+    "consumables": [],
+    "consumableDetails": [],
+    "installationType": "빌트인"
+  },
+  {
+    "id": "lg-fq18gv6ee1",
+    "name": "LG 휘센 AI 오브제컬렉션 뷰I 프로 에어컨 싱글 6시리즈",
+    "type": "appliance",
+    "categoryName": "에어컨",
+    "brand": "LG전자",
+    "manufacturer": "LG전자",
+    "modelName": "FQ18GV6EE1",
+    "seriesName": "휘센 AI 오브제컬렉션 뷰I 프로 6시리즈",
+    "summary": "흡입구 필터의 먼지를 제거하고 외관과 송풍구 주변을 안전하게 관리해요.",
+    "frequency": "필터 알림 또는 냉방 성능이 떨어질 때",
+    "recurrenceDays": 0,
+    "estimatedMinutes": 20,
+    "productMethod": "스탠드 에어컨 일반 관리",
+    "guideStatus": "공식 제품 정보와 제품군 관리 안내를 확인했어요.",
+    "guideBasis": "LG전자 공식 제품 페이지로 모델과 58.5㎡ 냉방면적 및 2026년 출시 정보를 확인했으며 모델별 설명서 확보 전까지 에어컨 제품군의 보수적인 일반 관리법을 제공해요.",
+    "guideSourceType": "general",
+    "matchLevelLabel": "정확 모델·일반 관리법",
+    "sourceTitle": "LG전자 FQ18GV6EE1 공식 제품 페이지",
+    "sourceUrl": "https://www.lge.co.kr/air-conditioners/fq18gv6ee1",
+    "sourceCheckedAt": "2026-06-14",
+    "sources": [
+      {
+        "id": "lg-fq18gv6ee1-product",
+        "title": "LG전자 FQ18GV6EE1 공식 제품 페이지",
+        "url": "https://www.lge.co.kr/air-conditioners/fq18gv6ee1",
+        "type": "officialProduct",
+        "publisher": "LG전자",
+        "checkedAt": "2026-06-14",
+        "supports": [
+          "제품명",
+          "모델명",
+          "출시 연도",
+          "냉방면적",
+          "구성품",
+          "대표 이미지"
+        ],
+        "isOfficial": true,
+        "isActive": true
+      },
+      {
+        "id": "lg-air-conditioner-general",
+        "title": "에어컨 제품군 보수적 관리 가이드",
+        "url": null,
+        "type": "generalGuidance",
+        "publisher": "앱 편집 가이드",
+        "checkedAt": "2026-06-14",
+        "supports": [
+          "안전사항",
+          "일반 관리 순서"
+        ],
+        "isOfficial": false,
+        "isActive": true
+      }
+    ],
+    "specSourceIds": {
+      "공식 모델명": [
+        "lg-fq18gv6ee1-product"
+      ],
+      "출시 연도": [
+        "lg-fq18gv6ee1-product"
+      ],
+      "냉방 면적": [
+        "lg-fq18gv6ee1-product"
+      ],
+      "구성품": [
+        "lg-fq18gv6ee1-product"
+      ]
+    },
+    "stepSourceIds": {
+      "0": [
+        "lg-air-conditioner-general"
+      ],
+      "1": [
+        "lg-air-conditioner-general"
+      ],
+      "2": [
+        "lg-air-conditioner-general"
+      ],
+      "3": [
+        "lg-air-conditioner-general"
+      ],
+      "4": [
+        "lg-air-conditioner-general"
+      ]
+    },
+    "reviewHistory": [
+      {
+        "status": "reviewed",
+        "reviewer": "catalog-editor",
+        "reviewedAt": "2026-06-14",
+        "note": "공식 제품 페이지로 모델 식별 완료; 모델별 설명서 확보 후 verified 승격 필요"
+      }
+    ],
+    "productSpecs": [
+      "공식 모델명: FQ18GV6EE1",
+      "출시 연도: 2026년",
+      "냉방 면적: 58.5㎡",
+      "구성품: FQ18GV6EEN 실내기·FQ24GNEU 실외기"
+    ],
+    "supplies": [
+      "부드러운 천",
+      "부드러운 브러시",
+      "진공청소기"
+    ],
+    "recommendedSupplies": [],
+    "recommendedProducts": [],
+    "cautions": [
+      "청소 전 전원 플러그를 빼세요.",
+      "제품에 물을 직접 뿌리지 마세요.",
+      "팬과 열교환기 및 전기 부품을 임의로 분리하지 마세요."
+    ],
+    "steps": [
+      "운전을 멈추고 전원 플러그를 뺀 뒤 송풍구가 완전히 멈췄는지 확인해요.",
+      "사용자가 분리할 수 있는 흡입구 필터의 먼지를 진공청소기나 부드러운 브러시로 제거해요.",
+      "물세척 표시가 있는 필터만 씻고 직사광선을 피해 완전히 말려요.",
+      "외관과 송풍구 주변은 부드러운 마른 천으로 닦고 내부 팬과 열교환기는 분해하지 않아요.",
+      "필터 방향을 확인해 장착하고 전문 세척이 필요한 냄새나 곰팡이는 LG전자 서비스에 문의해요."
+    ],
+    "keywords": [
+      "LG 에어컨",
+      "FQ18GV6EE1",
+      "휘센 뷰I 프로"
+    ],
+    "reviewStatus": "reviewed",
+    "reviewedBy": "catalog-editor",
+    "reviewNote": "공식 제품 페이지로 모델 식별 완료; 모델별 설명서 확보 후 verified 승격 필요",
+    "officialManualUrl": null,
+    "supportUrl": "https://www.lge.co.kr/support",
+    "servicePhone": "1544-7777",
+    "releaseYear": 2026,
+    "isDiscontinued": false,
+    "imageUrl": "https://www.lge.co.kr/kr/images/air-conditioners/md10729830/gallery/medium01.jpg",
+    "modelFeatures": [
+      "58.5㎡",
+      "2026년"
+    ],
+    "consumables": [],
+    "consumableDetails": [],
+    "installationType": "스탠드형 일반배관"
   }
 ]

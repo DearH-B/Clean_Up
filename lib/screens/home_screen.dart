@@ -31,10 +31,13 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  final TextEditingController _searchController = TextEditingController();
   List<ZoneItem> _items = [];
   List<ProductSpace> _spaces = [];
   List<CareRecord> _records = [];
+  List<String> _recentProductIds = [];
   bool _isLoading = true;
+  String _searchQuery = '';
 
   @override
   void initState() {
@@ -43,11 +46,37 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final dueItems = _items.where((item) => item.isDue(DateTime.now())).toList()
-      ..sort((a, b) => (a.nextDueAt ?? DateTime(3000))
-          .compareTo(b.nextDueAt ?? DateTime(3000)));
-    final featuredItems = dueItems.isEmpty ? _items.take(3).toList() : dueItems;
+    final recentItems = [
+      for (final id in _recentProductIds)
+        ..._items.where((item) => item.id == id),
+    ];
+    final normalizedQuery = _normalizeSearch(_searchQuery);
+    final searchResults = normalizedQuery.isEmpty
+        ? const <ZoneItem>[]
+        : _items
+            .where(
+              (item) => _normalizeSearch([
+                item.name,
+                item.nickname,
+                item.manufacturer,
+                item.seriesName,
+                item.modelName,
+              ].whereType<String>().join(' '))
+                  .contains(normalizedQuery),
+            )
+            .toList();
+    final featuredItems = normalizedQuery.isNotEmpty
+        ? searchResults
+        : recentItems.isEmpty
+            ? _items.take(4).toList()
+            : recentItems;
 
     return RefreshIndicator(
       onRefresh: _loadData,
@@ -60,41 +89,69 @@ class _HomeScreenState extends State<HomeScreen> {
             description: '우리집 제품의 관리법과 소모품을 한곳에서 확인하세요.',
           ),
           const SizedBox(height: 18),
+          TextField(
+            controller: _searchController,
+            textInputAction: TextInputAction.search,
+            onChanged: (value) => setState(() => _searchQuery = value),
+            decoration: InputDecoration(
+              labelText: '내 제품 검색',
+              hintText: '제품명, 브랜드, 모델명',
+              prefixIcon: const Icon(Icons.search),
+              suffixIcon: _searchQuery.isEmpty
+                  ? null
+                  : IconButton(
+                      tooltip: '검색어 지우기',
+                      onPressed: () {
+                        FocusScope.of(context).unfocus();
+                        _searchController.clear();
+                        setState(() => _searchQuery = '');
+                      },
+                      icon: const Icon(Icons.close),
+                    ),
+            ),
+          ),
+          const SizedBox(height: 18),
           _HeroPanel(
             itemCount: _items.length,
-            dueCount: dueItems.length,
             onAddProduct: widget.onOpenProducts,
-            onFindGuide: widget.onOpenProducts,
           ),
           const SizedBox(height: 22),
           _QuickStats(items: _items, records: _records),
           const SizedBox(height: 24),
           _SectionTitle(
-            title: dueItems.isEmpty ? '바로 볼 제품' : '관리해두면 좋은 제품',
-            actionLabel: '내 제품 보기',
-            onAction: widget.onOpenProducts,
+            title: normalizedQuery.isNotEmpty
+                ? '검색 결과 ${searchResults.length}개'
+                : recentItems.isEmpty
+                    ? '내 제품'
+                    : '최근 본 제품',
+            actionLabel: normalizedQuery.isEmpty ? '내 제품 보기' : null,
+            onAction: normalizedQuery.isEmpty ? widget.onOpenProducts : null,
           ),
           const SizedBox(height: 10),
           if (_isLoading)
             const Center(child: CircularProgressIndicator())
           else if (_items.isEmpty)
             _EmptyProducts(onAddProduct: widget.onOpenProducts)
+          else if (normalizedQuery.isNotEmpty && searchResults.isEmpty)
+            const _EmptySearchResults()
           else
             for (final item in featuredItems.take(4)) ...[
               _HomeProductCard(
                 item: item,
+                records: _records,
                 onTap: () => _openItem(item),
               ),
               const SizedBox(height: 10),
             ],
-          const SizedBox(height: 14),
-          _SectionTitle(
-            title: '제품 정보 원칙',
-            actionLabel: '요청 내역',
-            onAction: _openSubmissions,
+          const SizedBox(height: 8),
+          Align(
+            alignment: Alignment.centerLeft,
+            child: TextButton.icon(
+              onPressed: _openSubmissions,
+              icon: const Icon(Icons.inbox_outlined),
+              label: const Text('제품 정보 요청 내역'),
+            ),
           ),
-          const SizedBox(height: 10),
-          const _DirectionCard(),
         ],
       ),
     );
@@ -104,6 +161,7 @@ class _HomeScreenState extends State<HomeScreen> {
     final items = await widget.dataRepository.loadUserProducts();
     final spaces = await widget.dataRepository.loadSpaces();
     final records = await widget.dataRepository.loadCareRecords();
+    final recentProductIds = await widget.dataRepository.loadRecentProductIds();
     if (!mounted) {
       return;
     }
@@ -112,6 +170,7 @@ class _HomeScreenState extends State<HomeScreen> {
       _items = items ?? [];
       _spaces = spaces ?? [];
       _records = records ?? [];
+      _recentProductIds = recentProductIds;
       _isLoading = false;
     });
   }
@@ -124,6 +183,7 @@ class _HomeScreenState extends State<HomeScreen> {
           item: item,
           spaceId: space?.id ?? item.zoneId,
           spaceName: space?.name ?? '미지정 공간',
+          spaces: _spaces,
           dataRepository: widget.dataRepository,
           catalogRepository: widget.catalogRepository,
           onItemUpdated: _updateItem,
@@ -186,31 +246,21 @@ class _HomeScreenState extends State<HomeScreen> {
 class _HeroPanel extends StatelessWidget {
   const _HeroPanel({
     required this.itemCount,
-    required this.dueCount,
     required this.onAddProduct,
-    required this.onFindGuide,
   });
 
   final int itemCount;
-  final int dueCount;
   final VoidCallback onAddProduct;
-  final VoidCallback onFindGuide;
 
   @override
   Widget build(BuildContext context) {
-    final title = itemCount == 0
-        ? '제품을 등록해볼까요?'
-        : dueCount > 0
-            ? '관리법 바로 보기'
-            : '필요할 때 바로 보기';
+    final title = itemCount == 0 ? '제품을 등록해볼까요?' : '필요할 때 바로 보기';
     final message = itemCount == 0
-        ? '음식물처리기, 냉장고, 세탁기처럼 자주 검색하는 제품부터 넣어두면 좋아요.'
-        : dueCount > 0
-            ? '$dueCount개 제품은 청소법이나 소모품을 확인하기 좋은 시점이에요.'
-            : '등록된 제품 $itemCount개의 관리법과 추천용품을 정리해두고 있어요.';
+        ? '자주 찾는 제품부터 등록해 두면 관리법과 설명서를 바로 볼 수 있어요.'
+        : '등록된 제품 $itemCount개의 관리법, 설명서와 소모품 정보를 모아두고 있어요.';
 
     return Container(
-      height: 245,
+      constraints: const BoxConstraints(minHeight: 245),
       clipBehavior: Clip.antiAlias,
       decoration: BoxDecoration(
         color: Colors.white,
@@ -221,63 +271,52 @@ class _HeroPanel extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Container(height: 8, color: AppColors.coral),
-          Expanded(
-            child: Padding(
-              padding: const EdgeInsets.fromLTRB(20, 18, 20, 18),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const _PillLabel(text: 'CARE INDEX'),
-                        const SizedBox(height: 14),
-                        Text(
-                          title,
-                          maxLines: 2,
-                          style: Theme.of(context).textTheme.headlineSmall,
-                        ),
-                        const SizedBox(height: 8),
-                        Text(message, maxLines: 3),
-                        const Spacer(),
-                        Row(
-                          children: [
-                            FilledButton.icon(
-                              onPressed: onAddProduct,
-                              icon: const Icon(Icons.add, size: 18),
-                              label: const Text('제품 추가'),
-                            ),
-                            const SizedBox(width: 8),
-                            IconButton.outlined(
-                              onPressed: onFindGuide,
-                              tooltip: '관리법 찾기',
-                              icon: const Icon(Icons.manage_search_outlined),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(20, 18, 20, 18),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Expanded(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const _PillLabel(text: 'CARE INDEX'),
+                      const SizedBox(height: 14),
+                      Text(
+                        title,
+                        style: Theme.of(context).textTheme.titleLarge,
+                      ),
+                      const SizedBox(height: 8),
+                      Text(message),
+                      const SizedBox(height: 18),
+                      FilledButton.icon(
+                        onPressed: onAddProduct,
+                        icon: const Icon(Icons.add, size: 18),
+                        label: const Text('제품 추가'),
+                      ),
+                    ],
                   ),
-                  const SizedBox(width: 16),
-                  Container(
-                    width: 76,
-                    height: 118,
-                    alignment: Alignment.center,
-                    color: AppColors.ink,
-                    child: const RotatedBox(
-                      quarterTurns: 3,
-                      child: Text(
-                        'PRODUCT CARE',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 11,
-                          fontWeight: FontWeight.w900,
-                        ),
+                ),
+                const SizedBox(width: 12),
+                Container(
+                  width: 64,
+                  height: 112,
+                  alignment: Alignment.center,
+                  color: AppColors.ink,
+                  child: const RotatedBox(
+                    quarterTurns: 3,
+                    child: Text(
+                      'PRODUCT CARE',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 11,
+                        fontWeight: FontWeight.w900,
                       ),
                     ),
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
           ),
         ],
@@ -298,9 +337,6 @@ class _QuickStats extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final productInfoCount = items.where((item) => item.hasProductInfo).length;
-    final recommendedCount =
-        items.where((item) => item.recommendedProducts.isNotEmpty).length;
-
     return Row(
       children: [
         Expanded(
@@ -321,9 +357,9 @@ class _QuickStats extends StatelessWidget {
         const SizedBox(width: 10),
         Expanded(
           child: _StatTile(
-            label: '추천용품',
-            value: '$recommendedCount',
-            icon: Icons.shopping_bag_outlined,
+            label: '관리 기록',
+            value: '${records.length}',
+            icon: Icons.history,
           ),
         ),
       ],
@@ -403,10 +439,12 @@ class _SectionTitle extends StatelessWidget {
 class _HomeProductCard extends StatelessWidget {
   const _HomeProductCard({
     required this.item,
+    required this.records,
     required this.onTap,
   });
 
   final ZoneItem item;
+  final List<CareRecord> records;
   final VoidCallback onTap;
 
   @override
@@ -449,7 +487,7 @@ class _HomeProductCard extends StatelessWidget {
                       runSpacing: 4,
                       children: [
                         _MiniBadge(label: item.guideSourceType.label),
-                        _MiniBadge(label: _dueLabel(item.nextDueAt)),
+                        _MiniBadge(label: _statusLabel(item)),
                       ],
                     ),
                   ],
@@ -483,17 +521,26 @@ class _HomeProductCard extends StatelessWidget {
     return '${item.type.label} · 모델 정보 없이 일반 관리법 제공';
   }
 
-  String _dueLabel(DateTime? dateTime) {
-    if (dateTime == null) {
-      return '관리일 미정';
+  String _statusLabel(ZoneItem item) {
+    final lastManagedAt = item.lastCleanedAt ??
+        latestScheduledCareRecord(records, item.id)?.completedAt;
+    if (lastManagedAt != null) {
+      return '마지막 관리 ${_shortDate(lastManagedAt)}';
+    }
+    if (item.nextDueAt == null) {
+      return '관리 전';
     }
     final now = DateTime.now();
-    if (!dateTime.isAfter(now)) {
+    if (!item.nextDueAt!.isAfter(now)) {
       return '관리 확인';
     }
+    return '다음 ${_shortDate(item.nextDueAt!)}';
+  }
+
+  String _shortDate(DateTime dateTime) {
     final month = dateTime.month.toString().padLeft(2, '0');
     final day = dateTime.day.toString().padLeft(2, '0');
-    return '다음 $month.$day';
+    return '$month.$day';
   }
 }
 
@@ -522,7 +569,7 @@ class _EmptyProducts extends StatelessWidget {
           ),
           const SizedBox(height: 6),
           const Text(
-            '자주 청소법을 검색하는 제품부터 하나만 추가해보세요.',
+            '설명서나 관리법을 자주 찾는 제품부터 하나만 추가해보세요.',
             textAlign: TextAlign.center,
           ),
           const SizedBox(height: 16),
@@ -537,59 +584,30 @@ class _EmptyProducts extends StatelessWidget {
   }
 }
 
-class _DirectionCard extends StatelessWidget {
-  const _DirectionCard();
+class _EmptySearchResults extends StatelessWidget {
+  const _EmptySearchResults();
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 26),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(3),
         border: Border.all(color: AppColors.rule),
       ),
       child: const Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _DirectionRow(
-            icon: Icons.inventory_2_outlined,
-            text: '제품별 관리법, 주의사항, 준비물을 한곳에 정리',
-          ),
+          Icon(Icons.search_off_outlined, size: 34, color: AppColors.coral),
           SizedBox(height: 10),
-          _DirectionRow(
-            icon: Icons.manage_search_outlined,
-            text: '모델명이 없어도 비슷한 제품 기준으로 안내',
+          Text(
+            '등록된 제품에서 찾지 못했어요',
+            style: TextStyle(fontWeight: FontWeight.w800),
           ),
-          SizedBox(height: 10),
-          _DirectionRow(
-            icon: Icons.shopping_bag_outlined,
-            text: '출처와 추천 이유가 분명한 관리용품 안내',
-          ),
+          SizedBox(height: 6),
+          Text('제품명이나 모델명의 일부만 입력해보세요.'),
         ],
       ),
-    );
-  }
-}
-
-class _DirectionRow extends StatelessWidget {
-  const _DirectionRow({
-    required this.icon,
-    required this.text,
-  });
-
-  final IconData icon;
-  final String text;
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Icon(icon, size: 19, color: AppColors.ink),
-        const SizedBox(width: 10),
-        Expanded(child: Text(text)),
-      ],
     );
   }
 }
@@ -677,4 +695,8 @@ class _EditorialPageHeader extends StatelessWidget {
       ],
     );
   }
+}
+
+String _normalizeSearch(String value) {
+  return value.toLowerCase().replaceAll(RegExp(r'[\s\-_]+'), '');
 }

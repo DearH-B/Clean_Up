@@ -3,10 +3,12 @@ import 'package:flutter/material.dart';
 import '../models/product_space.dart';
 import '../models/zone_item.dart';
 import '../repositories/product_catalog_repository.dart';
+import '../repositories/product_diagnostic_repository.dart';
 import '../repositories/product_data_repository.dart';
 import '../theme/app_theme.dart';
 import '../widgets/zone_item_tile.dart';
 import 'product_registration_screen.dart';
+import 'product_diagnostic_screen.dart';
 import 'zone_item_detail_screen.dart';
 
 class ZoneDetailScreen extends StatefulWidget {
@@ -78,7 +80,7 @@ class _ZoneDetailScreenState extends State<ZoneDetailScreen> {
               padding: const EdgeInsets.fromLTRB(16, 12, 16, 96),
               children: [
                 const Text(
-                  'PRODUCT SECTION',
+                  '제품 목록',
                   style: TextStyle(
                     color: AppColors.coral,
                     fontSize: 11,
@@ -102,6 +104,7 @@ class _ZoneDetailScreenState extends State<ZoneDetailScreen> {
                   ZoneItemTile(
                     item: item,
                     onTap: () => _openItem(item),
+                    onSolveProblem: () => _openProblemSolver(item),
                   ),
                   const SizedBox(height: 10),
                 ],
@@ -169,6 +172,7 @@ class _ZoneDetailScreenState extends State<ZoneDetailScreen> {
           item: item,
           spaceId: widget.zone.id,
           spaceName: widget.zone.name,
+          spaces: widget.spaces,
           dataRepository: widget.dataRepository,
           catalogRepository: widget.catalogRepository,
           onItemUpdated: (updatedItem) async {
@@ -178,8 +182,14 @@ class _ZoneDetailScreenState extends State<ZoneDetailScreen> {
             if (index == -1 || !mounted) {
               return;
             }
-            setState(() => _items[index] = updatedItem);
-            await widget.onItemsChanged(widget.zone.id, _items);
+            if (updatedItem.zoneId == widget.zone.id) {
+              setState(() => _items[index] = updatedItem);
+              await widget.onItemsChanged(widget.zone.id, _items);
+            } else {
+              setState(() => _items.removeAt(index));
+              await widget.onItemsChanged(widget.zone.id, _items);
+              await widget.onProductAdded(updatedItem);
+            }
           },
           onItemDeleted: (itemId) async {
             if (!mounted) {
@@ -190,6 +200,17 @@ class _ZoneDetailScreenState extends State<ZoneDetailScreen> {
             });
             await widget.onItemsChanged(widget.zone.id, _items);
           },
+        ),
+      ),
+    );
+  }
+
+  void _openProblemSolver(ZoneItem item) {
+    Navigator.of(context).push(
+      MaterialPageRoute<void>(
+        builder: (_) => ProductDiagnosticScreen(
+          item: item,
+          diagnosticRepository: const RemoteFirstProductDiagnosticRepository(),
         ),
       ),
     );

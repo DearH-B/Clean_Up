@@ -67,7 +67,7 @@ class SpaceCard extends StatelessWidget {
               Row(
                 children: [
                   Text(
-                    '${space.identifiedProductCount}/${space.productCount} 제품 확인',
+                    '${space.identifiedProductCount}/${space.productCount} 상세 정보',
                     style: const TextStyle(fontWeight: FontWeight.w800),
                   ),
                   const Spacer(),

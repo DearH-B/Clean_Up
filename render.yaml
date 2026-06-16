@@ -1,0 +1,25 @@
+services:
+  - type: web
+    runtime: docker
+    name: carelog-api
+    region: singapore
+    plan: starter
+    dockerfilePath: ./server/Dockerfile
+    dockerContext: ./server
+    healthCheckPath: /health
+    autoDeployTrigger: checksPass
+    envVars:
+      - key: CARELOG_ENV
+        value: production
+      - key: CATALOG_DATABASE_PATH
+        value: /app/runtime/catalog_admin.db
+      - key: SUBMISSIONS_PATH
+        value: /app/runtime/submissions.json
+      - key: CARELOG_ALLOWED_ORIGINS
+        value: ""
+      - key: CATALOG_ADMIN_API_KEY
+        generateValue: true
+    disk:
+      name: carelog-runtime
+      mountPath: /app/runtime
+      sizeGB: 1

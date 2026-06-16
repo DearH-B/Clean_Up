@@ -7,11 +7,13 @@ class ZoneItemTile extends StatelessWidget {
   const ZoneItemTile({
     required this.item,
     required this.onTap,
+    required this.onSolveProblem,
     super.key,
   });
 
   final ZoneItem item;
   final VoidCallback onTap;
+  final VoidCallback onSolveProblem;
 
   @override
   Widget build(BuildContext context) {
@@ -19,14 +21,17 @@ class ZoneItemTile extends StatelessWidget {
       child: ListTile(
         onTap: onTap,
         contentPadding: const EdgeInsets.symmetric(
-          horizontal: 16,
-          vertical: 8,
+          horizontal: 12,
+          vertical: 4,
         ),
         leading: Container(
-          width: 48,
-          height: 58,
-          color: AppColors.ink,
-          child: Icon(_iconFor(item.type), color: Colors.white),
+          width: 44,
+          height: 48,
+          decoration: BoxDecoration(
+            color: Theme.of(context).colorScheme.surfaceContainerHigh,
+            borderRadius: BorderRadius.circular(4),
+          ),
+          child: Icon(_iconFor(item), color: AppColors.ink),
         ),
         title: Text(item.displayName),
         subtitle: Padding(
@@ -60,19 +65,36 @@ class ZoneItemTile extends StatelessWidget {
                 runSpacing: 4,
                 children: [
                   _MiniBadge(label: item.guideSourceType.label),
-                  _MiniBadge(label: '다음 ${_formatDue(item.nextDueAt)}'),
+                  if (item.nextDueAt != null)
+                    _MiniBadge(label: '다음 ${_formatDue(item.nextDueAt!)}'),
                 ],
               ),
             ],
           ),
         ),
-        trailing: const Icon(Icons.chevron_right),
+        trailing: IconButton(
+          tooltip: '문제 해결',
+          onPressed: onSolveProblem,
+          icon: const Icon(Icons.handyman_outlined),
+        ),
       ),
     );
   }
 
-  IconData _iconFor(ZoneItemType type) {
-    return switch (type) {
+  IconData _iconFor(ZoneItem item) {
+    final name = item.name.replaceAll(' ', '');
+    if (name.contains('냉장고')) return Icons.kitchen_outlined;
+    if (name.contains('세면대')) return Icons.wash_outlined;
+    if (name.contains('변기')) return Icons.wc_outlined;
+    if (name.contains('침대') || name.contains('매트리스')) {
+      return Icons.bed_outlined;
+    }
+    if (name.contains('TV')) return Icons.tv_outlined;
+    if (name.contains('세탁기')) return Icons.local_laundry_service_outlined;
+    if (name.contains('공기청정기') || name.contains('환풍기')) {
+      return Icons.air_outlined;
+    }
+    return switch (item.type) {
       ZoneItemType.appliance => Icons.kitchen_outlined,
       ZoneItemType.furniture => Icons.chair_outlined,
       ZoneItemType.fixture => Icons.countertops_outlined,
@@ -80,10 +102,7 @@ class ZoneItemTile extends StatelessWidget {
     };
   }
 
-  String _formatDue(DateTime? dateTime) {
-    if (dateTime == null) {
-      return '미정';
-    }
+  String _formatDue(DateTime dateTime) {
     final month = dateTime.month.toString().padLeft(2, '0');
     final day = dateTime.day.toString().padLeft(2, '0');
     return '$month.$day';

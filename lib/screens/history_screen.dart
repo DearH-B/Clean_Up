@@ -68,90 +68,95 @@ class _HistoryScreenState extends State<HistoryScreen> {
           const SizedBox(height: 7),
           Container(width: 52, height: 4, color: AppColors.coral),
           const SizedBox(height: 9),
-          const Text('제품별 청소, 점검, 교체 이력을 날짜순으로 확인하세요.'),
+          const Text('제품별 관리, 점검, 교체 이력을 날짜순으로 확인하세요.'),
           const SizedBox(height: 20),
           _HistorySummary(
             count: filtered.length,
             latestAt: filtered.isEmpty ? null : filtered.first.completedAt,
           ),
-          const SizedBox(height: 18),
-          TextField(
-            controller: _searchController,
-            decoration: InputDecoration(
-              labelText: '기록 검색',
-              hintText: '제품, 메모, 증상, 사용한 용품',
-              prefixIcon: const Icon(Icons.search),
-              suffixIcon: _query.isEmpty
-                  ? null
-                  : IconButton(
-                      tooltip: '검색어 지우기',
-                      onPressed: () {
-                        _searchController.clear();
-                        setState(() => _query = '');
-                      },
-                      icon: const Icon(Icons.close),
-                    ),
+          if (_records.isNotEmpty) ...[
+            const SizedBox(height: 18),
+            TextField(
+              controller: _searchController,
+              decoration: InputDecoration(
+                labelText: '기록 검색',
+                hintText: '제품, 메모, 증상, 사용한 용품',
+                prefixIcon: const Icon(Icons.search),
+                suffixIcon: _query.isEmpty
+                    ? null
+                    : IconButton(
+                        tooltip: '검색어 지우기',
+                        onPressed: () {
+                          _searchController.clear();
+                          setState(() => _query = '');
+                        },
+                        icon: const Icon(Icons.close),
+                      ),
+              ),
+              onChanged: (value) => setState(() => _query = value.trim()),
             ),
-            onChanged: (value) => setState(() => _query = value.trim()),
-          ),
-          const SizedBox(height: 12),
-          Wrap(
-            spacing: 8,
-            runSpacing: 8,
-            children: [
-              _FilterMenu<String>(
-                label: _selectedProductId == null
-                    ? '모든 제품'
-                    : _productName(_selectedProductId!),
-                icon: Icons.inventory_2_outlined,
-                value: _selectedProductId,
-                entries: [
-                  const DropdownMenuEntry(value: null, label: '모든 제품'),
-                  for (final product in _products)
-                    DropdownMenuEntry(
-                      value: product.id,
-                      label: product.displayName,
-                    ),
-                ],
-                onSelected: (value) {
-                  setState(() => _selectedProductId = value);
-                },
-              ),
-              _FilterMenu<String>(
-                label: _selectedSpaceId == null
-                    ? '모든 공간'
-                    : _spaceName(_selectedSpaceId!),
-                icon: Icons.home_work_outlined,
-                value: _selectedSpaceId,
-                entries: [
-                  const DropdownMenuEntry(value: null, label: '모든 공간'),
-                  for (final space in _spaces)
-                    DropdownMenuEntry(value: space.id, label: space.name),
-                ],
-                onSelected: (value) {
-                  setState(() => _selectedSpaceId = value);
-                },
-              ),
-              _FilterMenu<CareRecordType>(
-                label: _selectedType?.label ?? '모든 유형',
-                icon: Icons.tune,
-                value: _selectedType,
-                entries: [
-                  const DropdownMenuEntry(value: null, label: '모든 유형'),
-                  for (final type in CareRecordType.values)
-                    DropdownMenuEntry(value: type, label: type.label),
-                ],
-                onSelected: (value) {
-                  setState(() => _selectedType = value);
-                },
-              ),
-            ],
-          ),
+            const SizedBox(height: 12),
+            Wrap(
+              spacing: 8,
+              runSpacing: 8,
+              children: [
+                _FilterMenu<String>(
+                  label: _selectedProductId == null
+                      ? '모든 제품'
+                      : _productName(_selectedProductId!),
+                  icon: Icons.inventory_2_outlined,
+                  value: _selectedProductId,
+                  entries: [
+                    const DropdownMenuEntry(value: null, label: '모든 제품'),
+                    for (final product in _products)
+                      DropdownMenuEntry(
+                        value: product.id,
+                        label: product.displayName,
+                      ),
+                  ],
+                  onSelected: (value) {
+                    setState(() => _selectedProductId = value);
+                  },
+                ),
+                _FilterMenu<String>(
+                  label: _selectedSpaceId == null
+                      ? '모든 공간'
+                      : _spaceName(_selectedSpaceId!),
+                  icon: Icons.home_work_outlined,
+                  value: _selectedSpaceId,
+                  entries: [
+                    const DropdownMenuEntry(value: null, label: '모든 공간'),
+                    for (final space in _spaces)
+                      DropdownMenuEntry(value: space.id, label: space.name),
+                  ],
+                  onSelected: (value) {
+                    setState(() => _selectedSpaceId = value);
+                  },
+                ),
+                _FilterMenu<CareRecordType>(
+                  label: _selectedType?.label ?? '모든 유형',
+                  icon: Icons.tune,
+                  value: _selectedType,
+                  entries: [
+                    const DropdownMenuEntry(value: null, label: '모든 유형'),
+                    for (final type in CareRecordType.values)
+                      DropdownMenuEntry(value: type, label: type.label),
+                  ],
+                  onSelected: (value) {
+                    setState(() => _selectedType = value);
+                  },
+                ),
+              ],
+            ),
+          ],
           const SizedBox(height: 24),
           if (_isLoading)
             const Center(child: CircularProgressIndicator())
           else if (filtered.isEmpty)
-            _EmptyHistory(hasFilters: _hasFilters)
+            _EmptyHistory(
+              hasFilters: _hasFilters,
+              onClearFilters: _hasFilters ? _clearFilters : null,
+            )
           else
             for (final group in groups.entries) ...[
               Text(group.key, style: Theme.of(context).textTheme.titleLarge),
@@ -209,6 +214,16 @@ class _HistoryScreenState extends State<HistoryScreen> {
       _selectedProductId != null ||
       _selectedSpaceId != null ||
       _selectedType != null;
+
+  void _clearFilters() {
+    _searchController.clear();
+    setState(() {
+      _query = '';
+      _selectedProductId = null;
+      _selectedSpaceId = null;
+      _selectedType = null;
+    });
+  }
 
   Future<void> _loadData() async {
     final records = await widget.dataRepository.loadCareRecords();
@@ -571,9 +586,13 @@ class _DetailLine extends StatelessWidget {
 }
 
 class _EmptyHistory extends StatelessWidget {
-  const _EmptyHistory({required this.hasFilters});
+  const _EmptyHistory({
+    required this.hasFilters,
+    this.onClearFilters,
+  });
 
   final bool hasFilters;
+  final VoidCallback? onClearFilters;
 
   @override
   Widget build(BuildContext context) {
@@ -597,6 +616,14 @@ class _EmptyHistory extends StatelessWidget {
               hasFilters ? '검색어나 필터를 바꿔보세요.' : '제품 상세에서 관리 기록을 추가할 수 있어요.',
               textAlign: TextAlign.center,
             ),
+            if (onClearFilters != null) ...[
+              const SizedBox(height: 14),
+              TextButton.icon(
+                onPressed: onClearFilters,
+                icon: const Icon(Icons.filter_alt_off_outlined),
+                label: const Text('필터 초기화'),
+              ),
+            ],
           ],
         ),
       ),

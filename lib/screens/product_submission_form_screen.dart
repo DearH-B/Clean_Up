@@ -10,6 +10,7 @@ class ProductSubmissionFormScreen extends StatefulWidget {
     this.product,
     this.initialType,
     this.initialTitle,
+    this.screenContext,
     super.key,
   });
 
@@ -17,6 +18,7 @@ class ProductSubmissionFormScreen extends StatefulWidget {
   final ZoneItem? product;
   final ProductSubmissionType? initialType;
   final String? initialTitle;
+  final String? screenContext;
 
   @override
   State<ProductSubmissionFormScreen> createState() =>
@@ -57,13 +59,18 @@ class _ProductSubmissionFormScreenState
   @override
   Widget build(BuildContext context) {
     final product = widget.product;
+    final screenContext = widget.screenContext;
     return Scaffold(
-      appBar: AppBar(title: const Text('제품 정보 제보')),
+      appBar: AppBar(title: const Text('문제·불편 신고')),
       body: ListView(
         padding: const EdgeInsets.fromLTRB(16, 8, 16, 120),
         children: [
           if (product != null) ...[
             _ProductContextCard(product: product),
+            const SizedBox(height: 18),
+          ],
+          if (screenContext?.isNotEmpty == true) ...[
+            _ScreenContextCard(screenContext: screenContext!),
             const SizedBox(height: 18),
           ],
           DropdownMenu<ProductSubmissionType>(
@@ -74,7 +81,9 @@ class _ProductSubmissionFormScreenState
             dropdownMenuEntries: [
               for (final type in ProductSubmissionType.values)
                 if (product != null ||
-                    type == ProductSubmissionType.missingProduct)
+                    type == ProductSubmissionType.missingProduct ||
+                    type == ProductSubmissionType.appIssue ||
+                    type == ProductSubmissionType.usabilityFeedback)
                   DropdownMenuEntry(value: type, label: type.label),
             ],
             onSelected: (value) {
@@ -99,9 +108,9 @@ class _ProductSubmissionFormScreenState
             controller: _detailsController,
             minLines: 5,
             maxLines: 9,
-            decoration: const InputDecoration(
+            decoration: InputDecoration(
               labelText: '자세한 내용',
-              hintText: '어떤 정보가 다르거나 위험한지 알려주세요',
+              hintText: _type.detailsHint,
               alignLabelWithHint: true,
             ),
           ),
@@ -189,6 +198,7 @@ class _ProductSubmissionFormScreenState
       createdAt: now,
       updatedAt: now,
       status: ProductSubmissionStatus.pendingUpload,
+      screenContext: widget.screenContext,
     );
     final existing = await widget.dataRepository.loadProductSubmissions() ?? [];
     await widget.dataRepository.saveProductSubmissions([
@@ -198,6 +208,44 @@ class _ProductSubmissionFormScreenState
     if (mounted) {
       Navigator.of(context).pop(submission);
     }
+  }
+}
+
+class _ScreenContextCard extends StatelessWidget {
+  const _ScreenContextCard({required this.screenContext});
+
+  final String screenContext;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(14),
+      decoration: BoxDecoration(
+        color: Theme.of(context).colorScheme.surfaceContainerLow,
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: Row(
+        children: [
+          const Icon(Icons.layers_outlined),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  '발생 화면',
+                  style: Theme.of(context).textTheme.labelMedium,
+                ),
+                Text(
+                  screenContext,
+                  style: const TextStyle(fontWeight: FontWeight.w700),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }
 

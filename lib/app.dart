@@ -21,7 +21,7 @@ class CleanUpApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Clean Up',
+      title: '케어로그',
       debugShowCheckedModeBanner: false,
       theme: buildAppTheme(),
       home: MainShell(

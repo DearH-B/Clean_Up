@@ -6,6 +6,7 @@ import '../repositories/product_data_repository.dart';
 import '../repositories/product_catalog_repository.dart';
 import '../theme/app_theme.dart';
 import '../widgets/space_card.dart';
+import 'data_management_screen.dart';
 import 'zone_detail_screen.dart';
 
 class ZonesScreen extends StatefulWidget {
@@ -48,7 +49,7 @@ class _ZonesScreenState extends State<ZonesScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       const Text(
-                        'PRODUCT LIBRARY',
+                        '제품 라이브러리',
                         style: TextStyle(
                           color: AppColors.coral,
                           fontSize: 11,
@@ -67,10 +68,20 @@ class _ZonesScreenState extends State<ZonesScreen> {
                     ],
                   ),
                 ),
-                IconButton.outlined(
-                  onPressed: _showAddZoneSheet,
-                  tooltip: '공간 추가',
-                  icon: const Icon(Icons.add_home_work_outlined),
+                Column(
+                  children: [
+                    IconButton.outlined(
+                      onPressed: _openDataManagement,
+                      tooltip: '데이터 백업',
+                      icon: const Icon(Icons.cloud_download_outlined),
+                    ),
+                    const SizedBox(height: 8),
+                    IconButton.outlined(
+                      onPressed: _showAddZoneSheet,
+                      tooltip: '공간 추가',
+                      icon: const Icon(Icons.add_home_work_outlined),
+                    ),
+                  ],
                 ),
               ],
             ),
@@ -125,6 +136,19 @@ class _ZonesScreenState extends State<ZonesScreen> {
       _items = savedItems ?? [];
       _isLoading = false;
     });
+  }
+
+  Future<void> _openDataManagement() async {
+    final restored = await Navigator.of(context).push<bool>(
+      MaterialPageRoute(
+        builder: (context) => DataManagementScreen(
+          dataRepository: widget.dataRepository,
+        ),
+      ),
+    );
+    if (restored == true) {
+      await _loadSavedData();
+    }
   }
 
   Future<void> _showAddZoneSheet() async {

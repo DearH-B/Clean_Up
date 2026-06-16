@@ -4,7 +4,9 @@ enum ProductSubmissionType {
   brokenLink,
   incorrectGuide,
   unsafeGuide,
-  officialSource;
+  officialSource,
+  appIssue,
+  usabilityFeedback;
 
   String get label => switch (this) {
         ProductSubmissionType.missingProduct => '검색되지 않는 제품',
@@ -13,6 +15,16 @@ enum ProductSubmissionType {
         ProductSubmissionType.incorrectGuide => '관리법이 맞지 않음',
         ProductSubmissionType.unsafeGuide => '위험한 안내가 있음',
         ProductSubmissionType.officialSource => '새 공식 자료 제보',
+        ProductSubmissionType.appIssue => '앱 기능이 작동하지 않음',
+        ProductSubmissionType.usabilityFeedback => '사용하기 불편함',
+      };
+
+  String get detailsHint => switch (this) {
+        ProductSubmissionType.appIssue =>
+          '무엇을 누른 뒤 문제가 생겼는지, 기대한 결과와 실제 결과를 적어주세요',
+        ProductSubmissionType.usabilityFeedback => '어느 부분에서 망설였거나 불편했는지 적어주세요',
+        ProductSubmissionType.unsafeGuide => '위험하다고 느낀 안내와 그 이유를 적어주세요',
+        _ => '어떤 정보가 다르거나 확인이 필요한지 알려주세요',
       };
 }
 
@@ -58,6 +70,7 @@ class ProductSubmission {
     this.modelName,
     this.sourceUrl,
     this.statusMessage,
+    this.screenContext,
   });
 
   final String id;
@@ -75,6 +88,7 @@ class ProductSubmission {
   final DateTime updatedAt;
   final ProductSubmissionStatus status;
   final String? statusMessage;
+  final String? screenContext;
 
   ProductSubmission copyWith({
     String? trackingToken,
@@ -98,6 +112,7 @@ class ProductSubmission {
       updatedAt: updatedAt ?? this.updatedAt,
       status: status ?? this.status,
       statusMessage: statusMessage ?? this.statusMessage,
+      screenContext: screenContext,
     );
   }
 
@@ -122,6 +137,7 @@ class ProductSubmission {
         json['status'] as String? ?? ProductSubmissionStatus.pendingUpload.name,
       ),
       statusMessage: json['statusMessage'] as String?,
+      screenContext: json['screenContext'] as String?,
     );
   }
 
@@ -142,6 +158,7 @@ class ProductSubmission {
       'updatedAt': updatedAt.toIso8601String(),
       'status': status.name,
       'statusMessage': statusMessage,
+      'screenContext': screenContext,
     };
   }
 
@@ -158,6 +175,7 @@ class ProductSubmission {
       'modelName': modelName,
       'sourceUrl': sourceUrl,
       'createdAt': createdAt.toUtc().toIso8601String(),
+      'screenContext': screenContext,
     };
   }
 }
